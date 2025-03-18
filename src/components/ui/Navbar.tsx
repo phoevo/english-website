@@ -9,6 +9,7 @@ async function Navbar() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-center h-18">
           <div className="flex items-center gap-20">
+          <Link href={"/"} className="text-3xl font-light absolute left-10">Synomilo</Link>
             <Link href="/home" className="text-xl font-bold text-primary font-mono tracking-wider">
               home
             </Link>
