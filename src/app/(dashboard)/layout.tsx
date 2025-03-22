@@ -2,9 +2,9 @@ import Navbar from "@/components/ui/Navbar";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
+    <div className="">
       <Navbar />
-      <main className="p-4">{children}</main>
+      <main className="m-2">{children}</main>
     </div>
   );
 }

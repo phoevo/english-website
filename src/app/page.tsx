@@ -3,7 +3,7 @@ import ModeToggle from "@/components/ui/ModeToggle";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Raleway } from "next/font/google";
-import { Montserrat } from "next/font/google";
+// import { Montserrat } from "next/font/google";
 import { motion } from "motion/react"
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/components/ui/accordion"
 
@@ -60,14 +60,17 @@ export default function LandingPage() {
           <div className="flex flex-row text-2xl font-normal gap-2" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div>
-          <p className="text1xl text-zinc-500">Greek for: "I conversate"</p>
+          <p className="text1xl text-zinc-500">Greek for: &quot;I conversate&quot;</p>
 
         </div>
         <h2 className="text-3xl font-normal">Conversation based English learning platform</h2>
-        <div className="flex flex-col w-200 h-100 justify-start items-center bg-blue-500 border-b p-10 ">
+        <div className="flex flex-col w-180 h-100 justify-start items-center border-b p-10 ">
           <h2 className="text-4xl font-bold p-5">Our Mission:</h2>
-          <p className="text-2xl font-light">Our mission is to allow English learners have conversations
-            faster by
+          <p className="text-2xl font-light">Our mission is to allow English learners
+             have meaningful conversations faster by employing methods inspired by Assimil.
+            These methods help keep the student engaged through dialogues that reflect real-life scenarios,
+            increasing their comprehension and ability to learn (and most importantly) use English.
+
 
           </p>
         </div>
@@ -189,7 +192,7 @@ export default function LandingPage() {
         <AccordionTrigger className="text-2xl">Do I need an account?</AccordionTrigger>
         <AccordionContent className="text-[18px]">
         <p>Quick answer: No.</p>
-        <p className="pt-5">But if you want to keep track of your progress, you'll need an account. It's free.</p>
+        <p className="pt-5">But if you want to keep track of your progress, you will need an account. It is free.</p>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

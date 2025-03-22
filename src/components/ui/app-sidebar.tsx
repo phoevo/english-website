@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import { Home, Search, Settings } from "lucide-react"
 
 import {
   Sidebar,
@@ -14,19 +14,9 @@ import {
 // Menu items.
 const items = [
   {
-    title: "Home",
+    title: "Recents",
     url: "#",
     icon: Home,
-  },
-  {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
   },
   {
     title: "Search",
@@ -42,7 +32,7 @@ const items = [
 
 export function AppSidebar() {
   return (
-    <Sidebar className="w-60 h-auto rounded-lg absolute">
+    <Sidebar className="w-60 h-auto mb-1 rounded-lg absolute">
       <SidebarContent className="">
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>

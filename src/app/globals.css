@@ -12,7 +12,7 @@
 }
 
 :root {
-  --background: oklch(0.95 0 0); /* Light background */
+  --background: oklch(0.985 0 0); /* Light background */
   --foreground: oklch(0.145 0 0); /* Light foreground */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -74,7 +74,7 @@
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
   --radius: 0.8rem;
-  --sidebar: oklch(0.205 0 0); /* Dark sidebar background */
+  --sidebar: oklch(0.200 0 0); /* Dark sidebar background */
   --sidebar-foreground: oklch(0.985 0 0); /* Lighter text on dark sidebar */
   --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
