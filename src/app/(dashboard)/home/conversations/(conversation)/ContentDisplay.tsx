@@ -14,7 +14,7 @@ export default function ContentDisplay() {
     <div className="bg-background flex flex-col justify-center items-center
     text-foreground h-full flex-1 rounded-lg">
 
-      <div className='flex justify-start pl-10 items-center border-1 w-full h-15 border-1 rounded-lg'>
+      <div className='flex justify-start pl-10 items-center border-1 w-full h-15 rounded-lg'>
         Title of conversation
       </div>
 
@@ -32,7 +32,7 @@ export default function ContentDisplay() {
           <PaginationLink href="#" isActive >1</PaginationLink>
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink href="#" isActive>
+          <PaginationLink href="#">
             2
           </PaginationLink>
         </PaginationItem>

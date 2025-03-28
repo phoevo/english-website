@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Raleway } from "next/font/google";
 // import { Montserrat } from "next/font/google";
-import { motion } from "motion/react"
+import { motion } from "motion/react";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/components/ui/accordion"
 
 
+console.log("Motion import:", motion);
 
 const raleway = Raleway({ subsets: ['latin'] });
 
