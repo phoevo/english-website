@@ -46,8 +46,8 @@ export default function LandingPage() {
         <div className="flex items-center h-20 ">
             <h1 className="text-3xl font-normal absolute left-10">Synomilo</h1>
             <div className="flex absolute right-10 gap-3">
-              <Button className="cursor-pointer">Sign Up</Button>
-              <Button className="cursor-pointer" variant="outline">Log in</Button>
+              <Link href={"/register"}> <Button className="cursor-pointer">Sign Up</Button> </Link>
+              <Link href={"/login"}> <Button className="cursor-pointer" variant="outline">Log in</Button> </Link>
               <ModeToggle />
             </div>
         </div>
@@ -95,7 +95,7 @@ export default function LandingPage() {
          viewport={{margin: "0px" }}
          transition={transition2}
         > <p>An atypical approach to learning English. Synomilo helps you with your conversation skill first.</p>
-        <p>You dont need to know the meaning of <i>elbow</i> or <i>highway </i> when you are asking how much
+        <p>You dont need to know the meaning of <i>elbow</i> or <i>curtain </i> when you are asking how much
         something costs or where the train station is.</p>
         </motion.h2>
         </div>
@@ -193,7 +193,7 @@ export default function LandingPage() {
         <AccordionTrigger className="text-2xl">Do I need an account?</AccordionTrigger>
         <AccordionContent className="text-[18px]">
         <p>Quick answer: No.</p>
-        <p className="pt-5">But if you want to keep track of your progress, you will need an account. It is free.</p>
+        <p className="pt-5">But if you want to keep track of your progress, you will need an account. It&apos;s free.</p>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

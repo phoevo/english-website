@@ -5,7 +5,6 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-
 import {
   Form,
   FormControl,
@@ -22,7 +21,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-//import { PasswordInput } from '@/components/ui/password-input'
+import { PasswordInput } from '@/components/ui/PasswordInput'
 
 // Improved schema with additional validation rules
 const formSchema = z.object({
@@ -42,19 +41,8 @@ export default function Login() {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      // Assuming an async login function
-      console.log(values)
-      toast(
-        <pre className="">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>,
-      )
-    } catch (error) {
-      console.error('Form submission error', error)
-      toast.error('Failed to submit the form. Please try again.')
-    }
+  async function onSubmit() {
+
   }
 
   return (
@@ -78,7 +66,7 @@ export default function Login() {
                       <FormControl>
                         <Input
                           id="email"
-                          placeholder="johndoe@mail.com"
+                          placeholder="john@mail.com"
                           type="email"
                           autoComplete="email"
                           {...field}
@@ -95,40 +83,43 @@ export default function Login() {
                     <FormItem className="grid gap-2">
                       <div className="flex justify-between items-center">
                         <FormLabel htmlFor="password">Password</FormLabel>
-                        <Link
-                          href="/forgot-password"
-                          className="ml-auto inline-block text-sm underline"
-                        >
-                          Forgot your password?
-                        </Link >
+
+
                       </div>
                       <FormControl>
-                        <Input
+                      <PasswordInput
                           id="password"
                           placeholder="******"
                           autoComplete="current-password"
                           {...field}
-                        />
+                          />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full cursor-pointer">
                   Login
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full cursor-pointer">
                   Login with Google
                 </Button>
               </div>
             </form>
           </Form>
-          <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{' '}
-            <Link href="/register" className="underline">
-              Sign up
-            </Link>
-          </div>
+            <div className="justify-center items-center flex flex-col mt-4 text-sm mt-20">
+            <Link
+                href="/forgot-password"
+                className="text-sm underline">
+                Forgot your password?
+            </Link >
+            <p className='inline-flex mt-5'>
+              Don&apos;t have an account?{' '}
+              <Link href="/register" className="underline">
+                Sign up
+              </Link>
+              </p>
+            </div>
         </CardContent>
 
     </div>

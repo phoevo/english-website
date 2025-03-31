@@ -2,8 +2,8 @@ import React from 'react'
 
 function page() {
   return (
-    <div>
-      Nothing yet
+    <div className='m-10'>
+      Conversation you&apos;ve interacted with will appear here.
     </div>
   )
 }

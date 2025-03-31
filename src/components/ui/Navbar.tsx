@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ModeToggle from "./ModeToggle";
 import { Button } from "./button";
+import { Badge } from "./badge";
 
 
 async function Navbar() {
@@ -18,9 +19,11 @@ async function Navbar() {
             <Link href="/profile" className="text-xl font-bold text-primary font-mono tracking-wider hover:underline underline-offset-10 decoration-zinc-600">
               profile
             </Link>
-            <div className="flex items-center gap-5 absolute right-10"><ModeToggle/>
+            <div className="flex items-center gap-5 absolute right-10">
+            <Badge>Free</Badge>
             <Link href={"/login"}><Button className="cursor-pointer" variant="outline">Log in</Button>
             </Link>
+             <ModeToggle/>
             </div>
 
           </div>
