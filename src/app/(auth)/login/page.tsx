@@ -114,7 +114,7 @@ export default function Login() {
                 Forgot your password?
             </Link >
             <p className='inline-flex mt-5'>
-              Don&apos;t have an account?{' '}
+              Don&apos;t have an account?&nbsp;
               <Link href="/register" className="underline">
                 Sign up
               </Link>
