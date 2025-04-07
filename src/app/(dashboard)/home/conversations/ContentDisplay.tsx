@@ -56,6 +56,8 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
 
   const [hoverEnabled, setHoverEnabled] = React.useState(true);
   const [nounEnabled, setNounEnabled] = React.useState(false);
+  const [adjectiveEnabled, setAdjectiveEnabled] = React.useState(false);
+  const [pronounEnabled, setPronounEnabled] = React.useState(false);
 
   const colorMap: Record<string, string> = {
     noun: "hover:bg-pink-500",
@@ -74,10 +76,14 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   const renderWord = (word: Word, index: number) => {
     if (!word?.text) return null;
 
+    // Dynamically set color based on word type
     const baseColor = colorMap[word.type]?.replace("hover:", "") || "";
     const hoverColor = hoverEnabled ? colorMap[word.type] || "" : "";
     const nounColor = nounEnabled && word.type === "noun" ? baseColor : "";
+    const pronounColor = pronounEnabled && word.type === "pronoun" ? baseColor : "";
+    const adjectiveColor = adjectiveEnabled && word.type === "adjective" ? baseColor : "";
 
+    console.log(word.type)
     return (
       <React.Fragment key={index}>
         <HoverCard openDelay={100} closeDelay={0}>
@@ -85,7 +91,7 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
             <span
               className={`text-base rounded transition-colors ${
                 hoverColor ? "cursor-pointer" : ""
-              } ${hoverColor} ${nounColor}`}
+              } ${hoverColor} ${nounColor} ${adjectiveColor} ${pronounColor}`}
             >
               {word.text}
             </span>
@@ -138,6 +144,12 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
               </span>
               <span>
                 Nouns <Switch checked={nounEnabled} onCheckedChange={setNounEnabled} />
+              </span>
+              <span>
+                Pronouns <Switch checked={pronounEnabled} onCheckedChange={setPronounEnabled} />
+              </span>
+              <span>
+                Adjectives <Switch checked={adjectiveEnabled} onCheckedChange={setAdjectiveEnabled} />
               </span>
             </div>
           </div>

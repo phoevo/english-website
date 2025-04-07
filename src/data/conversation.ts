@@ -20,7 +20,7 @@ export interface Conversation {
 
 
 const rawDialogue = `
-Alex: Hey, how was your weekend?
+Alex: Hey, how was your weekend break-a-leg?
 Jordan: Oh, it was fantastic! I went hiking with some friends up the mountains. We chose the less-traveled path, which was a bit more challenging than we expected, but totally worth it in the end. The views were just breathtaking—the kind of views that make you forget about everything else for a while. We even saw some wildlife along the way, like a couple of deer grazing near the trail and some colorful birds flying overhead. The best part was when we stopped for a break by a small stream, and I just sat there listening to the water flowing. It was such a peaceful moment. We all agreed that nature has this way of making everything feel right.
 Alex: That sounds absolutely incredible! I’ve been thinking about getting out into nature more lately, but I’m not sure where to start. What trail did you guys take? Is it something you’d recommend for someone like me who's still getting back into hiking?
 Jordan: Oh, you definitely should! We did the Eagle Ridge Trail, and I think you’d love it. It’s one of those trails that’s a little off the beaten path, so it doesn’t get as crowded as some of the more popular ones, but the views are just incredible. There are some steep sections, so it’s a bit of a workout, but it’s not too technical—nothing too crazy. There’s this spot about halfway up where you get this panoramic view of the whole valley, and it just takes your breath away. You can see the mountains stretching out in the distance, with the trees below forming this gorgeous, lush carpet of green. It’s one of those views where you feel like you’re on top of the world. And if you’re into spotting wildlife, there are always a few creatures around. We saw a hawk gliding through the air, which was pretty amazing. Honestly, I think if you’re in decent shape and take it at your own pace, you’ll have a great time.
@@ -63,131 +63,6 @@ const parsedDialogue = rawDialogue
       title: "Quick catchup",
       content: parsedDialogue,
     },
-
-      // vocab["hey"],          // hey
-      // vocab["how"],          // how
-      // vocab["was"],          // was
-      // vocab["your"],         // your
-      // vocab["weekend"],      // weekend
-      // vocab["it"],           // it
-      // vocab["was"],          // was
-      // vocab["pretty"],       // pretty
-      // vocab["good"],         // good
-      // vocab["actually"],     // actually
-      // vocab["went"],         // went
-      // vocab["hiking"],       // hiking
-      // vocab["with"],         // with
-      // vocab["some"],         // some
-      // vocab["friends"],      // friends
-      // vocab["up"],           // up
-      // vocab["mountains"],    // mountains
-      // vocab["we"],           // we
-      // vocab["were"],         // were
-      // vocab["looking"],      // looking
-      // vocab["for"],          // for
-      // vocab["a"],            // a
-      // vocab["new"],          // new
-      // vocab["trail"],        // trail
-      // vocab["to"],           // to
-      // vocab["explore"],      // explore
-      // vocab["sounds"],       // sounds
-      // vocab["amazing"],      // amazing
-      // vocab["how"],          // how
-      // vocab["was"],          // was
-      // vocab["the"],          // the
-      // vocab["weather"],      // weather
-      // vocab["it"],           // it
-      // vocab["was"],          // was
-      // vocab["perfect"],      // perfect
-      // vocab["sun"],          // sun
-      // vocab["was"],          // was
-      // vocab["out"],          // out
-      // vocab["but"],          // but
-      // vocab["it"],           // it
-      // vocab["wasn't"],       // wasn't
-      // vocab["too"],          // too
-      // vocab["hot"],          // hot
-      // vocab["challenging"],  // challenging
-      // vocab["view"],         // view
-      // vocab["from"],         // from
-      // vocab["the"],          // the
-      // vocab["top"],          // top
-      // vocab["we"],           // we
-      // vocab["could"],        // could
-      // vocab["see"],          // see
-      // vocab["the"],          // the
-      // vocab["whole"],        // whole
-      // vocab["valley"],       // valley
-      // vocab["below"],        // below
-      // vocab["the"],          // the
-      // vocab["city"],         // city
-      // vocab["in"],           // in
-      // vocab["the"],          // the
-      // vocab["distance"],     // distance
-      // vocab["we"],           // we
-      // vocab["had"],          // had
-      // vocab["never"],        // never
-      // vocab["seen"],         // seen
-      // vocab["that"],         // that
-      // vocab["angle"],        // angle
-      // vocab["before"],       // before
-      // vocab["haven't"],      // haven't
-      // vocab["gone"],         // gone
-      // vocab["hiking"],       // hiking
-      // vocab["in"],           // in
-      // vocab["a"],            // a
-      // vocab["long"],         // long
-      // vocab["time"],         // time
-      // vocab["I"],            // I
-      // vocab["miss"],         // miss
-      // vocab["nature"],       // nature
-      // vocab["it's"],         // it's
-      // vocab["so"],           // so
-      // vocab["calming"],      // calming
-      // vocab["I"],            // I
-      // vocab["don't"],        // don't
-      // vocab["think"],        // think
-      // vocab["I'll"],         // I'll
-      // vocab["ever"],         // ever
-      // vocab["completely"],   // completely
-      // vocab["agree"],        // agree
-      // vocab["but"],          // but
-      // vocab["absolutely"],   // absolutely
-      // vocab["feel"],         // feel
-      // vocab["like"],         // like
-      // vocab["it"],           // it
-      // vocab["clears"],       // clears
-      // vocab["my"],           // my
-      // vocab["mind"],         // mind
-      // vocab["yeah"],         // yeah
-      // vocab["me"],           // me
-      // vocab["too"],          // too
-      // vocab["it's"],         // it's
-      // vocab["definitely"],   // definitely
-      // vocab["the"],          // the
-      // vocab["best"],         // best
-      // vocab["way"],          // way
-      // vocab["to"],           // to
-      // vocab["clear"],        // clear
-      // vocab["my"],           // my
-      // vocab["head"],         // head
-      // vocab["yeah"],         // yeah
-      // vocab["I"],            // I
-      // vocab["agree"],        // agree
-      // vocab["let's"],        // let's
-      // vocab["do"],           // do
-      // vocab["more"],         // more
-      // vocab["hiking"],       // hiking
-      // vocab["soon"],         // soon
-      // vocab["I"],            // I
-      // vocab["can't"],        // can't
-      // vocab["wait"],         // wait
-      // vocab["for"],          // for
-      // vocab["our"],          // our
-      // vocab["next"],         // next
-      // vocab["trip"],         // trip
-      // vocab["."],            // punctuation
-
 
   "2": {
     title: "Conversation 2",
