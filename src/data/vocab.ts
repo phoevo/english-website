@@ -168,7 +168,6 @@ export const vocab: Record<string, { text: string; type: string; definition: str
   "waterfall": { text: "waterfall", type: "noun", definition: "falling water" },
   "two-thirds": { text: "two-thirds", type: "noun", definition: "2/3" },
   "way": { text: "way", type: "noun", definition: "path" },
-  "Sounds": { text: "Sounds", type: "verb", definition: "produces noise" },
   "exactly": { text: "exactly", type: "adverb", definition: "precisely" },
   "looking": { text: "looking", type: "verb", definition: "present participle of 'look'" },
   "Thanks": { text: "Thanks", type: "noun", definition: "expression of gratitude" },
