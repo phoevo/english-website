@@ -65,7 +65,7 @@ type WordTypeData = {
 
 export default function ContentDisplay({ conversation }: ConversationProps) {
   const [currentPage, setCurrentPage] = React.useState(0);
-  const pageSize = 4;
+  const pageSize = 5;
   const rawDialogue = conversation.content;
   const pages = Array.isArray(rawDialogue)
     ? Array.from({ length: Math.ceil(rawDialogue.length / pageSize) }, (_, i) =>

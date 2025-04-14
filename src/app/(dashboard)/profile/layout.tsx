@@ -29,6 +29,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import ModeToggle from "@/components/ui/ModeToggle"
 
 
 
@@ -36,7 +37,7 @@ const geist = Geist({ subsets: ['latin'] });
 
 export default function profileLayout(){
   return (
-    <div className={`flex justify-center items-center h-auto ${geist}`}>
+    <div className={`flex justify-center items-center h-auto pt-5 ${geist}`}>
     <Tabs defaultValue="account" className="">
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="account">Account</TabsTrigger>
@@ -62,20 +63,7 @@ export default function profileLayout(){
               <Input id="username" defaultValue="" />
             </div>
           </CardContent>
-          <CardFooter>
-            <Button>Save changes</Button>
-          </CardFooter>
-        </Card>
-      </TabsContent>
 
-      <TabsContent value="settings">
-        <Card className="bg-background">
-          <CardHeader>
-            <CardTitle>Settings</CardTitle>
-            <CardDescription>
-              Change your password here.
-            </CardDescription>
-          </CardHeader>
           <CardContent className="space-y-2">
             <div className="space-y-1">
               <Label htmlFor="current">Current password</Label>
@@ -85,6 +73,27 @@ export default function profileLayout(){
               <Label htmlFor="new">New password</Label>
               <Input id="new" type="password" />
             </div>
+          </CardContent>
+
+          <CardFooter>
+            <Button>Save changes</Button>
+          </CardFooter>
+        </Card>
+      </TabsContent>
+
+      <TabsContent value="settings">
+        <Card className="bg-background">
+          <CardHeader>
+            <CardTitle>Customization</CardTitle>
+            <CardDescription>
+
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="space-y-1">
+            <Label htmlFor="toggle">Light/Dark Mode Toggle</Label>
+            <ModeToggle />
+          </div>
           </CardContent>
           <CardFooter>
             <Button>Save password</Button>
