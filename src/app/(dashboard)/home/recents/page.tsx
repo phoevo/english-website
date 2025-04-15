@@ -1,18 +1,42 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { account } from '@/data/appwrite' // Adjust path based on where your Appwrite client is
+import { account, databaseId, databases, usersCollectionId } from '@/data/appwrite'  // Import appwrite functions
+import { getConversationFromDB } from '@/data/appwrite'  // Import the utility function
+import Link from 'next/link'
 
 function RecentsPage() {
   const [userName, setUserName] = useState<string | null>(null)
+  const [recentConversations, setRecentConversations] = useState<any[]>([])  // To hold all recent conversations
+  const [isCheckingUser, setIsCheckingUser] = useState(true)
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const user = await account.get()
-        setUserName(user.name) // or user.email if you prefer that
+        setUserName(user.name)
+
+
+        // Fetch the user document to get recentConversations array
+        const userDoc = await databases.getDocument(databaseId, usersCollectionId, user.$id)
+
+        // Assuming the user document has a field 'recentConversations' which is an array of IDs
+        const conversationIds = userDoc.recentConversations || []
+
+        // Now fetch all conversations using the IDs
+        const conversations = []
+        for (const conversationId of conversationIds) {
+          const conversation = await getConversationFromDB(conversationId)
+          conversations.push(conversation)
+        }
+
+        // Set all fetched conversations to the state
+        setRecentConversations(conversations)
+
       } catch (error) {
-        console.error('Failed to fetch user:', error)
+        console.error("Error fetching user or conversations:", error)
+      } finally {
+        setIsCheckingUser(false)
       }
     }
 
@@ -21,10 +45,34 @@ function RecentsPage() {
 
   return (
     <div className='m-10 space-y-4'>
-      {userName && <h1 className="text-2xl">Hello {userName}, this is where you left off...</h1>}
-      <p>Conversations you've interacted with will appear here.</p>
+      {/* Only show greeting if user is logged in */}
+      {!isCheckingUser && userName ? (
+        <>
+          <h1 className="text-2xl">Hello {userName}, here are your recent conversations...</h1>
+
+          <p>Conversations you&apos;ve interacted with will appear here.</p>
+
+          {recentConversations.length > 0 ? (
+            recentConversations.map((conversation) => (
+              <div key={conversation.$id} className="p-4 border-b">
+                <h2>{conversation.title}</h2>
+                <p>{conversation.lastMessage}</p>
+                {/* You can add more fields like timestamp, user interaction, etc. */}
+              </div>
+            ))
+          ) : (
+            <p>No recent conversations found.</p>
+          )}
+        </>
+      ) : (
+
+        <p>Please <Link href="/login" className="underline">log in </Link>
+        or <Link href="/register" className="underline">create an account </Link>
+        to view your recent conversations.</p>
+      )}
     </div>
   )
+
 }
 
 export default RecentsPage

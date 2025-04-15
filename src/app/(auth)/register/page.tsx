@@ -26,6 +26,7 @@ import { account } from '@/data/appwrite'
 import { ID } from 'appwrite'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { ensureUserDocument } from '@/data/syncUser'
 
 // Define validation schema using Zod
 const formSchema = z
@@ -75,15 +76,21 @@ export default function Register() {
       console.log('User created:', user);  // Log user creation
 
       // 2. Log the user in using email and password
-      await account.createEmailPasswordSession(data.email, data.password);  // Directly authenticate with email and password
+      await account.createEmailPasswordSession(data.email, data.password);
+      await ensureUserDocument();  // Directly authenticate with email and password
 
       // 3. Redirect to the dashboard
       router.push('/home');
-    } catch (err: any) {
-      console.error("Error during signup:", err);  // Log the error for debugging
-      setError(err?.message || 'Something went wrong');
-    }
-  };
+    } catch (err: unknown) {
+      console.error("Error during signup:", err);
+
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Something went wrong');
+      }
+  }
+};
 
 
   return (

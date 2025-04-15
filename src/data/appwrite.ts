@@ -1,4 +1,4 @@
-import { Client, Databases, Account, ID } from 'appwrite'
+import { Client, Databases, Account } from 'appwrite'
 
 // Initialize the Appwrite client
 const client = new Client()
@@ -12,6 +12,8 @@ export const account = new Account(client)
 // IDs
 export const databaseId = '67f9017b002808c927aa'     // Replace with your DB ID
 export const conversationsCollectionId = '67f9244b00193b15fd04' // Your collection ID
+export const usersCollectionId = '67fe6fe9001dc88e2b72';
+
 
 // Example util
 export const getConversationFromDB = async (documentId: string) => {

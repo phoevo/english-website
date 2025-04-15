@@ -4,28 +4,16 @@ import Link from 'next/link'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation' // For redirecting after login
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import {Form,FormControl,FormField,FormItem,FormLabel,FormMessage,} from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
-import {
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import {CardContent,CardDescription,CardHeader,CardTitle,} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/PasswordInput'
-import { account } from '@/data/appwrite' // Import Appwrite's account API
+import { account } from '@/data/appwrite'
+import { ensureUserDocument } from '@/data/syncUser'
 
-// Improved schema with additional validation rules
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
   password: z
@@ -43,22 +31,64 @@ export default function Login() {
     },
   })
 
-  const router = useRouter()
-
-  // Handle login submission
-  async function onSubmit(data: z.infer<typeof formSchema>) {
+  const handleGoogleLogin = async () => {
     try {
-      // Call Appwrite's createEmailPasswordSession method with the user's email and password
-      await account.createEmailPasswordSession(data.email, data.password)
-
-      // If login is successful, redirect to the home page or user profile
-      router.push('/home') // You can redirect to another page as per your requirement
+      // This opens a new window for Google OAuth
+      await account.createOAuth2Session(
+        'google',
+        `${window.location.origin}/home/recents`, // success redirect
+        `${window.location.origin}/login`         // failure redirect
+      );
     } catch (error) {
-      // Handle login error (e.g., invalid credentials)
-      console.error('Login error:', error)
-      // Optionally, you can show an error message to the user here
+      console.error('Google login error:', error)
+      setFormError('Failed to authenticate with Google.')
     }
   }
+
+
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
+
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    setFormError(null); // clear previous error
+
+    try {
+
+      try {
+        await account.get(); // succeeds if logged in
+        console.log('Fetched user:', user); // This logs the entire user object
+        console.log('User ID:', user.$id);
+        await account.deleteSession('current'); // log out
+      } catch (err) {
+        // No active session — all good
+      }
+
+      // 🔑 Create new session
+      await account.createEmailPasswordSession(data.email, data.password);
+
+      // 🧾 Ensure user document exists
+      await ensureUserDocument();
+
+      // 🚀 Redirect to home
+      router.push('/home/recents');
+
+    } catch (error: any) {
+      console.error('Login error:', error);
+      if (error.code === 429) {
+        setFormError("Too many login attempts. Please wait a moment and try again.");
+      } else if (error?.message) {
+        setFormError(error.message);
+      } else {
+        setFormError("Something went wrong. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+
 
   return (
     <div className="flex flex-col w-100 gap-10">
@@ -72,6 +102,12 @@ export default function Login() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid gap-4">
+              {formError && (
+                <div className="text-sm text-red-500 bg-red-100 p-2 rounded-md">
+                  {formError}
+                </div>
+              )}
+
               <FormField
                 control={form.control}
                 name="email"
@@ -91,6 +127,7 @@ export default function Login() {
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="password"
@@ -111,15 +148,18 @@ export default function Login() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full cursor-pointer">
-                Login
+
+              <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
+                {isLoading ? 'Logging in...' : 'Login'}
               </Button>
-              <Button variant="outline" className="w-full cursor-pointer">
+
+              <Button onClick={handleGoogleLogin} variant="outline" type='button' className="w-full cursor-pointer" disabled={isLoading}>
                 Login with Google
               </Button>
             </div>
           </form>
         </Form>
+
         <div className="justify-center items-center flex flex-col mt-4 text-sm mt-20">
           <Link href="/forgot-password" className="text-sm underline">
             Forgot your password?
