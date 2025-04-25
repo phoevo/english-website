@@ -1,8 +1,7 @@
 import { account, databases } from "./appwrite";
-import { ID } from "appwrite";
 
-const DATABASE_ID = "67f9017b002808c927aa"; // replace with your real DB ID
-const COLLECTION_ID = "67fe6fe9001dc88e2b72"; // replace with your real collection ID
+const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
+const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
 
 export async function ensureUserDocument() {
   const user = await account.get();
@@ -10,11 +9,11 @@ export async function ensureUserDocument() {
 
   try {
     // Try to get the user document by ID
-    await databases.getDocument(DATABASE_ID, COLLECTION_ID, userId);
+    await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, userId);
   } catch (err: any) {
     if (err.code === 404) {
       // If not found, create it
-      await databases.createDocument(DATABASE_ID, COLLECTION_ID, userId, {
+      await databases.createDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
         userId: userId,
         email: user.email,
         name: user.name ?? "",
@@ -23,5 +22,34 @@ export async function ensureUserDocument() {
     } else {
       throw err; // throw other unexpected errors
     }
+  }
+}
+
+
+export async function subscribeUser(documentId: string) {
+  try {
+    await databases.updateDocument(
+      DATABASE_ID,
+      USERS_COLLECTION_ID,
+      documentId,
+      { isSubscribed: true }
+    );
+    console.log('User is now subscribed!');
+  } catch (error) {
+    console.error('Subscription update failed:', error);
+  }
+}
+
+export async function unsubscribeUser(documentId: string) {
+  try {
+    await databases.updateDocument(
+      DATABASE_ID,
+      USERS_COLLECTION_ID,
+      documentId,
+      { isSubscribed: false }
+    );
+    console.log('User has been unsubscribed!');
+  } catch (error) {
+    console.error('Unsubscription failed:', error);
   }
 }

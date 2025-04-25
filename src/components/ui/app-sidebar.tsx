@@ -1,4 +1,4 @@
-import { Home, BookOpen, Search, Settings } from "lucide-react"
+import { BookOpen, BookMarked, ArrowUpRight } from "lucide-react"
 
 import {
   Sidebar,
@@ -17,7 +17,7 @@ const items = [
   {
     title: "Recents",
     url: "/home/recents",
-    icon: Home,
+    icon: ArrowUpRight,
   },
   {
     title: "Conversations",
@@ -25,15 +25,11 @@ const items = [
     icon: BookOpen,
   },
   {
-    title: "Search",
-    url: "",
-    icon: Search,
+    title: "Dictionary",
+    url: "/home/conversations",
+    icon: BookMarked,
   },
-  {
-    title: "Settings",
-    url: "",
-    icon: Settings,
-  },
+
 ]
 
 export function AppSidebar() {
@@ -41,7 +37,7 @@ export function AppSidebar() {
     <Sidebar className="w-60 h-auto mb-2 rounded-lg absolute">
       <SidebarContent className="">
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Tabs</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

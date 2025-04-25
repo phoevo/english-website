@@ -1,5 +1,5 @@
 export const vocab: Record<string, { text: string; type: string; definition: string }> = {
-  "hey": { text: "Hey", type: "interjection", definition: "informal greeting" },
+  "hey": { text: "hey", type: "interjection", definition: "informal greeting" },
   "break-a-leg":{text: "break-a-leg", type: "idiom", definition: "to wish good luck"},
   "how": { text: "how", type: "adverb", definition: "in what way" },
   "was": { text: "was", type: "verb", definition: "past tense of 'be'" },
@@ -209,7 +209,7 @@ export const vocab: Record<string, { text: string; type: string; definition: str
 "dolphins": { text: "dolphins", type: "noun", definition: "marine mammals known for their intelligence" },
 "swimming": { text: "swimming", type: "verb", definition: "present participle of 'swim', meaning to move through water" },
 "nearby": { text: "nearby", type: "adjective", definition: "close in distance" },
-"Wow": { text: "Wow", type: "interjection", definition: "expressing amazement or admiration" },
+"wow": { text: "wow", type: "interjection", definition: "expressing amazement or admiration" },
 "dream": { text: "dream", type: "noun", definition: "a cherished desire or aspiration" },
 "Paddleboarding": { text: "Paddleboarding", type: "noun", definition: "the activity of standing on a large board and paddling" },
 "fun": { text: "fun", type: "adjective", definition: "enjoyable or amusing" },
@@ -237,5 +237,13 @@ export const vocab: Record<string, { text: string; type: string; definition: str
 "paddling": { text: "paddling", type: "verb", definition: "moving a boat or board with a paddle" },
 "around": { text: "around", type: "preposition", definition: "in a circular or surrounding direction" },
 "pro": { text: "pro", type: "noun", definition: "a professional" },
-
+  "quick": { text: "quick", type: "adjective", definition: "moving fast or doing something in a short time" },
+  "fox": { text: "fox", type: "noun", definition: "a small wild animal with a bushy tail and a pointed snout" },
+  "can't": { text: "can't", type: "contraction", definition: "contraction of 'cannot'" },
+  "jump": { text: "jump", type: "verb", definition: "to push oneself off a surface and into the air" },
+  "over": { text: "over", type: "preposition", definition: "extending directly upward from" },
+  "because": { text: "because", type: "conjunction", definition: "for the reason that" },
+  "she": { text: "she", type: "pronoun", definition: "used to refer to a woman or girl previously mentioned or known" },
+  "very": { text: "very", type: "adverb", definition: "to a high degree" },
+  "tired": { text: "tired", type: "adjective", definition: "in need of sleep or rest" },
 }

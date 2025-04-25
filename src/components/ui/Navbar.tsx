@@ -7,6 +7,11 @@ import { Badge } from "./badge";
 import { account } from '@/data/appwrite'; // Ensure you're importing Appwrite instance
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { databases } from "@/data/appwrite";
+import { Skeleton } from "./skeleton";
+
+const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
+const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
 
 // Define the type of user (optional, depending on how Appwrite returns the user data)
 interface User {
@@ -20,18 +25,26 @@ const Navbar = () => {
   // State to store the logged-in user or null if not logged in
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
 
   // Function to check the user session asynchronously
   const checkUserSession = async (): Promise<void> => {
     try {
-      const currentUser = await account.get(); // Fetch current user
-      setUser(currentUser); // Set the user state with the data from Appwrite
-      console.log(currentUser);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const currentUser = await account.get();
+      setUser(currentUser);
+
+      const userDoc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, currentUser.$id);
+      setIsSubscribed(userDoc?.isSubscribed ?? false);
     } catch (err) {
-      setUser(null); // If an error occurs, set the user to null (not logged in)
+      setUser(null);
+      setIsSubscribed(false);
+    } finally {
+      setIsLoading(false); // 👈 don't forget this!
     }
   };
+
 
   // useEffect to check session on component mount
   useEffect(() => {
@@ -71,10 +84,19 @@ const Navbar = () => {
             <div>Hello, {user.name}</div>
             }
 
-              <Badge>Free</Badge>
+            {isLoading ? (
+              <Skeleton className="w-10 h-6 rounded-lg"/>
+            ) : isSubscribed ? (
+              <Badge className="bg-pink-500 text-foreground">Pro</Badge>
+            ) : (
+              <Badge variant="default">Free</Badge>
+            )}
 
-              {/* Conditionally render login or logout button based on user state */}
-              {user ? (
+
+
+              {isLoading? (
+                <Skeleton className="w-20 h-10 rounded-md"/>
+               ) : user ? (
                 <Button className="cursor-pointer" onClick={handleLogout} variant="outline">Logout</Button>
               ) : (
                 <Link href={"/login"}>

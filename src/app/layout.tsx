@@ -26,6 +26,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <div className="min-h-screen flex flex-col">
             <div className="flex-1">{children}</div>
+
           </div>
         </ThemeProvider>
       </body>

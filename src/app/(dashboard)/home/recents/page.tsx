@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { account, databaseId, databases, usersCollectionId } from '@/data/appwrite'  // Import appwrite functions
 import { getConversationFromDB } from '@/data/appwrite'  // Import the utility function
 import Link from 'next/link'
+import { Skeleton } from '@/components/ui/skeleton'
 
 function RecentsPage() {
   const [userName, setUserName] = useState<string | null>(null)
@@ -44,20 +45,21 @@ function RecentsPage() {
   }, [])
 
   return (
-    <div className='m-10 space-y-4'>
-      {/* Only show greeting if user is logged in */}
-      {!isCheckingUser && userName ? (
+    <div className="m-10 space-y-4">
+      {isCheckingUser ? (
+        <div className="space-y-5">
+          <Skeleton className='w-[530px] h-[32px]'/>
+          <Skeleton className='w-[430px] h-[15px]'/>
+        </div>
+      ) : userName ? (
         <>
           <h1 className="text-2xl">Hello {userName}, here are your recent conversations...</h1>
-
           <p>Conversations you&apos;ve interacted with will appear here.</p>
-
           {recentConversations.length > 0 ? (
             recentConversations.map((conversation) => (
               <div key={conversation.$id} className="p-4 border-b">
                 <h2>{conversation.title}</h2>
                 <p>{conversation.lastMessage}</p>
-                {/* You can add more fields like timestamp, user interaction, etc. */}
               </div>
             ))
           ) : (
@@ -65,13 +67,14 @@ function RecentsPage() {
           )}
         </>
       ) : (
-
-        <p>Please <Link href="/login" className="underline">log in </Link>
-        or <Link href="/register" className="underline">create an account </Link>
-        to view your recent conversations.</p>
+        <p>
+          Please <Link href="/login" className="underline">log in</Link> or{' '}
+          <Link href="/register" className="underline">create an account</Link> to view your recent conversations.
+        </p>
       )}
     </div>
   )
+
 
 }
 

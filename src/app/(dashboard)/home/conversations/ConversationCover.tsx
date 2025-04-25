@@ -7,11 +7,10 @@ import Link from "next/link";
 
 interface ConversationCoverProps {
   conversationTitle: string;
-  conversationPrice: number;
   conversationId: string;
 }
 
-function ConversationCover({ conversationTitle, conversationPrice, conversationId }: ConversationCoverProps) {
+function ConversationCover({ conversationTitle, conversationId }: ConversationCoverProps) {
 
   const handleClick = async () => {
     try {
@@ -43,7 +42,6 @@ function ConversationCover({ conversationTitle, conversationPrice, conversationI
       </div>
       <div className="flex flex-col justify-center items-center ">
         <div className="font-semibold">{conversationTitle}</div>
-        <div className="italic text-zinc-500">${conversationPrice}</div>
       </div>
     </motion.div>
 

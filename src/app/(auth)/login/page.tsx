@@ -35,7 +35,7 @@ export default function Login() {
     try {
       // This opens a new window for Google OAuth
       await account.createOAuth2Session(
-        'google',
+        "google",
         `${window.location.origin}/home/recents`, // success redirect
         `${window.location.origin}/login`         // failure redirect
       );
@@ -52,26 +52,18 @@ export default function Login() {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    setFormError(null); // clear previous error
+    setFormError(null);
 
     try {
 
       try {
         await account.get(); // succeeds if logged in
-        console.log('Fetched user:', user); // This logs the entire user object
-        console.log('User ID:', user.$id);
         await account.deleteSession('current'); // log out
       } catch (err) {
-        // No active session — all good
       }
 
-      // 🔑 Create new session
       await account.createEmailPasswordSession(data.email, data.password);
-
-      // 🧾 Ensure user document exists
       await ensureUserDocument();
-
-      // 🚀 Redirect to home
       router.push('/home/recents');
 
     } catch (error: any) {

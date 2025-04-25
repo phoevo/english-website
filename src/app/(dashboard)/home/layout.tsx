@@ -6,6 +6,7 @@ import { Raleway } from "next/font/google";
 const raleway = Raleway({ subsets: ['latin'] });
 
 
+
 function homeLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={`flex h-500 w-auto h-auto ${raleway}`}>

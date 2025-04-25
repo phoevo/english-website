@@ -18,7 +18,7 @@ export interface Conversation {
 }
 
 // Function to parse dialogue from raw text
-const parseDialogue = (rawDialogue: string) => {
+export const parseDialogue = (rawDialogue: string) => {
   const parsedDialogue = rawDialogue
     .trim()
     .split("\n")

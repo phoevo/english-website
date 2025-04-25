@@ -88,12 +88,6 @@ export default function ConversationPage() {
 
 
 
-
-
-
-
-
-
   if (error) {
     return <div className="text-center p-10 text-red-500">{error}</div>;
   }

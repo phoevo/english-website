@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
   Pagination,
   PaginationContent,
@@ -21,10 +21,26 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Check, Dot } from "lucide-react";
+import { Check, Plus } from "lucide-react";
+import { WordTypeSettings } from "@/components/ui/WordTypeSettings";
+import { Button } from "@/components/ui/button";
+import { account, databases } from "@/data/appwrite";
+import { toast } from "sonner";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const raleway = Raleway({ subsets: ["latin"], variable: "--font-raleway", display: "swap" });
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
+
+const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
+const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
+
+
+
 
 interface Word {
   text: string;
@@ -90,6 +106,29 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
     contraction: { color: "purple-500", enabled: false },
   });
 
+  const [savedWords, setSavedWords] = useState<string[]>([]);
+  const [userId, setUserId] = useState<string | null>(null);
+
+
+  useEffect(() => {
+    async function fetchUserWords() {
+      try {
+        const user = await account.get();
+        const userDoc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, user.$id);
+
+        setUserId(user.$id);
+        setSavedWords(userDoc.dictionaryWords || []);
+      } catch (err) {
+        console.error("User not logged in or fetch failed", err);
+        setUserId(null);
+        setSavedWords([]);
+      }
+    }
+
+    fetchUserWords();
+  }, []);
+
+
   const toggleWordType = (key: WordTypeKey) => {
     setWordTypes(prev => ({
       ...prev,
@@ -101,6 +140,7 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   };
 
   const tickIcon = <Check size={17} />;
+  const addIcon = <Plus/>
 
   const renderWord = (word: Word, index: number) => {
     const wordType = wordTypes[word.type];
@@ -110,6 +150,43 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
     const isEnabled = wordType.enabled;
     const hoverColor = hoverEnabled ? `hover:bg-${baseColor}` : "";
     const appliedColor = isEnabled ? `bg-${baseColor}` : "";
+
+
+    async function addDictionary(wordText: string) {
+      if (!userId) {
+        toast("Account required", {
+          description: "You need to log in or create an account to save words.",
+        });
+        return;
+      }
+
+      // Optimistic update (instant visual feedback)
+      setSavedWords(prev => [...prev, wordText]);
+      toast.success(`Added "${wordText}" to your dictionary`);
+
+      try {
+        const userDoc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, userId);
+        const currentWords: string[] = Array.isArray(userDoc.dictionaryWords)
+          ? userDoc.dictionaryWords
+          : [];
+
+        if (currentWords.includes(wordText)) {
+          return; // no need to update
+        }
+
+        const updatedWords = [...currentWords, wordText];
+
+        await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
+          dictionaryWords: updatedWords,
+        });
+      } catch (err) {
+        console.error("Error saving word:", err);
+        toast.error("Something went wrong. Word might not be saved.");
+      }
+    }
+
+    const alreadySaved = savedWords.includes(word.text);
+
 
     return (
       <React.Fragment key={index}>
@@ -125,12 +202,24 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
           </HoverCardTrigger>
           {hoverEnabled && word.definition && (
             <HoverCardContent className={`flex flex-col text-sm ${geist.className}`}>
-              <div className="flex flex-col items-center justify-center">
+              <div className="flex flex-col items-center justify-center gap-1">
                 <span className="font-bold">{word.type}</span>
                 <span>{word.definition}</span>
+
+                    <Button
+                      variant="outline"
+                      onClick={() => !alreadySaved && addDictionary(word.text)}
+                      className="w-4 h-5 rounded-sm cursor-pointer"
+                      disabled={alreadySaved}
+                      title={alreadySaved ? "Already saved" : "Add"}
+                    >
+                      {alreadySaved ? tickIcon : addIcon}
+                    </Button>
+
               </div>
             </HoverCardContent>
           )}
+
         </HoverCard>
       </React.Fragment>
     );
@@ -173,25 +262,8 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
                 <AccordionItem value="item-1">
                   <AccordionTrigger className="w-30">Word Types</AccordionTrigger>
                   <AccordionContent>
-                    <div className="bg-background rounded-md p-2 w-full gap-2 flex flex-col">
-                      {(Object.keys(wordTypes) as WordTypeKey[]).map((key) => (
-                        <div
-                          key={key}
-                          className={`${
-                            wordTypes[key].enabled ? "bg-muted" : "bg-background"
-                          } flex items-center rounded-md cursor-pointer w-35 border-1`}
-                          onClick={() => toggleWordType(key)}
-                        >
-                          <div className="flex flex-row items-center justify-self-start pl-1">
-                            <Dot size={30} className={`text-${wordTypes[key].color}`} />
-                            {key.charAt(0).toUpperCase() + key.slice(1)}
-
-                          </div>
-
-                          <div className="ml-auto pr-2">{wordTypes[key].enabled ? tickIcon : ""}</div>
-
-                        </div>
-                      ))}
+                  <div className="bg-background rounded-md p-2 w-full gap-2 flex flex-col">
+                    <WordTypeSettings wordTypes={wordTypes} toggleWordType={toggleWordType} />
                     </div>
                   </AccordionContent>
                 </AccordionItem>
