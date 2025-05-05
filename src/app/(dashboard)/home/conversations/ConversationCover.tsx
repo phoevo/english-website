@@ -8,9 +8,10 @@ import Link from "next/link";
 interface ConversationCoverProps {
   conversationTitle: string;
   conversationId: string;
+  level: string;
 }
 
-function ConversationCover({ conversationTitle, conversationId }: ConversationCoverProps) {
+function ConversationCover({ conversationTitle, conversationId, level}: ConversationCoverProps) {
 
   const handleClick = async () => {
     try {
@@ -42,6 +43,7 @@ function ConversationCover({ conversationTitle, conversationId }: ConversationCo
       </div>
       <div className="flex flex-col justify-center items-center ">
         <div className="font-semibold">{conversationTitle}</div>
+        <div className="color-zinc-500">{level}</div>
       </div>
     </motion.div>
 

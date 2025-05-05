@@ -1,6 +1,6 @@
 export const vocab: Record<string, { text: string; type: string; definition: string }> = {
   "hey": { text: "hey", type: "interjection", definition: "informal greeting" },
-  "break-a-leg":{text: "break-a-leg", type: "idiom", definition: "to wish good luck"},
+  "break-a-leg":{text: "break a leg", type: "idiom", definition: "to wish good luck"},
   "how": { text: "how", type: "adverb", definition: "in what way" },
   "was": { text: "was", type: "verb", definition: "past tense of 'be'" },
   "your": { text: "your", type: "pronoun", definition: "belonging to you" },

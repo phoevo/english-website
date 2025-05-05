@@ -4,7 +4,7 @@ import { vocab } from "./vocab";
 export interface Word {
   text: string;
   type: string;
-  definition?: string; // Make definition optional
+  definition?: string;
 }
 
 interface DialogueLine {
@@ -27,11 +27,10 @@ export const parseDialogue = (rawDialogue: string) => {
       const text = rest.join(":").trim();
 
       const words = text
-        .replace(/\s+/g, " ") // Normalize spaces
-        .trim()
-        .split(" ") // Split into words
+        .replace(/\s+/g, " ")
+
+        .split(" ")
         .map(rawWord => {
-          // Clean the word for vocab lookup by stripping punctuation and converting to lowercase
           const cleaned = rawWord
             .toLowerCase()
             .replace(/[’]/g, "'") // normalize fancy apostrophes

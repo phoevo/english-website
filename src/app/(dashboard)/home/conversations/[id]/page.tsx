@@ -3,7 +3,7 @@ import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import ContentDisplay from "../ContentDisplay";
 import { loadConversation } from "@/data/conversation";
-import { Skeleton } from "@/components/ui/skeleton";  // Import your loadConversation function
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ConversationPage() {
   const params = useParams();
@@ -40,8 +40,8 @@ export default function ConversationPage() {
       }
     };
 
-    fetchConversation(); // Fetch when the component mounts
-  }, [conversationId]); // Re-fetch if the conversationId changes
+    fetchConversation();
+  }, [conversationId]);
 
   if (loading) {
     return(

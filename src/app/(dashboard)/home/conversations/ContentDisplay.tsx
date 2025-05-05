@@ -26,12 +26,6 @@ import { WordTypeSettings } from "@/components/ui/WordTypeSettings";
 import { Button } from "@/components/ui/button";
 import { account, databases } from "@/data/appwrite";
 import { toast } from "sonner";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 const raleway = Raleway({ subsets: ["latin"], variable: "--font-raleway", display: "swap" });
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
@@ -109,6 +103,15 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   const [savedWords, setSavedWords] = useState<string[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
 
+function cleanWord(rawWord: string) {
+  return rawWord
+    .toLowerCase()
+    .replace(/[’]/g, "'")   // normalize apostrophes
+    .replace(/[.,!?—;:()"]/g, "")  // remove punctuation
+    .trim();
+}
+
+
 
   useEffect(() => {
     async function fetchUserWords() {
@@ -151,8 +154,11 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
     const hoverColor = hoverEnabled ? `hover:bg-${baseColor}` : "";
     const appliedColor = isEnabled ? `bg-${baseColor}` : "";
 
+    // CLEAN the word before checking if it's already saved
+    const cleanedWordText = cleanWord(word.text);
+    const alreadySaved = savedWords.includes(cleanedWordText);
 
-    async function addDictionary(wordText: string) {
+    async function addDictionary(rawWordText: string) {
       if (!userId) {
         toast("Account required", {
           description: "You need to log in or create an account to save words.",
@@ -160,7 +166,8 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
         return;
       }
 
-      // Optimistic update (instant visual feedback)
+      const wordText = cleanWord(rawWordText);
+
       setSavedWords(prev => [...prev, wordText]);
       toast.success(`Added "${wordText}" to your dictionary`);
 
@@ -171,11 +178,10 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
           : [];
 
         if (currentWords.includes(wordText)) {
-          return; // no need to update
+          return; // Word already exists
         }
 
         const updatedWords = [...currentWords, wordText];
-
         await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
           dictionaryWords: updatedWords,
         });
@@ -184,9 +190,6 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
         toast.error("Something went wrong. Word might not be saved.");
       }
     }
-
-    const alreadySaved = savedWords.includes(word.text);
-
 
     return (
       <React.Fragment key={index}>
@@ -206,26 +209,26 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
                 <span className="font-bold">{word.type}</span>
                 <span>{word.definition}</span>
 
-                    <Button
-                      variant="outline"
-                      onClick={() => !alreadySaved && addDictionary(word.text)}
-                      className="w-4 h-5 rounded-sm cursor-pointer"
-                      disabled={alreadySaved}
-                      title={alreadySaved ? "Already saved" : "Add"}
-                    >
-                      {alreadySaved ? tickIcon : addIcon}
-                    </Button>
-
+                <Button
+                  variant="outline"
+                  onClick={() => !alreadySaved && addDictionary(word.text)}
+                  className="w-4 h-5 rounded-sm cursor-pointer"
+                  disabled={alreadySaved}
+                  title={alreadySaved ? "Already saved" : "Add"}
+                >
+                  {alreadySaved ? tickIcon : addIcon}
+                </Button>
               </div>
             </HoverCardContent>
           )}
-
         </HoverCard>
       </React.Fragment>
     );
   };
 
+
   return (
+
     <div className="bg-background flex flex-col justify-center items-center text-foreground h-full flex-1 rounded-lg">
       <div className="flex text-2xl justify-start pl-10 items-center border-b w-full h-15">
         {conversation.title}
@@ -255,7 +258,7 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
           <div className="flex justify-center items-center">
             <div className="flex justify-center items-center gap-3 flex-col">
               <span className="flex gap-1 items-center">
-                Hover <Switch checked={hoverEnabled} onCheckedChange={setHoverEnabled} />
+                <div className="bg-pink-500 rounded px-1">Hover</div> <Switch checked={hoverEnabled} onCheckedChange={setHoverEnabled} />
               </span>
 
               <Accordion type="single" collapsible>

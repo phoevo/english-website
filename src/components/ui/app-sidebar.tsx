@@ -26,7 +26,7 @@ const items = [
   },
   {
     title: "Dictionary",
-    url: "/home/conversations",
+    url: "/home/dictionary",
     icon: BookMarked,
   },
 
