@@ -1,14 +1,14 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { account, databaseId, databases, usersCollectionId } from '@/data/appwrite'  // Import appwrite functions
-import { getConversationFromDB } from '@/data/appwrite'  // Import the utility function
+import { account, databaseId, databases, usersCollectionId } from '@/data/appwrite'
+import { getConversationFromDB } from '@/data/appwrite'
 import Link from 'next/link'
 import { Skeleton } from '@/components/ui/skeleton'
 
 function RecentsPage() {
   const [userName, setUserName] = useState<string | null>(null)
-  const [recentConversations, setRecentConversations] = useState<any[]>([])  // To hold all recent conversations
+  const [recentConversations, setRecentConversations] = useState<any[]>([])
   const [isCheckingUser, setIsCheckingUser] = useState(true)
 
   useEffect(() => {
@@ -17,23 +17,16 @@ function RecentsPage() {
         const user = await account.get()
         setUserName(user.name)
 
-
-        // Fetch the user document to get recentConversations array
         const userDoc = await databases.getDocument(databaseId, usersCollectionId, user.$id)
-
-        // Assuming the user document has a field 'recentConversations' which is an array of IDs
         const conversationIds = userDoc.recentConversations || []
 
-        // Now fetch all conversations using the IDs
-        const conversations = []
-        for (const conversationId of conversationIds) {
-          const conversation = await getConversationFromDB(conversationId)
-          conversations.push(conversation)
-        }
+        const conversations = await Promise.all(
+          conversationIds.map(async (conversationId: string) =>
+            getConversationFromDB(conversationId)
+          )
+        )
 
-        // Set all fetched conversations to the state
         setRecentConversations(conversations)
-
       } catch (error) {
         console.error("Error fetching user or conversations:", error)
       } finally {
@@ -48,20 +41,26 @@ function RecentsPage() {
     <div className="m-10 space-y-4">
       {isCheckingUser ? (
         <div className="space-y-5">
-          <Skeleton className='w-[530px] h-[32px]'/>
-          <Skeleton className='w-[430px] h-[15px]'/>
+          <Skeleton className="w-[530px] h-[32px]" />
+          <Skeleton className="w-[430px] h-[15px]" />
         </div>
       ) : userName ? (
         <>
           <h1 className="text-2xl">Hello {userName}, here are your recent conversations...</h1>
           <p>Conversations you&apos;ve interacted with will appear here.</p>
           {recentConversations.length > 0 ? (
-            recentConversations.map((conversation) => (
-              <div key={conversation.$id} className="p-4 border-b">
-                <h2>{conversation.title}</h2>
-                <p>{conversation.lastMessage}</p>
-              </div>
-            ))
+            <div className="space-y-3">
+              {recentConversations.map((conversation) => (
+                <Link
+                  key={conversation.$id}
+                  href={`conversations/${conversation.$id}`}
+                  className="block p-4 border rounded-lg "
+                >
+                  <h2 className="text-lg font-semibold">{conversation.title}</h2>
+                  <p className="text-sm text-gray-500">{conversation.level}</p>
+                </Link>
+              ))}
+            </div>
           ) : (
             <p>No recent conversations found.</p>
           )}
@@ -74,8 +73,6 @@ function RecentsPage() {
       )}
     </div>
   )
-
-
 }
 
 export default RecentsPage

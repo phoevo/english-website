@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { account, databases } from "@/data/appwrite";
-import { subscribeUser } from "@/data/syncUser";
+import { subscribeUser } from "@/data/getData";
+import { useConversations } from "@/hooks/useConversations";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import ConversationCover from "./ConversationCover";
@@ -12,9 +13,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
+} from "@/components/ui/select";
 
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
@@ -24,14 +25,7 @@ function ConversationsPage() {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState<string | undefined>();
 
-  const conversations = [
-    { title: "Conversation 1", level: "A1", id: "67f9251e002631f20f08" },
-    { title: "Conversation 2", level: "A1", id: "67f94611001db351fdc0" },
-    { title: "Conversation 3", level: "A2", id: "67f9244b00193b15fd06" },
-    { title: "Conversation 4", level: "A2", id: "67f9244b00193b15fd07" },
-  ];
-
-
+  const { conversations, loading, error } = useConversations();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -39,12 +33,7 @@ function ConversationsPage() {
         const user = await account.get();
         setUserId(user.$id);
 
-        const doc = await databases.getDocument(
-          DATABASE_ID, // DB ID
-          USERS_COLLECTION_ID, // Collection ID
-          user.$id               // User doc ID
-        );
-
+        const doc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, user.$id);
         setIsSubscribed(doc?.isSubscribed ?? false);
       } catch (error) {
         console.error("Failed to fetch subscription status:", error);
@@ -67,6 +56,18 @@ function ConversationsPage() {
     }
   };
 
+  if (loading) {
+    return <div className="p-10 text-center">Loading conversations...</div>;
+  }
+
+  if (error) {
+    return <div className="p-10 text-center text-red-500">{error}</div>;
+  }
+
+  const filtered = conversations.filter(conv =>
+    !selectedLevel || selectedLevel === "All" || conv.level === selectedLevel
+  );
+
   return (
     <div className="flex flex-col overflow-auto">
       <div className="m-10 flex flex-row gap-10">
@@ -88,23 +89,18 @@ function ConversationsPage() {
             <SelectItem value="C2">C2 - Mastery</SelectItem>
           </SelectContent>
         </Select>
-
-
       </div>
 
-      <div className="grid grid-cols-2 p-7 gap-5 max-h-80 md:grid-cols-3 lg:grid-cols-4">
-  {conversations
-    .filter(conv => !selectedLevel || selectedLevel === "All" || conv.level === selectedLevel)
-    .map(conv => (
-      <ConversationCover
-        key={conv.id}
-        conversationTitle={conv.title}
-        level={conv.level}
-        conversationId={conv.id}
-      />
-    ))}
-</div>
-
+      <div className="grid grid-cols-2 p-7 gap-5 md:grid-cols-3 lg:grid-cols-4">
+        {filtered.map(conv => (
+          <ConversationCover
+            key={conv.$id}
+            conversationTitle={conv.title}
+            level={conv.level}
+            conversationId={conv.$id}
+          />
+        ))}
+      </div>
     </div>
   );
 }

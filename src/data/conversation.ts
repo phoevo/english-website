@@ -71,5 +71,6 @@ export const loadConversation = async (documentId: string) => {
   return {
     title: doc.title,
     content: parsedContent,
+    level: doc.level,
   };
 };

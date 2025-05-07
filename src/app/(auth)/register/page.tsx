@@ -26,7 +26,7 @@ import { account } from '@/data/appwrite'
 import { ID } from 'appwrite'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { ensureUserDocument } from '@/data/syncUser'
+import { ensureUserDocument } from '@/data/getData'
 
 // Define validation schema using Zod
 const formSchema = z

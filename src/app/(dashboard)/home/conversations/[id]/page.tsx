@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import ContentDisplay from "../ContentDisplay";
 import { loadConversation } from "@/data/conversation";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Conversation } from "@/data/conversation";
 
 export default function ConversationPage() {
   const params = useParams();

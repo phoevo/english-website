@@ -40,7 +40,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
-import { unsubscribeUser } from '@/data/syncUser'
+import { unsubscribeUser } from '@/data/getData'
 
 
 

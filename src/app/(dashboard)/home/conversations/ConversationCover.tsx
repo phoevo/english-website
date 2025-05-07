@@ -33,12 +33,12 @@ function ConversationCover({ conversationTitle, conversationId, level}: Conversa
     <Link href={`conversations/${conversationId}`}>
 
     <motion.div
-      className="bg-muted flex flex-col h-80 w-80 rounded-lg cursor-pointer overflow-hidden"
+      className="bg-muted flex flex-col h-70 w-70 p-2 rounded-lg cursor-pointer overflow-hidden"
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.1 }}
       onClick={handleClick}
     >
-      <div className="flex justify-center items-center bg-blue-900 border-1 border-foreground rounded-lg m-5 h-50">
+      <div className="flex justify-center items-center bg-blue-900 border-1 border-foreground rounded-lg m-3 h-50">
         Sample Image
       </div>
       <div className="flex flex-col justify-center items-center ">

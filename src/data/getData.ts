@@ -2,6 +2,7 @@ import { account, databases } from "./appwrite";
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
+const CONVERSATIONS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_CONVERSATIONS_COLLECTION_ID!;
 
 export async function ensureUserDocument() {
   const user = await account.get();
@@ -51,5 +52,15 @@ export async function unsubscribeUser(documentId: string) {
     console.log('User has been unsubscribed!');
   } catch (error) {
     console.error('Unsubscription failed:', error);
+  }
+}
+
+export async function fetchConversations() {
+  try {
+    const res = await databases.listDocuments(DATABASE_ID, CONVERSATIONS_COLLECTION_ID);
+    return res.documents;
+  } catch (error) {
+    console.error("Failed to fetch conversations:", error);
+    throw error;
   }
 }

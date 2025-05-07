@@ -12,7 +12,7 @@ import {CardContent,CardDescription,CardHeader,CardTitle,} from '@/components/ui
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/PasswordInput'
 import { account } from '@/data/appwrite'
-import { ensureUserDocument } from '@/data/syncUser'
+import { ensureUserDocument } from '@/data/getData'
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
