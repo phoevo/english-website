@@ -15,7 +15,7 @@ export const conversationsCollectionId = '67f9244b00193b15fd04' // Your collecti
 export const usersCollectionId = '67fe6fe9001dc88e2b72';
 
 
-// Example util
+
 export const getConversationFromDB = async (documentId: string) => {
   try {
     const response = await databases.getDocument(databaseId, conversationsCollectionId, documentId)

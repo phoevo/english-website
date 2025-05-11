@@ -58,13 +58,11 @@ export const parseDialogue = (rawDialogue: string) => {
 export const loadConversation = async (documentId: string) => {
   const doc = await getConversationFromDB(documentId);
 
-  let parsedContent: any = doc.content;
+  let parsedContent: unknown = doc.content;
 
   try {
-    // If content is a valid JSON array (already parsed), this works
     parsedContent = JSON.parse(doc.content);
-  } catch (e) {
-    // If it's not JSON, assume it's raw dialogue text and parse it
+  } catch {
     parsedContent = parseDialogue(doc.content);
   }
 

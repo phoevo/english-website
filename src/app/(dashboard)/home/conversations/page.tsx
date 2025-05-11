@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { account, databases } from "@/data/appwrite";
+import { databases } from "@/data/appwrite";
 import { subscribeUser } from "@/data/getData";
 import { useConversations } from "@/hooks/useConversations";
 import { toast } from "sonner";
@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useUserStore } from "@/data/useUserStore";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
@@ -21,34 +22,36 @@ const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
 
 function ConversationsPage() {
-  const [userId, setUserId] = useState<string | null>(null);
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const { conversations, loading: conversationsLoading, error } = useConversations();
   const [selectedLevel, setSelectedLevel] = useState<string | undefined>();
 
-  const { conversations, loading, error } = useConversations();
+  const {
+    user,
+    loading: userLoading,
+    isSubscribed,
+    setSubscribed,
+  } = useUserStore();
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchSubscription = async () => {
+      if (!user) return;
       try {
-        const user = await account.get();
-        setUserId(user.$id);
-
         const doc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, user.$id);
-        setIsSubscribed(doc?.isSubscribed ?? false);
+        setSubscribed(doc?.isSubscribed ?? false);
       } catch (error) {
         console.error("Failed to fetch subscription status:", error);
       }
     };
 
-    fetchUser();
-  }, []);
+    fetchSubscription();
+  }, [user, setSubscribed]);
 
   const handleSubscribe = async () => {
-    if (!userId) return;
+    if (!user?.$id) return;
 
     try {
-      await subscribeUser(userId);
-      setIsSubscribed(true);
+      await subscribeUser(user.$id);
+      setSubscribed(true);
       toast.success("You are now subscribed!");
     } catch (err) {
       console.error("Subscription failed", err);
@@ -56,7 +59,7 @@ function ConversationsPage() {
     }
   };
 
-  if (loading) {
+  if (conversationsLoading || userLoading) {
     return <div className="p-10 text-center">Loading conversations...</div>;
   }
 

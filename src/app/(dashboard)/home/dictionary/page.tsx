@@ -1,126 +1,157 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState } from 'react'
-import { account, databaseId, databases, usersCollectionId } from '@/data/appwrite'
-import { vocab } from '@/data/vocab'
-import Link from 'next/link'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Button } from '@/components/ui/button'
-import { X } from 'lucide-react'
-import { AnimatePresence, motion } from 'framer-motion'
+import React, { useEffect, useState } from "react";
+import { databases } from "@/data/appwrite";
+import { vocab } from "@/data/vocab";
+import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useUserStore } from "@/data/useUserStore";
+import { ScrollArea } from "@/components/ui/scroll-area"
 
+// Get the word details from vocab
 function getWordDetails(wordText: string) {
-  return vocab[wordText.toLowerCase()] ?? null
+  return vocab[wordText.toLowerCase()] ?? null;
 }
 
 function DictionaryPage() {
-  const [userName, setUserName] = useState<string | null>(null)
-  const [userId, setUserId] = useState<string | null>(null)
-  const [savedWords, setSavedWords] = useState<string[]>([])
-  const [isCheckingUser, setIsCheckingUser] = useState(true)
-  const [deletingWord, setDeletingWord] = useState<string | null>(null)
+  const [savedWords, setSavedWords] = useState<string[]>([]);
+  const [isCheckingUser, setIsCheckingUser] = useState(true);
+  const [deletingWord, setDeletingWord] = useState<string | null>(null);
+
+  // Access the user data from Zustand
+  const { user, loading: userLoading } = useUserStore();
 
   useEffect(() => {
-    const fetchUser = async () => {
+    // If user is available, fetch saved words from the database
+    const fetchSavedWords = async () => {
+      if (!user) return;
+
       try {
-        const user = await account.get()
-        setUserName(user.name)
-        setUserId(user.$id)
-
-        const userDoc = await databases.getDocument(databaseId, usersCollectionId, user.$id)
-        const userSavedWords = userDoc.dictionaryWords || []
-        setSavedWords(userSavedWords)
-
+        const userDoc = await databases.getDocument(
+          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+          process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!,
+          user.$id
+        );
+        const userSavedWords = userDoc?.dictionaryWords || [];
+        setSavedWords(userSavedWords);
       } catch (error) {
-        console.error("Error fetching user or words:", error)
+        console.error("Error fetching saved words:", error);
       } finally {
-        setIsCheckingUser(false)
+        setIsCheckingUser(false);
       }
-    }
+    };
 
-    fetchUser()
-  }, [])
+    fetchSavedWords();
+  }, [user]); // Re-run whenever user changes
 
   const handleDelete = async (wordToDelete: string) => {
-    if (!userId) return
+    if (!user?.$id) return;
 
-    setDeletingWord(wordToDelete) // Trigger animation
+    setDeletingWord(wordToDelete); // Trigger animation
 
     // Wait for the animation to finish
     setTimeout(async () => {
-      const updatedWords = savedWords.filter(word => word !== wordToDelete)
-      setSavedWords(updatedWords)
-      setDeletingWord(null)
+      const updatedWords = savedWords.filter((word) => word !== wordToDelete);
+      setSavedWords(updatedWords);
+      setDeletingWord(null);
 
       try {
-        await databases.updateDocument(databaseId, usersCollectionId, userId, {
-          dictionaryWords: updatedWords,
-        })
+        // Update user document with new saved words list
+        await databases.updateDocument(
+          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+          process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!,
+          user.$id,
+          { dictionaryWords: updatedWords }
+        );
       } catch (error) {
-        console.error("Failed to delete word:", error)
+        console.error("Failed to delete word:", error);
       }
-    }, 300) // Match this with the animation duration
+    }, 0); // Match this with the animation duration
+  };
+
+  if (isCheckingUser || userLoading) {
+    return (
+      <div className="m-10 space-y-5">
+        <Skeleton className="w-[450px] h-[32px]" />
+        <Skeleton className="w-[514px] h-[14px]" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div>
+        <p>
+          Please{" "}
+          <Link href="/login" className="underline">
+            log in
+          </Link>{" "}
+          or{" "}
+          <Link href="/register" className="underline">
+            create an account
+          </Link>{" "}
+          to view your saved words.
+        </p>
+      </div>
+    );
   }
 
   return (
     <div className="m-10 space-y-4">
-      {isCheckingUser ? (
-        <div className="space-y-5">
-          <Skeleton className='w-[530px] h-[32px]' />
-          <Skeleton className='w-[430px] h-[15px]' />
-        </div>
-      ) : userName ? (
-        <>
-          <h1 className="text-2xl">Hello {userName}, here are your saved words...</h1>
-          <p>Words you&apos;ve saved will appear here, along with definitions if available.</p>
-          {savedWords.length > 0 ? (
-            <div className="grid gap-4">
-              <AnimatePresence>
-                {savedWords.map((wordText) => {
-                  const details = getWordDetails(wordText)
+      <h1 className="text-2xl">Hello {user.name}, here are your saved words...</h1>
+      <p>Words you&apos;ve saved will appear here, along with word classes and definitions.</p>
+      {savedWords.length > 0 ? (
+        <ScrollArea className="h-160">
+        <div className="grid gap-4 p-3 pb-4 h-auto overflow border-1 rounded-md">
+          <AnimatePresence>
+            {savedWords.map((wordText, index) => {
+              const details = getWordDetails(wordText);
 
-                  return (
-                    <motion.div
-                      key={wordText}
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.2, ease: "easeInOut" }}
-                    >
-                      <div className="border-b rounded flex flex-row justify-between items-center text-md ">
-                        <div className='flex flex-col'>
-                          <div className='flex flex-row gap-2'>
-                            <div className="font-bold">{wordText}</div>
-                            <span className="italic text-zinc-500">{details && details.type}</span>
-                          </div>
-                          <span className='text-zinc-500'>{details && details.definition}</span>
-                          {!details && <p className="italic text-sm">No additional info found.</p>}
-                        </div>
-                        <Button
-                          variant="destructive"
-                          onClick={() => handleDelete(wordText)}
-                          className="h-5 w-5 cursor-pointer"
-                        >
-                          <X />
-                        </Button>
+              return (
+                <motion.div
+                  key={wordText}
+                  layout
+                  initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.2, delay: index * 0.04, ease: 'easeOut' }}
+                >
+                  <div className="border-b rounded flex flex-row justify-between items-center text-md pr-5 ">
+                    <div className="flex flex-col">
+                      <div className="flex flex-row gap-2">
+                        <div className="font-bold">{wordText}</div>
+                        <span className="italic text-zinc-500">{details && details.type}</span>
                       </div>
-                    </motion.div>
-                  )
-                })}
-              </AnimatePresence>
-            </div>
-          ) : (
-            <p>No saved words yet</p>
-          )}
-        </>
+                      <span className="text-zinc-500">{details && details.definition}</span>
+                      {!details && <p className="italic text-sm">No additional info found.</p>}
+                    </div>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      onClick={() => handleDelete(wordText)}
+                      className="h-5 w-5 cursor-pointer"
+                    >
+                      <X />
+                    </Button>
+                  </div>
+
+
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+          <div className="flex justify-center text-zinc-500">end</div>
+        </div>
+
+        </ScrollArea>
       ) : (
-        <p>
-          Please <Link href="/login" className="underline">log in</Link> or{' '}
-          <Link href="/register" className="underline">create an account</Link> to view your saved words.
-        </p>
+        <p>No saved words yet</p>
       )}
     </div>
-  )
+  );
 }
 
-export default DictionaryPage
+export default DictionaryPage;

@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+// import {
+//   Pagination,
+//   PaginationContent,
+//   PaginationItem,
+//   PaginationLink,
+//   PaginationNext,
+//   PaginationPrevious,
+// } from "@/components/ui/pagination";
 import { Switch } from "@/components/ui/switch";
 import {
   HoverCard,
@@ -74,14 +74,14 @@ type WordTypeData = {
 };
 
 export default function ContentDisplay({ conversation }: ConversationProps) {
-  const [currentPage, setCurrentPage] = React.useState(0);
-  const pageSize = 5;
+  // const [currentPage, setCurrentPage] = React.useState(0);
+  // const pageSize = 5;
   const rawDialogue = conversation.content;
-  const pages = Array.isArray(rawDialogue)
-    ? Array.from({ length: Math.ceil(rawDialogue.length / pageSize) }, (_, i) =>
-        rawDialogue.slice(i * pageSize, i * pageSize + pageSize)
-      )
-    : [];
+  // const pages = Array.isArray(rawDialogue)
+  //   ? Array.from({ length: Math.ceil(rawDialogue.length / pageSize) }, (_, i) =>
+  //       rawDialogue.slice(i * pageSize, i * pageSize + pageSize)
+  //     )
+  //   : []; --------------UNCOMMENT FOR PAGINATION------------------
 
   const [hoverEnabled, setHoverEnabled] = React.useState(true);
 
@@ -235,10 +235,13 @@ function cleanWord(rawWord: string) {
       </div>
 
       <div className="flex flex-row flex-1 w-full">
-        <ScrollArea className="w-3/4 flex-1 border-b">
-          <div className="h-160 flex-1 p-5 text-lg">
-            {pages.length > 0 ? (
-              pages[currentPage].map((line, i) => (
+        <ScrollArea className="w-3/4 flex-1 h-170 border-b">
+          <div className="h-full flex-1 p-5 text-lg">
+            {/* {pages.length > 0 ? (
+              pages[currentPage].map((line, i) => ( ---  PAGINATION LOGIC----*/}
+              {Array.isArray(rawDialogue) && rawDialogue.length > 0 ? (
+                rawDialogue.map((line, i) => (
+
                 <div key={i} className="flex flex-row mb-10">
                   <div className="font-semibold pr-6 border-r border-gray-400 min-w-[100px] text-right">
                     {line.speaker}
@@ -247,11 +250,18 @@ function cleanWord(rawWord: string) {
                     {line.words.map((word, j) => renderWord(word, j))}
                   </div>
                 </div>
+
+
+
+
               ))
             ) : (
               <div>No conversation data available.</div>
             )}
           </div>
+
+          <div className="p-10 italic text-zinc-500">You have reached the end of {conversation.title}</div>
+
         </ScrollArea>
 
         <div className="w-1/8 border-l pt-10">
@@ -263,7 +273,7 @@ function cleanWord(rawWord: string) {
 
               <Accordion type="single" collapsible>
                 <AccordionItem value="item-1">
-                  <AccordionTrigger className="w-30">Word Types</AccordionTrigger>
+                  <AccordionTrigger className="w-31">Word Classes</AccordionTrigger>
                   <AccordionContent>
                   <div className="bg-background rounded-md p-2 w-full gap-2 flex flex-col">
                     <WordTypeSettings wordTypes={wordTypes} toggleWordType={toggleWordType} />
@@ -276,7 +286,9 @@ function cleanWord(rawWord: string) {
         </div>
       </div>
 
-      {pages.length > 1 && (
+
+      {/*-----------------------PAGINATED CONVERSATION TEXT---------------*/}
+      {/* {pages.length > 1 && (
         <div className="flex justify-center items-center w-full h-15">
           <Pagination>
             <PaginationContent>
@@ -316,8 +328,8 @@ function cleanWord(rawWord: string) {
               </PaginationItem>
             </PaginationContent>
           </Pagination>
-        </div>
-      )}
+        </div> */}
+
     </div>
   );
 }
