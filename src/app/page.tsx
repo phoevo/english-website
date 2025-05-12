@@ -6,6 +6,7 @@ import { Raleway } from "next/font/google";
 // import { Montserrat } from "next/font/google";
 import { motion } from "motion/react";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/components/ui/accordion"
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 
 console.log("Motion import:", motion);
@@ -41,7 +42,7 @@ const transitionImage = {
 
 export default function LandingPage() {
   return (
-    <div className={`flex bg-background flex-col items-center h-screen overflow-scroll overflow-x-hidden ${raleway.className}`}>
+    <ScrollArea className={`flex bg-background flex-col items-center h-screen overflow-x-hidden ${raleway.className}`}>
        <nav className="sticky top-0 w-full bg-landing-bg z-50 shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)]">
         <div className="flex items-center h-20 ">
             <h1 className="text-3xl font-normal absolute left-10">Synomilo</h1>
@@ -52,7 +53,6 @@ export default function LandingPage() {
             </div>
         </div>
     </nav>
-
 
 
       <div className="flex flex-col w-screen border-b bg-card justify-center items-center gap-30 p-20">
@@ -223,6 +223,7 @@ export default function LandingPage() {
     </footer>
 
 
-    </div>
+    </ScrollArea>
+
   );
 }

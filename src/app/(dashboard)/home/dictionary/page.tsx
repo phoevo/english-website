@@ -20,12 +20,10 @@ function DictionaryPage() {
   const [savedWords, setSavedWords] = useState<string[]>([]);
   const [isCheckingUser, setIsCheckingUser] = useState(true);
   const [deletingWord, setDeletingWord] = useState<string | null>(null);
-
-  // Access the user data from Zustand
   const { user, loading: userLoading } = useUserStore();
 
   useEffect(() => {
-    // If user is available, fetch saved words from the database
+
     const fetchSavedWords = async () => {
       if (!user) return;
 
@@ -45,14 +43,13 @@ function DictionaryPage() {
     };
 
     fetchSavedWords();
-  }, [user]); // Re-run whenever user changes
+  }, [user]);
 
   const handleDelete = async (wordToDelete: string) => {
     if (!user?.$id) return;
 
-    setDeletingWord(wordToDelete); // Trigger animation
+    setDeletingWord(wordToDelete);
 
-    // Wait for the animation to finish
     setTimeout(async () => {
       const updatedWords = savedWords.filter((word) => word !== wordToDelete);
       setSavedWords(updatedWords);
@@ -69,15 +66,21 @@ function DictionaryPage() {
       } catch (error) {
         console.error("Failed to delete word:", error);
       }
-    }, 0); // Match this with the animation duration
+    }, 0);
   };
 
   if (isCheckingUser || userLoading) {
     return (
       <div className="m-10 space-y-5">
-        <Skeleton className="w-[450px] h-[32px]" />
-        <Skeleton className="w-[514px] h-[14px]" />
-      </div>
+      <Skeleton className="w-[450px] h-[32px]" />
+      <Skeleton className="w-[570px] h-[14px]" />
+      <div className="border-t-1 border-x-1 flex flex-col justify-center rounded-md gap-4 p-3">
+        <Skeleton className="w-[537px] h-[49px]" />
+      <Skeleton className="w-[537px] h-[49px] opacity-25" />
+      <Skeleton className="w-[537px] h-[49px] opacity-15" />
+      <div className="w-[537px] h-107 opacity-0" />
+    </div>
+    </div>
     );
   }
 
@@ -102,7 +105,9 @@ function DictionaryPage() {
   return (
     <div className="m-10 space-y-4">
       <h1 className="text-2xl">Hello {user.name}, here are your saved words...</h1>
-      <p>Words you&apos;ve saved will appear here, along with word classes and definitions.</p>
+      <p className='text-zinc-500'>Words you&apos;ve saved will appear here, along with word classes and definitions.</p>
+
+
       {savedWords.length > 0 ? (
         <ScrollArea className="h-160">
         <div className="grid gap-4 p-3 pb-4 h-auto overflow border-1 rounded-md">

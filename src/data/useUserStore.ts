@@ -1,5 +1,8 @@
 import { create } from "zustand";
-import { account } from "@/data/appwrite";
+import { account, databases } from "@/data/appwrite";
+
+const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
+const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
 
 interface User {
   $id: string;
@@ -24,9 +27,14 @@ export const useUserStore = create<UserState>((set) => ({
     set({ loading: true });
     try {
       const res = await account.get();
-      set({ user: res });
+
+      // Fetch user document for extra fields
+      const userDoc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, res.$id);
+      const isSubscribed = userDoc?.isSubscribed ?? false;
+
+      set({ user: res, isSubscribed });
     } catch {
-      set({ user: null });
+      set({ user: null, isSubscribed: false });
     } finally {
       set({ loading: false });
     }
