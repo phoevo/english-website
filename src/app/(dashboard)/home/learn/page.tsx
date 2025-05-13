@@ -167,29 +167,31 @@ const wordTypes: Record<WordTypeKey, WordTypeInfo> = {
       );
     }
 
-  return (
-    <ScrollArea className='w-full h-190 mt-10'>
+  return ( //learn
+    <div className='flex mt-10 flex-1'>
+      <ScrollArea className='flex-1 w-auto'>
     <div className='flex flex-col items-center justify-center'>
       {Object.entries(wordTypes).map(([key, { name, definition, examples, color }]) => (
 
-      <div key={key} className="flex flex-col items-center mb-10 border-b ">
+      <div key={key} className="flex flex-col items-center mb-10 border-b w-1/3 ">
 
         <h2 className={`text-lg rounded-sm px-1 bg-${color}`}>{name}</h2>
 
         <p className="italic mb-2">{definition}</p>
 
-        <ul className="list-disc list-inside space-y-1">
+        <ul className="list-disc list-inside space-y-1 mb-3">
           {examples.map((example, index) => (
             <li key={index} className="">{example}</li>
           ))}
         </ul>
       </div>
 ))}
-
-
     </div>
     </ScrollArea>
+    </div>
+
   )
+
 }
 
 export default LearnPage

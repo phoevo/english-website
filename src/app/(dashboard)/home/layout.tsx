@@ -9,7 +9,7 @@ const raleway = Raleway({ subsets: ['latin'] });
 
 function homeLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`flex h-500 w-auto h-auto ${raleway}`}>
+    <div className={`flex h-screen w-auto ${raleway}`}>
       <div className='flex h-auto w-auto'>
        <SidebarProvider>
       <AppSidebar />
@@ -18,7 +18,7 @@ function homeLayout({ children }: { children: React.ReactNode }) {
       </main>
     </SidebarProvider>
     </div>
-      <div className='flex bg-background border-1 rounded-lg h-auto w-screen mb-22'>
+      <div className='flex bg-background border-1 rounded-lg h-auto mb-22 w-screen'>
        {children}
       </div>
 

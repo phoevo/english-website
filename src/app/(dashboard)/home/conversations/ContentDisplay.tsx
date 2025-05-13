@@ -229,12 +229,12 @@ function cleanWord(rawWord: string) {
 
   return (
 
-    <div className="bg-background flex flex-col justify-center items-center text-foreground h-full flex-1 rounded-lg">
+    <div className="bg-background flex flex-col justify-center items-center text-foreground flex-1 rounded-lg">
       <div className="flex text-2xl justify-start pl-10 items-center border-b w-full h-15">
         {conversation.title}
       </div>
 
-      <div className="flex flex-row flex-1 w-full">
+      <div className="flex flex-row w-full">
         <ScrollArea className="w-3/4 flex-1 h-170 border-b">
           <div className="h-full flex-1 p-5 text-lg">
             {/* {pages.length > 0 ? (

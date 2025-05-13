@@ -69,15 +69,15 @@ function DictionaryPage() {
     }, 0);
   };
 
-  if (isCheckingUser || userLoading) {
+  if (userLoading) {
     return (
-      <div className="m-10 space-y-5">
+      <div className="m-10 h-192 space-y-5">
       <Skeleton className="w-[450px] h-[32px]" />
       <Skeleton className="w-[570px] h-[14px]" />
       <div className="border-t-1 border-x-1 flex flex-col justify-center rounded-md gap-4 p-3">
-        <Skeleton className="w-[537px] h-[49px]" />
-      <Skeleton className="w-[537px] h-[49px] opacity-25" />
-      <Skeleton className="w-[537px] h-[49px] opacity-15" />
+        <Skeleton className="w-[536px] h-[49px]" />
+      <Skeleton className="w-[536px] h-[49px] opacity-25" />
+      <Skeleton className="w-[536px] h-[49px] opacity-15" />
       <div className="w-[537px] h-107 opacity-0" />
     </div>
     </div>
@@ -102,15 +102,18 @@ function DictionaryPage() {
     );
   }
 
-  return (
-    <div className="m-10 space-y-4">
-      <h1 className="text-2xl">Hello {user.name}, here are your saved words...</h1>
-      <p className='text-zinc-500'>Words you&apos;ve saved will appear here, along with word classes and definitions.</p>
+  return ( //dictionary
+    <div className="flex flex-col h-auto">
+      <div className="m-10 flex flex-col space-y-5">
+      <p className="text-2xl">Hello {user.name}, here are your saved words...</p>
+      <p>Words you&apos;ve saved will appear here, along with word classes and definitions.</p>
+
+
 
 
       {savedWords.length > 0 ? (
-        <ScrollArea className="h-160">
-        <div className="grid gap-4 p-3 pb-4 h-auto overflow border-1 rounded-md">
+        <ScrollArea className="h-155">
+        <div className="grid gap-4 p-3 pb-4 border-1 rounded-md">
           <AnimatePresence>
             {savedWords.map((wordText, index) => {
               const details = getWordDetails(wordText);
@@ -155,6 +158,7 @@ function DictionaryPage() {
       ) : (
         <p>No saved words yet</p>
       )}
+      </div>
     </div>
   );
 }
