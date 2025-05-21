@@ -72,9 +72,11 @@ function ConversationsPage() {
   );
 
   return ( //conversations
-    <div className="flex flex-col overflow-auto">
-      <div className="m-10 flex flex-row gap-10">
-        <Button onClick={handleSubscribe} disabled={isSubscribed}>
+    <div className="m-10 space-y-4">
+      <h1 className="text-3xl font-light">Conversations</h1>
+      <p className="text-zinc-500">All conversation material from all levels</p>
+      <div className="flex flex-row">
+        <Button onClick={handleSubscribe} disabled={isSubscribed} className="mr-10">
           {isSubscribed ? "Subscribed" : "Subscribe"}
         </Button>
 

@@ -41,9 +41,13 @@ const Navbar = () => {
               {loading ? (
                 <Skeleton className="w-10 h-6 rounded-lg" />
               ) : isSubscribed ? (
+                <Link href={"/subscribe"} className="cursor-pointer">
                 <Badge className="bg-pink-500 text-foreground">Pro</Badge>
+                </Link>
               ) : (
+                <Link href={"/subscribe"} className="cursor-pointer">
                 <Badge variant="default">Free</Badge>
+                </Link>
               )}
 
               {loading ? (

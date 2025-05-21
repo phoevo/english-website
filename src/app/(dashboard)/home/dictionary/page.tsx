@@ -18,9 +18,8 @@ function getWordDetails(wordText: string) {
 
 function DictionaryPage() {
   const [savedWords, setSavedWords] = useState<string[]>([]);
-  const [isCheckingUser, setIsCheckingUser] = useState(true);
-  const [deletingWord, setDeletingWord] = useState<string | null>(null);
-  const { user, loading: userLoading } = useUserStore();
+  const [, setDeletingWord] = useState<string | null>(null);
+  const { user, loading } = useUserStore();
 
   useEffect(() => {
 
@@ -37,8 +36,6 @@ function DictionaryPage() {
         setSavedWords(userSavedWords);
       } catch (error) {
         console.error("Error fetching saved words:", error);
-      } finally {
-        setIsCheckingUser(false);
       }
     };
 
@@ -69,7 +66,7 @@ function DictionaryPage() {
     }, 0);
   };
 
-  if (userLoading) {
+  if (loading) {
     return (
       <div className="m-10 h-192 space-y-5">
       <Skeleton className="w-[450px] h-[32px]" />
@@ -86,27 +83,20 @@ function DictionaryPage() {
 
   if (!user) {
     return (
-      <div>
+      <div className="m-10">
         <p>
-          Please{" "}
-          <Link href="/login" className="underline">
-            log in
-          </Link>{" "}
-          or{" "}
-          <Link href="/register" className="underline">
-            create an account
-          </Link>{" "}
-          to view your saved words.
+          Please <Link href="/login" className="underline">log in</Link> or{' '}
+          <Link href="/register" className="underline">create an account</Link> to view your recent conversations.
         </p>
       </div>
-    );
+    )
   }
 
   return ( //dictionary
     <div className="flex flex-col h-auto">
       <div className="m-10 flex flex-col space-y-5">
-      <p className="text-2xl">Hello {user.name}, here are your saved words...</p>
-      <p>Words you&apos;ve saved will appear here, along with word classes and definitions.</p>
+      <h1 className="text-3xl font-light">Dictionary</h1>
+      <p className="text-zinc-500">Words you&apos;ve saved will appear here, along with word classes and definitions.</p>
 
 
 

@@ -1,18 +1,23 @@
 import { Client, Databases, Account } from 'appwrite'
 
+const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
+const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
+const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
+const CONVERSATIONS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_CONVERSATIONS_COLLECTION_ID!;
+
 // Initialize the Appwrite client
 const client = new Client()
-  .setEndpoint('https://cloud.appwrite.io/v1')  // Your Appwrite endpoint
-  .setProject('67f8ef4d001bf840a8a4')           // Your Project ID
+  .setEndpoint('https://cloud.appwrite.io/v1')
+  .setProject(PROJECT_ID)
 
 // Services
 export const databases = new Databases(client)
 export const account = new Account(client)
 
 // IDs
-export const databaseId = '67f9017b002808c927aa'     // Replace with your DB ID
-export const conversationsCollectionId = '67f9244b00193b15fd04' // Your collection ID
-export const usersCollectionId = '67fe6fe9001dc88e2b72';
+export const databaseId = DATABASE_ID    // Replace with your DB ID
+export const conversationsCollectionId = CONVERSATIONS_COLLECTION_ID // Your collection ID
+export const usersCollectionId = USERS_COLLECTION_ID
 
 
 

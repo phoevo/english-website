@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { account, databases } from '@/data/appwrite'
+import { account, databases, databaseId, usersCollectionId } from '@/data/appwrite'
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -41,6 +41,7 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 import { unsubscribeUser } from '@/data/getData'
+import Link from 'next/link'
 
 
 
@@ -165,12 +166,13 @@ export default function ProfileLayout() {
       const user = await account.get();
       setUser(user);
 
-      const doc = await databases.getDocument("67f9017b002808c927aa", "67fe6fe9001dc88e2b72", user.$id);
+      const doc = await databases.getDocument(databaseId, usersCollectionId, user.$id);
       setIsSubscribed(doc.isSubscribed);
     };
 
     fetchUser();
   }, []);
+
 
   const handleUnsubscribe = async () => {
     if (!user) {
@@ -421,6 +423,7 @@ console.log(isSubscribed);
         <CardContent>
           <AlertDialog>
             <AlertDialogTrigger asChild>
+            <div className='flex items-center gap-2'>
             <Button
           variant="destructive"
           className="cursor-pointer"
@@ -428,7 +431,8 @@ console.log(isSubscribed);
         >
           Unsubscribe
         </Button>
-
+        {!isSubscribed && (<Link className='underline cursor-pointer text-sm' href={"/subscribe"}>Subscribe?</Link>)}
+        </div>
 
 
             </AlertDialogTrigger>
@@ -441,11 +445,14 @@ console.log(isSubscribed);
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Go back</AlertDialogCancel>
-                <AlertDialogAction
+                <Link href={"/home/conversations"}>
+                 <AlertDialogAction
                  onClick={handleUnsubscribe}
-              >
+                              >
                 Unsubscribe
               </AlertDialogAction>
+                </Link>
+
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>

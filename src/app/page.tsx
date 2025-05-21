@@ -185,7 +185,7 @@ export default function LandingPage() {
           <li>All future conversations to be added.</li>
           </ul>
           <p className="flex items-center gap-2 text-[18px] pt-5">Find out more on the
-           <Link className="underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href="/home">Subscriptions</Link>page.</p>
+           <Link className="underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href="/subscribe">Subscriptions</Link>page.</p>
 
           </AccordionContent>
       </AccordionItem>

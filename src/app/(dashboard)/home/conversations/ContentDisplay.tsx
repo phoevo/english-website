@@ -229,62 +229,61 @@ function cleanWord(rawWord: string) {
 
   return (
 
-    <div className="bg-background flex flex-col justify-center items-center text-foreground flex-1 rounded-lg">
-      <div className="flex text-2xl justify-start pl-10 items-center border-b w-full h-15">
-        {conversation.title}
-      </div>
+    <div className="grid grid-rows-[auto_1fr] h-full w-full bg-background text-foreground rounded-lg">
 
-      <div className="flex flex-row w-full">
-        <ScrollArea className="w-3/4 flex-1 h-170 border-b">
-          <div className="h-full flex-1 p-5 text-lg">
-            {/* {pages.length > 0 ? (
-              pages[currentPage].map((line, i) => ( ---  PAGINATION LOGIC----*/}
-              {Array.isArray(rawDialogue) && rawDialogue.length > 0 ? (
-                rawDialogue.map((line, i) => (
-
-                <div key={i} className="flex flex-row mb-10">
-                  <div className="font-semibold pr-6 border-r border-gray-400 min-w-[100px] text-right">
-                    {line.speaker}
-                  </div>
-                  <div className="ml-6 flex flex-wrap gap-1">
-                    {line.words.map((word, j) => renderWord(word, j))}
-                  </div>
-                </div>
+  <div className="border-b px-10 py-4 text-2xl">
+    {conversation.title}
+  </div>
 
 
-
-
-              ))
-            ) : (
-              <div>No conversation data available.</div>
-            )}
-          </div>
-
-          <div className="p-10 italic text-zinc-500">You have reached the end of {conversation.title}</div>
-
-        </ScrollArea>
-
-        <div className="w-1/8 border-l pt-10">
-          <div className="flex justify-center items-center">
-            <div className="flex justify-center items-center gap-3 flex-col">
-              <span className="flex gap-1 items-center">
-                <div className="bg-pink-500 rounded px-1">Hover</div> <Switch checked={hoverEnabled} onCheckedChange={setHoverEnabled} />
-              </span>
-
-              <Accordion type="single" collapsible>
-                <AccordionItem value="item-1">
-                  <AccordionTrigger className="w-31">Word Classes</AccordionTrigger>
-                  <AccordionContent>
-                  <div className="bg-background rounded-md p-2 w-full gap-2 flex flex-col">
-                    <WordTypeSettings wordTypes={wordTypes} toggleWordType={toggleWordType} />
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+  <div className="grid grid-cols-[6fr_1fr] overflow-hidden h-full">
+    <ScrollArea className="h-full w-full overflow-y-auto">
+      <div className="p-5 text-lg">
+        {Array.isArray(rawDialogue) && rawDialogue.length > 0 ? (
+          rawDialogue.map((line, i) => (
+            <div key={i} className="flex flex-row mb-10">
+              <div className="font-semibold pr-6 border-r border-gray-400 min-w-[100px] text-right">
+                {line.speaker}
+              </div>
+              <div className="ml-6 flex flex-wrap gap-1">
+                {line.words.map((word, j) => renderWord(word, j))}
+              </div>
             </div>
-          </div>
+          ))
+        ) : (
+          <div>No conversation data available.</div>
+        )}
+        <div className="p-10 italic text-zinc-500">
+          You have reached the end of {conversation.title}
         </div>
       </div>
+    </ScrollArea>
+
+
+    <div className="p-5 h-full border-l-1">
+      <div className="flex flex-col items-center gap-4">
+        <span className="flex gap-1 items-center">
+          <div className="bg-pink-500 rounded px-1">Hover</div>
+          <Switch checked={hoverEnabled} onCheckedChange={setHoverEnabled} />
+        </span>
+
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Word Classes</AccordionTrigger>
+            <AccordionContent>
+              <div className="bg-background rounded-md p-2 flex flex-col gap-2">
+                <WordTypeSettings wordTypes={wordTypes} toggleWordType={toggleWordType} />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </div>
+  </div>
+
+
+
+
 
 
       {/*-----------------------PAGINATED CONVERSATION TEXT---------------*/}

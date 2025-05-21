@@ -36,7 +36,7 @@ export default function Login() {
       // This opens a new window for Google OAuth
       await account.createOAuth2Session(
         "google",
-        `${window.location.origin}/home/recents`, // success redirect
+        `${window.location.origin}/home`, // success redirect
         `${window.location.origin}/login`         // failure redirect
       );
     } catch (error) {
@@ -64,7 +64,7 @@ export default function Login() {
 
       await account.createEmailPasswordSession(data.email, data.password);
       await ensureUserDocument();
-      router.push('/home/recents');
+      router.push('/home');
 
     } catch (error: any) {
       console.error('Login error:', error);
