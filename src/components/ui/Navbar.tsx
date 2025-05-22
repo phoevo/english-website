@@ -56,7 +56,7 @@ const Navbar = () => {
                 <Button onClick={handleLogout} variant="outline">Logout</Button>
               ) : (
                 <Link href={"/login"}>
-                  <Button variant="outline">Log in</Button>
+                  <Button variant="outline" className="cursor-pointer">Log in</Button>
                 </Link>
               )}
 

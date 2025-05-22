@@ -28,6 +28,8 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { ensureUserDocument } from '@/data/getData'
 
+
+
 // Define validation schema using Zod
 const formSchema = z
   .object({
@@ -60,8 +62,10 @@ export default function Register() {
 
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
     console.log('Form submitted:');  // Added console log to verify submission
     setError(null);
 
@@ -89,6 +93,7 @@ export default function Register() {
       } else {
         setError('Something went wrong');
       }
+      setIsLoading(false);
   }
 };
 
@@ -186,8 +191,8 @@ export default function Register() {
                 )}
               />
 
-              <Button type="submit" className="w-full cursor-pointer">
-                Sign up
+                <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
+                {isLoading ? 'Signing Up...' : 'Sign Up'}
               </Button>
             </div>
           </form>

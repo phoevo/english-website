@@ -5,7 +5,6 @@ import { useUserStore } from '@/data/useUserStore'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import UserGuidePopover from '../../userGuide'
-import PlacementTest from '../placementTest'
 
 
 
@@ -172,8 +171,8 @@ const wordTypes: Record<WordTypeKey, WordTypeInfo> = {
 
   return (
 
-    <div className='m-10 space-y-4 flex flex-row'>
-      <div>
+    <div className='m-10 flex flex-col'>
+      <div className='space-y-5'>
        <UserGuidePopover
       id="learn-page"
       title="The Learn Page"

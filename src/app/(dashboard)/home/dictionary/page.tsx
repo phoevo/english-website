@@ -87,7 +87,7 @@ function DictionaryPage() {
       <div className="m-10">
         <p>
           Please <Link href="/login" className="underline">log in</Link> or{' '}
-          <Link href="/register" className="underline">create an account</Link> to view your recent conversations.
+          <Link href="/register" className="underline">create an account</Link> to view your dictionary.
         </p>
       </div>
     )
@@ -102,7 +102,8 @@ function DictionaryPage() {
           description="Your personal dictionary. Save words you're unfamiliar with or want to revise.
           Pick and choose to create flashcards with."
           side="top"
-          align="start"            >
+          align="start"
+          >
             <h1 className="text-3xl font-light">Dictionary</h1>
           </UserGuidePopover>
 

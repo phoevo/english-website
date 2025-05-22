@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 import { useUserStore } from "@/data/useUserStore";
 import UserGuidePopover from "../../userGuide";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 import PlacementTest from "../placementTest";
 import {
   AlertDialog,
@@ -93,7 +93,8 @@ function ConversationsPage() {
 
   return (
     <div className="m-10 space-y-4">
-      <UserGuidePopover
+      <div>
+        <UserGuidePopover
         id="conversation-page"
         title="The Conversations Page"
         description="Here you'll find a library of carefully crafted dialogues to help you with your reading
@@ -102,7 +103,8 @@ function ConversationsPage() {
         align="start"
         >
           <h1 className="text-3xl font-light">Conversations</h1>
-        </UserGuidePopover>
+        </UserGuidePopover></div>
+
 
 
       <p className="text-zinc-500">All conversation material from all levels</p>
