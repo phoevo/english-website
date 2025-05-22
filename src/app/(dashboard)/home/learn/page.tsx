@@ -4,6 +4,9 @@ import React, { useEffect } from 'react'
 import { useUserStore } from '@/data/useUserStore'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import UserGuidePopover from '../../userGuide'
+import PlacementTest from '../placementTest'
+
 
 
 function LearnPage() {
@@ -167,13 +170,27 @@ const wordTypes: Record<WordTypeKey, WordTypeInfo> = {
       );
     }
 
-  return ( //learn
-    <div className='flex mt-10 flex-1'>
-      <ScrollArea className='flex-1 w-auto'>
-    <div className='flex flex-col items-center justify-center'>
+  return (
+
+    <div className='m-10 space-y-4 flex flex-row'>
+      <div>
+       <UserGuidePopover
+      id="learn-page"
+      title="The Learn Page"
+       description="Discover key word types in English, complete with definitions
+      and real-life examples to enhance your language skills."
+         side="top"
+        align="start"
+        >
+      <h1 className='text-3xl font-light'>Learn</h1>
+        </UserGuidePopover>
+
+      <p className="text-zinc-500">Everything you need to know about word types can be found here.</p>
+      <ScrollArea className='h-160'>
+    <div className='flex flex-col'>
       {Object.entries(wordTypes).map(([key, { name, definition, examples, color }]) => (
 
-      <div key={key} className="flex flex-col items-center mb-10 border-b w-1/3 ">
+      <div key={key} className="flex flex-col mb-10 border-b ">
 
         <h2 className={`text-lg rounded-sm px-1 bg-${color}`}>{name}</h2>
 
@@ -186,8 +203,10 @@ const wordTypes: Record<WordTypeKey, WordTypeInfo> = {
         </ul>
       </div>
 ))}
-    </div>
-    </ScrollArea>
+          </div>
+        </ScrollArea>
+
+      </div>
     </div>
 
   )

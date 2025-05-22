@@ -55,19 +55,19 @@ export default function LandingPage() {
     </nav>
 
 
-      <div className="flex flex-col w-screen border-b bg-card justify-center items-center gap-30 p-20">
+      <div className="flex flex-col w-screen border-b bg-card bg-dots justify-center items-center gap-30 p-10">
         <div className="flex flex-col gap-5 items-center">
-          <h1 className="text-8xl font-normal">Synomilo</h1>
-          <div className="flex flex-row text-2xl font-normal gap-2" >
+          <h1 className="text-8xl font-normal bg-card">Synomilo</h1>
+          <div className="flex flex-row text-2xl font-normal gap-2 bg-card" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div>
-          <p className="text1xl text-zinc-500">Greek for: &quot;I conversate&quot;</p>
+          <p className="text-zinc-500">Greek for: &quot;I conversate&quot;</p>
 
         </div>
-        <h2 className="text-3xl font-normal">Conversation based English learning platform</h2>
-        <div className="flex flex-col w-180 h-100 justify-start items-center border-b p-10 ">
-          <h2 className="text-4xl font-bold p-5">Our Mission:</h2>
-          <p className="text-2xl font-light">Our mission is to allow English learners
+        <h2 className="text-3xl font-normal bg-card">Conversation based English learning platform</h2>
+        <div className="flex flex-col w-180 h-100 justify-start items-center p-10 space-y-4">
+          <h2 className="text-4xl font-bold bg-card">Our Mission:</h2>
+          <p className="text-2xl font-light bg-card">Our mission is to allow English learners
              have meaningful conversations faster by employing methods inspired by Assimil.
             These methods help keep the student engaged through dialogues that reflect real-life scenarios,
             increasing their comprehension and ability to learn (and most importantly) use English.
@@ -75,10 +75,11 @@ export default function LandingPage() {
 
           </p>
         </div>
-        <h2 className="flex items-center gap-2 text-2xl font-light">Head to the
-           <Link className="underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href="/home">Home</Link>
+        <h2 className="flex items-center text-2xl font-semibold bg-card">Head to the
+           <Link className="p-2 underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href="/home">Home</Link>
            page and start for free</h2>
       </div>
+
 
       <div className="flex w-screen h-auto items-center justify-evenly flex-row bg-background p-40 border-b">
       <div className="sticky top-1/3 self-start border-b ">

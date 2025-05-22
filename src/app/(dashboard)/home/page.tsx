@@ -3,6 +3,8 @@
 import { useUserStore } from "@/data/useUserStore";
 import Link from "next/link";
 import DailyChallenges from "./dailyChallenges";
+import UserGuidePopover from "../userGuide";
+
 
 function Page() {
   const { user, recentConversations } = useUserStore();
@@ -11,14 +13,23 @@ function Page() {
 
   return (
     <div className="w-full m-10 space-y-4">
-      <div className="flex flex-row gap-9">
-        <div className="flex flex-grow flex-col w-1/3 space-y-4 h-full border-r-1">
+      <div className="flex flex-row gap-3">
 
-            <h1 className="text-3xl font-light">Welcome back, {user?.name || "Guest"}</h1>
+        <div className="flex flex-col w-2/3 space-y-4 h-full">
+            <UserGuidePopover
+             id="home-page-main"
+             title="The Home Page"
+             description="This is the main page where you can find recaps of your previous lessons, vocabulary as well as daily challenges.  "
+             side="top"
+             align="start"
+            >
+              <h1 className="text-3xl font-light">Welcome back, {user?.name || "Guest"}</h1>
+            </UserGuidePopover>
+
             <p className="text-zinc-500">Here&apos;s where you left off</p>
 
 
-          <div className="flex flex-col w-98">
+          <div className="flex flex-col">
           {conversation ? (
             <Link
               href={`home/conversations/${conversation.$id}`}
@@ -33,17 +44,13 @@ function Page() {
           </div>
         </div>
 
+
         <div className="w-1/3">
-              <DailyChallenges/>
+          <DailyChallenges />
+
         </div>
 
       </div>
-
-
-
-
-
-
 
 
     </div>

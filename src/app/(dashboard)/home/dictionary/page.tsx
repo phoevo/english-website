@@ -10,6 +10,7 @@ import { X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUserStore } from "@/data/useUserStore";
 import { ScrollArea } from "@/components/ui/scroll-area"
+import UserGuidePopover from "../../userGuide";
 
 // Get the word details from vocab
 function getWordDetails(wordText: string) {
@@ -95,7 +96,16 @@ function DictionaryPage() {
   return ( //dictionary
     <div className="flex flex-col h-auto">
       <div className="m-10 flex flex-col space-y-5">
-      <h1 className="text-3xl font-light">Dictionary</h1>
+       <UserGuidePopover
+          id="dictionary-page"
+          title="The Dictionary Page"
+          description="Your personal dictionary. Save words you're unfamiliar with or want to revise.
+          Pick and choose to create flashcards with."
+          side="top"
+          align="start"            >
+            <h1 className="text-3xl font-light">Dictionary</h1>
+          </UserGuidePopover>
+
       <p className="text-zinc-500">Words you&apos;ve saved will appear here, along with word classes and definitions.</p>
 
 

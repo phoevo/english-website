@@ -46,6 +46,7 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.87 0 0);
   --landing-bg: oklch(100% 0 339);
+  --dot-color: oklch(0.100 0 0 / 0.1);
 }
 
 .dark {
@@ -83,6 +84,7 @@
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
   --landing-bg: oklch(0% 0 339);
+  --dot-color: oklch(0.90 0 0 / 0.15);
 }
 
 @theme inline {
@@ -123,6 +125,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-landing-bg: var(--landing-bg);
+
 }
 
 @layer base {
@@ -131,6 +134,16 @@
   }
   body {
     @apply bg-background text-foreground overflow-hidden;
+
+    .bg-dots {
+      --dot-color: oklch(0.353 0.013 260);
+      --dot-size: 4px;
+      --dot-space: 60px;
+
+      background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
+      background-size: var(--dot-space) var(--dot-space);
+    }
+
   }
   html, body {
     font-family: var(--font-sans), sans-serif;

@@ -12,10 +12,10 @@ import {
   AlertDialogTitle, AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { Geist } from "next/font/google";
+import { Switch } from "@/components/ui/switch";
 
 const geist = Geist({ subsets: ['latin'] });
 
-// Full challenge pool
 const allChallenges = [
   "Save 3 new words to your dictionary",
   "Review 5 words from your saved dictionary",
@@ -54,7 +54,6 @@ const allChallenges = [
   "Challenge yourself: no English allowed during your session"
 ];
 
-// Generate 5 random unique daily challenges
 const getDailyChallenges = () => {
   const shuffled = [...allChallenges].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, 5);
@@ -63,10 +62,12 @@ const getDailyChallenges = () => {
 const DailyChallenges = () => {
   const [challenges, setChallenges] = useState<string[]>([]);
   const [completed, setCompleted] = useState<{ [key: string]: boolean }>({});
+  const [showWarnings, setShowWarnings] = useState(true);
 
   useEffect(() => {
     const stored = localStorage.getItem("daily-challenges");
     const storedCompleted = localStorage.getItem("completed-challenges");
+    const storedWarnings = localStorage.getItem("show-challenge-warnings");
 
     if (stored) {
       setChallenges(JSON.parse(stored));
@@ -78,6 +79,10 @@ const DailyChallenges = () => {
 
     if (storedCompleted) {
       setCompleted(JSON.parse(storedCompleted));
+    }
+
+    if (storedWarnings !== null) {
+      setShowWarnings(storedWarnings === "true");
     }
   }, []);
 
@@ -98,50 +103,81 @@ const DailyChallenges = () => {
     localStorage.removeItem("completed-challenges");
   };
 
+  const toggleWarningPref = () => {
+    const nextValue = !showWarnings;
+    setShowWarnings(nextValue);
+    localStorage.setItem("show-challenge-warnings", String(nextValue));
+  };
+
   return (
-    <Card className={`w-full bg-background space-y-4 border-1 ${geist}`}>
+    <Card className={`w-full bg-background space-y-4 border-1 ${geist.className}`}>
       <CardHeader>
-        <CardTitle className="text-2xl">Daily Challenges</CardTitle>
+        <div className="flex flex-row items-center justify-between">
+          <CardTitle className="text-2xl">Daily Challenges</CardTitle>
+          <div className="flex flex-row items-center gap-1">
+            <span className="text-sm text-muted-foreground">Warning</span>
+            <Switch checked={showWarnings} onCheckedChange={toggleWarningPref} />
+          </div>
+
+        </div>
+
         <CardDescription>
           Challenges that can help guide you towards your language goals.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+
         {challenges.map((challenge, index) => {
           const isDone = completed[challenge];
 
           return (
             <div key={index} className="flex items-center gap-2">
               {!isDone ? (
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Checkbox
-                      checked={false}
-                      onCheckedChange={() => {}}
-                      className="cursor-pointer"
-                    />
-                  </AlertDialogTrigger>
-                  <AlertDialogContent className={geist.className}>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Mark challenge as complete?</AlertDialogTitle>
-                      <AlertDialogDescription>
+                showWarnings ? (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Checkbox
+                        checked={false}
+                        onCheckedChange={() => {}}
+                        className="cursor-pointer"
+                      />
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className={geist.className}>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Mark challenge as complete?</AlertDialogTitle>
+                        <AlertDialogDescription>
                         Are you sure you&apos;ve completed this challenge? There&apos;s nothing checking your progress
                         automatically, so it’s up to you to be honest and track it accurately. Only mark it complete if
                         you’ve truly done it.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel >Not yet</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => toggleChallenge(challenge)}>
-                        Yes, I have
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="cursor-pointer">Not yet</AlertDialogCancel>
+                        <AlertDialogAction className="cursor-pointer" onClick={() => toggleChallenge(challenge)}>Yes, I have</AlertDialogAction>
+                        <AlertDialogAction
+                          className="cursor-pointer"
+                          variant="destructive"
+                          onClick={() => {
+                            toggleChallenge(challenge);
+                            setShowWarnings(false);
+                            localStorage.setItem("show-challenge-warnings", "false");
+                          }}
+                        >
+                          Yes, I have, and don&apos;t remind me again
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                ) : (
+                  <Checkbox
+                    checked={false}
+                    onCheckedChange={() => toggleChallenge(challenge)}
+                    className="cursor-pointer"
+                  />
+                )
               ) : (
                 <Checkbox checked disabled />
               )}
-
               <span className={isDone ? "line-through text-muted-foreground" : ""}>
                 {challenge}
               </span>
@@ -149,9 +185,10 @@ const DailyChallenges = () => {
           );
         })}
 
-        <Button variant="outline" className="mt-4 w-auto" onClick={resetChallenges}>
+          <Button variant="outline" className="mt-4 w-auto" onClick={resetChallenges}>
           Refresh Challenges
         </Button>
+
       </CardContent>
     </Card>
   );

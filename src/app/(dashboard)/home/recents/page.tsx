@@ -8,7 +8,7 @@ import { X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUserStore } from "@/data/useUserStore";
 import { databaseId, databases, usersCollectionId } from "@/data/appwrite";
-import DailyChallenges from "../dailyChallenges";
+import UserGuidePopover from "../../userGuide";
 
 function RecentsPage() {
   const { user, loading, recentConversations, setRecentConversations } = useUserStore();
@@ -62,7 +62,16 @@ function RecentsPage() {
 
   return (
     <div className="m-10 space-y-4">
-      <h1 className="text-3xl font-light">Recent Conversations</h1>
+        <UserGuidePopover
+                    id="recents-page"
+                    title="The Recents Page"
+                    description="Conversations you interact with will be placed here for ease of access later."
+                    side="top"
+                    align="start"
+                    >
+                      <h1 className="text-3xl font-light">Recent Conversations</h1>
+                    </UserGuidePopover>
+
       <p className="text-zinc-500">Conversations you&apos;ve interacted with will appear here.</p>
 
       {recentConversations.length > 0 ? (

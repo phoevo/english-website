@@ -30,28 +30,28 @@ function SubscribePage() {
     {
       title: "Monthly",
       price: "6.99",
-      info: "Standard pricing",
+      info: "Standard Pricing",
       desc: [
-        "Ideal for trying out Synomilo",
-        "Pro access with monthly renewal.",
-        "Flexible; cancel anytime",
+        "Ideal for trying out Synomilo.",
+        "Pro access, billed monthly.",
+        "Flexible; cancel anytime.",
       ],
 
     },
     {
       title: "Yearly",
-      price:"69.99",
-      info: "17% cheaper than monthly.",
+      price:"67.99",
+      info: "20% cheaper than monthly",
       desc: [
         "Ideal for those who want to commit to a long-term journey.",
-        "Pro access with yearly renewal",
+        "Pro access, billed yearly.",
         "Access to all existing and new content within the year of purchase.",
       ]
     },
     {
       title: "Lifetime",
-      price: "139.99",
-      info: "Break even after 20 months.",
+      price: "167.99",
+      info: "Break even after 2 years",
       desc: [
         "For those who see language as a life-long journey.",
         "Pay once — it’s yours forever. Come back anytime, even years later.",
@@ -77,16 +77,18 @@ function SubscribePage() {
      <div className='flex flex-row gap-5 w-full'>
 
 
-  <div className='flex flex-col justify-between p-4 border-1 rounded-lg h-60 w-1/2 text-zinc-500'>
+  <div className='flex flex-col justify-between p-2 border-1 rounded-lg h-60 w-1/2 text-zinc-500'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-4'>Free</Badge>
+      <div className='flex justify-center'>
       <ul className='text-sm list-disc marker:text-popover-foreground space-y-1 justify-start'>
-        <li>Recents</li>
-        <li>Learn</li>
-        <li>All Conversations</li>
+        <li>Learn page</li>
+        <li>Access to 10 Conversations</li>
         <li>Hover feature</li>
         <li>Dictionary</li>
       </ul>
+      </div>
+
     </div>
 
     {isSubscribed ? (
@@ -109,16 +111,19 @@ function SubscribePage() {
   </div>
 
 
-  <div className='flex flex-col justify-between p-4 border-1 rounded-lg h-60 w-1/2 text-zinc-500 shadow-[0_0_10px_1px_rgba] shadow-pink-500'>
+  <div className='flex flex-col justify-between p-2 border-1 rounded-lg h-60 w-1/2 text-zinc-500 shadow-[0_0_10px_1px_rgba] shadow-pink-500'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-4 bg-pink-500 text-white'>Pro</Badge>
-      <ul className='text-sm list-disc marker:text-pink-500 space-y-1 w-1/2 justify-start'>
+      <div className='flex justify-center items-center'>
+      <ul className='text-sm list-disc marker:text-pink-500 space-y-1 w-full'>
         <li>Everything in Free</li>
+        <li>All Conversations</li>
         <li>Audio for conversations</li>
         <li>Color customization</li>
-        <li>Monthly, yearly or lifetime acces</li>
-
+        <li>Monthly, yearly or lifetime access</li>
       </ul>
+      </div>
+
     </div>
 
     <Dialog>
@@ -140,7 +145,7 @@ function SubscribePage() {
     {paidOptions.map((option, index) => (
       <div
         key={index}
-        className="flex flex-col justify-between items-center p-4 border-2 rounded-md w-1/3 h-85"
+        className="flex flex-col justify-between items-center p-4 border-2 rounded-md w-1/3 h-80"
       >
         <div className="flex flex-col items-center flex-grow">
           <Badge className="mb-2 bg-pink-500 text-white">{option.title} - ${option.price}</Badge>

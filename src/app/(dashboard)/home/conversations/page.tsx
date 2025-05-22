@@ -5,6 +5,7 @@ import { subscribeUser } from "@/data/getData";
 import { useConversations } from "@/hooks/useConversations";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import ConversationCover from "./ConversationCover";
 import { Geist } from "next/font/google";
 import {
@@ -15,6 +16,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUserStore } from "@/data/useUserStore";
+import UserGuidePopover from "../../userGuide";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import PlacementTest from "../placementTest";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogTrigger,
+  AlertDialogCancel,
+  AlertDialogFooter,
+} from "@/components/ui/alert-dialog";
+
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
@@ -24,6 +39,7 @@ const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID
 function ConversationsPage() {
   const { conversations, loading: conversationsLoading, error } = useConversations();
   const [selectedLevel, setSelectedLevel] = useState<string | undefined>();
+  const [test, setTest] = useState(false);
 
   const {
     user,
@@ -71,15 +87,58 @@ function ConversationsPage() {
     !selectedLevel || selectedLevel === "All" || conv.level === selectedLevel
   );
 
-  return ( //conversations
+  function showTest(){
+    setTest(prevValue =>(!prevValue));
+  }
+
+  return (
     <div className="m-10 space-y-4">
-      <h1 className="text-3xl font-light">Conversations</h1>
+      <UserGuidePopover
+        id="conversation-page"
+        title="The Conversations Page"
+        description="Here you'll find a library of carefully crafted dialogues to help you with your reading
+        comprehension, vocabulary, real-life communication and listening skills."
+        side="top"
+        align="start"
+        >
+          <h1 className="text-3xl font-light">Conversations</h1>
+        </UserGuidePopover>
+
+
       <p className="text-zinc-500">All conversation material from all levels</p>
       <div className="flex flex-row">
         <Button onClick={handleSubscribe} disabled={isSubscribed} className="mr-10">
           {isSubscribed ? "Subscribed" : "Subscribe"}
         </Button>
 
+        <div className="flex flex-col space-y-1">
+          <div className="flex flex-row items-center gap-2">
+            <Label htmlFor="Select">Select your level</Label>
+            <AlertDialog open={test} onOpenChange={setTest}>
+              <AlertDialogTrigger asChild>
+                <div onClick={showTest} className="text-sm font-medium underline cursor-pointer">Not sure?</div>
+              </AlertDialogTrigger>
+              <AlertDialogContent className={`max-w-xl bg-background ${geist.className}`}>
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="text-2xl">Quick Placement Test</AlertDialogTitle>
+                  <AlertDialogDescription>
+                Not sure where to begin? Take this quick test to get a better idea of which conversations match your current level.
+              </AlertDialogDescription>
+              <div className="text-red-500 mt-2 text-sm">
+                <p>This is not an official exam and is intended only as a general guide.</p>
+                <p>Your score will not be stored.</p>
+              </div>
+                </AlertDialogHeader>
+                <CardContent>
+                  <PlacementTest />
+                </CardContent>
+                <AlertDialogFooter>
+              <AlertDialogCancel className="cursor-pointer">Back</AlertDialogCancel>
+              </AlertDialogFooter>
+              </AlertDialogContent>
+
+            </AlertDialog>
+          </div>
         <Select value={selectedLevel} onValueChange={setSelectedLevel}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="All" />
@@ -94,6 +153,8 @@ function ConversationsPage() {
             <SelectItem value="C2">C2 - Mastery</SelectItem>
           </SelectContent>
         </Select>
+
+        </div>
       </div>
 
       <div className="grid grid-cols-2 p-7 gap-5 md:grid-cols-3 lg:grid-cols-4">
