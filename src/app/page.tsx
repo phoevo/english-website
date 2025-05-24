@@ -77,7 +77,8 @@ export default function LandingPage() {
         </div>
         <h2 className="flex items-center text-2xl font-semibold bg-card">Head to the
            <Link className="p-2 underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href="/home">Home</Link>
-           page and start for free</h2>
+           page and start for free or <Link className="p-2 underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href={"/register"}> create an account</Link>
+           </h2>
       </div>
 
 

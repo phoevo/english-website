@@ -116,7 +116,7 @@ const DailyChallenges = () => {
           <CardTitle className="text-2xl">Daily Challenges</CardTitle>
           <div className="flex flex-row items-center gap-1">
             <span className="text-sm text-muted-foreground">Warning</span>
-            <Switch checked={showWarnings} onCheckedChange={toggleWarningPref} />
+            <Switch checked={showWarnings} onCheckedChange={toggleWarningPref} className="cursor-pointer" />
           </div>
 
         </div>
@@ -185,7 +185,10 @@ const DailyChallenges = () => {
           );
         })}
 
-          <Button variant="outline" className="mt-4 w-auto" onClick={resetChallenges}>
+          <Button
+          variant="outline"
+          className="mt-4 w-auto cursor-pointer"
+          onClick={resetChallenges}>
           Refresh Challenges
         </Button>
 

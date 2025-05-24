@@ -53,7 +53,7 @@ const Navbar = () => {
               {loading ? (
                 <Skeleton className="w-20 h-10 rounded-md" />
               ) : user ? (
-                <Button onClick={handleLogout} variant="outline">Logout</Button>
+                <Button onClick={handleLogout} variant="outline" className="cursor-pointer">Logout</Button>
               ) : (
                 <Link href={"/login"}>
                   <Button variant="outline" className="cursor-pointer">Log in</Button>

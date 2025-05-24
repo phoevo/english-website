@@ -1,10 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { databases } from "@/data/appwrite";
-import { subscribeUser } from "@/data/getData";
 import { useConversations } from "@/hooks/useConversations";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import ConversationCover from "./ConversationCover";
 import { Geist } from "next/font/google";
@@ -44,7 +41,6 @@ function ConversationsPage() {
   const {
     user,
     loading: userLoading,
-    isSubscribed,
     setSubscribed,
   } = useUserStore();
 
@@ -62,18 +58,6 @@ function ConversationsPage() {
     fetchSubscription();
   }, [user, setSubscribed]);
 
-  const handleSubscribe = async () => {
-    if (!user?.$id) return;
-
-    try {
-      await subscribeUser(user.$id);
-      setSubscribed(true);
-      toast.success("You are now subscribed!");
-    } catch (err) {
-      console.error("Subscription failed", err);
-      toast.error("Failed to subscribe. Try again later.");
-    }
-  };
 
   if (conversationsLoading || userLoading) {
     return <div className="p-10 text-center">Loading conversations...</div>;
@@ -103,20 +87,34 @@ function ConversationsPage() {
         align="start"
         >
           <h1 className="text-3xl font-light">Conversations</h1>
-        </UserGuidePopover></div>
+        </UserGuidePopover>
+        </div>
 
 
 
-      <p className="text-zinc-500">All conversation material from all levels</p>
+      <p className="text-zinc-500">Conversation material from all levels</p>
       <div className="flex flex-row">
-        <Button onClick={handleSubscribe} disabled={isSubscribed} className="mr-10">
-          {isSubscribed ? "Subscribed" : "Subscribe"}
-        </Button>
 
-        <div className="flex flex-col space-y-1">
-          <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-col space-y-1 mt-5">
             <Label htmlFor="Select">Select your level</Label>
-            <AlertDialog open={test} onOpenChange={setTest}>
+
+        <div className="flex flex-row items-center gap-1">
+        <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="All" />
+          </SelectTrigger>
+          <SelectContent className={geist.className}>
+            <SelectItem value="All">All</SelectItem>
+            <SelectItem value="A1">A1 - Beginner</SelectItem>
+            <SelectItem value="A2">A2 - Basic</SelectItem>
+            <SelectItem value="B1">B1 - Intermediate</SelectItem>
+            <SelectItem value="B2">B2 - Independent</SelectItem>
+            <SelectItem value="C1">C1 - Advanced</SelectItem>
+            <SelectItem value="C2">C2 - Mastery</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <AlertDialog open={test} onOpenChange={setTest}>
               <AlertDialogTrigger asChild>
                 <div onClick={showTest} className="text-sm font-medium underline cursor-pointer">Not sure?</div>
               </AlertDialogTrigger>
@@ -138,28 +136,13 @@ function ConversationsPage() {
               <AlertDialogCancel className="cursor-pointer">Back</AlertDialogCancel>
               </AlertDialogFooter>
               </AlertDialogContent>
-
             </AlertDialog>
-          </div>
-        <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="All" />
-          </SelectTrigger>
-          <SelectContent className={geist.className}>
-            <SelectItem value="All">All</SelectItem>
-            <SelectItem value="A1">A1 - Beginner</SelectItem>
-            <SelectItem value="A2">A2 - Basic</SelectItem>
-            <SelectItem value="B1">B1 - Intermediate</SelectItem>
-            <SelectItem value="B2">B2 - Independent</SelectItem>
-            <SelectItem value="C1">C1 - Advanced</SelectItem>
-            <SelectItem value="C2">C2 - Mastery</SelectItem>
-          </SelectContent>
-        </Select>
+        </div>
 
         </div>
       </div>
 
-      <div className="grid grid-cols-2 p-7 gap-5 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid mt-10 grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
         {filtered.map(conv => (
           <ConversationCover
             key={conv.$id}

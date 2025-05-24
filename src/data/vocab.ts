@@ -101,7 +101,6 @@ export const vocab: Record<string, { text: string; type: string; definition: str
   "Eagle": { text: "Eagle", type: "proper noun", definition: "bird of prey" },
   "Ridge": { text: "Ridge", type: "noun", definition: "mountain range" },
   "Trail": { text: "Trail", type: "noun", definition: "path" },
-  "It's": { text: "It's", type: "contraction", definition: "It is" },
   "it's": { text: "it's", type: "contraction", definition: "It is" },
   "quieter": { text: "quieter", type: "adjective", definition: "more quiet" },
   "popular": { text: "popular", type: "adjective", definition: "well-liked" },

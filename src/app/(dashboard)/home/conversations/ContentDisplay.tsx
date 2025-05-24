@@ -196,7 +196,7 @@ function cleanWord(rawWord: string) {
         <HoverCard openDelay={50} closeDelay={50}>
           <HoverCardTrigger asChild>
             <span
-              className={`text-base rounded transition-colors ${raleway.variable} ${
+              className={`text-base rounded transition-colors ${
                 hoverEnabled ? "cursor-pointer" : ""
               } ${hoverColor} ${appliedColor}`}
             >
@@ -231,7 +231,7 @@ function cleanWord(rawWord: string) {
 
     <div className="grid grid-rows-[auto_1fr] h-full w-full bg-background text-foreground rounded-lg">
 
-  <div className="border-b px-10 py-4 text-2xl">
+  <div className="border-b px-10 py-4 font-light text-2xl">
     {conversation.title}
   </div>
 

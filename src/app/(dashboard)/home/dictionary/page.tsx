@@ -34,7 +34,7 @@ function DictionaryPage() {
           user.$id
         );
         const userSavedWords = userDoc?.dictionaryWords || [];
-        setSavedWords(userSavedWords);
+        setSavedWords(userSavedWords.reverse());
       } catch (error) {
         console.error("Error fetching saved words:", error);
       }
@@ -126,7 +126,7 @@ function DictionaryPage() {
                   initial={{ opacity: 0, y: 30, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.2, delay: index * 0.04, ease: 'easeOut' }}
+                  transition={{ duration: 0.2, delay: index * 0.03, ease: 'easeOut' }}
                 >
                   <div className="border-b rounded flex flex-row justify-between items-center text-md pr-5 ">
                     <div className="flex flex-col">

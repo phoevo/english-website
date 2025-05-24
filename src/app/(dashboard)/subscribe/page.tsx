@@ -15,16 +15,36 @@ import {
 import { Geist } from 'next/font/google'
 import Link from 'next/link'
 import { useUserStore } from '@/data/useUserStore'
+import { subscribeUser } from '@/data/getData'
+import { toast } from 'sonner'
+
 
 const geist = Geist({ subsets: ['latin'] })
 
 function SubscribePage() {
   const [isVisible, setIsVisible] = useState(false);
-  const {isSubscribed,} = useUserStore();
+  const {isSubscribed, setSubscribed, user} = useUserStore();
 
   function handleOptions(){
     setIsVisible(!isVisible);
   }
+
+  const handleSubscribe = async () => {
+    if (!user?.$id) return;
+
+    try {
+      await subscribeUser(user.$id);
+      if (isSubscribed) {
+        toast.error("You're already subscribed");
+        return;
+      }
+      setSubscribed(true);
+      toast.success("You are now subscribed!");
+    } catch (err) {
+      console.error("Subscription failed", err);
+      toast.error("Failed to subscribe. Try again later.");
+    }
+  };
 
   const paidOptions = [
     {
@@ -154,10 +174,16 @@ function SubscribePage() {
           {option.desc.map((item, i) => (
             <li key={i}>{item}</li>
           ))}
-        </ul>
-
+          </ul>
         </div>
-        <Button variant="outline" className="mt-4 cursor-pointer">Get {option.title}</Button>
+
+          <Button
+          variant="outline"
+          className="mt-4 cursor-pointer"
+          onClick={handleSubscribe}>
+          Get {option.title}</Button>
+
+
       </div>
     ))}
   </div>

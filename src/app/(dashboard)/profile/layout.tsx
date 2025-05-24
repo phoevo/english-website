@@ -445,11 +445,11 @@ console.log(isSubscribed);
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Go back</AlertDialogCancel>
-                <Link href={"/home/conversations"}>
+                <Link href={"/home"}>
                  <AlertDialogAction
                  onClick={handleUnsubscribe}
-                              >
-                Unsubscribe
+                  >
+                  Unsubscribe
               </AlertDialogAction>
                 </Link>
 

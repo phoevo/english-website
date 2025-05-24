@@ -5,12 +5,23 @@ import Link from "next/link";
 import DailyChallenges from "./dailyChallenges";
 import UserGuidePopover from "../userGuide";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+
 
 
 function Page() {
-  const { user, recentConversations, loading } = useUserStore();
+  const { user, recentConversations, loading, dictionaryWords } = useUserStore();
 
   const conversation = recentConversations[0]; // get the first one
+  const firstFiveWords = [...dictionaryWords].reverse().slice(0, 5);
+
 
   if (loading) {
     return (
@@ -26,17 +37,17 @@ function Page() {
 
   return (
     <div className="w-full m-10 space-y-4">
-      <div className="flex flex-row gap-3">
-
+      <div className="flex flex-col gap-3">
         <div className="flex flex-col w-2/3 space-y-4 h-full">
             <UserGuidePopover
              id="home-page-main"
              title="The Home Page"
-             description="This is the main page where you can find recaps of your previous lessons, vocabulary as well as daily challenges.  "
+             description="This is the main page where you can find a recap of your previous conversation and
+             vocabulary as well as daily challenges."
              side="top"
              align="start"
             >
-              <h1 className="text-3xl font-light">Welcome back, {user?.name || "Guest"}</h1>
+              <h1 className="text-3xl font-normal">Welcome back, {user?.name || "Guest"}</h1>
             </UserGuidePopover>
 
             {!user ? (
@@ -45,19 +56,25 @@ function Page() {
                 <Link href="/register" className="underline">create an account</Link> for full Home page experience.
               </p>
             ) : (
-              <p>Here&apos;s where you left off</p>
+              <p className="text-zinc-500">Here&apos;s where you left off</p>
             )}
+            </div>
 
-
-          <div className="flex flex-col">
+          <div className="flex flex-row gap-4">
+          <div className="flex flex-col w-2/3">
           {user && (
-            <div className="flex flex-col">
-              {conversation ? (
+            <div className="flex flex-col space-y-4">
+              <Card className="bg-background">
+              <CardHeader>
+                <CardTitle>Most recent conversation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                 {conversation ? (
                 <Link
                   href={`home/conversations/${conversation.$id}`}
                   className="block border p-4 rounded-lg hover:bg-primary-foreground transition"
                 >
-                  <h2 className="text-lg font-light">{conversation.title}</h2>
+                  <h2 className="text-lg font-light">Resume: {conversation.title}</h2>
                   {conversation.level && (
                     <p className="text-sm text-gray-500">Level: {conversation.level}</p>
                   )}
@@ -65,16 +82,49 @@ function Page() {
               ) : (
                 <p className="text-zinc-400">No recent conversations to continue.</p>
               )}
-            </div>
-          )}
+              </CardContent>
+              <CardFooter>
+                <Link href={"/home/recents"}>
+                 <Button variant="outline" className="cursor-pointer">View more</Button>
+                </Link>
+
+              </CardFooter>
+            </Card>
+
+
+            <Card className="bg-background">
+              <CardHeader>
+                <CardTitle>Recently saved words</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {firstFiveWords.length === 0 ? (
+                  <p className="text-zinc-500">No words added yet.</p>
+                  ) : (
+                  <ul className="list-disc list-inside space-y-1">
+                  {firstFiveWords.map((word, index) => (
+                  <li key={index} className="text-md">{word}</li>
+                  ))}
+                </ul>
+                    )}
+              </CardContent>
+              <CardFooter>
+                <Link href={"/home/dictionary"}>
+                 <Button variant="outline" className="cursor-pointer">View more</Button>
+                </Link>
+
+              </CardFooter>
+            </Card>
           </div>
-        </div>
+        )}
+      </div>
 
-
-        <div className="w-1/3">
+      <div className="w-1/3">
           <DailyChallenges />
+      </div>
+  </div>
 
-        </div>
+
+
 
       </div>
 

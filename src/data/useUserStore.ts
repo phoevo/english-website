@@ -21,16 +21,20 @@ interface UserState {
   isSubscribed: boolean;
   loading: boolean;
   recentConversations: Conversation[];
+  dictionaryWords: string[];
   fetchUser: () => Promise<void>;
   setSubscribed: (val: boolean) => void;
   setRecentConversations: (conversations: Conversation[]) => void;
+  setDictionaryWords: (words: string[]) => void;
 }
+
 
 export const useUserStore = create<UserState>((set) => ({
   user: null,
   isSubscribed: false,
   loading: true,
   recentConversations: [],
+  dictionaryWords: [],
 
   fetchUser: async () => {
     set({ loading: true });
@@ -45,14 +49,22 @@ export const useUserStore = create<UserState>((set) => ({
         conversationIds.map((id: string) => getConversationFromDB(id))
       );
 
+      const dictionaryWords = userDoc?.dictionaryWords || [];
+
       set({
         user: res,
         isSubscribed,
         recentConversations: conversations,
+        dictionaryWords,
       });
     } catch (error) {
       console.error("Failed to fetch user or conversations:", error);
-      set({ user: null, isSubscribed: false, recentConversations: [] });
+      set({
+        user: null,
+        isSubscribed: false,
+        recentConversations: [],
+        dictionaryWords: [],
+      });
     } finally {
       set({ loading: false });
     }
@@ -60,4 +72,5 @@ export const useUserStore = create<UserState>((set) => ({
 
   setSubscribed: (val: boolean) => set({ isSubscribed: val }),
   setRecentConversations: (conversations) => set({ recentConversations: conversations }),
+  setDictionaryWords: (words) => set({ dictionaryWords: words }), // ✅ Add this
 }));

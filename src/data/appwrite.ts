@@ -14,9 +14,9 @@ const client = new Client()
 export const databases = new Databases(client)
 export const account = new Account(client)
 
-// IDs
-export const databaseId = DATABASE_ID    // Replace with your DB ID
-export const conversationsCollectionId = CONVERSATIONS_COLLECTION_ID // Your collection ID
+
+export const databaseId = DATABASE_ID
+export const conversationsCollectionId = CONVERSATIONS_COLLECTION_ID
 export const usersCollectionId = USERS_COLLECTION_ID
 
 
