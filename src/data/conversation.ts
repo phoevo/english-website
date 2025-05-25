@@ -1,5 +1,6 @@
 import { getConversationFromDB } from "./appwrite"; // Import the function from appwrite.ts
 import { vocab } from "./vocab";
+import { vocabIndex } from "./vocab/vocabIndex";
 
 export interface Word {
   text: string;
@@ -18,7 +19,7 @@ export interface Conversation {
 }
 
 // Function to parse dialogue from raw text
-export const parseDialogue = (rawDialogue: string) => {
+export const parseDialogue = (rawDialogue: string, vocab: Record<string, { type: string; definition: string }>) => {
   const parsedDialogue = rawDialogue
     .trim()
     .split("\n")
@@ -28,21 +29,19 @@ export const parseDialogue = (rawDialogue: string) => {
 
       const words = text
         .replace(/\s+/g, " ")
-
         .split(" ")
         .map(rawWord => {
           const cleaned = rawWord
             .toLowerCase()
-            .replace(/[’]/g, "'") // normalize fancy apostrophes
-            .replace(/[.,!?—;:()"]/g, ""); // remove all other punctuation
+            .replace(/[’]/g, "'")
+            .replace(/[.,!?—;:()"]/g, "");
 
-          // Lookup cleaned word in vocab
           const vocabEntry = vocab[cleaned];
 
           return {
-            text: rawWord, // Keep the original word with punctuation for display
-            type: vocabEntry?.type ?? "unknown", // Use type from vocab or "unknown"
-            definition: vocabEntry?.definition, // Include the definition from vocab
+            text: rawWord,
+            type: vocabEntry?.type ?? "unknown",
+            definition: vocabEntry?.definition,
           };
         });
 
@@ -55,15 +54,21 @@ export const parseDialogue = (rawDialogue: string) => {
   return parsedDialogue;
 };
 
+
+
+
+
 export const loadConversation = async (documentId: string) => {
   const doc = await getConversationFromDB(documentId);
+
+  const vocab = vocabIndex[doc.vocabId] ?? {};
 
   let parsedContent: unknown = doc.content;
 
   try {
     parsedContent = JSON.parse(doc.content);
   } catch {
-    parsedContent = parseDialogue(doc.content);
+    parsedContent = parseDialogue(doc.content, vocab); // pass vocab
   }
 
   return {
