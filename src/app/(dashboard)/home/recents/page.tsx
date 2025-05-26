@@ -61,7 +61,7 @@ function RecentsPage() {
   }
 
   return (
-    <div className="m-10 space-y-4">
+    <div className="m-10 space-y-5">
       <div>
         <UserGuidePopover
           id="recents-page"

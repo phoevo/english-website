@@ -1,5 +1,4 @@
 import { getConversationFromDB } from "./appwrite"; // Import the function from appwrite.ts
-import { vocab } from "./vocab";
 import { vocabIndex } from "./vocab/vocabIndex";
 
 export interface Word {

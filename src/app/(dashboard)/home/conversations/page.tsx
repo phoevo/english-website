@@ -1,6 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { databases } from "@/data/appwrite";
+import React, { useState } from "react";
 import { useConversations } from "@/hooks/useConversations";
 import { Label } from "@/components/ui/label";
 import ConversationCover from "./ConversationCover";
@@ -30,8 +29,6 @@ import {
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
-const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
-const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
 
 function ConversationsPage() {
   const { conversations, loading: conversationsLoading, error } = useConversations();
@@ -39,24 +36,8 @@ function ConversationsPage() {
   const [test, setTest] = useState(false);
 
   const {
-    user,
     loading: userLoading,
-    setSubscribed,
   } = useUserStore();
-
-  useEffect(() => {
-    const fetchSubscription = async () => {
-      if (!user) return;
-      try {
-        const doc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, user.$id);
-        setSubscribed(doc?.isSubscribed ?? false);
-      } catch (error) {
-        console.error("Failed to fetch subscription status:", error);
-      }
-    };
-
-    fetchSubscription();
-  }, [user, setSubscribed]);
 
 
   if (conversationsLoading || userLoading) {

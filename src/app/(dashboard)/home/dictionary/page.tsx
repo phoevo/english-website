@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { databases } from "@/data/appwrite";
+import React, { useState } from "react";
+import { databases} from "@/data/appwrite";
 import { vocab } from "@/data/vocab";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -18,39 +18,17 @@ function getWordDetails(wordText: string) {
 }
 
 function DictionaryPage() {
-  const [savedWords, setSavedWords] = useState<string[]>([]);
+
   const [, setDeletingWord] = useState<string | null>(null);
-  const { user, loading } = useUserStore();
+  const { user, loading, dictionaryWords, setDictionaryWords } = useUserStore();
 
-  useEffect(() => {
-
-    const fetchSavedWords = async () => {
-      if (!user) return;
-
-      try {
-        const userDoc = await databases.getDocument(
-          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-          process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!,
-          user.$id
-        );
-        const userSavedWords = userDoc?.dictionaryWords || [];
-        setSavedWords(userSavedWords.reverse());
-      } catch (error) {
-        console.error("Error fetching saved words:", error);
-      }
-    };
-
-    fetchSavedWords();
-  }, [user]);
 
   const handleDelete = async (wordToDelete: string) => {
     if (!user?.$id) return;
-
     setDeletingWord(wordToDelete);
-
     setTimeout(async () => {
-      const updatedWords = savedWords.filter((word) => word !== wordToDelete);
-      setSavedWords(updatedWords);
+      const updatedWords = dictionaryWords.filter((word) => word !== wordToDelete);
+      setDictionaryWords(updatedWords);
       setDeletingWord(null);
 
       try {
@@ -112,11 +90,11 @@ function DictionaryPage() {
 
 
 
-      {savedWords.length > 0 ? (
+      {dictionaryWords.length > 0 ? (
         <ScrollArea className="h-155">
         <div className="grid gap-4 p-3 pb-4 border-1 rounded-md">
           <AnimatePresence>
-            {savedWords.map((wordText, index) => {
+            {dictionaryWords.map((wordText, index) => {
               const details = getWordDetails(wordText);
 
               return (

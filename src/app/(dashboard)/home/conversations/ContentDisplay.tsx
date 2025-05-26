@@ -14,7 +14,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Raleway, Geist } from "next/font/google";
+import { Geist } from "next/font/google";
 import {
   Accordion,
   AccordionContent,
@@ -27,7 +27,6 @@ import { Button } from "@/components/ui/button";
 import { account, databases } from "@/data/appwrite";
 import { toast } from "sonner";
 
-const raleway = Raleway({ subsets: ["latin"], variable: "--font-raleway", display: "swap" });
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;

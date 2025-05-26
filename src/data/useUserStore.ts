@@ -1,8 +1,6 @@
 import { create } from "zustand";
-import { account, databases, getConversationFromDB } from "@/data/appwrite";
+import { account, databases, getConversationFromDB, usersCollectionId, databaseId } from "@/data/appwrite";
 
-const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
-const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
 
 interface User {
   $id: string;
@@ -38,18 +36,39 @@ export const useUserStore = create<UserState>((set) => ({
 
   fetchUser: async () => {
     set({ loading: true });
+
     try {
       const res = await account.get();
-      const userDoc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, res.$id);
+      const userDoc = await databases.getDocument(databaseId, usersCollectionId, res.$id);
+
       const isSubscribed = userDoc?.isSubscribed ?? false;
       const conversationIds: string[] = userDoc?.recentConversations || [];
-
-      // Fetch recent conversations
-      const conversations = await Promise.all(
-        conversationIds.map((id: string) => getConversationFromDB(id))
-      );
-
       const dictionaryWords = userDoc?.dictionaryWords || [];
+
+      const conversations: Conversation[] = [];
+      const validConversationIds: string[] = [];
+
+      for (const id of conversationIds) {
+        try {
+          const convo = await getConversationFromDB(id);
+          if (convo) {
+            conversations.push({
+              $id: convo.$id,
+              title: convo.title,
+              level: convo.level,
+            });
+            validConversationIds.push(convo.$id);
+          }
+        } catch (err) {
+          console.warn(`Skipping deleted conversation ID: ${id}`);
+        }
+      }
+
+      if (validConversationIds.length !== conversationIds.length) {
+        await databases.updateDocument(databaseId, usersCollectionId, res.$id, {
+          recentConversations: validConversationIds,
+        });
+      }
 
       set({
         user: res,
@@ -70,7 +89,9 @@ export const useUserStore = create<UserState>((set) => ({
     }
   },
 
+
+
   setSubscribed: (val: boolean) => set({ isSubscribed: val }),
   setRecentConversations: (conversations) => set({ recentConversations: conversations }),
-  setDictionaryWords: (words) => set({ dictionaryWords: words }), // ✅ Add this
+  setDictionaryWords: (words) => set({ dictionaryWords: words }),
 }));

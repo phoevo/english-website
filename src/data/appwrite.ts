@@ -19,14 +19,19 @@ export const databaseId = DATABASE_ID
 export const conversationsCollectionId = CONVERSATIONS_COLLECTION_ID
 export const usersCollectionId = USERS_COLLECTION_ID
 
+console.log(databaseId)
+console.log(conversationsCollectionId)
+
+
+
 
 
 export const getConversationFromDB = async (documentId: string) => {
   try {
     const response = await databases.getDocument(databaseId, conversationsCollectionId, documentId)
     return response
-  } catch (error) {
-    console.error("Error fetching from DB:", error)
-    throw new Error("Failed to fetch conversation.")
+  } catch (error: any) {
+    console.warn(`Conversation ${documentId} could not be fetched. It may have been deleted.`)
+    return null
   }
 }
