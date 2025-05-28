@@ -1,6 +1,7 @@
-export const vocabA1_2: Record<string, { text: string; type: string; definition: string }> = {
-  "hey": { text: "hey", type: "interjection", definition: "used to greet someone" },
-  "how’s": { text: "how’s", type: "contraction", definition: "contraction of 'how is'" },
+export const vocabA1_2: Record<string, { text: string; type: string; definition: string; context: string; }> = {
+  "hey": { text: "hey", type: "interjection", definition: "informal greeting", context: "Hey, how was your weekend?"},
+  "well": { text: "well", type: "Add the word type", definition: "Add the definition", context: "Add a short sentence containing the word" },
+  "how's": { text: "how’s", type: "contraction", definition: "contraction of 'how is'" },
   "it": { text: "it", type: "pronoun", definition: "used to refer to a thing previously mentioned or easily identified" },
   "going": { text: "going", type: "verb", definition: "present participle of 'go'" },
   "what": { text: "what", type: "pronoun", definition: "used to ask for information" },
@@ -10,7 +11,7 @@ export const vocabA1_2: Record<string, { text: string; type: string; definition:
   "up": { text: "up", type: "adverb", definition: "towards a higher place or position" },
   "to": { text: "to", type: "preposition", definition: "used to indicate direction or purpose" },
   "this": { text: "this", type: "determiner", definition: "referring to a specific thing near in time or space" },
-  "weekend": { text: "weekend", type: "noun", definition: "Saturday and Sunday" },
+  "weekend": { text: "weekend", type: "noun", definition: "Saturday and Sunday", context: "Lets meetup on the weekend" },
   "oh": { text: "oh", type: "interjection", definition: "expressing surprise or emotion" },
   "it2": { text: "it", type: "pronoun", definition: "used to refer to a thing previously mentioned" },
   "was": { text: "was", type: "verb", definition: "past tense of 'be'" },

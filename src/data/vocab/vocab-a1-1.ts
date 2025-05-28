@@ -1,10 +1,9 @@
-export const vocabA1_1: Record<string, { text: string; type: string; definition: string }> = {
-  "hey": { text: "hey", type: "interjection", definition: "informal greeting" },
-  "break-a-leg":{text: "break a leg", type: "idiom", definition: "to wish good luck"},
+export const vocabA1_1: Record<string, { text: string; type: string; definition: string; context: string }> = {
+  "hey": { text: "hey", type: "interjection", definition: "informal greeting", context: "Hey, how was your weekend?" },
   "how": { text: "how", type: "adverb", definition: "in what way" },
   "was": { text: "was", type: "verb", definition: "past tense of 'be'" },
   "your": { text: "your", type: "pronoun", definition: "belonging to you" },
-  "weekend": { text: "weekend", type: "noun", definition: "Saturday and Sunday" },
+  "weekend": { text: "weekend", type: "noun", definition: "Saturday and Sunday", context: "Let's meetup on the weekend." },
   "it": { text: "it", type: "pronoun", definition: "third person singular" },
   "awesome": { text: "awesome", type: "adjective", definition: "extremely impressive" },
   "I": {text: "I", type: "pronoun", definition: "refers to oneself when speaking"},
@@ -172,7 +171,7 @@ export const vocabA1_1: Record<string, { text: string; type: string; definition:
   "this": { text: "this", type: "determiner", definition: "referring to something near" },
   "You'll": { text: "You'll", type: "contraction", definition: "You will" },
   "you'll": { text: "you'll", type: "contraction", definition: "You will" },
-  "have": { text: "have", type: "verb", definition: "to own or possessß" },
+  "have": { text: "have", type: "verb", definition: "to own or possess" },
   "an": { text: "an", type: "article", definition: "indefinite article" },
   "Let": { text: "Let", type: "verb", definition: "allow" },
   "know": { text: "know", type: "verb", definition: "be aware" },

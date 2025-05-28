@@ -1,10 +1,12 @@
-import { vocabA1_1 } from "./vocab-a1-1";
-import { vocabA1_2 } from "./vocab-a1-2";
+import { vocabA1 } from "./vocab-a1";
+
+export const vocabIndex: Record<string, Record<string, { type: string; definition: string; context: string; }>> = {
+  //A1
+  "A1": vocabA1
 
 
 
-export const vocabIndex: Record<string, Record<string, { type: string; definition: string }>> = {
-  "a11": vocabA1_1,
-  "a12": vocabA1_2,
+  //A2
+
 
 };

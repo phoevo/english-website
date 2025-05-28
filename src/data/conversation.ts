@@ -5,6 +5,7 @@ export interface Word {
   text: string;
   type: string;
   definition?: string;
+  context?: string,
 }
 
 interface DialogueLine {
@@ -18,7 +19,7 @@ export interface Conversation {
 }
 
 // Function to parse dialogue from raw text
-export const parseDialogue = (rawDialogue: string, vocab: Record<string, { type: string; definition: string }>) => {
+export const parseDialogue = (rawDialogue: string, vocab: Record<string, { type: string; definition: string; context: string; }>) => {
   const parsedDialogue = rawDialogue
     .trim()
     .split("\n")
@@ -41,6 +42,7 @@ export const parseDialogue = (rawDialogue: string, vocab: Record<string, { type:
             text: rawWord,
             type: vocabEntry?.type ?? "unknown",
             definition: vocabEntry?.definition,
+            context: vocabEntry?.context,
           };
         });
 
@@ -59,8 +61,9 @@ export const parseDialogue = (rawDialogue: string, vocab: Record<string, { type:
 
 export const loadConversation = async (documentId: string) => {
   const doc = await getConversationFromDB(documentId);
+  console.log(documentId)
 
-  const vocab = vocabIndex[doc.vocabId] ?? {};
+  const vocab = vocabIndex[doc.level] ?? {};
 
   let parsedContent: unknown = doc.content;
 
@@ -74,5 +77,7 @@ export const loadConversation = async (documentId: string) => {
     title: doc.title,
     content: parsedContent,
     level: doc.level,
+
   };
+
 };

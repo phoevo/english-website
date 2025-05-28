@@ -1,12 +1,4 @@
 import React, {useEffect, useState} from "react";
-// import {
-//   Pagination,
-//   PaginationContent,
-//   PaginationItem,
-//   PaginationLink,
-//   PaginationNext,
-//   PaginationPrevious,
-// } from "@/components/ui/pagination";
 import { Switch } from "@/components/ui/switch";
 import {
   HoverCard,
@@ -32,13 +24,11 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "sw
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
 
-
-
-
 interface Word {
   text: string;
   type: WordTypeKey;
   definition?: string;
+  context?: string,
 }
 
 interface ConversationProps {
@@ -84,6 +74,8 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
 
   const [hoverEnabled, setHoverEnabled] = React.useState(true);
 
+  console.log(rawDialogue);
+
   const [wordTypes, setWordTypes] = React.useState<Record<WordTypeKey, WordTypeData>>({
     noun: { color: "pink-500", enabled: false },
     verb: { color: "red-500", enabled: false },
@@ -102,13 +94,14 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   const [savedWords, setSavedWords] = useState<string[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
 
-function cleanWord(rawWord: string) {
-  return rawWord
-    .toLowerCase()
-    .replace(/[’]/g, "'")   // normalize apostrophes
-    .replace(/[.,!?—;:()"]/g, "")  // remove punctuation
-    .trim();
-}
+  function cleanWord(rawWord: string) {
+    return rawWord
+      .toLowerCase()
+      .replace(/[’]/g, "'")
+      .replace(/[.,!?—;:()"]/g, "")
+      .trim();
+  }
+
 
 
 
@@ -148,16 +141,20 @@ function cleanWord(rawWord: string) {
     const wordType = wordTypes[word.type];
     if (!word?.text || !wordType) return null;
 
+    const displayText = word.text.replace(/\/.*?\//g, "");
+
     const baseColor = wordType.color;
     const isEnabled = wordType.enabled;
     const hoverColor = hoverEnabled ? `hover:bg-${baseColor}` : "";
     const appliedColor = isEnabled ? `bg-${baseColor}` : "";
 
     // CLEAN the word before checking if it's already saved
-    const cleanedWordText = cleanWord(word.text);
-    const alreadySaved = savedWords.includes(cleanedWordText);
 
-    async function addDictionary(rawWordText: string) {
+    const wordString = `${cleanWord(word.text)}::${word.definition}`;
+    const alreadySaved = savedWords.includes(wordString);
+
+
+    async function addDictionary(wordString: string) {
       if (!userId) {
         toast("Account required", {
           description: "You need to log in or create an account to save words.",
@@ -165,10 +162,10 @@ function cleanWord(rawWord: string) {
         return;
       }
 
-      const wordText = cleanWord(rawWordText);
+      if (savedWords.includes(wordString)) return;
 
-      setSavedWords(prev => [...prev, wordText]);
-      toast.success(`Added "${wordText}" to your dictionary`);
+      setSavedWords(prev => [...prev, wordString]);
+      toast.success(`Added "${wordString.split("::")[0]}" to your dictionary`);
 
       try {
         const userDoc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, userId);
@@ -176,11 +173,7 @@ function cleanWord(rawWord: string) {
           ? userDoc.dictionaryWords
           : [];
 
-        if (currentWords.includes(wordText)) {
-          return; // Word already exists
-        }
-
-        const updatedWords = [...currentWords, wordText];
+        const updatedWords = [...currentWords, wordString];
         await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
           dictionaryWords: updatedWords,
         });
@@ -189,6 +182,7 @@ function cleanWord(rawWord: string) {
         toast.error("Something went wrong. Word might not be saved.");
       }
     }
+
 
     return (
       <React.Fragment key={index}>
@@ -199,7 +193,7 @@ function cleanWord(rawWord: string) {
                 hoverEnabled ? "cursor-pointer" : ""
               } ${hoverColor} ${appliedColor}`}
             >
-              {word.text}
+              {displayText}
             </span>
           </HoverCardTrigger>
           {hoverEnabled && word.definition && (
@@ -210,7 +204,7 @@ function cleanWord(rawWord: string) {
 
                 <Button
                   variant="outline"
-                  onClick={() => !alreadySaved && addDictionary(word.text)}
+                  onClick={() => !alreadySaved && addDictionary(`${cleanWord(word.text)}::${word.definition}`)}
                   className="w-4 h-5 rounded-sm cursor-pointer"
                   disabled={alreadySaved}
                   title={alreadySaved ? "Already saved" : "Add"}
@@ -279,6 +273,14 @@ function cleanWord(rawWord: string) {
       </div>
     </div>
   </div>
+  </div>
+  );
+}
+
+
+
+
+
 
 
 
@@ -327,7 +329,3 @@ function cleanWord(rawWord: string) {
             </PaginationContent>
           </Pagination>
         </div> */}
-
-    </div>
-  );
-}

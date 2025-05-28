@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { databases} from "@/data/appwrite";
-import { vocab } from "@/data/vocab";
+import { vocabIndex } from "@/data/vocab/vocabIndex";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -11,39 +11,60 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useUserStore } from "@/data/useUserStore";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import UserGuidePopover from "../../userGuide";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+
 
 // Get the word details from vocab
 function getWordDetails(wordText: string) {
-  return vocab[wordText.toLowerCase()] ?? null;
+  const lowerCaseWord = wordText.toLowerCase();
+
+  for (const sectionKey in vocabIndex) {
+    const section = vocabIndex[sectionKey];
+    if (section[lowerCaseWord]) {
+      return section[lowerCaseWord];
+    }
+  }
+
+  return null; // Not found in any section
 }
+
+
 
 function DictionaryPage() {
 
-  const [, setDeletingWord] = useState<string | null>(null);
+  const [deletingWord, setDeletingWord] = useState<string | null>(null);
   const { user, loading, dictionaryWords, setDictionaryWords } = useUserStore();
 
 
   const handleDelete = async (wordToDelete: string) => {
     if (!user?.$id) return;
     setDeletingWord(wordToDelete);
-    setTimeout(async () => {
-      const updatedWords = dictionaryWords.filter((word) => word !== wordToDelete);
-      setDictionaryWords(updatedWords);
-      setDeletingWord(null);
 
-      try {
-        // Update user document with new saved words list
-        await databases.updateDocument(
-          process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-          process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!,
-          user.$id,
-          { dictionaryWords: updatedWords }
-        );
-      } catch (error) {
-        console.error("Failed to delete word:", error);
-      }
-    }, 0);
+    // Find the full entry (e.g., "apple::a fruit")
+    const fullEntry = dictionaryWords.find((entry) => entry.startsWith(wordToDelete + "::")) || wordToDelete;
+
+    const updatedWords = dictionaryWords.filter((word) => word !== fullEntry);
+    setDictionaryWords(updatedWords);
+    setDeletingWord(null);
+
+    try {
+      await databases.updateDocument(
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+        process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!,
+        user.$id,
+        { dictionaryWords: updatedWords }
+      );
+    } catch (error) {
+      console.error("Failed to delete word:", error);
+    }
   };
+
+
 
   if (loading) {
     return (
@@ -94,8 +115,15 @@ function DictionaryPage() {
         <ScrollArea className="h-155">
         <div className="grid gap-4 p-3 pb-4 border-1 rounded-md">
           <AnimatePresence>
-            {dictionaryWords.map((wordText, index) => {
-              const details = getWordDetails(wordText);
+          {[...dictionaryWords].reverse().map((wordEntry, index) => {
+            // Split if word is in "word::definition" format
+            const [wordText] = wordEntry.split("::");
+            const details = getWordDetails(wordText.trim().toLowerCase());
+            const displayText = wordText
+            .replace(/\/.*?\//g, "")
+            .replace(/^\w/, (c) => c.toUpperCase());
+
+
 
               return (
                 <motion.div
@@ -106,15 +134,34 @@ function DictionaryPage() {
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.2, delay: index * 0.03, ease: 'easeOut' }}
                 >
-                  <div className="border-b rounded flex flex-row justify-between items-center text-md pr-5 ">
-                    <div className="flex flex-col">
-                      <div className="flex flex-row gap-2">
-                        <div className="font-bold">{wordText}</div>
-                        <span className="italic text-zinc-500">{details && details.type}</span>
-                      </div>
-                      <span className="text-zinc-500">{details && details.definition}</span>
-                      {!details && <p className="italic text-sm">No additional info found.</p>}
+                 <div className="border-b h-min-15 rounded flex flex-row justify-between items-center text-md px-5">
+                    <div className="flex flex-row flex-1 items-center gap-5">
+
+                        <Accordion type="single" collapsible>
+                        <AccordionItem value="item-1">
+                          <AccordionTrigger className="justify-between w-full cursor-pointer">
+                            <div className="flex flex-col">
+                              <div className="flex flex-row items-center gap-2">
+                                <div className="font-bold text-base">{displayText}</div>
+                                <div className="italic text-zinc-500">{details?.type}</div>
+                              </div>
+                                <div className="text-zinc-500">{details?.definition}</div>
+                            </div>
+                          </AccordionTrigger>
+
+                          {details?.context && (
+                          <AccordionContent>
+                            <div className="py-2 text-base">{details.context}</div>
+                          </AccordionContent>
+                            )}
+                            {!details && <div className="italic text-sm">No additional info found.</div>}
+                        </AccordionItem>
+                      </Accordion>
+
+
+
                     </div>
+
                     <Button
                       variant="destructive"
                       size="icon"
