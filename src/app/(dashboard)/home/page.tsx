@@ -100,11 +100,19 @@ function Page() {
                 {firstFiveWords.length === 0 ? (
                   <p className="text-zinc-500">No words added yet.</p>
                   ) : (
-                  <ul className="list-disc list-inside space-y-1">
-                  {firstFiveWords.map((word, index) => (
-                  <li key={index} className="text-md">{word}</li>
-                  ))}
-                </ul>
+                    <ul className="list-disc list-inside space-y-1">
+                    {firstFiveWords.map((wordEntry, index) => {
+                      const [wordText] = wordEntry.split("::");
+                      const displayText = wordText
+                        .replace(/\/.*?\//g, "")
+                        .replace(/^\w/, (c) => c.toUpperCase());
+
+                      return (
+                        <li key={index} className="text-md">{displayText}</li>
+                      );
+                    })}
+                  </ul>
+
                     )}
               </CardContent>
               <CardFooter>

@@ -4,14 +4,29 @@ import { motion } from "motion/react";
 import { account } from "@/data/appwrite";
 import { updateRecentConversations } from "@/data/updateRecentConversations";
 import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { useUserStore } from "@/data/useUserStore";
+import { Badge } from "@/components/ui/badge";
+
 
 interface ConversationCoverProps {
   conversationTitle: string;
+  conversationDescription: string;
   conversationId: string;
   level: string;
 }
 
-function ConversationCover({ conversationTitle, conversationId, level}: ConversationCoverProps) {
+function ConversationCover({ conversationTitle, conversationDescription, conversationId, level}: ConversationCoverProps) {
+
+  const completeConversations = useUserStore((state) => state.completeConversations);
+  const isComplete = completeConversations.includes(conversationId);
 
   const handleClick = async () => {
     try {
@@ -33,18 +48,23 @@ function ConversationCover({ conversationTitle, conversationId, level}: Conversa
     <Link href={`conversations/${conversationId}`}>
 
     <motion.div
-      className="bg-muted flex flex-col h-70 w-70 p-2 rounded-lg cursor-pointer overflow-hidden"
-      whileHover={{ scale: 1.02 }}
+      className=""
+      whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.1 }}
       onClick={handleClick}
     >
-      <div className="flex justify-center items-center bg-blue-900 border-1 border-foreground rounded-lg m-3 h-50">
-        Sample Image
-      </div>
-      <div className="flex flex-col justify-center items-center ">
-        <div className="font-semibold">{conversationTitle}</div>
-        <div className="color-zinc-500">{level}</div>
-      </div>
+        <Card className="w-70 h-70 bg-background">
+    <CardHeader>
+      <CardTitle className="flex justify-between">
+        {conversationTitle}
+        {isComplete && <Badge variant="secondary" className="bg-green-500 max-h-6">Complete</Badge>}
+        </CardTitle>
+      <CardDescription>{level}</CardDescription>
+    </CardHeader>
+    <CardContent>
+      <p className="text-sm">{conversationDescription}</p>
+    </CardContent>
+  </Card>
     </motion.div>
 
   </Link>

@@ -11,8 +11,9 @@ import { databaseId, databases, usersCollectionId } from "@/data/appwrite";
 import UserGuidePopover from "../../userGuide";
 
 function RecentsPage() {
-  const { user, loading, recentConversations, setRecentConversations } = useUserStore();
+  const { user, loading, recentConversations, setRecentConversations, } = useUserStore();
   const [, setDeletingId] = useState<string | null>(null);
+
 
   const handleDelete = async (conversationId: string) => {
     if (!user?.$id) return;

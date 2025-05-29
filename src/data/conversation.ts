@@ -74,7 +74,9 @@ export const loadConversation = async (documentId: string) => {
   }
 
   return {
+    $id: doc.$id,
     title: doc.title,
+    description: doc.description,
     content: parsedContent,
     level: doc.level,
 

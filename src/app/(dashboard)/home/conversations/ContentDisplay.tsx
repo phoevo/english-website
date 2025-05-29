@@ -18,6 +18,8 @@ import { WordTypeSettings } from "@/components/ui/WordTypeSettings";
 import { Button } from "@/components/ui/button";
 import { account, databases } from "@/data/appwrite";
 import { toast } from "sonner";
+import { useUserStore } from "@/data/useUserStore";
+import { Badge } from "@/components/ui/badge";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
@@ -33,6 +35,7 @@ interface Word {
 
 interface ConversationProps {
   conversation: {
+    $id: string;
     title: string;
     content:
       | string
@@ -75,6 +78,7 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   const [hoverEnabled, setHoverEnabled] = React.useState(true);
 
   console.log(rawDialogue);
+  console.log(conversation.$id)
 
   const [wordTypes, setWordTypes] = React.useState<Record<WordTypeKey, WordTypeData>>({
     noun: { color: "pink-500", enabled: false },
@@ -91,8 +95,17 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
     contraction: { color: "purple-500", enabled: false },
   });
 
-  const [savedWords, setSavedWords] = useState<string[]>([]);
-  const [userId, setUserId] = useState<string | null>(null);
+  const {
+    user,
+    dictionaryWords,
+    setDictionaryWords,
+    completeConversations,
+    setConversationComplete,
+  } = useUserStore();
+
+  const savedWords = dictionaryWords;
+  const userId = user?.$id ?? null;
+  const isComplete = completeConversations.includes(conversation.$id);
 
   function cleanWord(rawWord: string) {
     return rawWord
@@ -102,26 +115,6 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
       .trim();
   }
 
-
-
-
-  useEffect(() => {
-    async function fetchUserWords() {
-      try {
-        const user = await account.get();
-        const userDoc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, user.$id);
-
-        setUserId(user.$id);
-        setSavedWords(userDoc.dictionaryWords || []);
-      } catch (err) {
-        console.error("User not logged in or fetch failed", err);
-        setUserId(null);
-        setSavedWords([]);
-      }
-    }
-
-    fetchUserWords();
-  }, []);
 
 
   const toggleWordType = (key: WordTypeKey) => {
@@ -164,16 +157,11 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
 
       if (savedWords.includes(wordString)) return;
 
-      setSavedWords(prev => [...prev, wordString]);
+      const updatedWords = [...savedWords, wordString];
+      setDictionaryWords(updatedWords);
       toast.success(`Added "${wordString.split("::")[0]}" to your dictionary`);
 
       try {
-        const userDoc = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, userId);
-        const currentWords: string[] = Array.isArray(userDoc.dictionaryWords)
-          ? userDoc.dictionaryWords
-          : [];
-
-        const updatedWords = [...currentWords, wordString];
         await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
           dictionaryWords: updatedWords,
         });
@@ -182,6 +170,7 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
         toast.error("Something went wrong. Word might not be saved.");
       }
     }
+
 
 
     return (
@@ -246,9 +235,22 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
         ) : (
           <div>No conversation data available.</div>
         )}
-        <div className="p-10 italic text-zinc-500">
-          You have reached the end of {conversation.title}
+        <div className="p-5 flex flex-col ">
+          <div className="text-base italic text-zinc-500">You have reached the end of {conversation.title}</div>
+          {!isComplete && (
+            <Badge
+              className="cursor-pointer"
+              variant="outline"
+              onClick={() => setConversationComplete(conversation.$id)}
+            >
+              Mark Complete
+            </Badge>
+          )}
+          {isComplete && (
+            <Badge className="bg-green-500">Complete</Badge>
+          )}
         </div>
+
       </div>
     </ScrollArea>
 
