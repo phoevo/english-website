@@ -8,7 +8,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -55,11 +54,11 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
     >
         <Card className="w-70 h-70 bg-background">
     <CardHeader>
-      <CardTitle className="flex justify-between">
+      <CardTitle className="flex justify-between items-center">
         {conversationTitle}
-        {isComplete && <Badge variant="secondary" className="bg-green-500 max-h-6">Complete</Badge>}
+        {isComplete && <Badge variant="outline" className="bg-green-500 max-h-6">Complete</Badge>}
         </CardTitle>
-      <CardDescription>{level}</CardDescription>
+      <CardDescription className="border-b">{level}</CardDescription>
     </CardHeader>
     <CardContent>
       <p className="text-sm">{conversationDescription}</p>

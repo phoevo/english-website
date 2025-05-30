@@ -16,7 +16,7 @@ const questions: Question[] = [
   {
     id: 1,
     level: "A1",
-    question: "I ____ a student.",
+    question: "I ____  a student.",
     options: ["am", "is", "are", "be"],
     correctAnswer: "am",
   },
@@ -203,7 +203,7 @@ export default function PlacementTest() {
   return (
     <div className="space-y-4 p-6 border rounded-md">
       <h2 className="text-xl font-semibold">Question {current + 1} of {questions.length}</h2>
-      <p className="text-lg">{questions[current].question}</p>
+      <p className="min-h-[80px] max-h-[120px] overflow-y-auto text-lg">{questions[current].question}</p>
       <div className="space-y-2">
         {questions[current].options.map((opt) => (
           <Button

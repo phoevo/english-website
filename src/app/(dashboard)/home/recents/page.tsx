@@ -9,9 +9,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useUserStore } from "@/data/useUserStore";
 import { databaseId, databases, usersCollectionId } from "@/data/appwrite";
 import UserGuidePopover from "../../userGuide";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardDescription,
+  CardTitle,
+} from "@/components/ui/card"
 
 function RecentsPage() {
-  const { user, loading, recentConversations, setRecentConversations, } = useUserStore();
+  const { user, loading, recentConversations, setRecentConversations, completeConversations } = useUserStore();
   const [, setDeletingId] = useState<string | null>(null);
 
 
@@ -80,30 +86,48 @@ function RecentsPage() {
       {recentConversations.length > 0 ? (
         <div className="space-y-3">
           <AnimatePresence>
-            {recentConversations.map((conversation, index) => (
+            {recentConversations.map((conversation) => (
               <motion.div
-                key={conversation.$id}
-                layout
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3, delay: index * 0.05, ease: "easeOut" }}
-              >
-                <div className="flex justify-between items-center border rounded-lg p-4 hover:bg-primary-foreground transition">
-                  <Link href={`conversations/${conversation.$id}`} className="flex-1">
-                    <h2 className="text-lg font-light">{conversation.title}</h2>
-                    <p className="text-sm text-gray-500">{conversation.level}</p>
-                  </Link>
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    onClick={() => handleDelete(conversation.$id)}
-                    className="ml-4 cursor-pointer h-5 w-5"
-                  >
-                    <X />
-                  </Button>
-                </div>
-              </motion.div>
+              key={conversation.$id}
+              layout
+              whileHover={{ scale: 1.01 }}
+              exit={{ opacity: 0, scale: 1.0 }}
+              transition={{ duration: 0.1, ease: "easeOut" }}
+            >
+              <Card className="bg-background flex flex-row justify-between items-center px-4">
+                <Link
+                  href={`conversations/${conversation.$id}`}
+                  className="flex flex-col flex-1"
+                >
+                  <div className="flex flex-row items-center mb-2">
+                    <CardTitle>{conversation.title}</CardTitle>
+                    {completeConversations.includes(conversation.$id) && (
+                      <div className="ml-4">
+                        <Badge variant="secondary" className="bg-green-500">Complete</Badge>
+                      </div>
+                    )}
+                  </div>
+                  <CardDescription>{conversation.level}</CardDescription>
+                </Link>
+
+
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    handleDelete(conversation.$id);
+                  }}
+                  className="ml-4 cursor-pointer h-5 w-5 self-center"
+                >
+                  <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
+                    <X className="h-4 w-4" />
+                  </motion.div>
+                </Button>
+              </Card>
+            </motion.div>
+
             ))}
           </AnimatePresence>
         </div>

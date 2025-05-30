@@ -162,14 +162,19 @@ function DictionaryPage() {
 
                     </div>
 
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      onClick={() => handleDelete(wordText)}
-                      className="h-5 w-5 cursor-pointer"
-                    >
-                      <X />
-                    </Button>
+                      <Button
+                         variant="destructive"
+                        size="icon"
+                        onClick={() => handleDelete(wordText)}
+                        className="ml-4 cursor-pointer h-5 w-5 self-center">
+
+                        <motion.div
+                        whileHover={{ rotate: 90 }}
+                        transition={{ duration: 0.1 }}
+                         >
+                        <X className="h-4 w-4" />
+                        </motion.div>
+                     </Button>
                   </div>
 
 

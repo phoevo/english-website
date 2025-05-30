@@ -77,7 +77,7 @@ function ConversationsPage() {
       <div className="flex flex-row">
 
         <div className="flex flex-col space-y-1 mt-5">
-            <Label htmlFor="Select">Select your level</Label>
+            <Label htmlFor="Select" className="text-base font-semibold">Level</Label>
 
         <div className="flex flex-row items-center gap-1">
         <Select value={selectedLevel} onValueChange={setSelectedLevel}>
@@ -97,7 +97,7 @@ function ConversationsPage() {
 
         <AlertDialog open={test} onOpenChange={setTest}>
               <AlertDialogTrigger asChild>
-                <div onClick={showTest} className="text-sm font-medium underline cursor-pointer">Not sure?</div>
+                <div onClick={showTest} className="text-sm font-medium underline cursor-pointer ml-1">Not sure?</div>
               </AlertDialogTrigger>
               <AlertDialogContent className={`max-w-xl bg-background ${geist.className}`}>
                 <AlertDialogHeader>

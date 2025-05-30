@@ -36,7 +36,7 @@ function Page() {
   }
 
   return (
-    <div className="w-full m-10 space-y-4">
+    <div className="w-full m-10">
       <div className="flex flex-col gap-3">
         <div className="flex flex-col w-2/3 space-y-4 h-full">
             <UserGuidePopover
@@ -47,7 +47,10 @@ function Page() {
              side="top"
              align="start"
             >
-              <h1 className="text-3xl font-normal">Welcome back, {user?.name || "Guest"}</h1>
+              {user ? (
+                 <h1 className="text-3xl font-normal">Welcome back, {user.name}</h1>
+              ): ""}
+
             </UserGuidePopover>
 
             {!user ? (

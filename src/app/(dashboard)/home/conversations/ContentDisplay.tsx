@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import { Switch } from "@/components/ui/switch";
 import {
   HoverCard,
@@ -16,10 +16,12 @@ import {
 import { Check, Plus } from "lucide-react";
 import { WordTypeSettings } from "@/components/ui/WordTypeSettings";
 import { Button } from "@/components/ui/button";
-import { account, databases } from "@/data/appwrite";
+import { databases } from "@/data/appwrite";
 import { toast } from "sonner";
 import { useUserStore } from "@/data/useUserStore";
 import { Badge } from "@/components/ui/badge";
+import { motion, AnimatePresence } from "framer-motion";
+
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
@@ -237,17 +239,16 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
         )}
         <div className="p-5 flex flex-col ">
           <div className="text-base italic text-zinc-500">You have reached the end of {conversation.title}</div>
-          {!isComplete && (
+          {!isComplete && user &&(
             <Badge
-              className="cursor-pointer"
-              variant="outline"
+              className="cursor-pointer mt-3"
               onClick={() => setConversationComplete(conversation.$id)}
             >
-              Mark Complete
+              Mark as Complete
             </Badge>
           )}
           {isComplete && (
-            <Badge className="bg-green-500">Complete</Badge>
+            <Badge className="bg-green-500 mt-3">Complete</Badge>
           )}
         </div>
 

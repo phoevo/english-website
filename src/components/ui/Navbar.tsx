@@ -8,6 +8,18 @@ import { useRouter } from "next/navigation";
 import { account } from "@/data/appwrite";
 import { Skeleton } from "./skeleton";
 import { useUserStore } from "@/data/useUserStore";
+import { Geist } from "next/font/google";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
 const Navbar = () => {
   const { user, loading, isSubscribed } = useUserStore();
@@ -28,11 +40,11 @@ const Navbar = () => {
         <div className="flex items-center justify-center h-18">
           <div className="flex items-center gap-20">
             <Link href={"/"} className="text-3xl font-light absolute left-10">Synomilo</Link>
-            <Link href="/home" className="text-xl font-bold text-primary font-mono tracking-wider hover:underline underline-offset-10 decoration-zinc-600">
-              home
+            <Link href="/home" className="text-xl font-semibold text-primary font-mono  hover:underline underline-offset-10 decoration-zinc-600">
+              Home
             </Link>
-            <Link href="/profile" className="text-xl font-bold text-primary font-mono tracking-wider hover:underline underline-offset-10 decoration-zinc-600">
-              profile
+            <Link href="/profile" className="text-xl font-semibold text-primary font-mono hover:underline underline-offset-10 decoration-zinc-600 transition-all duration-300">
+              Profile
             </Link>
 
             <div className="flex items-center gap-5 absolute right-10">

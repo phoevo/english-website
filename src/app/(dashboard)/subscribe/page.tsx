@@ -165,7 +165,7 @@ function SubscribePage() {
     {paidOptions.map((option, index) => (
       <div
         key={index}
-        className="flex flex-col justify-between items-center p-4 border-2 rounded-md w-1/3 h-80"
+        className="flex flex-col justify-between items-center p-2 border-2 rounded-md w-1/3 h-80"
       >
         <div className="flex flex-col items-center flex-grow">
           <Badge className="mb-2 bg-pink-500 text-white">{option.title} - ${option.price}</Badge>
