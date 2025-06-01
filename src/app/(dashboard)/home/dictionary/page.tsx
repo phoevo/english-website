@@ -17,9 +17,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import WordBoard from "./wordBoard";
 
 
-// Get the word details from vocab
+
 function getWordDetails(wordText: string) {
   const lowerCaseWord = wordText.toLowerCase();
 
@@ -30,14 +31,14 @@ function getWordDetails(wordText: string) {
     }
   }
 
-  return null; // Not found in any section
+  return null;
 }
 
 
 
 function DictionaryPage() {
 
-  const [deletingWord, setDeletingWord] = useState<string | null>(null);
+  const [, setDeletingWord] = useState<string | null>(null);
   const { user, loading, dictionaryWords, setDictionaryWords } = useUserStore();
 
 
@@ -92,106 +93,109 @@ function DictionaryPage() {
     )
   }
 
-  return ( //dictionary
-    <div className="flex flex-col h-auto">
-      <div className="m-10 flex flex-col space-y-5">
-       <UserGuidePopover
+  return (
+  <div className="w-full m-10">
+
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col w-2/3 space-y-4 h-full">
+        <UserGuidePopover
           id="dictionary-page"
           title="The Dictionary Page"
           description="Your personal dictionary. Save words you're unfamiliar with or want to revise.
           Pick and choose to create flashcards with."
           side="top"
           align="start"
-          >
-            <h1 className="text-3xl font-light">Dictionary</h1>
-          </UserGuidePopover>
+        >
+          <h1 className="text-3xl font-light">Dictionary</h1>
+        </UserGuidePopover>
 
-      <p className="text-zinc-500">Words you&apos;ve saved will appear here, along with word classes and definitions.</p>
-
-
-
-
-      {dictionaryWords.length > 0 ? (
-        <ScrollArea className="h-155">
-        <div className="grid gap-4 p-3 pb-4 border-1 rounded-md">
-          <AnimatePresence>
-          {[...dictionaryWords].reverse().map((wordEntry, index) => {
-            // Split if word is in "word::definition" format
-            const [wordText] = wordEntry.split("::");
-            const details = getWordDetails(wordText.trim().toLowerCase());
-            const displayText = wordText
-            .replace(/\/.*?\//g, "")
-            .replace(/^\w/, (c) => c.toUpperCase());
-
-
-
-              return (
-                <motion.div
-                  key={wordText}
-                  layout
-                  initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.2, delay: index * 0.03, ease: 'easeOut' }}
-                >
-                 <div className="border-b h-min-15 rounded flex flex-row justify-between items-center text-md px-5">
-                    <div className="flex flex-row flex-1 items-center gap-5">
-
-                        <Accordion type="single" collapsible>
-                        <AccordionItem value="item-1">
-                          <AccordionTrigger className="justify-between w-full cursor-pointer">
-                            <div className="flex flex-col">
-                              <div className="flex flex-row items-center gap-2">
-                                <div className="font-bold text-base">{displayText}</div>
-                                <div className="italic text-zinc-500">{details?.type}</div>
-                              </div>
-                                <div className="text-zinc-500">{details?.definition}</div>
-                            </div>
-                          </AccordionTrigger>
-
-                          {details?.context && (
-                          <AccordionContent>
-                            <div className="py-2 text-base">{details.context}</div>
-                          </AccordionContent>
-                            )}
-                            {!details && <div className="italic text-sm">No additional info found.</div>}
-                        </AccordionItem>
-                      </Accordion>
-
-
-
-                    </div>
-
-                      <Button
-                         variant="destructive"
-                        size="icon"
-                        onClick={() => handleDelete(wordText)}
-                        className="ml-4 cursor-pointer h-5 w-5 self-center">
-
-                        <motion.div
-                        whileHover={{ rotate: 90 }}
-                        transition={{ duration: 0.1 }}
-                         >
-                        <X className="h-4 w-4" />
-                        </motion.div>
-                     </Button>
-                  </div>
-
-
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-          <div className="flex justify-center text-zinc-500">end</div>
-        </div>
-
-        </ScrollArea>
-      ) : (
-        <p>No saved words yet</p>
-      )}
+        <p className="text-zinc-500">
+          Words you&apos;ve saved will appear here, along with word classes and definitions.
+        </p>
       </div>
     </div>
-  );
+
+
+    <div className="flex flex-row gap-4 mt-6">
+      {/* Dictionary Word List */}
+      <div className="flex flex-col w-1/2 space-y-5 border-1 rounded-md shadow-md">
+        {dictionaryWords.length > 0 ? (
+          <ScrollArea className="h-155">
+            <div className="grid gap-4 p-3 pb-4 m-1 rounded-md">
+              <AnimatePresence>
+                {[...dictionaryWords].reverse().map((wordEntry, index) => {
+                  const [wordText] = wordEntry.split("::");
+                  const details = getWordDetails(wordText.trim().toLowerCase());
+                  const displayText = wordText
+                    .replace(/\/.*?\//g, "")
+                    .replace(/^\w/, (c) => c.toUpperCase());
+
+                  return (
+                    <motion.div
+                      key={wordText}
+                      layout
+                      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.2, delay: index * 0.03, ease: "easeOut" }}
+                    >
+                      <div className="border-b h-min-15 rounded flex flex-row justify-between items-center text-md px-5">
+                        <div className="flex flex-row flex-1 items-center gap-5">
+                          <Accordion type="single" collapsible>
+                            <AccordionItem value="item-1">
+                              <AccordionTrigger className="justify-between w-full cursor-pointer">
+                                <div className="flex flex-col">
+                                  <div className="flex flex-row items-center gap-2">
+                                    <div className="font-bold text-base">{displayText}</div>
+                                    <div className="italic text-zinc-500">{details?.type}</div>
+                                  </div>
+                                  <div className="text-zinc-500">{details?.definition}</div>
+                                </div>
+                              </AccordionTrigger>
+
+                              {details?.context && (
+                                <AccordionContent>
+                                  <div className="py-2 text-base">{details.context}</div>
+                                </AccordionContent>
+                              )}
+                              {!details && (
+                                <div className="italic text-sm">No additional info found.</div>
+                              )}
+                            </AccordionItem>
+                          </Accordion>
+                        </div>
+
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          onClick={() => handleDelete(wordText)}
+                          className="ml-4 cursor-pointer h-5 w-5 self-center"
+                        >
+                          <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
+                            <X className="h-4 w-4" />
+                          </motion.div>
+                        </Button>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+              <div className="flex justify-center text-zinc-500">end</div>
+            </div>
+          </ScrollArea>
+        ) : (
+          <p>No saved words yet</p>
+        )}
+      </div>
+
+      {/* Word Pad / Flashcard Area */}
+      <div className="w-2/3">
+        <WordBoard />
+      </div>
+    </div>
+  </div>
+);
+
 }
 
 export default DictionaryPage;

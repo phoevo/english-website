@@ -4,6 +4,7 @@ const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
 const CONVERSATIONS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_CONVERSATIONS_COLLECTION_ID!;
+const DECKS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_DECKS_COLLECTION_ID!;
 
 // Initialize the Appwrite client
 const client = new Client()
@@ -18,6 +19,7 @@ export const account = new Account(client)
 export const databaseId = DATABASE_ID
 export const conversationsCollectionId = CONVERSATIONS_COLLECTION_ID
 export const usersCollectionId = USERS_COLLECTION_ID
+export const decksCollectionId = DECKS_COLLECTION_ID
 
 console.log(databaseId)
 console.log(conversationsCollectionId)

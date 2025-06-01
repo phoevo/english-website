@@ -97,7 +97,7 @@ function RecentsPage() {
               <Card className="bg-background flex flex-row justify-between items-center px-4">
                 <Link
                   href={`conversations/${conversation.$id}`}
-                  className="flex flex-col flex-1"
+                  className="flex flex-col flex-1 border-r"
                 >
                   <div className="flex flex-row items-center mb-2">
                     <CardTitle>{conversation.title}</CardTitle>
@@ -119,7 +119,7 @@ function RecentsPage() {
                     e.preventDefault();
                     handleDelete(conversation.$id);
                   }}
-                  className="ml-4 cursor-pointer h-5 w-5 self-center"
+                  className="cursor-pointer h-5 w-5 self-center"
                 >
                   <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
                     <X className="h-4 w-4" />
