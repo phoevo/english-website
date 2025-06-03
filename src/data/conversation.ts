@@ -79,6 +79,7 @@ export const loadConversation = async (documentId: string) => {
     description: doc.description,
     content: parsedContent,
     level: doc.level,
+    audioFileId: doc.audioFileId,
 
   };
 

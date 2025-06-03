@@ -128,7 +128,7 @@ export function MyDecks({ onSelectDeck }: MyDecksProps) {
         variant="destructive"
         size="icon"
         onClick={() => handleDeleteDeck(deck.$id)}
-        className="absolute top-2 right-2 z-10 h-5 w-5"
+        className="absolute top-2 right-2 z-10 h-5 w-5 cursor-pointer"
       >
         <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
           <X className="h-4 w-4" />

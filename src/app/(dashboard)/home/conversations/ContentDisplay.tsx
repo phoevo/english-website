@@ -16,11 +16,13 @@ import {
 import { Check, Plus } from "lucide-react";
 import { WordTypeSettings } from "@/components/ui/WordTypeSettings";
 import { Button } from "@/components/ui/button";
-import { databases } from "@/data/appwrite";
-import { toast } from "sonner";
+import { databases, storage } from "@/data/appwrite";
 import { useUserStore } from "@/data/useUserStore";
 import { Badge } from "@/components/ui/badge";
-import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
+import { audioBucketId } from "@/data/appwrite";
+import { AudioPlayer } from "./AudioPlayer";
+
 
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
@@ -39,12 +41,15 @@ interface ConversationProps {
   conversation: {
     $id: string;
     title: string;
+    levev: string;
+    audioFileId: string;
     content:
       | string
       | {
           speaker: string;
           words: Word[];
         }[];
+
   };
 }
 
@@ -79,9 +84,6 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
 
   const [hoverEnabled, setHoverEnabled] = React.useState(true);
 
-  console.log(rawDialogue);
-  console.log(conversation.$id)
-
   const [wordTypes, setWordTypes] = React.useState<Record<WordTypeKey, WordTypeData>>({
     noun: { color: "pink-500", enabled: false },
     verb: { color: "red-500", enabled: false },
@@ -108,6 +110,32 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   const savedWords = dictionaryWords;
   const userId = user?.$id ?? null;
   const isComplete = completeConversations.includes(conversation.$id);
+  const [audioUrl, setAudioUrl] = React.useState<string | null>(null);
+
+
+    React.useEffect(() => {
+      const fetchAudioUrl = async () => {
+        if (!conversation || !conversation.audioFileId) {
+          console.warn("Missing conversation or audioFileId");
+          return;
+        }
+
+        try {
+          const result = await storage.getFileView(audioBucketId, conversation.audioFileId);
+          console.log("Audio preview URL:", result);
+          setAudioUrl(result);
+
+        } catch (err) {
+          console.error("Error fetching audio preview:", err);
+        }
+      };
+
+      fetchAudioUrl();
+    }, [conversation]);
+
+
+
+
 
   function cleanWord(rawWord: string) {
     return rawWord
@@ -142,9 +170,6 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
     const isEnabled = wordType.enabled;
     const hoverColor = hoverEnabled ? `hover:bg-${baseColor}` : "";
     const appliedColor = isEnabled ? `bg-${baseColor}` : "";
-
-    // CLEAN the word before checking if it's already saved
-
     const wordString = `${cleanWord(word.text)}::${word.definition}`;
     const alreadySaved = savedWords.includes(wordString);
 
@@ -172,9 +197,6 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
         toast.error("Something went wrong. Word might not be saved.");
       }
     }
-
-
-
     return (
       <React.Fragment key={index}>
         <HoverCard openDelay={50} closeDelay={50}>
@@ -226,7 +248,7 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
         {Array.isArray(rawDialogue) && rawDialogue.length > 0 ? (
           rawDialogue.map((line, i) => (
             <div key={i} className="flex flex-row mb-10">
-              <div className="font-semibold pr-6 border-r border-gray-400 min-w-[100px] text-right">
+              <div className="font-semibold pr-6 border-r-1 border-gray-400 min-w-[100px] text-right">
                 {line.speaker}
               </div>
               <div className="ml-6 flex flex-wrap gap-1">
@@ -258,6 +280,7 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
 
     <div className="p-5 h-full border-l-1">
       <div className="flex flex-col items-center gap-4">
+
         <span className="flex gap-1 items-center">
           <div className="bg-pink-500 rounded px-1">Hover</div>
           <Switch checked={hoverEnabled} onCheckedChange={setHoverEnabled} />
@@ -275,7 +298,15 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
         </Accordion>
       </div>
     </div>
+
+    <div className="flex items-center justify-center h-8 w-auto bg-background border-t-1 rounded-bl-md">
+
+      {audioUrl && <AudioPlayer src={audioUrl} />}
+    </div>
   </div>
+
+
+
   </div>
   );
 }

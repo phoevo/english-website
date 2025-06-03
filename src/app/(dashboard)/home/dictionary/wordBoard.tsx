@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, ArrowRight, Plus } from "lucide-react"
 import { Create } from './create'
 import { MyDecks } from './decks'
+import { motion } from 'motion/react'
 
 
 
@@ -49,13 +50,13 @@ const flashcards = [...rawWords].map((entry) => {
     };
   });
 
-  // Game functions
+
   const startGame = () => {
     if (flashcards.length > 0) {
       setCurrentIndex(0);
       setFlipped(false);
       setIsGameActive(true);
-      setShowMyDecks(false);  // hide decks if game starts
+      setShowMyDecks(false);
     }
   };
 
@@ -69,7 +70,7 @@ const flashcards = [...rawWords].map((entry) => {
   };
 
   const previousCard = () => {
-    if (currentIndex - 1 >= 0) {  // fixed condition here
+    if (currentIndex - 1 >= 0) {
       setCurrentIndex(currentIndex - 1);
       setFlipped(false);
     }
@@ -79,18 +80,18 @@ const flashcards = [...rawWords].map((entry) => {
     setIsGameActive(false);
   }
 
-  // Toggle decks visibility
+
   const toggleMyDecks = () => {
     setShowMyDecks(prev => !prev);
-    setIsGameActive(false); // optionally stop game when decks open
+    setIsGameActive(false);
   }
 
   return (
     <div className='h-155'>
       <Card className='w-full h-full bg-background border-1 flex flex-col'>
         <CardHeader className='flex flex-col'>
-
           <CardTitle className='text-2xl'>Word Board</CardTitle>
+
           <CardDescription>A more in-depth look at your Dictionary</CardDescription>
 
           <div className='flex flex-row gap-2 bg-background'>
@@ -132,27 +133,63 @@ const flashcards = [...rawWords].map((entry) => {
           </CardContent>
         ) : (
           <CardContent className="flex-grow">
+
             <div className='w-full h-full border-1 rounded-md shadow-xs p-5 flex items-center justify-center'>
+               <motion.div
+              layout
+              className="w-full h-full"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              >
               {!isGameActive ? (
                 <p className="text-zinc-500 text-center">Choose one of your saved decks or Quick Start for all your words.</p>
               ) : (
                 <div
                   className="w-full h-full flex flex-col justify-center items-center space-y-4"
                 >
-                  <div
-                    className="flex flex-col justify-center items-center border rounded-lg p-8 cursor-pointer w-full max-w-md h-2/3 shadow-md hover:bg-muted transition"
-                    onClick={() => setFlipped(!flipped)}
-                  >
-                    <p className="text-lg">
-                      {flipped
-                        ? flashcards[currentIndex].definition
-                        : flashcards[currentIndex].word}
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-2">{flipped ? "Click to see word" : "Click to see definition"}</p>
-                  </div>
+                <div className="w-full max-w-md h-2/3" onClick={() => setFlipped(!flipped)}>
+          <div className="relative w-full h-full" style={{ perspective: 1000 }}>
+
+
+            <motion.div
+              className="w-full h-full relative"
+              transition={{ duration: 0.1 }}
+              animate={{ rotateY: flipped ? 180 : 0 }}
+              style={{
+                transformStyle: 'preserve-3d',
+              }}
+            >
+              {/* Front side */}
+              <div
+                className="absolute w-full h-full border rounded-lg p-8 bg-background flex flex-col items-center justify-center cursor-pointer shadow-md"
+                style={{
+                  backfaceVisibility: 'hidden',
+                }}
+              >
+                <p className="text-lg">{flashcards[currentIndex].word}</p>
+                <p className="text-sm text-muted-foreground mt-2">Click to see definition</p>
+              </div>
+
+              {/* Back side */}
+              <div
+                className="absolute w-full h-full border rounded-lg p-8 bg-background flex flex-col items-center justify-center cursor-pointer shadow-md"
+                style={{
+                  backfaceVisibility: 'hidden',
+                  transform: 'rotateY(180deg)',
+                }}
+              >
+                <p className="text-lg">{flashcards[currentIndex].definition}</p>
+                <p className="text-sm text-muted-foreground mt-2">Click to see word</p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+
 
                   <div className='flex flex-row gap-2'>
-
                     <Button
                       className='h-7 cursor-pointer'
                       variant="secondary"
@@ -163,7 +200,7 @@ const flashcards = [...rawWords].map((entry) => {
                     <Button
                       className='h-7 cursor-pointer'
                       variant="secondary"
-                      onClick={nextCard}>
+                    onClick={nextCard}>
                       {currentIndex + 1 < flashcards.length ? <ArrowRight/> : "Finish"}
                     </Button>
                   </div>
@@ -177,6 +214,7 @@ const flashcards = [...rawWords].map((entry) => {
 
                 </div>
               )}
+              </motion.div>
             </div>
           </CardContent>
         )}

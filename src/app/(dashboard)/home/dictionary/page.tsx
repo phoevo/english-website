@@ -69,8 +69,8 @@ function DictionaryPage() {
 
   if (loading) {
     return (
-      <div className="m-10 h-192 space-y-5">
-      <Skeleton className="w-[450px] h-[32px]" />
+      <div className="m-10 h-192 space-y-6">
+      <Skeleton className="w-[150px] h-[32px]" />
       <Skeleton className="w-[570px] h-[14px]" />
       <div className="border-t-1 border-x-1 flex flex-col justify-center rounded-md gap-4 p-3">
         <Skeleton className="w-[536px] h-[49px]" />
@@ -198,4 +198,4 @@ function DictionaryPage() {
 
 }
 
-export default DictionaryPage;
+export default DictionaryPage

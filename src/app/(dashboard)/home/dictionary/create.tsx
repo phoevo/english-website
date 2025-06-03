@@ -23,6 +23,7 @@ import { useUserStore } from "@/data/useUserStore"
 import { Geist } from "next/font/google"
 import { ReactNode, useState } from "react"
 import { createDeck } from "./decks"
+import { toast } from "sonner"
 
 
 const geist = Geist({ subsets: ['latin'] })
@@ -39,6 +40,9 @@ export function Create({ children }: { children: ReactNode }) {
   const [selectedWords, setSelectedWords] = useState<string[]>([])
   const [deckName, setDeckName] = useState("")
   const [deckType, setDeckType] = useState<string>("")
+  const [isCreating, setIsCreating] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
   const allSelected = selectedWords.length === wordList.length && wordList.length > 0
 
   const toggleSelectAll = () => {
@@ -54,25 +58,27 @@ export function Create({ children }: { children: ReactNode }) {
   }
 
   const handleCreate = async () => {
+  setIsCreating(true)
 
   try {
-    const createdDeck = await createDeck({
+    await createDeck({
       name: deckName,
       type: deckType,
       words: selectedWords,
     });
 
-    console.log("Created deck:", createdDeck);
-
-    // Reset or give feedback
     setDeckName("");
     setDeckType("");
     setSelectedWords([]);
+    setIsOpen(false);
 
+    toast.success("Deck created.");
 
   } catch (error) {
     console.error("Error creating deck:", error);
 
+  }finally{
+    setIsCreating(false)
   }
 };
 
@@ -91,7 +97,7 @@ if (!user) return null;
 
   return (
     <div className={geist.className}>
-      <Popover>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger>{children}</PopoverTrigger>
         <PopoverContent
           side="right"
@@ -177,9 +183,9 @@ if (!user) return null;
             <Button
               className="w-full h-8"
               onClick={handleCreate}
-              disabled={!deckName.trim() || !deckType || selectedWords.length === 0}
+              disabled={isCreating || !deckName.trim() || !deckType || selectedWords.length === 0}
             >
-              Create deck
+              {isCreating ? "Creating Deck" : "Create Deck"}
             </Button>
           </CardContent>
         </PopoverContent>

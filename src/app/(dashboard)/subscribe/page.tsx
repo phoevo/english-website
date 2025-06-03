@@ -87,7 +87,7 @@ function SubscribePage() {
 
     <div className="flex flex-col border-1 rounded-lg w-1/2 space-y-10 m-10 p-10 h-auto shadow-md">
 
-      <CardHeader className=''>
+      <CardHeader>
       <CardTitle className="text-2xl">Subscribe</CardTitle>
       <CardDescription>
         Subscribe to get access to the most Synomilo has to offer.
@@ -105,7 +105,7 @@ function SubscribePage() {
         <li>Learn page</li>
         <li>Access to 10 Conversations</li>
         <li>Hover feature</li>
-        <li>Dictionary</li>
+        <li>Dictionary and Word Board</li>
       </ul>
       </div>
 

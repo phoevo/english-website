@@ -20,6 +20,7 @@ interface ConversationCoverProps {
   conversationDescription: string;
   conversationId: string;
   level: string;
+  audioFileId: string;
 }
 
 function ConversationCover({ conversationTitle, conversationDescription, conversationId, level}: ConversationCoverProps) {

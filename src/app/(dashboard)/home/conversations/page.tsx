@@ -131,6 +131,7 @@ function ConversationsPage() {
             conversationDescription={conv.description}
             level={conv.level}
             conversationId={conv.$id}
+            audioFileId={conv.audioFileId}
           />
         ))}
       </div>
