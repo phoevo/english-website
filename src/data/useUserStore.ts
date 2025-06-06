@@ -27,7 +27,7 @@ interface UserState {
   setDictionaryWords: (words: string[]) => void;
 }
 
-export const useUserStore = create<UserState>((set) => ({
+export const useUserStore = create<UserState>((set, get) => ({
   user: null,
   isSubscribed: false,
   loading: true,
@@ -99,8 +99,13 @@ export const useUserStore = create<UserState>((set) => ({
       return;
     }
 
+    const user = get().user;
+    if (!user) {
+      console.error("No user logged in");
+      return;
+    }
+
     try {
-      const user = await account.get();
       const userDoc = await databases.getDocument(databaseId, usersCollectionId, user.$id);
 
       const currentCompleted: string[] = Array.isArray(userDoc.completeConversations)
@@ -118,7 +123,6 @@ export const useUserStore = create<UserState>((set) => ({
         completeConversations: updated,
       });
 
-      // Use set() with updater callback
       set((state) => ({
         completeConversations: [...state.completeConversations, conversationId],
       }));
@@ -126,7 +130,6 @@ export const useUserStore = create<UserState>((set) => ({
       console.error("Failed to mark conversation as complete:", err);
     }
   },
-
 
   setSubscribed: (val: boolean) => set({ isSubscribed: val }),
   setRecentConversations: (conversations) => set({ recentConversations: conversations }),

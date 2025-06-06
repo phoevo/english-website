@@ -94,10 +94,10 @@ function DictionaryPage() {
   }
 
   return (
-  <div className="w-full m-10">
+  <div className="w-full h-auto m-10">
 
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-col w-2/3 space-y-4 h-full">
+    <div className="flex flex-col h-1/6">
+      <div className="flex flex-col w-2/3 space-y-5 h-full">
         <UserGuidePopover
           id="dictionary-page"
           title="The Dictionary Page"
@@ -116,12 +116,13 @@ function DictionaryPage() {
     </div>
 
 
-    <div className="flex flex-row gap-4 mt-6">
+    <div className="flex flex-row gap-4 h-5/6">
       {/* Dictionary Word List */}
-      <div className="flex flex-col w-1/2 space-y-5 border-1 rounded-md shadow-md">
+      <div className="flex flex-col w-1/2 h-full space-y-5 border-1 rounded-2xl shadow-sm">
         {dictionaryWords.length > 0 ? (
-          <ScrollArea className="h-155">
+          <ScrollArea className="h-full">
             <div className="grid gap-4 p-3 pb-4 m-1 rounded-md">
+
               <AnimatePresence>
                 {[...dictionaryWords].reverse().map((wordEntry, index) => {
                   const [wordText] = wordEntry.split("::");
@@ -142,7 +143,7 @@ function DictionaryPage() {
                       <div className="border-b h-min-15 rounded flex flex-row justify-between items-center text-md px-5">
                         <div className="flex flex-row flex-1 items-center gap-5">
                           <Accordion type="single" collapsible>
-                            <AccordionItem value="item-1">
+                            <AccordionItem value={`item-${index}`}>
                               <AccordionTrigger className="justify-between w-full cursor-pointer">
                                 <div className="flex flex-col">
                                   <div className="flex flex-row items-center gap-2">
@@ -189,7 +190,7 @@ function DictionaryPage() {
       </div>
 
       {/* Word Pad / Flashcard Area */}
-      <div className="w-2/3">
+      <div className="w-2/3 h-full">
         <WordBoard />
       </div>
     </div>

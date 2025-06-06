@@ -87,7 +87,7 @@ const flashcards = [...rawWords].map((entry) => {
   }
 
   return (
-    <div className='h-155'>
+    <div className='h-full'>
       <Card className='w-full h-full bg-background border-1 flex flex-col'>
         <CardHeader className='flex flex-col'>
           <CardTitle className='text-2xl'>Word Board</CardTitle>

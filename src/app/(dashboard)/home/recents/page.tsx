@@ -46,7 +46,7 @@ function RecentsPage() {
 
   if (loading) {
     return (
-      <div className="m-10 space-y-6">
+      <div className="m-10 space-y-8">
         <Skeleton className="w-[300px] h-[32px]" />
         <Skeleton className="w-[400px] h-[15px]" />
         <Skeleton className="w-[392px] h-[82px] opacity-50 mt-5" />
@@ -68,7 +68,7 @@ function RecentsPage() {
   }
 
   return (
-    <div className="m-10 space-y-5">
+    <div className="h-full space-y-5 m-10">
       <div>
         <UserGuidePopover
           id="recents-page"
@@ -81,8 +81,10 @@ function RecentsPage() {
           </UserGuidePopover>
         </div>
 
-      <p className="text-zinc-500">Conversations you&apos;ve interacted with will appear here.</p>
+          <p className="text-zinc-500">Conversations you&apos;ve interacted with will appear here.</p>
 
+
+    <div className="mt-9">
       {recentConversations.length > 0 ? (
         <div className="space-y-3">
           <AnimatePresence>
@@ -134,6 +136,8 @@ function RecentsPage() {
       ) : (
         <p>No recent conversations found.</p>
       )}
+
+      </div>
 
     </div>
 

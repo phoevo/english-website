@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { motion } from "motion/react";
-import { account } from "@/data/appwrite";
 import { updateRecentConversations } from "@/data/updateRecentConversations";
 import Link from "next/link";
 import {
@@ -27,22 +26,23 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
 
   const completeConversations = useUserStore((state) => state.completeConversations);
   const isComplete = completeConversations.includes(conversationId);
+  const user = useUserStore(state => state.user);
 
-  const handleClick = async () => {
-    try {
-      const user = await account.get();
-      const userId = user.$id;
+    const handleClick = async () => {
+      if (!user) {
+        console.warn("User not loaded yet");
+        return;
+      }
 
-      await updateRecentConversations({
-        userId,
-        conversationId,
-      });
-
-
-    } catch (err) {
-      console.error("Error updating recents:", err);
-    }
-  };
+      try {
+        await updateRecentConversations({
+          userId: user.$id,
+          conversationId,
+        });
+      } catch (err) {
+        console.error("Error updating recents:", err);
+      }
+    };
 
   return (
     <Link href={`conversations/${conversationId}`}>

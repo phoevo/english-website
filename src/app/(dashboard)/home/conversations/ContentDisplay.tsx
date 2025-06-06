@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { audioBucketId } from "@/data/appwrite";
 import { AudioPlayer } from "./AudioPlayer";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 
@@ -111,27 +112,30 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   const userId = user?.$id ?? null;
   const isComplete = completeConversations.includes(conversation.$id);
   const [audioUrl, setAudioUrl] = React.useState<string | null>(null);
+  const [audioLoading, setAudioLoading] = React.useState(true);
 
 
     React.useEffect(() => {
-      const fetchAudioUrl = async () => {
-        if (!conversation || !conversation.audioFileId) {
-          console.warn("Missing conversation or audioFileId");
-          return;
-        }
+  const fetchAudioUrl = async () => {
+    if (!conversation || !conversation.audioFileId) {
+      setAudioLoading(false);
+      return;
+    }
 
-        try {
-          const result = await storage.getFileView(audioBucketId, conversation.audioFileId);
-          console.log("Audio preview URL:", result);
-          setAudioUrl(result);
+    try {
+      const result = await storage.getFileView(audioBucketId, conversation.audioFileId);
+      console.log("Audio preview URL:", result);
+      setAudioUrl(result);
+    } catch (err) {
+      console.error("Error fetching audio preview:", err);
+      setAudioUrl(null);
+    } finally {
+      setAudioLoading(false);
+    }
+  };
 
-        } catch (err) {
-          console.error("Error fetching audio preview:", err);
-        }
-      };
-
-      fetchAudioUrl();
-    }, [conversation]);
+  fetchAudioUrl();
+}, [conversation]);
 
 
 
@@ -300,8 +304,13 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
     </div>
 
     <div className="flex items-center justify-center h-8 w-auto bg-background border-t-1 rounded-bl-md">
-
-      {audioUrl && <AudioPlayer src={audioUrl} />}
+      {audioLoading ? (
+        <Skeleton className="h-2 w-1/2 rounded-xl" />
+      ) : audioUrl ? (
+        <AudioPlayer src={audioUrl} />
+      ) : (
+        <span className="text-zinc-500">No audio found</span>
+      )}
     </div>
   </div>
 
