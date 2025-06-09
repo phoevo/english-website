@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { audioBucketId } from "@/data/appwrite";
 import { AudioPlayer } from "./AudioPlayer";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 
 
@@ -265,7 +266,16 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
         )}
         <div className="p-5 flex flex-col ">
           <div className="text-base italic text-zinc-500">You have reached the end of {conversation.title}</div>
-          {!isComplete && user &&(
+          {!user && (
+            <Link href={"/login"}>
+            <Badge>
+              Login to track completion
+            </Badge>
+            </Link>
+
+          )}
+
+          {!isComplete && user && (
             <Badge
               className="cursor-pointer mt-3"
               onClick={() => setConversationComplete(conversation.$id)}

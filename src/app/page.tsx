@@ -3,15 +3,21 @@ import ModeToggle from "@/components/ui/ModeToggle";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Raleway } from "next/font/google";
+import { Geist } from "next/font/google";
+import { DM_Sans } from "next/font/google";
+
 // import { Montserrat } from "next/font/google";
 import { motion } from "motion/react";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/components/ui/accordion"
 import { ScrollArea } from "@/components/ui/scroll-area";
-
+import { TestConversation } from "./(dashboard)/TestConversation";
+import TestDictionary from "./(dashboard)/TestDictionary";
 
 console.log("Motion import:", motion);
 
 const raleway = Raleway({ subsets: ['latin'] });
+const geist = Geist({ subsets: ['latin'] });
+const dmSans = DM_Sans({ subsets: ['latin'] });
 
 const transition1 = {
   duration: 1,
@@ -39,14 +45,13 @@ const transitionImage = {
 
 
 
-
 export default function LandingPage() {
   return (
-    <ScrollArea className={`flex bg-background flex-col items-center h-screen overflow-x-hidden ${raleway.className}`}>
+    <ScrollArea className={`flex bg-background flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
        <nav className="sticky top-0 w-full bg-landing-bg z-50 shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)]">
-        <div className="flex items-center h-20 ">
+        <div className="flex items-center h-18">
             <h1 className="text-3xl font-normal absolute left-10">Synomilo</h1>
-            <div className="flex absolute right-10 gap-3">
+            <div className={`flex absolute right-10 gap-3 ${geist.className}`}>
               <Link href={"/register"}> <Button className="cursor-pointer">Sign Up</Button> </Link>
               <Link href={"/login"}> <Button className="cursor-pointer" variant="outline">Log in</Button> </Link>
               <ModeToggle />
@@ -55,22 +60,49 @@ export default function LandingPage() {
     </nav>
 
 
-      <div className="flex flex-col w-screen border-b bg-card bg-dots justify-center items-center gap-30 p-10">
-        <div className="flex flex-col gap-5 items-center">
-          <h1 className="text-8xl font-normal bg-card">Synomilo</h1>
-          <div className="flex flex-row text-2xl font-normal gap-2 bg-card" >
+      <div className="flex flex-col w-screen border-b bg-card bg-dots justify-center items-center gap-20 p-10">
+        <div className="flex flex-col gap-1 items-center">
+          <h1 className="text-8xl p-5 font-normal bg-card ">Synomilo</h1>
+          <div className="flex flex-row text-xl font-normal gap-2 bg-card" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div>
           <p className="text-zinc-500">Greek for: &quot;I conversate&quot;</p>
-
         </div>
-        <h2 className="text-3xl font-normal bg-card">Conversation based English learning platform</h2>
-        <div className="flex flex-col w-180 h-100 justify-start items-center p-10 space-y-4">
-          <h2 className="text-4xl font-bold bg-card">Our Mission:</h2>
-          <p className="text-2xl font-light bg-card">Our mission is to allow English learners
+
+        <div className="flex flex-col items-center gap-3">
+        <h2 className="text-5xl font-semibold bg-card mt-10"> A conversation-based English learning platform</h2>
+        <h2 className="text-4xl font-semibold bg-card mt-20
+        "> Here&apos;s how it works</h2>
+
+        <div className={`w-auto h-auto m-10 ${geist.className}`}>
+          <TestConversation/>
+        </div>
+
+        <div className={` w-auto h-auto ${geist.className}`}>
+          <TestDictionary/>
+        </div>
+
+
+      <h2 className="text-3xl font-semibold bg-card mt-10">Like what you see?</h2>
+        <div className={`flex gap-4 bg-card p-5 ${geist.className}`}>
+        <Link href="/register">
+          <Button className="cursor-pointer px-6 py-4">Get Started</Button>
+        </Link>
+        <Link href="/home">
+          <Button variant="outline" className=" cursor-pointer px-6 py-4">Try Without Account</Button>
+        </Link>
+        <Link href="/subscribe">
+          <Button variant="ghost" className="shadow-[0_0_5px_1px_rgba] shadow-pink-500 cursor-pointer px-6 py-4">Pricing</Button>
+        </Link>
+      </div>
+        </div>
+
+        <div className="flex flex-col max-w-4xl h-auto bg-card border-1 rounded-4xl justify-start items-center p-20 space-y-6 shadow-md">
+          <h2 className="text-4xl font-bold bg-card">Our Mission</h2>
+          <p className={`text-lg text-zinc-500 leading-relaxed bg-card ${dmSans.className}`}>Our mission is to allow English learners
              have meaningful conversations faster by employing methods inspired by Assimil.
             These methods help keep the student engaged through dialogues that reflect real-life scenarios,
-            increasing their comprehension and ability to learn (and most importantly) use English.
+            increasing their comprehension and ability to learn, and most importantly <i>use</i> English.
 
 
           </p>
@@ -91,7 +123,7 @@ export default function LandingPage() {
          transition={transition1}
         >Conversation comes first</motion.h1>
 
-        <motion.h2 className="flex flex-col gap-10 text-[20px] text-zinc-500 font-medium mt-10 w-150"
+        <motion.h2 className="flex flex-col gap-10 text-lg text-zinc-500 leading-relaxed mt-10 w-150"
          initial={{ opacity: 0 }}
          whileInView={{ opacity: 1, y: -50 }}
          viewport={{margin: "0px" }}
@@ -121,17 +153,17 @@ export default function LandingPage() {
          transition={transition1}
         >Tools at your disposal</motion.h1>
 
-        <motion.h2 className="flex flex-col gap-10 text-[20px] text-zinc-500 font-medium mt-10 w-150"
+        <motion.h2 className="flex flex-col gap-10 text-lg text-zinc-500 leading-relaxed mt-10 w-150"
          initial={{ opacity: 0 }}
          whileInView={{ opacity: 1, y: -50 }}
          viewport={{ once: true, margin: "-100px" }}
          transition={transition2}
         > <p>Synomilo provides you with tools to assist your English learning</p>
-          <ul className="flex flex-col gap-5">
-          <li>AI bot for quick searches</li>
+          <ol className="flex flex-col gap-2">
+          <li>Audio for reading along conversations</li>
           <li>Your own dictionary where you can save words</li>
-          <li>other stuff</li>
-        </ul>
+          <li>Custom flashcard decks</li>
+        </ol>
 
         </motion.h2>
         </div>
@@ -147,14 +179,14 @@ export default function LandingPage() {
 
       <div className="flex w-screen h-auto items-center justify-center flex-col bg-background p-40 border-b">
       <div className="">
-        <motion.h1 className="text-5xl font-semibold"
+        <motion.h1 className="text-5xl font-semibold flex justify-center"
          initial={{ opacity: 0 }}
          whileInView={{ opacity: 1, y: -50 }}
          viewport={{ margin: "0px" }}
          transition={transition1}
         >Learn at your own pace</motion.h1>
 
-        <motion.h2 className="text-2xl text-zinc-500 font-medium mt-10 w-150"
+        <motion.h2 className="text-lg text-zinc-500 leading-relaxed mt-10 w-auto"
          initial={{ opacity: 0 }}
          whileInView={{ opacity: 1, y: -50 }}
          viewport={{ margin: "-100px" }}
@@ -170,34 +202,36 @@ export default function LandingPage() {
       </div>
 
     <div className="flex w-screen h-auto items-center justify-center flex-col bg-card pt-20">
-      <h1 className="text-4xl font-semibold">Some quick questions you may have</h1>
+      <h1 className="text-5xl font-semibold">Some quick questions you may have</h1>
       <Accordion type="single" collapsible className="flex flex-col justify-center w-200 p-10">
       <AccordionItem value="item-1">
-        <AccordionTrigger className="text-2xl">Is it free?</AccordionTrigger>
+        <AccordionTrigger className="text-xl cursor-pointer">Is it free?</AccordionTrigger>
         <AccordionContent className="text-[18px]">
           There are free and paid options.
         </AccordionContent>
       </AccordionItem>
+
       <AccordionItem value="item-2">
-        <AccordionTrigger className="text-2xl">What do I get with the paid option?</AccordionTrigger>
+        <AccordionTrigger className="text-xl cursor-pointer">What do I get with the paid option?</AccordionTrigger>
         <AccordionContent className="text-[18px] ">You get access to:
           <ul className="list-disc pl-5">
-          <li>An assortment of tools like the AI helper and the <span className="bg-pink-500 pl-1 pr-1 rounded-[3px]">Hover</span> feature.</li>
-          <li>All conversations to go through at your own pace.</li>
-          <li>All future conversations to be added.</li>
+          <li>Conversation Audio</li>
+          <li>All existing and future conversations to go through at your own pace.</li>
+          <li>Color customization</li>
           </ul>
           <p className="flex items-center gap-2 text-[18px] pt-5">Find out more on the
            <Link className="underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href="/subscribe">Subscriptions</Link>page.</p>
-
           </AccordionContent>
       </AccordionItem>
+
       <AccordionItem value="item-3">
-        <AccordionTrigger className="text-2xl">Do I need an account?</AccordionTrigger>
+        <AccordionTrigger className="text-xl cursor-pointer">Do I need an account?</AccordionTrigger>
         <AccordionContent className="text-[18px]">
         <p>Quick answer: No.</p>
         <p className="pt-5">But if you want to keep track of your progress, you will need an account. It&apos;s free.</p>
         </AccordionContent>
       </AccordionItem>
+
     </Accordion>
     </div>
 

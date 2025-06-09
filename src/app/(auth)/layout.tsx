@@ -38,7 +38,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }){
 
       <div className="flex justify-center items-center w-1/2 h-screen bg-background hover:w-2/3 transition-all duration-500 ease-in-out">
 
-        <div className="flex justify-center items-center border-1 rounded-lg w-150 h-180">
+        <div className="flex justify-center items-center border-1 shadow-md rounded-lg w-150 h-180">
 
           {children}
 

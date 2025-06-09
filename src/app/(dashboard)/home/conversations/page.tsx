@@ -36,7 +36,7 @@ function ConversationsPage() {
   const [test, setTest] = useState(false);
 
   const {
-    loading: userLoading,
+    loading: userLoading, user
   } = useUserStore();
 
 
@@ -59,6 +59,7 @@ function ConversationsPage() {
   return (
     <div className="m-10 space-y-4">
       <div>
+        {user && (
         <UserGuidePopover
         id="conversation-page"
         title="The Conversations Page"
@@ -68,7 +69,7 @@ function ConversationsPage() {
         align="start"
         >
           <h1 className="text-3xl font-light">Conversations</h1>
-        </UserGuidePopover>
+        </UserGuidePopover>)}
         </div>
 
 
