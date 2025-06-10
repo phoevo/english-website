@@ -28,12 +28,12 @@ function getWordDetails(word: string) {
 
 export function TestDictionary() {
   return (
-    <div className="flex flex-col bg-card p-10 border-1 rounded-lg w-150">
-      <h2 className="text-4xl font-semibold bg-card">Dictionary</h2>
+    <div className="flex flex-col bg-muted p-6 border-1 shadow-lg rounded-lg w-150">
+      <h2 className="text-xl font-semibold bg-muted">Saved Words</h2>
       <div className="flex flex-row">
       <div className="m-10 p-10 w-full border rounded-xl bg-background shadow-md">
       {dictionaryWords.length > 0 ? (
-        <ScrollArea className="h-150 overflow-y-scroll">
+        <ScrollArea className="h-100 overflow-y-scroll">
           <div className="grid gap-3">
             <AnimatePresence>
               {[...dictionaryWords].map((entry, index) => {

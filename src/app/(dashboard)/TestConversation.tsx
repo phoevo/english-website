@@ -174,11 +174,10 @@ export function TestConversation() {
   };
 
   return (
-    <div className="flex flex-col bg-card p-10 border-1 rounded-lg">
-      <h2 className="text-4xl font-semibold bg-card">Conversations</h2>
+    <div className="flex flex-col bg-muted shadow-lg border-1 rounded-lg">
       <div className="flex flex-row">
-      <div className="m-10 p-6 mt-10 border rounded-xl bg-background shadow-md">
-         <h2 className="text-xl font-semibold mb-20">Conversation Demo</h2>
+      <div className="m-10 p-6 mt-10 border rounded-xl bg-background shadow-sm">
+         <h2 className="text-xl font-semibold mb-20">Conversation Title</h2>
         {sampleConversation.map((line, i) => (
           <div key={i} className="flex mb-6">
             <div className="font-semibold pr-6 mr-6 border-r border-gray-300 min-w-[100px] text-right">
@@ -191,7 +190,7 @@ export function TestConversation() {
         ))}
       </div>
       <div className="p-5 h-full border-l">
-        <div className="flex flex-col items-center gap-4 bg-background p-5 rounded-lg">
+        <div className="flex flex-col items-center gap-4 bg-background p-4 rounded-lg">
           <span className="flex gap-2 items-center">
             <div className="rounded px-2 font-semibold ">Hover</div>
             <Switch checked={hoverEnabled} onCheckedChange={setHoverEnabled} />

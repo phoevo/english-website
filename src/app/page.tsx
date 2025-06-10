@@ -12,6 +12,7 @@ import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/c
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TestConversation } from "./(dashboard)/TestConversation";
 import TestDictionary from "./(dashboard)/TestDictionary";
+import { ArrowDown, BookOpenCheck, FileStack, GalleryHorizontalEnd, ListCheck, Play } from "lucide-react";
 
 console.log("Motion import:", motion);
 
@@ -26,8 +27,8 @@ const transition1 = {
 }
 
 const transition2 = {
-  duration: 1,
-  delay: 0.2,
+  duration: 0.2,
+  delay: 0.1,
   ease: [0, 0.71, 0.2, 1.01],
 }
 
@@ -48,7 +49,8 @@ const transitionImage = {
 export default function LandingPage() {
   return (
     <ScrollArea className={`flex bg-background flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
-       <nav className="sticky top-0 w-full bg-landing-bg z-50 shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)]">
+       <nav className="sticky top-0 w-full z-50">
+        {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-18">
             <h1 className="text-3xl font-normal absolute left-10">Synomilo</h1>
             <div className={`flex absolute right-10 gap-3 ${geist.className}`}>
@@ -60,31 +62,139 @@ export default function LandingPage() {
     </nav>
 
 
-      <div className="flex flex-col w-screen border-b bg-card bg-dots justify-center items-center gap-20 p-10">
+      <div className="flex flex-col w-screen border-b bg-background bg-dots justify-center items-center gap-20 p-10">
         <div className="flex flex-col gap-1 items-center">
-          <h1 className="text-8xl p-5 font-normal bg-card ">Synomilo</h1>
-          <div className="flex flex-row text-xl font-normal gap-2 bg-card" >
+          <h1 className="text-8xl p-5 font-normal bg-background ">Synomilo</h1>
+          <div className="flex flex-row text-xl font-normal gap-2 bg-background" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div>
           <p className="text-zinc-500">Greek for: &quot;I conversate&quot;</p>
         </div>
 
         <div className="flex flex-col items-center gap-3">
-        <h2 className="text-5xl font-semibold bg-card mt-10"> A conversation-based English learning platform</h2>
-        <h2 className="text-4xl font-semibold bg-card mt-20
-        "> Here&apos;s how it works</h2>
+        <h2 className="text-5xl font-normal bg-background mt-10"> A conversation-based English learning platform</h2>
+        <h2 className="text-4xl font-semibold bg-background mt-20"/>
 
-        <div className={`w-auto h-auto m-10 ${geist.className}`}>
-          <TestConversation/>
+
+        <div className=" w-screen gap-10 flex flex-col justify-center items-center border-b bg-background">
+       <div className="sticky top-5 z-30 p-5 bg-accent border-1 mb-12 rounded-full shadow-lg">
+        <motion.h1
+          className="text-3xl font-semibold"
+          initial={{ opacity: 0, y: -40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true}}
+          transition={transition1}
+        >
+          <div className="flex flex-row items-center gap-1 ">
+
+          Here&apos;s what&apos;s offered <span><ArrowDown className= "text-pink-500" size={30}/></span>
+          </div>
+        </motion.h1>
+      </div>
+
+      <motion.div
+      className="z-20 sticky top-42 self-start m-4 text-3xl font-semibold"
+      initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-200px"}}
+          transition={transition1}>
+        <span className="px-1 text-pink-500 text">
+          1.
+        </span>
+        Conversations
+        </motion.div>
+
+
+        {/* Animated Conversation Component */}
+        <motion.div
+          className={`w-auto h-auto mt-10 ${geist.className}`}
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 200 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={transition2}
+        >
+          <TestConversation />
+        </motion.div>
+
+        {/* Animated Dictionary Component */}
+
+        <div className="z-20 sticky top-52 self-start m-4 text-3xl font-semibold">
+        <span className="px-1 text-pink-500 text">
+          2.
+        </span>
+        Dictionary
         </div>
 
-        <div className={` w-auto h-auto ${geist.className}`}>
-          <TestDictionary/>
+        <motion.div
+          className={`flex flex-row gap-10 mt-10 items-center justify-center w-full h-auto ${geist.className}`}
+          initial={{ opacity: 0, y: 200 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 80 }}
+          viewport={{ once: true, margin: "0px" }}
+          transition={transitionImage}
+        >
+          <div className="flex items-center justify-center">
+            <TestDictionary />
+          </div>
+        </motion.div>
+
+
+        <div className="z-20 sticky top-62 self-start m-4 text-3xl font-semibold">
+        <span className="px-1 text-pink-500">
+          3.
+        </span>
+        <span>An assortment</span>
+        <p className="pl-8">of tools</p>
         </div>
 
 
-      <h2 className="text-3xl font-semibold bg-card mt-10">Like what you see?</h2>
-        <div className={`flex gap-4 bg-card p-5 ${geist.className}`}>
+
+        <div className="flex flex-row justify-center items-center w-2/3 h-100 p-2 gap-5 rounded-lg">
+
+        <div className="flex flex-col items-center justify-center border-1 rounded-md p-5 gap-5 w-1/3 shadow-md">
+          <span className="flex justify-center items-center h-20">
+            <Play size={50} className="fill-current" />
+          </span>
+          <div className="flex items-center justify-center">Audio for conversations</div>
+        </div>
+
+        <div className="flex flex-col items-center justify-center border-1 rounded-md p-5 gap-5 w-1/3 shadow-md">
+          <span className="flex justify-center items-center h-20">
+            <GalleryHorizontalEnd size={50} className="fill-current" />
+          </span>
+          <div className="flex items-center justify-center">Custom flashcard builder</div>
+        </div>
+
+         <div className="flex flex-col items-center justify-center border-1 rounded-md p-5 gap-5 w-1/3 shadow-md">
+          <span className="flex justify-center items-center h-20">
+            <BookOpenCheck size={50} className="" />
+          </span>
+          <div className="flex items-center justify-center">Beginner - Advanced Levels</div>
+        </div>
+
+        <div className="flex flex-col items-center justify-center border-1 rounded-md p-5 gap-5 w-1/3 shadow-md">
+          <span className="flex justify-center items-center h-20">
+            <ListCheck size={50} className="" />
+          </span>
+          <div className="flex items-center justify-center">Conversation tracking</div>
+        </div>
+
+      </div>
+
+
+
+
+        <motion.div
+        className="flex flex-col justify-start items-center bg-accent w-1/3 p-10 m-10 border-1 shadow-md rounded-lg z-30"
+        initial={{ opacity: 0, y: 100 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+
+          >
+          <h2 className="text-3xl font-semibold bg-accent mt-5">Like what you see?</h2>
+        <div
+        className={`flex flex-row gap-4 bg-accent h-auto p-5 ${geist.className}`}>
         <Link href="/register">
           <Button className="cursor-pointer px-6 py-4">Get Started</Button>
         </Link>
@@ -95,11 +205,21 @@ export default function LandingPage() {
           <Button variant="ghost" className="shadow-[0_0_5px_1px_rgba] shadow-pink-500 cursor-pointer px-6 py-4">Pricing</Button>
         </Link>
       </div>
+      </motion.div>
+
         </div>
 
-        <div className="flex flex-col max-w-4xl h-auto bg-card border-1 rounded-4xl justify-start items-center p-20 space-y-6 shadow-md">
-          <h2 className="text-4xl font-bold bg-card">Our Mission</h2>
-          <p className={`text-lg text-zinc-500 leading-relaxed bg-card ${dmSans.className}`}>Our mission is to allow English learners
+
+
+
+
+
+
+        </div>
+
+        <div className="flex flex-col max-w-4xl h-auto bg-accent border-1 rounded-4xl justify-start items-center p-20 space-y-6 shadow-md">
+          <h2 className="text-4xl font-bold bg-accent">Our Mission</h2>
+          <p className={`text-lg text-zinc-500 leading-relaxed bg-accent ${dmSans.className}`}>Our mission is to allow English learners
              have meaningful conversations faster by employing methods inspired by Assimil.
             These methods help keep the student engaged through dialogues that reflect real-life scenarios,
             increasing their comprehension and ability to learn, and most importantly <i>use</i> English.
@@ -107,7 +227,7 @@ export default function LandingPage() {
 
           </p>
         </div>
-        <h2 className="flex items-center text-2xl font-semibold bg-card">Head to the
+        <h2 className="flex items-center text-2xl font-semibold">Head to the
            <Link className="p-2 underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href="/home">Home</Link>
            page and start for free or <Link className="p-2 underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href={"/register"}> create an account</Link>
            </h2>
@@ -144,7 +264,7 @@ export default function LandingPage() {
 
 
 
-      <div className="flex w-screen h-auto items-center justify-evenly flex-row-reverse bg-card p-40 border-b">
+      <div className="flex w-screen h-auto items-center justify-evenly flex-row-reverse bg-accent p-40 border-b">
       <div className="sticky top-1/3 self-start border-b ">
         <motion.h1 className="text-5xl font-semibold"
          initial={{ opacity: 0 }}
@@ -201,7 +321,7 @@ export default function LandingPage() {
         </div>
       </div>
 
-    <div className="flex w-screen h-auto items-center justify-center flex-col bg-card pt-20">
+    <div className="flex w-screen h-auto items-center justify-center flex-col bg-accent pt-20">
       <h1 className="text-5xl font-semibold">Some quick questions you may have</h1>
       <Accordion type="single" collapsible className="flex flex-col justify-center w-200 p-10">
       <AccordionItem value="item-1">
