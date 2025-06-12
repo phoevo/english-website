@@ -2,21 +2,20 @@
 import ModeToggle from "@/components/ui/ModeToggle";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Raleway } from "next/font/google";
 import { Geist } from "next/font/google";
 import { DM_Sans } from "next/font/google";
-
-// import { Montserrat } from "next/font/google";
 import { motion } from "motion/react";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/components/ui/accordion"
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TestConversation } from "./(dashboard)/TestConversation";
 import TestDictionary from "./(dashboard)/TestDictionary";
-import { ArrowDown, BookOpenCheck, FileStack, GalleryHorizontalEnd, ListCheck, Play } from "lucide-react";
+import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, BookOpenCheck, Check, GalleryHorizontalEnd, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal } from "lucide-react";
+import TestWordBoard from "./(dashboard)/TestWordBoard";
+
+
 
 console.log("Motion import:", motion);
 
-const raleway = Raleway({ subsets: ['latin'] });
 const geist = Geist({ subsets: ['latin'] });
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
@@ -46,6 +45,8 @@ const transitionImage = {
 
 
 
+
+
 export default function LandingPage() {
   return (
     <ScrollArea className={`flex bg-background flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
@@ -62,9 +63,9 @@ export default function LandingPage() {
     </nav>
 
 
-      <div className="flex flex-col w-screen border-b bg-background bg-dots justify-center items-center gap-20 p-10">
+      <div className="flex flex-col w-screen border-b bg-dots justify-center items-center gap-10">
         <div className="flex flex-col gap-1 items-center">
-          <h1 className="text-8xl p-5 font-normal bg-background ">Synomilo</h1>
+          <h1 className="text-8xl bg-background font-normal ">Synomilo</h1>
           <div className="flex flex-row text-xl font-normal gap-2 bg-background" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div>
@@ -72,54 +73,67 @@ export default function LandingPage() {
         </div>
 
         <div className="flex flex-col items-center gap-3">
-        <h2 className="text-5xl font-normal bg-background mt-10"> A conversation-based English learning platform</h2>
-        <h2 className="text-4xl font-semibold bg-background mt-20"/>
+        <h2 className="text-5xl font-normal bg-background mt-10"> An English learning platform focused on conversation</h2>
+        <h2 className="text-4xl font-semibold bg-background mt-10"/>
+
+        <div className="flex flex-col max-w-4xl h-auto mb-20 bg-accent border-1 rounded-4xl justify-start items-center p-15 space-y-6 shadow-md">
+          <p className={`text-xl leading-relaxed bg-accent ${dmSans.className}`}>Our goal is to help English learners start having
+            meaningful conversations faster by using methods inspired by Assimil — a trusted language learning approach that emphasizes
+             learning through natural, everyday dialogues. This helps keep students engaged and confident by practicing conversations that
+              reflect real-life situations.
 
 
-        <div className=" w-screen gap-10 flex flex-col justify-center items-center border-b bg-background">
-       <div className="sticky top-5 z-30 p-5 bg-accent border-1 mb-12 rounded-full shadow-lg">
-        <motion.h1
-          className="text-3xl font-semibold"
-          initial={{ opacity: 0, y: -40 }}
+
+          </p>
+        </div>
+
+
+        <div className="w-screen gap-10 flex flex-col justify-center items-center border-b bg-background">
+       <motion.div
+       className="sticky top-5 mb-20 z-30 p-5 bg-accent border-1 rounded-full shadow-lg"
+       initial={{ opacity: 0, y: 80 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true}}
-          transition={transition1}
+          transition={transition1}>
+        <h1
+          className="text-2xl font-semibold"
+
         >
-          <div className="flex flex-row items-center gap-1 ">
+          <div className="flex flex-row gap-2 items-center">
 
           Here&apos;s what&apos;s offered <span><ArrowDown className= "text-pink-500" size={30}/></span>
           </div>
-        </motion.h1>
-      </div>
+        </h1>
+      </motion.div>
 
       <motion.div
-      className="z-20 sticky top-42 self-start m-4 text-3xl font-semibold"
+      className="z-20 sticky top-42 self-start m-4 mb-33 text-3xl font-semibold"
       initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-200px"}}
           transition={transition1}>
-        <span className="px-1 text-pink-500 text">
+        <span className="px-1 text-pink-500">
           1.
         </span>
         Conversations
         </motion.div>
 
 
-        {/* Animated Conversation Component */}
         <motion.div
-          className={`w-auto h-auto mt-10 ${geist.className}`}
+          className={`w-screen h-auto ${geist.className}`}
           initial={{ opacity: 0, y: 80 }}
           whileInView={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 200 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={transition2}
         >
+          <div className="flex flex-row justify-end mr-12 gap-10">
           <TestConversation />
+          <p className="self-center w-40 text-2xl m-0 font-semibold"> <ArrowLeft size={40} className="text-pink-500"/>Highlight words types for easy reading</p>
+          </div>
         </motion.div>
 
-        {/* Animated Dictionary Component */}
-
-        <div className="z-20 sticky top-52 self-start m-4 text-3xl font-semibold">
+        <div className="z-20 sticky top-52 self-start m-4 mb-23  text-3xl font-semibold">
         <span className="px-1 text-pink-500 text">
           2.
         </span>
@@ -127,15 +141,16 @@ export default function LandingPage() {
         </div>
 
         <motion.div
-          className={`flex flex-row gap-10 mt-10 items-center justify-center w-full h-auto ${geist.className}`}
+          className={`flex flex-row gap-10 items-center justify-center w-full h-auto ${geist.className}`}
           initial={{ opacity: 0, y: 200 }}
           whileInView={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 80 }}
           viewport={{ once: true, margin: "0px" }}
           transition={transitionImage}
         >
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center gap-10">
             <TestDictionary />
+            <TestWordBoard/>
           </div>
         </motion.div>
 
@@ -150,37 +165,94 @@ export default function LandingPage() {
 
 
 
-        <div className="flex flex-row justify-center items-center w-2/3 h-100 p-2 gap-5 rounded-lg">
+       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-2 rounded-lg">
 
-        <div className="flex flex-col items-center justify-center border-1 rounded-md p-5 gap-5 w-1/3 shadow-md">
-          <span className="flex justify-center items-center h-20">
-            <Play size={50} className="fill-current" />
-          </span>
-          <div className="flex items-center justify-center">Audio for conversations</div>
-        </div>
+    <motion.div
+    className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+    initial={{ opacity: 0, y: 100 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-100px", }}
+    transition={{ delay: 0.1, duration: 0.1 }}
+    >
+    <span className="flex justify-center items-center h-20">
+      <Play size={50} className="fill-current" />
+      <Pause size={50} className="fill-current" />
+    </span>
+    <div className="flex items-center justify-center text-center">Audio for conversations</div>
+  </motion.div>
 
-        <div className="flex flex-col items-center justify-center border-1 rounded-md p-5 gap-5 w-1/3 shadow-md">
-          <span className="flex justify-center items-center h-20">
-            <GalleryHorizontalEnd size={50} className="fill-current" />
-          </span>
-          <div className="flex items-center justify-center">Custom flashcard builder</div>
-        </div>
+ <motion.div
+ className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+ initial={{ opacity: 0, y: 100 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-100px", }}
+    transition={{ delay: 0.1, duration: 0.1 }}
+    >
+  <span className="relative flex justify-center items-center h-20 w-20">
+    <MousePointer2 size={35} strokeWidth={1} fill="bg-foreground" className="absolute bottom-0 right-0" />
+    <RectangleHorizontal size={80} strokeWidth={1} className="text-pink-500" />
+  </span>
+  <div className="flex items-center justify-center text-center">Hover</div>
+</motion.div>
 
-         <div className="flex flex-col items-center justify-center border-1 rounded-md p-5 gap-5 w-1/3 shadow-md">
-          <span className="flex justify-center items-center h-20">
-            <BookOpenCheck size={50} className="" />
-          </span>
-          <div className="flex items-center justify-center">Beginner - Advanced Levels</div>
-        </div>
 
-        <div className="flex flex-col items-center justify-center border-1 rounded-md p-5 gap-5 w-1/3 shadow-md">
-          <span className="flex justify-center items-center h-20">
-            <ListCheck size={50} className="" />
-          </span>
-          <div className="flex items-center justify-center">Conversation tracking</div>
-        </div>
+   <motion.div
+   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+   initial={{ opacity: 0, y: 100 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-100px", }}
+    transition={{ delay: 0.1, duration: 0.1 }}>
+    <span className="flex justify-center items-center h-20">
+      <IterationCcw size={50} className="" />
+    </span>
+    <div className="flex items-center justify-center text-center">Recent conversations</div>
+  </motion.div>
 
-      </div>
+  <motion.div
+  className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+  initial={{ opacity: 0, y: 100 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-100px", }}
+    transition={{ delay: 0.2, duration: 0.1 }}
+    >
+    <span className="flex justify-center items-center h-20">
+      <GalleryHorizontalEnd size={50} className="fill-current" />
+    </span>
+    <div className="flex items-center justify-center text-center">Custom flashcard builder</div>
+  </motion.div>
+
+  <motion.div
+  className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+  initial={{ opacity: 0, y: 100 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-100px", }}
+    transition={{ delay: 0.2, duration: 0.1 }}>
+    <span className="flex justify-center items-center h-20">
+      <BookOpenCheck strokeWidth={2} size={50} />
+    </span>
+    <div className="flex items-center justify-center text-center">
+      Beginner <ArrowRight className="text-pink-500 mx-1" size={15} /> Advanced Levels
+    </div>
+  </motion.div>
+
+   <motion.div
+   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+   initial={{ opacity: 0, y: 100 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-100px", }}
+    transition={{ delay: 0.2, duration: 0.1 }}
+    >
+  <span className="relative flex justify-center items-center h-20 w-20">
+    <Check size={35} strokeWidth={2} className="absolute bottom-0 right-2 text-green-500" />
+    <AlignLeft size={60} strokeWidth={2} className="" />
+  </span>
+  <div className="flex items-center justify-center text-center">Progress tracking</div>
+</motion.div>
+
+</div>
+
+
+
 
 
 
@@ -192,7 +264,10 @@ export default function LandingPage() {
           viewport={{ once: true, margin: "-100px" }}
 
           >
-          <h2 className="text-3xl font-semibold bg-accent mt-5">Like what you see?</h2>
+            <div>
+            <h2 className="text-3xl font-semibold bg-accent mt-5">Like what you see?</h2>
+
+            </div>
         <div
         className={`flex flex-row gap-4 bg-accent h-auto p-5 ${geist.className}`}>
         <Link href="/register">
@@ -217,20 +292,11 @@ export default function LandingPage() {
 
         </div>
 
-        <div className="flex flex-col max-w-4xl h-auto bg-accent border-1 rounded-4xl justify-start items-center p-20 space-y-6 shadow-md">
-          <h2 className="text-4xl font-bold bg-accent">Our Mission</h2>
-          <p className={`text-lg text-zinc-500 leading-relaxed bg-accent ${dmSans.className}`}>Our mission is to allow English learners
-             have meaningful conversations faster by employing methods inspired by Assimil.
-            These methods help keep the student engaged through dialogues that reflect real-life scenarios,
-            increasing their comprehension and ability to learn, and most importantly <i>use</i> English.
 
-
-          </p>
-        </div>
-        <h2 className="flex items-center text-2xl font-semibold">Head to the
+        {/* <h2 className="flex items-center text-2xl font-semibold">Head to the
            <Link className="p-2 underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href="/home">Home</Link>
            page and start for free or <Link className="p-2 underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href={"/register"}> create an account</Link>
-           </h2>
+           </h2> */}
       </div>
 
 
@@ -280,9 +346,10 @@ export default function LandingPage() {
          transition={transition2}
         > <p>Synomilo provides you with tools to assist your English learning</p>
           <ol className="flex flex-col gap-2">
-          <li>Audio for reading along conversations</li>
-          <li>Your own dictionary where you can save words</li>
-          <li>Custom flashcard decks</li>
+            <li>Interactive hover feature</li>
+            <li>Audio for reading along conversations</li>
+            <li>Your own dictionary where you can save words</li>
+            <li>Custom flashcard decks</li>
         </ol>
 
         </motion.h2>

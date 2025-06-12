@@ -158,7 +158,7 @@ export function TestConversation() {
         </HoverCardTrigger>
         {hoverEnabled && word.definition && (
           <HoverCardContent className={`text-sm text-left ${geist.className}`}>
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col space-y-1 items-center">
               <span className="font-bold capitalize">{word.type}</span>
               <span>{word.definition}</span>
               <Link href="/register">

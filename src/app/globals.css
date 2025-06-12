@@ -138,7 +138,7 @@
     .bg-dots {
       --dot-color: oklch(0.353 0.013 260);
       --dot-size: 1px;
-      --dot-space: 57px;
+      --dot-space: 45px;
 
       background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
       background-size: var(--dot-space) var(--dot-space);
