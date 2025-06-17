@@ -31,21 +31,26 @@ function SubscribePage() {
   }
 
   const handleSubscribe = async () => {
-    if (!user?.$id)
+  if (!user?.$id) {
+    toast.error("User not found. Please log in.");
+    return;
+  }
 
-    try {
-      await subscribeUser(user.$id);
-      if (isSubscribed) {
-        toast.error("You're already subscribed");
-        return;
-      }
-      setSubscribed(true);
-      toast.success("You are now subscribed!");
-    } catch (err) {
-      console.error("Subscription failed", err);
-      toast.error("Failed to subscribe. Make sure you're logged in or try again later.");
+  try {
+    if (isSubscribed) {
+      toast.error("You're already subscribed");
+      return;
     }
-  };
+
+    await subscribeUser(user.$id);
+    setSubscribed(true);
+    toast.success("You are now subscribed!");
+  } catch (err) {
+    console.error("Subscription failed", err);
+    toast.error("Failed to subscribe. Make sure you're logged in or try again later.");
+  }
+};
+
 
   const paidOptions = [
     {

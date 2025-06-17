@@ -202,6 +202,7 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
         toast.error("Something went wrong. Word might not be saved.");
       }
     }
+
     return (
       <React.Fragment key={index}>
         <HoverCard openDelay={50} closeDelay={50}>

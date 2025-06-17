@@ -20,6 +20,7 @@ interface UserState {
   recentConversations: Conversation[];
   completeConversations: string[];
   dictionaryWords: string[];
+  customColors: string[];
   fetchUser: () => Promise<void>;
   setConversationComplete: (id: string) => Promise<void>;
   setSubscribed: (val: boolean) => void;
@@ -34,6 +35,7 @@ export const useUserStore = create<UserState>((set, get) => ({
   recentConversations: [],
   completeConversations: [],
   dictionaryWords: [],
+  customColors: [],
 
   fetchUser: async () => {
     set({ loading: true });

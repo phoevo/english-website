@@ -42,6 +42,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 import { unsubscribeUser } from '@/data/getData'
 import Link from 'next/link'
+import CustomColors from './CustomColors'
 
 
 
@@ -324,7 +325,8 @@ console.log(isSubscribed);
             </CardHeader>
             <CardContent className="space-y-1">
               <div className="space-y-1">
-                <Label htmlFor="toggle" className='mb-5'>Nothing here yet</Label>
+                <Label htmlFor="toggle" className='mb-5'>Color customization</Label>
+                {user && <CustomColors/>}
                 </div>
 
 
@@ -332,9 +334,7 @@ console.log(isSubscribed);
 
 
             </CardContent>
-            <CardFooter>
-              <Button>Save preferences</Button>
-            </CardFooter>
+
           </Card>
 
         </TabsContent>
@@ -415,49 +415,50 @@ console.log(isSubscribed);
         </CardFooter>
       </Card>
 
-      <Card className="bg-background">
-        <CardHeader>
-          <CardTitle>Subscription</CardTitle>
-          <CardDescription>Manage your Subscription</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-            <div className='flex items-center gap-2'>
-            <Button
-          variant="destructive"
-          className="cursor-pointer"
-          disabled={!isSubscribed}  // Disable the trigger button if not subscribed
-        >
-          Unsubscribe
-        </Button>
-        {!isSubscribed && (<Link className='underline cursor-pointer text-sm' href={"/subscribe"}>Subscribe?</Link>)}
+     <Card className="bg-background">
+  <CardHeader>
+    <CardTitle>Subscription</CardTitle>
+    <CardDescription>Manage your Subscription</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <AlertDialog>
+      {isSubscribed ? (
+        <AlertDialogTrigger asChild>
+          <div className="flex items-center gap-2">
+            <Button variant="destructive" className='cursor-pointer'>Unsubscribe</Button>
+          </div>
+        </AlertDialogTrigger>
+      ) : (
+        <div className="flex items-center gap-2">
+          <Button variant="destructive" disabled className="cursor-pointer">
+            Unsubscribe
+          </Button>
+          <Link className="underline cursor-pointer text-sm" href="/subscribe">
+            Subscribe?
+          </Link>
         </div>
+      )}
 
+      <AlertDialogContent className={geist.className}>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            You will lose access to all extra features and will be put on the free plan.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel className='cursor-pointer'>Go back</AlertDialogCancel>
+          <a href="/home">
+            <AlertDialogAction className='cursor-pointer' onClick={handleUnsubscribe}>
+              Unsubscribe
+            </AlertDialogAction>
+          </a>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  </CardContent>
+</Card>
 
-            </AlertDialogTrigger>
-            <AlertDialogContent className={geist.className}>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  You will lose access to all extra features and will be put on the free plan.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Go back</AlertDialogCancel>
-                <Link href={"/home"}>
-                 <AlertDialogAction
-                 onClick={handleUnsubscribe}
-                  >
-                  Unsubscribe
-              </AlertDialogAction>
-                </Link>
-
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </CardContent>
-      </Card>
     </div>
   ) : (
     <Card className="bg-background">
