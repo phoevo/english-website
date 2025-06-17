@@ -102,7 +102,7 @@ function DictionaryPage() {
           id="dictionary-page"
           title="The Dictionary Page"
           description="Your personal dictionary. Save words you're unfamiliar with or want to revise.
-          Pick and choose to create flashcards with."
+          Pick and choose to create flashcards with existing words."
           side="top"
           align="start"
         >

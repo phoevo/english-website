@@ -16,7 +16,7 @@ export const WordTypeSettings: React.FC<Props> = ({ wordTypes, toggleWordType })
                 key={key}
                 className={`${
                   wordTypes[key].enabled ? "bg-muted" : "bg-background"
-                } flex items-center rounded-md cursor-pointer w-35 border-1`}
+                } flex items-center rounded-md cursor-pointer w-35 border-1 hover:bg-muted`}
                 onClick={() => toggleWordType(key)}
               >
                 <div className="flex flex-row items-center justify-self-start pl-1">

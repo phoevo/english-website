@@ -22,7 +22,7 @@ const geistMono = Geist_Mono({
 export default function AuthLayout({ children }: { children: React.ReactNode }){
 
   return(
-    <div className={`flex w-screen h-screen bg-red-500 ${geistSans.className}`}>
+    <div className={`flex w-screen h-screen ${geistSans.className}`}>
       <div className="absolute top-5 right-5 z-1">
         <div className="flex gap-3 items-center">
         <Link className="underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href={"/home"}>Home</Link>
@@ -32,7 +32,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }){
 
 
 
-      <div className="flex justify-center items-center w-1/2 h-screen bg-foreground hover:w-2/3 transition-all duration-500 ease-in-out">
+      <div className="flex justify-center items-center w-1/2 h-screen bg-muted hover:w-2/3 transition-all duration-500 ease-in-out">
       <div className="flex justify-center items-center h-100 w-100 rounded-xl bg-red-500">Images showing app</div>
       </div>
 

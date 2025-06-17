@@ -59,7 +59,7 @@ function ConversationsPage() {
   return (
     <div className="m-10 space-y-4">
       <div>
-        {user && (
+
         <UserGuidePopover
         id="conversation-page"
         title="The Conversations Page"
@@ -69,7 +69,7 @@ function ConversationsPage() {
         align="start"
         >
           <h1 className="text-3xl font-light">Conversations</h1>
-        </UserGuidePopover>)}
+        </UserGuidePopover>
         </div>
 
 

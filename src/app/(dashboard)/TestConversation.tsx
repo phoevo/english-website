@@ -190,7 +190,7 @@ export function TestConversation() {
         ))}
       </div>
       <div className="p-5 h-full border-l">
-        <div className="flex flex-col items-center gap-4 bg-background p-4 rounded-lg">
+        <div className="flex flex-col items-center gap-4 bg-background p-4 rounded-lg shadow-md">
           <span className="flex gap-2 items-center">
             <div className="rounded px-2 font-semibold ">Hover</div>
             <Switch checked={hoverEnabled} onCheckedChange={setHoverEnabled} />
@@ -204,6 +204,7 @@ export function TestConversation() {
                   <WordTypeSettings
                     wordTypes={wordTypes}
                     toggleWordType={toggleWordType}
+
                   />
                 </div>
               </AccordionContent>

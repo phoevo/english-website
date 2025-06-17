@@ -1,4 +1,4 @@
-import { BookOpen, BookMarked, ArrowUpRight, GraduationCap } from "lucide-react"
+import { BookOpen, BookMarked, ArrowUpRight, GraduationCap, IterationCcw } from "lucide-react"
 
 import {
   Sidebar,
@@ -18,7 +18,7 @@ const items = [
   {
     title: "Recents",
     url: "/home/recents",
-    icon: ArrowUpRight,
+    icon: IterationCcw,
   },
   {
     title: "Learn",

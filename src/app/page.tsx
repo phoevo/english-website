@@ -11,6 +11,8 @@ import { TestConversation } from "./(dashboard)/TestConversation";
 import TestDictionary from "./(dashboard)/TestDictionary";
 import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, BookOpenCheck, Check, GalleryHorizontalEnd, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal } from "lucide-react";
 import TestWordBoard from "./(dashboard)/TestWordBoard";
+import Image from "next/image";
+
 
 
 
@@ -56,7 +58,7 @@ export default function LandingPage() {
             <h1 className="text-3xl font-normal absolute left-10">Synomilo</h1>
             <div className={`flex absolute right-10 gap-3 ${geist.className}`}>
               <Link href={"/register"}> <Button className="cursor-pointer">Sign Up</Button> </Link>
-              <Link href={"/login"}> <Button className="cursor-pointer" variant="outline">Log in</Button> </Link>
+              <Link href={"/login"}> <Button className="cursor-pointer" variant="secondary">Log in</Button> </Link>
               <ModeToggle />
             </div>
         </div>
@@ -66,7 +68,7 @@ export default function LandingPage() {
       <div className="flex flex-col w-screen border-b bg-dots justify-center items-center gap-10">
         <div className="flex flex-col gap-1 items-center">
           <h1 className="text-8xl bg-background font-normal ">Synomilo</h1>
-          <div className="flex flex-row text-xl font-normal gap-2 bg-background" >
+          <div className="flex flex-row text-xl font-normal gap-2" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div>
           <p className="text-zinc-500">Greek for: &quot;I conversate&quot;</p>
@@ -258,23 +260,23 @@ export default function LandingPage() {
 
 
         <motion.div
-        className="flex flex-col justify-start items-center bg-accent w-1/3 p-10 m-10 border-1 shadow-md rounded-lg z-30"
+        className="flex flex-col justify-start items-center bg-accent w-auto p-10 m-10 border-1 shadow-md rounded-lg z-30"
         initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
 
           >
             <div>
-            <h2 className="text-3xl font-semibold bg-accent mt-5">Like what you see?</h2>
+            <h2 className="text-3xl font-semibold bg-accent m-5">Looks good? Let’s get you started.</h2>
 
             </div>
         <div
-        className={`flex flex-row gap-4 bg-accent h-auto p-5 ${geist.className}`}>
+        className={`flex flex-row gap-4 p-5 bg-accent h-auto md:flex-row ${geist.className}`}>
         <Link href="/register">
           <Button className="cursor-pointer px-6 py-4">Get Started</Button>
         </Link>
         <Link href="/home">
-          <Button variant="outline" className=" cursor-pointer px-6 py-4">Try Without Account</Button>
+          <Button variant="outline" className=" cursor-pointer px-6 py-4 border-2">Try Without an Account</Button>
         </Link>
         <Link href="/subscribe">
           <Button variant="ghost" className="shadow-[0_0_5px_1px_rgba] shadow-pink-500 cursor-pointer px-6 py-4">Pricing</Button>
@@ -314,17 +316,53 @@ export default function LandingPage() {
          whileInView={{ opacity: 1, y: -50 }}
          viewport={{margin: "0px" }}
          transition={transition2}
-        > <p>An atypical approach to learning English. Synomilo helps you with your conversation skill first.</p>
-        <p>You dont need to know the meaning of <i>elbow</i> or <i>curtain </i> when you are asking how much
-        something costs or where the train station is.</p>
+
+        > <p>Learn English differently—with a focus on real conversation. Synomilo helps you build speaking skills first.</p>
+          <p>You don&apos;t need to know words like <i>elbow</i> or <i>curtain</i> when all you want to do is ask how much something
+           costs or where the train station is. Synomilo helps you learn what actually matters—first.</p>
+
         </motion.h2>
         </div>
 
         <div className="flex items-center flex-col m-2 gap-40">
-          <motion.span className="flex justify-center items-center h-150 w-150 rounded-xl bg-red-500" {...transitionImage}>Image showing conversations page</motion.span>
-          <motion.span className="flex justify-center items-center h-150 w-150 rounded-xl bg-blue-500" {...transitionImage}>Image showing highlightable words</motion.span>
-          <motion.span className="flex justify-center items-center h-150 w-150 rounded-xl bg-green-500" {...transitionImage}>Image showing translations and meaning of said words</motion.span>
-        </div>
+
+
+          <motion.div
+          {...transitionImage}>
+            <Image
+            src="/images/Screenshot1.png"
+            alt="Image 3"
+            width={500}
+            height={500}
+            className="object-cover rounded-xl shadow-md"
+          />
+          </motion.div>
+
+
+         <motion.div
+          {...transitionImage}>
+            <Image
+            src="/images/Screenshot2.png"
+            alt="Image 3"
+            width={500}
+            height={500}
+            className="object-cover rounded-xl shadow-md"
+          />
+          </motion.div>
+
+          <motion.div
+          {...transitionImage}>
+            <Image
+            src="/images/Screenshot3.png"
+            alt="Image 3"
+            width={500}
+            height={500}
+            className="object-cover rounded-xl shadow-md"
+          />
+          </motion.div>
+
+
+              </div>
       </div>
 
 

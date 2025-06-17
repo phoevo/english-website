@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { account } from "@/data/appwrite";
 import { Skeleton } from "./skeleton";
 import { useUserStore } from "@/data/useUserStore";
-import { Geist } from "next/font/google";
+import { Geist, DM_Sans } from "next/font/google";
 import {
   Card,
   CardAction,
@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/card"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
+const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
 const Navbar = () => {
   const { user, loading, isSubscribed } = useUserStore();
@@ -39,7 +40,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-center h-18">
           <div className="flex items-center gap-20">
-            <Link href={"/"} className="text-3xl font-light absolute left-10">Synomilo</Link>
+            <Link href={"/"} className={`text-3xl font-normal absolute left-10 ${dmSans.className}`}>Synomilo</Link>
             <Link href="/home" className="text-xl font-semibold text-primary font-mono  hover:underline underline-offset-10 decoration-zinc-600">
               Home
             </Link>

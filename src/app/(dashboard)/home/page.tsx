@@ -49,7 +49,7 @@ function Page() {
             >
               {user ? (
                  <h1 className="text-3xl font-normal">Welcome back, {user.name}</h1>
-              ): ""}
+              ): <h1 className="text-3xl font-normal">Welcome, New User</h1>}
 
             </UserGuidePopover>
 

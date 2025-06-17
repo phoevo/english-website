@@ -18,8 +18,9 @@ import { useUserStore } from '@/data/useUserStore'
 import { subscribeUser } from '@/data/getData'
 import { toast } from 'sonner'
 
-
 const geist = Geist({ subsets: ['latin'] })
+
+
 
 function SubscribePage() {
   const [isVisible, setIsVisible] = useState(false);
@@ -30,7 +31,7 @@ function SubscribePage() {
   }
 
   const handleSubscribe = async () => {
-    if (!user?.$id) return;
+    if (!user?.$id)
 
     try {
       await subscribeUser(user.$id);
@@ -42,7 +43,7 @@ function SubscribePage() {
       toast.success("You are now subscribed!");
     } catch (err) {
       console.error("Subscription failed", err);
-      toast.error("Failed to subscribe. Try again later.");
+      toast.error("Failed to subscribe. Make sure you're logged in or try again later.");
     }
   };
 
@@ -131,7 +132,7 @@ function SubscribePage() {
   </div>
 
 
-  <div className='flex flex-col justify-between p-2 border-1 rounded-lg h-60 w-1/2 text-zinc-500 shadow-[0_0_10px_1px_rgba] shadow-pink-500'>
+<div className='flex flex-col justify-between p-2 border-1 rounded-lg h-60 w-1/2 text-zinc-500 shadow-[0_0_3px_1px] shadow-pink-500'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-4 bg-pink-500 text-white'>Pro</Badge>
       <div className='flex justify-center items-center'>
@@ -148,7 +149,7 @@ function SubscribePage() {
 
     <Dialog>
   <DialogTrigger asChild>
-    <Button className="cursor-pointer" onClick={handleOptions}>
+    <Button variant={"secondary"} className="cursor-pointer" onClick={handleOptions}>
       {isSubscribed ? "Already subscribed. Change plan?" : "Explore Pro Options"}
     </Button>
   </DialogTrigger>
