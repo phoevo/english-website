@@ -20,7 +20,7 @@ const UserContext = createContext<UserContextType>({
   loading: true,
 });
 
-let fetchCount = 0; // ✅ Global counter outside component scope
+let fetchCount = 0;
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);

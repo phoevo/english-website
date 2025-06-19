@@ -322,11 +322,17 @@ console.log(isSubscribed);
             <Card className='bg-background'>
             <CardHeader>
               <CardTitle>Settings</CardTitle>
+              <CardDescription>Customize your account</CardDescription>
             </CardHeader>
             <CardContent className="space-y-1">
-              <div className="space-y-1">
-                <Label htmlFor="toggle" className='mb-5'>Color customization</Label>
-                {user && <CustomColors/>}
+              <div className="space-y-0">
+                <Label htmlFor="toggle" className='font-bold mb-2'>Color customization
+                  </Label>
+                  <p className='text-sm text-muted-foreground'>Select a word type and select a color. <span className='text-red-500 font-normal m-0 text-sm'>
+                    Certain background and text color combinations could make reading harder.</span>
+                    </p>
+
+                {isSubscribed && <CustomColors userId={user.$id} />}
                 </div>
 
 

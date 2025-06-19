@@ -24,6 +24,7 @@ import { audioBucketId } from "@/data/appwrite";
 import { AudioPlayer } from "./AudioPlayer";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { backgroundColors, hoverBackgroundColors } from "@/data/color";
 
 
 
@@ -43,7 +44,7 @@ interface ConversationProps {
   conversation: {
     $id: string;
     title: string;
-    levev: string;
+    level: string;
     audioFileId: string;
     content:
       | string
@@ -69,8 +70,11 @@ type WordTypeKey =
   | "determiner"
   | "contraction";
 
+  type BackgroundColorKey = keyof typeof backgroundColors;
+
+
 type WordTypeData = {
-  color: string;
+  colorKey: BackgroundColorKey;
   enabled: boolean;
 };
 
@@ -86,20 +90,7 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
 
   const [hoverEnabled, setHoverEnabled] = React.useState(true);
 
-  const [wordTypes, setWordTypes] = React.useState<Record<WordTypeKey, WordTypeData>>({
-    noun: { color: "pink-500", enabled: false },
-    verb: { color: "red-500", enabled: false },
-    adjective: { color: "green-500", enabled: false },
-    pronoun: { color: "blue-500", enabled: false },
-    adverb: { color: "yellow-500", enabled: false },
-    idiom: { color: "purple-500", enabled: false },
-    preposition: { color: "orange-500", enabled: false },
-    article: { color: "gray-500", enabled: false },
-    conjunction: { color: "yellow-500", enabled: false },
-    interjection: { color: "lime-500", enabled: false },
-    determiner: { color: "violet-500", enabled: false },
-    contraction: { color: "purple-500", enabled: false },
-  });
+
 
   const {
     user,
@@ -107,6 +98,7 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
     setDictionaryWords,
     completeConversations,
     setConversationComplete,
+    customColors
   } = useUserStore();
 
   const savedWords = dictionaryWords;
@@ -114,7 +106,6 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   const isComplete = completeConversations.includes(conversation.$id);
   const [audioUrl, setAudioUrl] = React.useState<string | null>(null);
   const [audioLoading, setAudioLoading] = React.useState(true);
-
 
     React.useEffect(() => {
   const fetchAudioUrl = async () => {
@@ -137,6 +128,50 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
 
   fetchAudioUrl();
 }, [conversation]);
+
+
+console.log(customColors)
+
+const [wordTypes, setWordTypes] = React.useState<Record<WordTypeKey, WordTypeData>>({
+  noun: { colorKey: "pink500", enabled: false },
+  verb: { colorKey: "red500", enabled: false },
+  adjective: { colorKey: "green500", enabled: false },
+  pronoun: { colorKey: "blue500", enabled: false },
+  adverb: { colorKey: "yellow500", enabled: false },
+  idiom: { colorKey: "purple500", enabled: false },
+  preposition: { colorKey: "orange500", enabled: false },
+  article: { colorKey: "cyan700", enabled: false },
+  conjunction: { colorKey: "yellow500", enabled: false },
+  interjection: { colorKey: "lime500", enabled: false },
+  determiner: { colorKey: "violet500", enabled: false },
+  contraction: { colorKey: "purple500", enabled: false },
+});
+
+
+
+React.useEffect(() => {
+  if (!customColors?.length) return;
+
+  const keys: WordTypeKey[] = [
+    "noun", "verb", "adjective", "pronoun", "adverb",
+    "idiom", "preposition", "article", "conjunction",
+    "interjection", "determiner", "contraction"
+  ];
+
+  setWordTypes(prev => {
+    const updated = { ...prev };
+    keys.forEach((key, index) => {
+      if (customColors[index]) {
+        updated[key].colorKey = customColors[index];
+      }
+    });
+    return updated;
+  });
+}, [customColors]);
+
+
+
+
 
 
 
@@ -165,18 +200,25 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   const tickIcon = <Check size={17} />;
   const addIcon = <Plus/>
 
-  const renderWord = (word: Word, index: number) => {
-    const wordType = wordTypes[word.type];
-    if (!word?.text || !wordType) return null;
 
-    const displayText = word.text.replace(/\/.*?\//g, "");
+const renderWord = (word: Word, index: number) => {
+  const wordType = wordTypes[word.type];
+  if (!word?.text || !wordType) return null;
 
-    const baseColor = wordType.color;
-    const isEnabled = wordType.enabled;
-    const hoverColor = hoverEnabled ? `hover:bg-${baseColor}` : "";
-    const appliedColor = isEnabled ? `bg-${baseColor}` : "";
-    const wordString = `${cleanWord(word.text)}::${word.definition}`;
-    const alreadySaved = savedWords.includes(wordString);
+  const displayText = word.text.replace(/\/.*?\//g, "");
+
+  const colorKey = wordType.colorKey;
+const baseClass = backgroundColors[colorKey];
+const hoverClass = hoverBackgroundColors[colorKey];
+
+
+  const isEnabled = wordType.enabled;
+  const appliedColor = isEnabled ? baseClass : "";
+  const appliedHover = hoverEnabled ? hoverClass : "";
+
+  const wordString = `${cleanWord(word.text)}::${word.definition}`;
+  const alreadySaved = savedWords.includes(wordString);
+
 
 
     async function addDictionary(wordString: string) {
@@ -208,12 +250,13 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
         <HoverCard openDelay={50} closeDelay={50}>
           <HoverCardTrigger asChild>
             <span
-              className={`text-base rounded transition-colors ${
-                hoverEnabled ? "cursor-pointer" : ""
-              } ${hoverColor} ${appliedColor}`}
-            >
-              {displayText}
-            </span>
+  className={`text-base rounded transition-colors ${
+    hoverEnabled ? "cursor-pointer" : ""
+  } ${appliedHover} ${appliedColor}`}
+>
+  {displayText}
+</span>
+
           </HoverCardTrigger>
           {hoverEnabled && word.definition && (
             <HoverCardContent className={`flex flex-col text-sm ${geist.className}`}>
@@ -314,6 +357,7 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
       </div>
     </div>
 
+      </div>
     <div className="flex items-center justify-center h-8 w-auto bg-background border-t-1 rounded-bl-md">
       {audioLoading ? (
         <Skeleton className="h-2 w-1/2 rounded-xl" />
@@ -323,7 +367,6 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
         <span className="text-zinc-500">No audio found</span>
       )}
     </div>
-  </div>
 
 
 

@@ -26,6 +26,8 @@ interface UserState {
   setSubscribed: (val: boolean) => void;
   setRecentConversations: (conversations: Conversation[]) => void;
   setDictionaryWords: (words: string[]) => void;
+  setCustomColors: (colors: string[]) => void;
+
 }
 
 export const useUserStore = create<UserState>((set, get) => ({
@@ -51,6 +53,7 @@ export const useUserStore = create<UserState>((set, get) => ({
 
       const conversations: Conversation[] = [];
       const validConversationIds: string[] = [];
+      const customColors = userDoc?.customColors || [];
 
       for (const id of conversationIds) {
         try {
@@ -80,6 +83,7 @@ export const useUserStore = create<UserState>((set, get) => ({
         recentConversations: conversations,
         completeConversations,
         dictionaryWords,
+        customColors,
       });
     } catch (error) {
       console.error("Failed to fetch user or conversations:", error);
@@ -136,4 +140,6 @@ export const useUserStore = create<UserState>((set, get) => ({
   setSubscribed: (val: boolean) => set({ isSubscribed: val }),
   setRecentConversations: (conversations) => set({ recentConversations: conversations }),
   setDictionaryWords: (words) => set({ dictionaryWords: words }),
+  setCustomColors: (colors: string[]) => set({ customColors: colors }),
+
 }));
