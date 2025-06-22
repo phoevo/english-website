@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
   Card, CardContent, CardDescription, CardHeader, CardTitle,
 } from "@/components/ui/card";
@@ -11,10 +11,13 @@ import {
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader,
   AlertDialogTitle, AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
-import { Geist } from "next/font/google";
+import { Geist, DM_Sans } from "next/font/google";
 import { Switch } from "@/components/ui/switch";
+import { Popover, PopoverContent } from "@/components/ui/popover";
+import { PopoverTrigger } from "@radix-ui/react-popover";
 
 const geist = Geist({ subsets: ['latin'] });
+const dmSans = DM_Sans({ subsets: ['latin'] });
 
 const allChallenges = [
   "Save 3 new words to your dictionary",
@@ -59,10 +62,11 @@ const getDailyChallenges = () => {
   return shuffled.slice(0, 5);
 };
 
-const DailyChallenges = () => {
+const DailyTasks = ({ children }: { children: ReactNode }) => {
   const [challenges, setChallenges] = useState<string[]>([]);
   const [completed, setCompleted] = useState<{ [key: string]: boolean }>({});
   const [showWarnings, setShowWarnings] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("daily-challenges");
@@ -110,10 +114,20 @@ const DailyChallenges = () => {
   };
 
   return (
-    <Card className={`w-full bg-background space-y-4 border-1 ${geist.className}`}>
+    <div className={dmSans.className}>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>{children}</PopoverTrigger>
+        <PopoverContent
+          side="bottom"
+          align="center"
+          className={`bg-background w-full ${dmSans.className}`}
+        >
+
+
+    <div className={`space-y-4 ${geist.className}`}>
       <CardHeader>
         <div className="flex flex-row items-center justify-between">
-          <CardTitle className="text-2xl">Daily Challenges</CardTitle>
+          <CardTitle className="text-xl">Daily Tasks</CardTitle>
           <div className="flex flex-row items-center gap-1">
             <span className="text-sm text-muted-foreground">Warning</span>
             <Switch checked={showWarnings} onCheckedChange={toggleWarningPref} className="cursor-pointer" />
@@ -122,7 +136,7 @@ const DailyChallenges = () => {
         </div>
 
         <CardDescription>
-          Challenges that can help guide you towards your language goals.
+          Tasks that can help guide you towards your language goals.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -144,9 +158,9 @@ const DailyChallenges = () => {
                     </AlertDialogTrigger>
                     <AlertDialogContent className={geist.className}>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Mark challenge as complete?</AlertDialogTitle>
+                        <AlertDialogTitle>Mark task as complete?</AlertDialogTitle>
                         <AlertDialogDescription>
-                        Are you sure you&apos;ve completed this challenge? There&apos;s nothing checking your progress
+                        Are you sure you&apos;ve completed this task? There&apos;s nothing checking your progress
                         automatically, so it’s up to you to be honest and track it accurately. Only mark it complete if
                         you’ve truly done it.
                         </AlertDialogDescription>
@@ -189,12 +203,15 @@ const DailyChallenges = () => {
           variant="outline"
           className="mt-4 w-auto cursor-pointer"
           onClick={resetChallenges}>
-          Refresh Challenges
+          Refresh Tasks
         </Button>
 
       </CardContent>
-    </Card>
+    </div>
+      </PopoverContent>
+      </Popover>
+    </div>
   );
 };
 
-export default DailyChallenges;
+export default DailyTasks;

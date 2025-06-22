@@ -2,12 +2,13 @@
 
 import { useUserStore } from "@/data/useUserStore";
 import Link from "next/link";
-import DailyChallenges from "./dailyChallenges";
+import DailyTasks from "./dailyTasks";
 import UserGuidePopover from "../userGuide";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -98,6 +99,7 @@ function Page() {
             <Card className="bg-background">
               <CardHeader>
                 <CardTitle>Recently saved words</CardTitle>
+                <CardDescription>Just to jog your memory</CardDescription>
               </CardHeader>
               <CardContent>
                 {firstFiveWords.length === 0 ? (
@@ -130,7 +132,7 @@ function Page() {
       </div>
 
       <div className="w-1/3">
-          <DailyChallenges />
+          <DailyTasks  />
       </div>
   </div>
 

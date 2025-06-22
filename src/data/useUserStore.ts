@@ -1,5 +1,11 @@
 import { create } from "zustand";
-import { account, databases, getConversationFromDB, usersCollectionId, databaseId } from "@/data/appwrite";
+import {
+  account,
+  databases,
+  getConversationFromDB,
+  usersCollectionId,
+  databaseId,
+} from "@/data/appwrite";
 
 interface User {
   $id: string;
@@ -21,13 +27,15 @@ interface UserState {
   completeConversations: string[];
   dictionaryWords: string[];
   customColors: string[];
+  challengeCount: string[];
   fetchUser: () => Promise<void>;
   setConversationComplete: (id: string) => Promise<void>;
   setSubscribed: (val: boolean) => void;
   setRecentConversations: (conversations: Conversation[]) => void;
   setDictionaryWords: (words: string[]) => void;
   setCustomColors: (colors: string[]) => void;
-
+  setChallengeCount: (count: string[]) => void;
+  incrementChallengeCount: (challenge: string) => Promise<void>;
 }
 
 export const useUserStore = create<UserState>((set, get) => ({
@@ -38,22 +46,30 @@ export const useUserStore = create<UserState>((set, get) => ({
   completeConversations: [],
   dictionaryWords: [],
   customColors: [],
+  challengeCount: [],
 
   fetchUser: async () => {
     set({ loading: true });
 
     try {
       const res = await account.get();
-      const userDoc = await databases.getDocument(databaseId, usersCollectionId, res.$id);
+      const userDoc = await databases.getDocument(
+        databaseId,
+        usersCollectionId,
+        res.$id
+      );
 
       const isSubscribed = userDoc?.isSubscribed ?? false;
       const conversationIds: string[] = userDoc?.recentConversations || [];
       const dictionaryWords = userDoc?.dictionaryWords || [];
-      const completeConversations: string[] = userDoc?.completeConversations || [];
+      const completeConversations: string[] =
+        userDoc?.completeConversations || [];
+      const customColors = userDoc?.customColors || [];
+      const challengeCount: string[] = userDoc?.challengeCount || [];
+
 
       const conversations: Conversation[] = [];
       const validConversationIds: string[] = [];
-      const customColors = userDoc?.customColors || [];
 
       for (const id of conversationIds) {
         try {
@@ -66,7 +82,7 @@ export const useUserStore = create<UserState>((set, get) => ({
             });
             validConversationIds.push(convo.$id);
           }
-        } catch (err) {
+        } catch {
           console.warn(`Skipping deleted conversation ID: ${id}`);
         }
       }
@@ -84,6 +100,7 @@ export const useUserStore = create<UserState>((set, get) => ({
         completeConversations,
         dictionaryWords,
         customColors,
+        challengeCount,
       });
     } catch (error) {
       console.error("Failed to fetch user or conversations:", error);
@@ -93,6 +110,7 @@ export const useUserStore = create<UserState>((set, get) => ({
         recentConversations: [],
         completeConversations: [],
         dictionaryWords: [],
+        challengeCount: [],
       });
     } finally {
       set({ loading: false });
@@ -112,9 +130,15 @@ export const useUserStore = create<UserState>((set, get) => ({
     }
 
     try {
-      const userDoc = await databases.getDocument(databaseId, usersCollectionId, user.$id);
+      const userDoc = await databases.getDocument(
+        databaseId,
+        usersCollectionId,
+        user.$id
+      );
 
-      const currentCompleted: string[] = Array.isArray(userDoc.completeConversations)
+      const currentCompleted: string[] = Array.isArray(
+        userDoc.completeConversations
+      )
         ? userDoc.completeConversations
         : [];
 
@@ -138,8 +162,36 @@ export const useUserStore = create<UserState>((set, get) => ({
   },
 
   setSubscribed: (val: boolean) => set({ isSubscribed: val }),
-  setRecentConversations: (conversations) => set({ recentConversations: conversations }),
+  setRecentConversations: (conversations) =>
+    set({ recentConversations: conversations }),
   setDictionaryWords: (words) => set({ dictionaryWords: words }),
   setCustomColors: (colors: string[]) => set({ customColors: colors }),
+  setChallengeCount: (count) => set({ challengeCount: count }),
+
+ incrementChallengeCount: async (challenge: string) => {
+  const { user, challengeCount } = get();
+
+  if (!user) {
+    console.error("No user logged in");
+    return;
+  }
+
+  if (challengeCount.includes(challenge)) {
+    console.log("Challenge already counted:", challenge);
+    return;
+  }
+
+  const updatedCount = [...challengeCount, challenge];
+
+  try {
+    await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
+      challengeCount: updatedCount,
+    });
+
+    set({ challengeCount: updatedCount });
+  } catch (err) {
+    console.error("Failed to update challenge count in Appwrite", err);
+  }
+}
 
 }));

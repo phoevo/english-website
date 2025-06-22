@@ -9,21 +9,16 @@ import { account } from "@/data/appwrite";
 import { Skeleton } from "./skeleton";
 import { useUserStore } from "@/data/useUserStore";
 import { Geist, DM_Sans } from "next/font/google";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Popover } from "@radix-ui/react-popover";
+import DailyTasks from "@/app/(dashboard)/home/dailyTasks";
+import Challenges from "@/app/(dashboard)/home/Challenges";
+import { Sword, Swords } from "lucide-react";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
 const Navbar = () => {
-  const { user, loading, isSubscribed } = useUserStore();
+  const { user, loading, isSubscribed, challengeCount } = useUserStore();
   const router = useRouter();
 
   const handleLogout = async (): Promise<void> => {
@@ -48,11 +43,35 @@ const Navbar = () => {
               Profile
             </Link>
 
+
+
             <div className="flex items-center gap-5 absolute right-10">
-              {user && <div>Hello, {user.name}</div>}
+              <div className="flex flex-row items-center gap-2 pr-10">
+
+              <DailyTasks>
+                <Button variant="secondary" className="items-center border-1 border-foreground cursor-pointer">
+                  <Sword size={24}/> 13
+                </Button>
+              </DailyTasks>
 
               {loading ? (
-                <Skeleton className="w-10 h-6 rounded-lg" />
+                <Skeleton className="w-[56px] h-[36px]"/>
+              ): (
+              isSubscribed &&
+              <Challenges>
+                <Button
+                className="flex items-center cursor-pointer">
+                  <Swords/> {challengeCount.length}
+                </Button>
+              </Challenges>)
+              }
+
+              </div>
+
+              {/* {user && <div>Hello, {user.name}</div>} */}
+
+              {loading ? (
+                <Skeleton className="w-9 h-6 rounded-lg" />
               ) : isSubscribed ? (
                 <Link href={"/subscribe"} className="cursor-pointer">
                 <Badge className="bg-pink-500 text-foreground">Pro</Badge>

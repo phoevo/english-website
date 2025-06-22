@@ -98,7 +98,8 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
     setDictionaryWords,
     completeConversations,
     setConversationComplete,
-    customColors
+    customColors,
+    isSubscribed,
   } = useUserStore();
 
   const savedWords = dictionaryWords;
@@ -359,14 +360,19 @@ const hoverClass = hoverBackgroundColors[colorKey];
 
       </div>
     <div className="flex items-center justify-center h-8 w-auto bg-background border-t-1 rounded-bl-md">
-      {audioLoading ? (
-        <Skeleton className="h-2 w-1/2 rounded-xl" />
-      ) : audioUrl ? (
-        <AudioPlayer src={audioUrl} />
-      ) : (
-        <span className="text-zinc-500">No audio found</span>
-      )}
-    </div>
+  {audioLoading ? (
+    <Skeleton className="h-2 w-1/2 rounded-xl" />
+  ) : audioUrl ? (
+    isSubscribed ? (
+      <AudioPlayer src={audioUrl} />
+    ) : (
+      <span className="text-zinc-500">Subscription required</span>
+    )
+  ) : (
+    <span className="text-zinc-500">No audio found</span>
+  )}
+</div>
+
 
 
 

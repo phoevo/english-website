@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useUserStore } from '@/data/useUserStore'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -9,11 +9,10 @@ import UserGuidePopover from '../../userGuide'
 
 
 function LearnPage() {
-  const {loading, fetchUser } = useUserStore()
+  const {loading} = useUserStore()
 
-  useEffect(() => {
-    fetchUser()
-  }, [fetchUser])
+
+
 
   type WordTypeKey =
   | "noun"
