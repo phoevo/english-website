@@ -18,7 +18,7 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "sw
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
 const Navbar = () => {
-  const { user, loading, isSubscribed, challengeCount } = useUserStore();
+  const { user, loading, isSubscribed, challengeCount, taskCount } = useUserStore();
   const router = useRouter();
 
   const handleLogout = async (): Promise<void> => {
@@ -46,13 +46,17 @@ const Navbar = () => {
 
 
             <div className="flex items-center gap-5 absolute right-10">
-              <div className="flex flex-row items-center gap-2 pr-10">
+              <div className="flex flex-row items-center gap-2 pr-20">
 
+                {loading ? (
+                <Skeleton className="w-[56px] h-[36px]"/>
+              ): (
+              isSubscribed &&
               <DailyTasks>
-                <Button variant="secondary" className="items-center border-1 border-foreground cursor-pointer">
-                  <Sword size={24}/> 13
+                <Button variant="secondary" className="items-center shadow-sm cursor-pointer">
+                  <Sword /> {taskCount}
                 </Button>
-              </DailyTasks>
+              </DailyTasks>)}
 
               {loading ? (
                 <Skeleton className="w-[56px] h-[36px]"/>
@@ -63,18 +67,15 @@ const Navbar = () => {
                 className="flex items-center cursor-pointer">
                   <Swords/> {challengeCount.length}
                 </Button>
-              </Challenges>)
-              }
+              </Challenges>)}
 
               </div>
-
-              {/* {user && <div>Hello, {user.name}</div>} */}
 
               {loading ? (
                 <Skeleton className="w-9 h-6 rounded-lg" />
               ) : isSubscribed ? (
                 <Link href={"/subscribe"} className="cursor-pointer">
-                <Badge className="bg-pink-500 text-foreground">Pro</Badge>
+                <Badge className="bg-pink-500 text-foreground shadow-md">Pro</Badge>
                 </Link>
               ) : (
                 <Link href={"/subscribe"} className="cursor-pointer">

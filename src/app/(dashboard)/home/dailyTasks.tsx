@@ -15,6 +15,7 @@ import { Geist, DM_Sans } from "next/font/google";
 import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
+import { useUserStore } from "@/data/useUserStore";
 
 const geist = Geist({ subsets: ['latin'] });
 const dmSans = DM_Sans({ subsets: ['latin'] });
@@ -67,6 +68,7 @@ const DailyTasks = ({ children }: { children: ReactNode }) => {
   const [completed, setCompleted] = useState<{ [key: string]: boolean }>({});
   const [showWarnings, setShowWarnings] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const {taskCount,incrementTaskCount,setTaskCount} = useUserStore();
 
   useEffect(() => {
     const stored = localStorage.getItem("daily-challenges");
@@ -97,6 +99,7 @@ const DailyTasks = ({ children }: { children: ReactNode }) => {
     };
     setCompleted(updated);
     localStorage.setItem("completed-challenges", JSON.stringify(updated));
+    incrementTaskCount();
   };
 
   const resetChallenges = () => {
@@ -162,7 +165,7 @@ const DailyTasks = ({ children }: { children: ReactNode }) => {
                         <AlertDialogDescription>
                         Are you sure you&apos;ve completed this task? There&apos;s nothing checking your progress
                         automatically, so it’s up to you to be honest and track it accurately. Only mark it complete if
-                        you’ve truly done it.
+                        you’ve truly done it. <i className="text-red-500 not-italic">The counter can't be re-adjusted incase of error. </i>
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>

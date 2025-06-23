@@ -328,11 +328,17 @@ console.log(isSubscribed);
               <div className="space-y-0">
                 <Label htmlFor="toggle" className='font-bold mb-2'>Color customization
                   </Label>
+
+                  {isSubscribed && user ?(
+                  <>
                   <p className='text-sm text-muted-foreground'>Select a word type and select a color. <span className='text-red-500 font-normal m-0 text-sm'>
                     Certain background and text color combinations could make reading harder.</span>
                     </p>
+                  <CustomColors userId={user.$id} />
 
-                {isSubscribed && <CustomColors userId={user.$id} />}
+                  </>):
+                    <p className='text-zinc-500 text-sm'>Color customization is a paid feature</p>
+                  }
                 </div>
 
 
@@ -344,11 +350,6 @@ console.log(isSubscribed);
           </Card>
 
         </TabsContent>
-
-
-
-
-
 
 
 

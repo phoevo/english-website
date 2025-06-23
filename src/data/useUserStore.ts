@@ -28,6 +28,7 @@ interface UserState {
   dictionaryWords: string[];
   customColors: string[];
   challengeCount: string[];
+  taskCount: number;
   fetchUser: () => Promise<void>;
   setConversationComplete: (id: string) => Promise<void>;
   setSubscribed: (val: boolean) => void;
@@ -36,6 +37,8 @@ interface UserState {
   setCustomColors: (colors: string[]) => void;
   setChallengeCount: (count: string[]) => void;
   incrementChallengeCount: (challenge: string) => Promise<void>;
+  setTaskCount: (count: number) => void;
+  incrementTaskCount: () => Promise<void>;
 }
 
 export const useUserStore = create<UserState>((set, get) => ({
@@ -47,6 +50,7 @@ export const useUserStore = create<UserState>((set, get) => ({
   dictionaryWords: [],
   customColors: [],
   challengeCount: [],
+  taskCount: 0,
 
   fetchUser: async () => {
     set({ loading: true });
@@ -62,11 +66,10 @@ export const useUserStore = create<UserState>((set, get) => ({
       const isSubscribed = userDoc?.isSubscribed ?? false;
       const conversationIds: string[] = userDoc?.recentConversations || [];
       const dictionaryWords = userDoc?.dictionaryWords || [];
-      const completeConversations: string[] =
-        userDoc?.completeConversations || [];
+      const completeConversations: string[] = userDoc?.completeConversations || [];
       const customColors = userDoc?.customColors || [];
       const challengeCount: string[] = userDoc?.challengeCount || [];
-
+      const taskCount: number = typeof userDoc?.taskCount === "number" ? userDoc.taskCount : 0;
 
       const conversations: Conversation[] = [];
       const validConversationIds: string[] = [];
@@ -101,6 +104,7 @@ export const useUserStore = create<UserState>((set, get) => ({
         dictionaryWords,
         customColors,
         challengeCount,
+        taskCount,
       });
     } catch (error) {
       console.error("Failed to fetch user or conversations:", error);
@@ -110,7 +114,9 @@ export const useUserStore = create<UserState>((set, get) => ({
         recentConversations: [],
         completeConversations: [],
         dictionaryWords: [],
+        customColors: [],
         challengeCount: [],
+        taskCount: 0,
       });
     } finally {
       set({ loading: false });
@@ -136,9 +142,7 @@ export const useUserStore = create<UserState>((set, get) => ({
         user.$id
       );
 
-      const currentCompleted: string[] = Array.isArray(
-        userDoc.completeConversations
-      )
+      const currentCompleted: string[] = Array.isArray(userDoc.completeConversations)
         ? userDoc.completeConversations
         : [];
 
@@ -162,36 +166,57 @@ export const useUserStore = create<UserState>((set, get) => ({
   },
 
   setSubscribed: (val: boolean) => set({ isSubscribed: val }),
-  setRecentConversations: (conversations) =>
-    set({ recentConversations: conversations }),
+  setRecentConversations: (conversations) => set({ recentConversations: conversations }),
   setDictionaryWords: (words) => set({ dictionaryWords: words }),
-  setCustomColors: (colors: string[]) => set({ customColors: colors }),
+  setCustomColors: (colors) => set({ customColors: colors }),
   setChallengeCount: (count) => set({ challengeCount: count }),
 
- incrementChallengeCount: async (challenge: string) => {
-  const { user, challengeCount } = get();
+  incrementChallengeCount: async (challenge: string) => {
+    const { user, challengeCount } = get();
 
-  if (!user) {
-    console.error("No user logged in");
-    return;
-  }
+    if (!user) {
+      console.error("No user logged in");
+      return;
+    }
 
-  if (challengeCount.includes(challenge)) {
-    console.log("Challenge already counted:", challenge);
-    return;
-  }
+    if (challengeCount.includes(challenge)) {
+      console.log("Challenge already counted:", challenge);
+      return;
+    }
 
-  const updatedCount = [...challengeCount, challenge];
+    const updatedCount = [...challengeCount, challenge];
 
-  try {
-    await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
-      challengeCount: updatedCount,
-    });
+    try {
+      await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
+        challengeCount: updatedCount,
+      });
 
-    set({ challengeCount: updatedCount });
-  } catch (err) {
-    console.error("Failed to update challenge count in Appwrite", err);
-  }
-}
+      set({ challengeCount: updatedCount });
+    } catch (err) {
+      console.error("Failed to update challenge count in Appwrite", err);
+    }
+  },
 
+  setTaskCount: (count: number) => set({ taskCount: count }),
+
+  incrementTaskCount: async () => {
+    const { user, taskCount } = get();
+
+    if (!user) {
+      console.error("No user logged in");
+      return;
+    }
+
+    const newCount = taskCount + 1;
+
+    try {
+      await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
+        taskCount: newCount,
+      });
+
+      set({ taskCount: newCount });
+    } catch (err) {
+      console.error("Failed to increment task count:", err);
+    }
+  },
 }));

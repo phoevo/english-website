@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
-
+import News from "./News";
 
 
 function Page() {
@@ -26,11 +26,11 @@ function Page() {
 
   if (loading) {
     return (
-      <div className="m-10 space-y-6">
+      <div className="m-10 space-y-6 w-full">
         <Skeleton className="w-[300px] h-[32px]" />
         <Skeleton className="w-[400px] h-[15px]" />
-        <Skeleton className="w-[392px] h-[82px] opacity-50 mt-5" />
-        <Skeleton className="w-[392px] h-[82px] opacity-25" />
+        <Skeleton className="w-2/3 h-1/3 opacity-50 mt-5" />
+        <Skeleton className="w-2/3 h-1/3 opacity-25" />
         <Skeleton className="w-[392px] h-[82px] opacity-15" />
       </div>
     );
@@ -132,16 +132,10 @@ function Page() {
       </div>
 
       <div className="w-1/3">
-          <DailyTasks  />
+          <News />
       </div>
   </div>
-
-
-
-
       </div>
-
-
     </div>
   );
 }

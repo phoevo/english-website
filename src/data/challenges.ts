@@ -1,28 +1,30 @@
-// data/challenges.ts
 import { useUserStore } from "@/data/useUserStore";
 
 export interface Challenge {
   id: string;
   description: string;
   condition: () => boolean;
+  progress?: () => { current: number; goal: number };
 }
+
 
 export const allChallenges: Challenge[] = [
   {
-    id: "finish-3-conversations",
+    id: "finish-5-conversations",
     description: "Finish 5 conversations",
-    condition: () => {
-      const { completeConversations } = useUserStore.getState();
-      return completeConversations.length >= 5;
-    },
+    condition: () => useUserStore.getState().completeConversations.length >= 5,
+    progress: () => {
+      const current = useUserStore.getState().completeConversations.length;
+      return { current, goal: 5 };
+    }
   },
   {
-    id: "save-5-dictionary-words",
+    id: "save-50-dictionary-words",
     description: "Save 50 dictionary words",
-    condition: () => {
-      const { dictionaryWords } = useUserStore.getState();
-      return dictionaryWords.length >= 50;
-    },
-  },
-
+    condition: () => useUserStore.getState().dictionaryWords.length >= 50,
+    progress: () => {
+      const current = useUserStore.getState().dictionaryWords.length;
+      return { current, goal: 50 };
+    }
+  }
 ];

@@ -103,7 +103,7 @@ function SubscribePage() {
      <div className='flex flex-row gap-5 w-full'>
 
 
-  <div className='flex flex-col justify-between p-2 border-1 rounded-lg h-60 w-1/2 text-zinc-500'>
+  <div className='flex flex-col justify-between p-2 border-1 rounded-lg h-65 w-1/2 text-zinc-500'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-4'>Free</Badge>
       <div className='flex justify-center'>
@@ -112,6 +112,7 @@ function SubscribePage() {
         <li>Access to 10 Conversations</li>
         <li>Hover feature</li>
         <li>Dictionary and Word Board</li>
+        <li>Daily Tasks</li>
       </ul>
       </div>
 
@@ -137,7 +138,7 @@ function SubscribePage() {
   </div>
 
 
-<div className='flex flex-col justify-between p-2 border-1 rounded-lg h-60 w-1/2 text-zinc-500 shadow-[0_0_3px_1px] shadow-pink-500'>
+<div className='flex flex-col justify-between p-2 border-1 rounded-lg h-65 w-1/2 text-zinc-500 shadow-[0_0_3px_1px] shadow-pink-500'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-4 bg-pink-500 text-white'>Pro</Badge>
       <div className='flex justify-center items-center'>
@@ -147,6 +148,7 @@ function SubscribePage() {
         <li>Audio for conversations</li>
         <li>Color customization</li>
         <li>Monthly, yearly or lifetime access</li>
+        <li>Challenges</li>
       </ul>
       </div>
 

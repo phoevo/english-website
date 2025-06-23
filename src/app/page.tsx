@@ -9,7 +9,7 @@ import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/c
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TestConversation } from "./(dashboard)/TestConversation";
 import TestDictionary from "./(dashboard)/TestDictionary";
-import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, BookOpenCheck, Check, GalleryHorizontalEnd, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal } from "lucide-react";
+import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, BookOpenCheck, Check, GalleryHorizontalEnd, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
 import TestWordBoard from "./(dashboard)/TestWordBoard";
 import Image from "next/image";
 
@@ -167,7 +167,7 @@ export default function LandingPage() {
 
 
 
-       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-2 rounded-lg">
+       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 p-2 rounded-lg">
 
     <motion.div
     className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
@@ -249,6 +249,32 @@ export default function LandingPage() {
     <AlignLeft size={60} strokeWidth={2} className="" />
   </span>
   <div className="flex items-center justify-center text-center">Progress tracking</div>
+</motion.div>
+
+ <motion.div
+   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+   initial={{ opacity: 0, y: 100 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-100px", }}
+    transition={{ delay: 0.2, duration: 0.1 }}
+    >
+  <span className="relative flex justify-center items-center h-20 w-20">
+    <Sword size={50}/>
+  </span>
+  <div className="flex items-center justify-center text-center">Tasks</div>
+</motion.div>
+
+<motion.div
+   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+   initial={{ opacity: 0, y: 100 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-100px", }}
+    transition={{ delay: 0.2, duration: 0.1 }}
+    >
+  <span className="relative flex justify-center items-center h-20 w-20">
+    <Swords className="fill-current" size={50}/>
+  </span>
+  <div className="flex items-center justify-center text-center">Challenges</div>
 </motion.div>
 
 </div>

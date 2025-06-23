@@ -11,6 +11,7 @@ import { PopoverTrigger } from "@radix-ui/react-popover";
 import { useUserStore } from "@/data/useUserStore";
 import { allChallenges } from "@/data/challenges";
 import { Check } from "lucide-react";
+import { Progress } from "@/components/ui/progress"
 
 
 const geist = Geist({ subsets: ['latin'] });
@@ -46,19 +47,33 @@ const Challenges = ({ children }: { children: ReactNode }) => {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {allChallenges.map((challenge) => {
-          const isDone = challengeCount.includes(challenge.id);
+  {allChallenges.map((challenge) => {
+    const isDone = challengeCount.includes(challenge.id);
+    const progressData = challenge.progress?.();
 
-          return (
-            <div key={challenge.id} className="flex items-center justify-center border-1 h-10 rounded-md gap-2">
-              {isDone && <Check size={20} className="text-green-500"/>}
-              <span className={isDone ? "text-muted-foreground" : ""}>
-                {challenge.description}
-              </span>
-            </div>
-          );
-        })}
-      </CardContent>
+    return (
+      <div key={challenge.id} className="space-y-0">
+        <div className="flex items-center border rounded-t-md px-3 py-2 gap-2 bg-muted">
+          {isDone && <Check size={20} className="text-green-500" />}
+          <span className={isDone ? "text-muted-foreground line-through" : ""}>
+            {challenge.description}
+          </span>
+
+        </div>
+
+        {progressData && (
+          <div className="">
+            <Progress
+              value={(progressData.current / progressData.goal) * 100}
+              className="h-1"
+            />
+          </div>
+        )}
+      </div>
+    );
+  })}
+</CardContent>
+
 
 
     </div>
