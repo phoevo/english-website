@@ -12,6 +12,7 @@ import TestDictionary from "./(dashboard)/TestDictionary";
 import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, BookOpenCheck, Check, GalleryHorizontalEnd, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
 import TestWordBoard from "./(dashboard)/TestWordBoard";
 import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 
 
 
@@ -162,12 +163,12 @@ export default function LandingPage() {
           3.
         </span>
         <span>An assortment</span>
-        <p className="pl-8">of tools</p>
+        <p className="pl-8">of tools/features</p>
         </div>
 
 
 
-       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 p-2 rounded-lg">
+       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-2 rounded-lg">
 
     <motion.div
     className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
@@ -271,11 +272,31 @@ export default function LandingPage() {
     viewport={{ once: true, margin: "-100px", }}
     transition={{ delay: 0.2, duration: 0.1 }}
     >
-  <span className="relative flex justify-center items-center h-20 w-20">
+  <div className="relative flex justify-center items-center h-20 w-20">
     <Swords className="fill-current" size={50}/>
-  </span>
+  </div>
   <div className="flex items-center justify-center text-center">Challenges</div>
 </motion.div>
+
+<motion.div
+  className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+  initial={{ opacity: 0, y: 100 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, margin: "-100px" }}
+  transition={{ delay: 0.2, duration: 0.1 }}
+>
+  <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-3 gap-1 p-4">
+   <div className="flex justify-center"><Badge className="bg-foreground text-background">0</Badge></div>
+  <div className="flex justify-center"><Badge className="bg-green-500 text-white">3</Badge></div>
+  <div className="flex justify-center"><Badge className="bg-gradient-to-r from-emerald-400 to-blue-600 text-white bg-clip-padding">10</Badge></div>
+  <div className="flex justify-center"><Badge className="bg-gradient-to-r from-blue-600 via-pink-600 to-purple-600  text-white bg-clip-padding rounded-full animate-gradient">30</Badge></div>
+  <div className="flex justify-center"><Badge className="bg-gradient-to-r from-red-500 via-purple-500 to-cyan-300 text-white bg-clip-padding rounded-full animate-gradient ring-1 ring-foreground">50</Badge></div>
+  <div className="flex justify-center"><Badge className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-300 text-black bg-clip-padding rounded-full animate-gradient uneven-glow border-none">100</Badge></div>
+  </div>
+
+  <div className="flex items-center justify-center text-center">Streaks</div>
+</motion.div>
+
 
 </div>
 

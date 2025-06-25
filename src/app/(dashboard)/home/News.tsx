@@ -44,7 +44,7 @@ const newsItems = [
     color: "bg-green-500",
     date: "June 11, 2025",
     content: (
-      <div className="flex items-center space-x-1">
+      <div className="flex space-x-1">
         <Link href="home/learn" className="underline">Learn</Link>
         <span>Page re-design</span>
       </div>
@@ -85,19 +85,19 @@ function News() {
           </CardDescription>
         </CardHeader>
 
-        <ScrollArea className="flex flex-col max-h-[440px] px-2">
+        <ScrollArea className="flex flex-col max-h-[440px]">
           {newsItems.map((item, index) => (
-            <CardContent key={index} className="m-0 py-2">
-              <div className="border rounded-md p-2">
-                <div className='flex flex-row items-center'>
+            <CardContent key={index} className="py-2">
+              <div className="border rounded-md p-1">
+                <div className='flex flex-row items-center m-1'>
                   <Badge className={`relative ${item.color}`}>
                     {item.icon} {item.type}
                   </Badge>
                   {item.date && (
-                    <span className="ml-2 text-zinc-500 text-xs italic">{item.date}</span>
+                    <span className="ml-2 text-zinc-500 text-xs underline">{item.date}</span>
                   )}
                 </div>
-                <div className="m-2 p-4 rounded-sm bg-muted text-sm">
+                <div className="flex flex-start mt-2 p-2 rounded-sm bg-muted text-sm">
                   {item.content}
                 </div>
               </div>

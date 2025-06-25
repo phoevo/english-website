@@ -112,6 +112,7 @@ function SubscribePage() {
         <li>Access to 10 Conversations</li>
         <li>Hover feature</li>
         <li>Dictionary and Word Board</li>
+        <li>Streaks</li>
         <li>Daily Tasks</li>
       </ul>
       </div>
@@ -147,8 +148,8 @@ function SubscribePage() {
         <li>All Conversations</li>
         <li>Audio for conversations</li>
         <li>Color customization</li>
-        <li>Monthly, yearly or lifetime access</li>
         <li>Challenges</li>
+        <li>Monthly, yearly or lifetime access</li>
       </ul>
       </div>
 

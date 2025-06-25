@@ -26,5 +26,14 @@ export const allChallenges: Challenge[] = [
       const current = useUserStore.getState().dictionaryWords.length;
       return { current, goal: 50 };
     }
+  },
+  {
+    id: "streak-30",
+    description: "Maintain your daily streak until day 30.",
+    condition: () => useUserStore.getState().streak >= 30,
+    progress: () => {
+      const current = useUserStore.getState().streak;
+      return { current, goal: 30 };
+    }
   }
 ];

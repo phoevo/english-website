@@ -29,6 +29,8 @@ interface UserState {
   customColors: string[];
   challengeCount: string[];
   taskCount: number;
+  lastActive: string | null; // ISO string
+  streak: number;
   fetchUser: () => Promise<void>;
   setConversationComplete: (id: string) => Promise<void>;
   setSubscribed: (val: boolean) => void;
@@ -39,6 +41,9 @@ interface UserState {
   incrementChallengeCount: (challenge: string) => Promise<void>;
   setTaskCount: (count: number) => void;
   incrementTaskCount: () => Promise<void>;
+  setLastActive: (iso: string) => void;
+  setStreak: (val: number) => void;
+
 }
 
 export const useUserStore = create<UserState>((set, get) => ({
@@ -51,6 +56,8 @@ export const useUserStore = create<UserState>((set, get) => ({
   customColors: [],
   challengeCount: [],
   taskCount: 0,
+  lastActive: null,
+  streak: 0,
 
   fetchUser: async () => {
     set({ loading: true });
@@ -70,6 +77,8 @@ export const useUserStore = create<UserState>((set, get) => ({
       const customColors = userDoc?.customColors || [];
       const challengeCount: string[] = userDoc?.challengeCount || [];
       const taskCount: number = typeof userDoc?.taskCount === "number" ? userDoc.taskCount : 0;
+        const lastActive = userDoc?.lastActive ?? null;
+    const streak = typeof userDoc?.streak === "number" ? userDoc.streak : 0;
 
       const conversations: Conversation[] = [];
       const validConversationIds: string[] = [];
@@ -105,6 +114,8 @@ export const useUserStore = create<UserState>((set, get) => ({
         customColors,
         challengeCount,
         taskCount,
+        lastActive,
+        streak,
       });
     } catch (error) {
       console.error("Failed to fetch user or conversations:", error);
@@ -117,6 +128,8 @@ export const useUserStore = create<UserState>((set, get) => ({
         customColors: [],
         challengeCount: [],
         taskCount: 0,
+        lastActive: null,
+        streak: 0,
       });
     } finally {
       set({ loading: false });
@@ -170,6 +183,9 @@ export const useUserStore = create<UserState>((set, get) => ({
   setDictionaryWords: (words) => set({ dictionaryWords: words }),
   setCustomColors: (colors) => set({ customColors: colors }),
   setChallengeCount: (count) => set({ challengeCount: count }),
+  setLastActive: (iso: string) => set({ lastActive: iso }),
+  setStreak: (val: number)    => set({ streak: val }),
+
 
   incrementChallengeCount: async (challenge: string) => {
     const { user, challengeCount } = get();

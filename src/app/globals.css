@@ -148,4 +148,57 @@
   html, body {
     font-family: var(--font-sans), sans-serif;
   }
+
+  @keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 300% 300%;
+  animation: gradientShift 15s ease infinite;
+}
+
+.animate-gradient-fire {
+  background-size: 300% 300%;
+  animation: gradientShift 3s ease infinite;
+}
+
+.uneven-glow {
+  animation: pulseGlow 10s infinite;
+  box-shadow:
+    0 0 40px rgba(236, 72, 153, 0.5),
+    0 0 40px rgba(139, 92, 246, 0.4),
+    0 0 50px rgba(6, 182, 212, 0.6);
+  transition: box-shadow 0.3s ease-in-out;
+  background: radial-gradient(
+    circle at 10% 10%,
+    rgba(139, 92, 246, 0.4),
+    rgba(236, 72, 153, 0.3),
+    rgba(6, 182, 212, 0.2)
+  );
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 3px rgba(250, 54, 0, 0.5),
+      0 0 3px rgba(241, 169, 67, 0.4),
+      0 0 1cqb rgb(238, 234, 96);
+  }
+  50% {
+    box-shadow:
+      0 0 5px rgba(250, 51, 1, 0.979),
+      0 0 7px rgba(239, 224, 4, 0.6),
+      0 0 5px rgba(245, 96, 4, 0.9);
+  }
+}
+
 }

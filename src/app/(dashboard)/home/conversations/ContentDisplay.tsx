@@ -251,12 +251,12 @@ const hoverClass = hoverBackgroundColors[colorKey];
         <HoverCard openDelay={50} closeDelay={50}>
           <HoverCardTrigger asChild>
             <span
-  className={`text-base rounded transition-colors ${
-    hoverEnabled ? "cursor-pointer" : ""
-  } ${appliedHover} ${appliedColor}`}
->
-  {displayText}
-</span>
+            className={`text-base rounded transition-colors ${
+              hoverEnabled ? "cursor-pointer" : ""
+            } ${appliedHover} ${appliedColor}`}
+          >
+            {displayText}
+          </span>
 
           </HoverCardTrigger>
           {hoverEnabled && word.definition && (

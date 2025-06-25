@@ -76,7 +76,7 @@ function Page() {
                  {conversation ? (
                 <Link
                   href={`home/conversations/${conversation.$id}`}
-                  className="block border p-4 rounded-lg hover:bg-primary-foreground transition"
+                  className="block border p-4 rounded-lg shadow-sm hover:bg-primary-foreground transition"
                 >
                   <h2 className="text-lg font-light">Resume: {conversation.title}</h2>
                   {conversation.level && (

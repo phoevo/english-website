@@ -9,17 +9,41 @@ import { account } from "@/data/appwrite";
 import { Skeleton } from "./skeleton";
 import { useUserStore } from "@/data/useUserStore";
 import { Geist, DM_Sans } from "next/font/google";
-import { Popover } from "@radix-ui/react-popover";
 import DailyTasks from "@/app/(dashboard)/home/dailyTasks";
 import Challenges from "@/app/(dashboard)/home/Challenges";
 import { Sword, Swords } from "lucide-react";
+import {
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
+} from "@/components/ui/hover-card";
+import { Flame } from "lucide-react";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
+function getStreakColor(streak: number) {
+  if (streak < 1 && streak <= 2) return "bg-foreground text-background";
+  if (streak >= 3 && streak <= 9) return "bg-green-500 text-white";
+  if (streak >= 10 && streak <= 29) return "bg-gradient-to-r from-emerald-400 to-blue-600 bg-clip-padding text-white ";
+  if (streak >= 30 && streak <= 49)
+    return "bg-gradient-to-r from-blue-600 via-pink-600 to-purple-600 text-white bg-clip-padding animate-gradient border-none ring-none";
+  if (streak >= 50 && streak <= 99)
+    return "bg-gradient-to-r from-red-500 via-purple-500 to-cyan-300 text-white bg-clip-padding rounded-full animate-gradient ring-1 ring-foreground";
+  if (streak >= 100 && streak <= 1000)
+    return "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-black bg-clip-padding rounded-full animate-gradient-fire uneven-glow border-none";
+  return "";
+}
+
+
+
+
 const Navbar = () => {
-  const { user, loading, isSubscribed, challengeCount, taskCount } = useUserStore();
+  const { user, loading, isSubscribed, challengeCount, taskCount, streak, setStreak } = useUserStore();
   const router = useRouter();
+
+
+   const badgeColor = getStreakColor(streak);
 
   const handleLogout = async (): Promise<void> => {
     try {
@@ -29,6 +53,7 @@ const Navbar = () => {
       console.error("Error logging out:", err);
     }
   };
+
 
   return (
     <nav className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
@@ -46,12 +71,11 @@ const Navbar = () => {
 
 
             <div className="flex items-center gap-5 absolute right-10">
-              <div className="flex flex-row items-center gap-2 pr-20">
+              <div className="flex flex-row items-center gap-2 pr-0">
 
                 {loading ? (
                 <Skeleton className="w-[56px] h-[36px]"/>
               ): (
-              isSubscribed &&
               <DailyTasks>
                 <Button variant="secondary" className="items-center shadow-sm cursor-pointer">
                   <Sword /> {taskCount}
@@ -71,17 +95,35 @@ const Navbar = () => {
 
               </div>
 
-              {loading ? (
-                <Skeleton className="w-9 h-6 rounded-lg" />
-              ) : isSubscribed ? (
-                <Link href={"/subscribe"} className="cursor-pointer">
-                <Badge className="bg-pink-500 text-foreground shadow-md">Pro</Badge>
+
+             {loading ? (
+              <Skeleton className="w-[180px] h-[36px] rounded-full" />
+            ) : (
+              <div className={`flex flex-row items-center justify-start border-1 rounded-full shadow-xs`}>
+                <Link href="/subscribe" className="cursor-pointer">
+                  <Badge className={`m-1 ${isSubscribed ? "bg-pink-500 text-foreground" : ""}`}>
+                    {isSubscribed ? "Pro" : "Free"}
+                  </Badge>
                 </Link>
-              ) : (
-                <Link href={"/subscribe"} className="cursor-pointer">
-                <Badge variant="default">Free</Badge>
-                </Link>
-              )}
+                {user && <p className="mx-2">{user.name}</p>}
+                <HoverCard>
+            <HoverCardTrigger asChild>
+              <Badge
+                className={`m-1 cursor-pointer ${badgeColor}`}
+                aria-label={`Current streak: ${streak}`}
+              >
+                {streak}
+              </Badge>
+            </HoverCardTrigger>
+            <HoverCardContent side="top" align="center" className={`${dmSans.className} w-auto text-xs`}>
+              Your current daily streak
+            </HoverCardContent>
+          </HoverCard>
+
+
+              </div>
+            )}
+
 
               {loading ? (
                 <Skeleton className="w-20 h-10 rounded-md" />

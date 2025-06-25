@@ -54,8 +54,8 @@ const Challenges = ({ children }: { children: ReactNode }) => {
     return (
       <div key={challenge.id} className="space-y-0">
         <div className="flex items-center border rounded-t-md px-3 py-2 gap-2 bg-muted">
-          {isDone && <Check size={20} className="text-green-500" />}
-          <span className={isDone ? "text-muted-foreground line-through" : ""}>
+          {isDone && <Check size={15} className="text-green-500" />}
+          <span className={isDone ? "text-muted-foreground text-xs line-through" : ""}>
             {challenge.description}
           </span>
 

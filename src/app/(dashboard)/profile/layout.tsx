@@ -298,7 +298,7 @@ console.log(isSubscribed);
                 )}
               />
 
-              <Button type="submit" disabled={isSaving}>
+              <Button type="submit" disabled={isSaving} className='cursor-pointer'>
                 {isSaving ? 'Saving...' : 'Save changes'}
               </Button>
             </form>
@@ -331,7 +331,7 @@ console.log(isSubscribed);
 
                   {isSubscribed && user ?(
                   <>
-                  <p className='text-sm text-muted-foreground'>Select a word type and select a color. <span className='text-red-500 font-normal m-0 text-sm'>
+                  <p className='text-sm text-muted-foreground'>Select a word type and select it&apos;s color. <span className='text-red-500 font-normal m-0 text-sm'>
                     Certain background and text color combinations could make reading harder.</span>
                     </p>
                   <CustomColors userId={user.$id} />
