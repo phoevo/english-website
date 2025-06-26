@@ -105,8 +105,9 @@ const Navbar = () => {
                     {isSubscribed ? "Pro" : "Free"}
                   </Badge>
                 </Link>
-                {user && <p className="mx-2">{user.name}</p>}
-                <HoverCard>
+                {user ? (<p className="mx-2">{user.name}</p>) : (<p className="mx-2">Guest</p>) }
+
+                {user && <HoverCard>
             <HoverCardTrigger asChild>
               <Badge
                 className={`m-1 cursor-pointer ${badgeColor}`}
@@ -118,7 +119,7 @@ const Navbar = () => {
             <HoverCardContent side="top" align="center" className={`${dmSans.className} w-auto text-xs`}>
               Your current daily streak
             </HoverCardContent>
-          </HoverCard>
+          </HoverCard>}
 
 
               </div>

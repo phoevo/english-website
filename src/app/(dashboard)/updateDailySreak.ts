@@ -16,7 +16,6 @@ export async function updateDailyStreak() {
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   if (!lastActive) {
-    // First login ever
     await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
       lastActive: now.toISOString(),
       streak: 1,
@@ -34,7 +33,7 @@ export async function updateDailyStreak() {
   );
 
   if (diffDays === 1) {
-    // Continued streak
+
     const newStreak = streak + 1;
     await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
       streak: newStreak,
@@ -43,7 +42,7 @@ export async function updateDailyStreak() {
     setStreak(newStreak);
     setLastActive(now.toISOString());
   } else if (diffDays > 1) {
-    // Missed a day, reset streak
+
     await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
       streak: 1,
       lastActive: now.toISOString(),
@@ -51,7 +50,6 @@ export async function updateDailyStreak() {
     setStreak(1);
     setLastActive(now.toISOString());
   } else {
-    // Already interacted today, no changes
     return;
   }
 }

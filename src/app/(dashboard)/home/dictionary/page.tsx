@@ -185,7 +185,7 @@ function DictionaryPage() {
             </div>
           </ScrollArea>
         ) : (
-          <p>No saved words yet</p>
+          <p className="m-5">No saved words yet</p>
         )}
       </div>
 

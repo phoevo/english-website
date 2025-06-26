@@ -85,7 +85,7 @@ function News() {
           </CardDescription>
         </CardHeader>
 
-        <ScrollArea className="flex flex-col max-h-[440px]">
+        <ScrollArea className="flex flex-col m-0 max-h-[440px]">
           {newsItems.map((item, index) => (
             <CardContent key={index} className="py-2">
               <div className="border rounded-md p-1">

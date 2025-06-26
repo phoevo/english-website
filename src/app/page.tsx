@@ -286,7 +286,7 @@ export default function LandingPage() {
   transition={{ delay: 0.2, duration: 0.1 }}
 >
   <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-3 gap-1 p-4">
-   <div className="flex justify-center"><Badge className="bg-foreground text-background">0</Badge></div>
+   <div className="flex justify-center"><Badge className="bg-foreground text-background">1</Badge></div>
   <div className="flex justify-center"><Badge className="bg-green-500 text-white">3</Badge></div>
   <div className="flex justify-center"><Badge className="bg-gradient-to-r from-emerald-400 to-blue-600 text-white bg-clip-padding">10</Badge></div>
   <div className="flex justify-center"><Badge className="bg-gradient-to-r from-blue-600 via-pink-600 to-purple-600  text-white bg-clip-padding rounded-full animate-gradient">30</Badge></div>
