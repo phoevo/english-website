@@ -107,7 +107,6 @@ const sampleConversation = [
   },
 ];
 
-
 export function TestConversation() {
   const [hoverEnabled, setHoverEnabled] = React.useState(true);
   const [wordTypes, setWordTypes] = React.useState<Record<WordTypeKey, WordTypeData>>({
@@ -125,6 +124,16 @@ export function TestConversation() {
     contraction: { color: "purple-500", enabled: false },
   });
 
+  // Disable hover by default on mobile (less than 768px)
+  React.useEffect(() => {
+    const handleResize = () => {
+      setHoverEnabled(window.innerWidth >= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const toggleWordType = (key: WordTypeKey) => {
     setWordTypes((prev) => ({
       ...prev,
@@ -137,21 +146,19 @@ export function TestConversation() {
 
   const renderWord = (word: Word, index: number) => {
     const wordType = wordTypes[word.type];
-     const baseColor = wordType.color;
+    const baseColor = wordType.color;
     const isEnabled = wordType.enabled;
     const hoverColor = hoverEnabled ? `hover:bg-${baseColor}` : "";
     const appliedColor = isEnabled ? `bg-${baseColor}` : "";
-
-
 
     return (
       <HoverCard key={index} openDelay={50} closeDelay={50}>
         <HoverCardTrigger asChild>
           <span
-             className={`text-base rounded transition-colors px-0.5 ${
-                hoverEnabled ? "cursor-pointer" : ""
-              } ${hoverColor} ${appliedColor}`}
-            >
+            className={`text-base rounded transition-colors px-0.5 ${
+              hoverEnabled ? "cursor-pointer" : ""
+            } ${hoverColor} ${appliedColor}`}
+          >
             {word.text}
             {!/[.,!?)]$/.test(word.text) && " "}
           </span>
@@ -161,11 +168,9 @@ export function TestConversation() {
             <div className="flex flex-col space-y-1 items-center">
               <span className="font-bold">{word.type}</span>
               <span>{word.definition}</span>
-              <Link href="/register">
-              <Button className="w-4 h-4 rounded-sm cursor-pointer" variant="outline">
-                <Plus/>
-              </Button>
-              </Link>
+                <Button className="w-8 h-8 rounded-sm cursor-pointer" variant="outline">
+                  <Plus />
+                </Button>
             </div>
           </HoverCardContent>
         )}
@@ -174,45 +179,45 @@ export function TestConversation() {
   };
 
   return (
-    <div className="flex flex-col bg-muted shadow-lg border-1 rounded-lg">
-      <div className="flex flex-row">
-      <div className="m-10 p-6 mt-10 border rounded-xl bg-background shadow-sm">
-         <h2 className="text-xl font-semibold mb-20">Conversation Title</h2>
+    <div className="flex p-1 flex-col lg:flex-row bg-muted shadow-lg border rounded-lg">
+      {/* Conversation section */}
+      <div className="m-5 p-4 mt-5 border rounded-xl bg-background shadow-sm flex-1">
+        <h2 className="text-lg sm:text-xl font-semibold mb-8 sm:mb-20">Conversation Title</h2>
         {sampleConversation.map((line, i) => (
-          <div key={i} className="flex mb-6">
-            <div className="font-semibold pr-6 mr-6 border-r border-gray-300 min-w-[100px] text-right">
+          <div key={i} className="flex mb-6 flex-wrap lg:flex-nowrap">
+            <div className="font-semibold pr-10 lg:pr-4 mr-4 lg:border-r border-gray-300 min-w-[100px] text-right">
               {line.speaker}
             </div>
-            <div className="flex flex-wrap">
-              {line.words.map((word, j) => renderWord(word, j))}
-            </div>
+            <div className="flex flex-wrap">{line.words.map((word, j) => renderWord(word, j))}</div>
           </div>
         ))}
       </div>
-      <div className="p-5 h-full border-l">
+
+      {/* Sidebar controls */}
+      <div className="p-5 border-t lg:border-t-0 lg:border-l w-full lg:w-60">
         <div className="flex flex-col items-center gap-4 bg-background p-4 rounded-lg shadow-md">
           <span className="flex gap-2 items-center">
             <div className="rounded px-2 font-semibold ">Hover</div>
             <Switch checked={hoverEnabled} onCheckedChange={setHoverEnabled} />
           </span>
 
-          <Accordion type="single" collapsible defaultValue="item-1" className="w-full bg-background">
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue="item-1"
+            className="w-full bg-background"
+          >
             <AccordionItem value="item-1">
-              <AccordionTrigger >Word Classes</AccordionTrigger>
+              <AccordionTrigger>Word Classes</AccordionTrigger>
               <AccordionContent>
                 <div className="rounded-md text-sm p-2 flex flex-col gap-2">
-                  <WordTypeSettings
-                    wordTypes={wordTypes}
-                    toggleWordType={toggleWordType}
-
-                  />
+                  <WordTypeSettings wordTypes={wordTypes} toggleWordType={toggleWordType} />
                 </div>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
         </div>
       </div>
-      </div>
     </div>
-   );
+  );
 }

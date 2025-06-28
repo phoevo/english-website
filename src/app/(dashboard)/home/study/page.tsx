@@ -8,7 +8,7 @@ import UserGuidePopover from '../../userGuide'
 
 
 
-function LearnPage() {
+function StudyPage() {
   const {loading} = useUserStore()
 
 
@@ -173,14 +173,14 @@ const wordTypes: Record<WordTypeKey, WordTypeInfo> = {
     <div className='m-10 flex flex-col'>
       <div className='space-y-5'>
        <UserGuidePopover
-      id="learn-page"
-      title="The Learn Page"
+      id="study-page"
+      title="The Study Page"
        description="Discover key word types in English, complete with definitions
       and real-life examples to enhance your language skills."
          side="top"
         align="start"
         >
-      <h1 className='text-3xl font-light'>Learn</h1>
+      <h1 className='text-3xl font-light'>Study</h1>
         </UserGuidePopover>
 
       <p className="text-zinc-500">Everything you need to know about word types can be found here.</p>
@@ -211,4 +211,4 @@ const wordTypes: Record<WordTypeKey, WordTypeInfo> = {
 
 }
 
-export default LearnPage
+export default StudyPage

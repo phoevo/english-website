@@ -108,7 +108,7 @@ function SubscribePage() {
       <Badge className='mb-4'>Free</Badge>
       <div className='flex justify-center'>
       <ul className='text-sm list-disc marker:text-popover-foreground space-y-1 justify-start'>
-        <li>Learn page</li>
+        <li>Study page</li>
         <li>Access to 10 Conversations</li>
         <li>Hover feature</li>
         <li>Dictionary and Word Board</li>

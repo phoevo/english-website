@@ -30,10 +30,11 @@
 
   export function TestDictionary() {
     return (
-      <div className="flex flex-col bg-muted p-6 border-1 shadow-lg rounded-lg w-150">
-        <h2 className="text-xl font-semibold bg-muted">Saved Words</h2>
-        <div className="flex flex-row">
-        <div className="m-10 p-10 w-full border rounded-xl bg-background shadow-md">
+      <div className="flex flex-col bg-muted p-4 border-1 shadow-lg rounded-lg w-150">
+
+        <div className="flex flex-row p-3">
+        <div className="p-2 w-full border rounded-xl bg-background shadow-md">
+          <h2 className="text-xl font-semibold mb-4 p-3">Saved Words</h2>
         {dictionaryWords.length > 0 ? (
           <ScrollArea className="h-100 overflow-y-scroll">
             <div className="grid gap-3">

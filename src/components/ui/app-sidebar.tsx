@@ -1,4 +1,4 @@
-import { BookOpen, BookMarked, ArrowUpRight, GraduationCap, IterationCcw } from "lucide-react"
+import { BookOpen, BookMarked, ArrowUpRight, GraduationCap, IterationCcw, Users, ClipboardCheck } from "lucide-react"
 
 import {
   Sidebar,
@@ -21,8 +21,8 @@ const items = [
     icon: IterationCcw,
   },
   {
-    title: "Learn",
-    url: "/home/learn",
+    title: "Study",
+    url: "/home/study",
     icon: GraduationCap,
   },
   {
@@ -37,6 +37,7 @@ const items = [
   },
 
 
+
 ]
 
 export function AppSidebar() {
@@ -44,7 +45,7 @@ export function AppSidebar() {
     <Sidebar className="w-60 h-auto mb-2 rounded-lg absolute">
       <SidebarContent className="bg-background">
         <SidebarGroup>
-          <SidebarGroupLabel>Sidebar</SidebarGroupLabel>
+          <SidebarGroupLabel>Explore</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -57,6 +58,23 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Classroom</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+
+              <SidebarMenuItem key="Classroom">
+                  <SidebarMenuButton asChild>
+                    <Link href="/home/assignments">
+                      <ClipboardCheck />
+                      <span>Assignments</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

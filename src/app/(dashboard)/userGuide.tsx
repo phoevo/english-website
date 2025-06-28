@@ -13,8 +13,8 @@ const geist = Geist({ subsets: ["latin"] });
 
 type UserGuidePopoverProps = {
   id: string;
-  title: string;
-  description: string;
+  title?: string;
+  description: React.ReactNode;
   children: React.ReactNode;
   side?: "top" | "right" | "bottom" | "left";
   align?: "start" | "center" | "end";

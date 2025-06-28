@@ -53,13 +53,13 @@ const transitionImage = {
 export default function LandingPage() {
   return (
     <ScrollArea className={`flex bg-background flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
-       <nav className="sticky top-0 w-full z-50">
+       <nav className="sticky top-0 w-screen z-50">
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
-        <div className="flex items-center h-18">
-            <h1 className="text-3xl font-normal absolute left-10">Synomilo</h1>
-            <div className={`flex absolute right-10 gap-3 ${geist.className}`}>
-              <Link href={"/register"}> <Button className="cursor-pointer">Sign Up</Button> </Link>
-              <Link href={"/login"}> <Button className="cursor-pointer" variant="secondary">Log in</Button> </Link>
+        <div className="flex items-center h-12 lg:h-18">
+            <h1 className="hidden lg:block text-xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
+            <div className={`flex absolute right-5 lg:right-10 gap-3 ${dmSans.className}`}>
+              <Link href={"/register"}> <Button className="hidden lg:block cursor-pointer">Sign Up</Button> </Link>
+              <Link href={"/login"}> <Button className="hidden lg:block cursor-pointer" variant="secondary">Log in</Button> </Link>
               <ModeToggle />
             </div>
         </div>
@@ -68,7 +68,7 @@ export default function LandingPage() {
 
       <div className="flex flex-col w-screen border-b bg-dots justify-center items-center gap-10">
         <div className="flex flex-col gap-1 items-center">
-          <h1 className="text-8xl bg-background font-normal ">Synomilo</h1>
+          <h1 className="text-5xl lg:text-8xl bg-background font-normal ">Synomilo</h1>
           <div className="flex flex-row text-xl font-normal gap-2" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div>
@@ -76,11 +76,11 @@ export default function LandingPage() {
         </div>
 
         <div className="flex flex-col items-center gap-3">
-        <h2 className="text-5xl font-normal bg-background mt-10"> An English learning platform focused on conversation</h2>
+        <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-background mt-10"> An English learning platform focused on conversation</h2>
         <h2 className="text-4xl font-semibold bg-background mt-10"/>
 
-        <div className="flex flex-col max-w-4xl h-auto mb-20 bg-accent border-1 rounded-4xl justify-start items-center p-15 space-y-6 shadow-md">
-          <p className={`text-xl leading-relaxed bg-accent ${dmSans.className}`}>Our goal is to help English learners start having
+        <div className="flex flex-col max-w-4xl h-auto mb-20 lg:mb-20 bg-accent border-1 rounded-4xl justify-start items-center p-10 lg:p-15 space-y-6 shadow-md">
+          <p className={`text-md lg:text-xl leading-relaxed bg-accent ${dmSans.className}`}>Our goal is to help English learners start having
             meaningful conversations faster by using methods inspired by Assimil — a trusted language learning approach that emphasizes
              learning through natural, everyday dialogues. This helps keep students engaged and confident by practicing conversations that
               reflect real-life situations.
@@ -110,7 +110,7 @@ export default function LandingPage() {
       </motion.div>
 
       <motion.div
-      className="z-20 sticky top-42 self-start m-4 mb-33 text-3xl font-semibold"
+      className="z-20 sticky top-30 lg:top-42 self-start m-2 lg:m-4 lg:mb-33 text-md lg:text-3xl font-semibold"
       initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-200px"}}
@@ -130,13 +130,13 @@ export default function LandingPage() {
           viewport={{ once: true, margin: "-50px" }}
           transition={transition2}
         >
-          <div className="flex flex-row justify-end mr-12 gap-10">
+          <div className="flex flex-col lg:flex-row justify-end lg:mr-12 gap-10">
           <TestConversation />
           <p className="self-center w-40 text-2xl m-0 font-semibold"> <ArrowLeft size={40} className="text-pink-500"/>Highlight words types for easy reading</p>
           </div>
         </motion.div>
 
-        <div className="z-20 sticky top-52 self-start m-4 mb-23  text-3xl font-semibold">
+        <div className="z-20 sticky top-30 left-43 text lg:left-0 lg:top-52 self-start m-4 mb-23  lg:text-3xl font-semibold">
         <span className="px-1 text-pink-500 text">
           2.
         </span>
@@ -158,12 +158,12 @@ export default function LandingPage() {
         </motion.div>
 
 
-        <div className="z-20 sticky top-62 self-start m-4 text-3xl font-semibold">
+        <div className="z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-62 self-start m-4 lg:text-3xl font-semibold">
         <span className="px-1 text-pink-500">
           3.
         </span>
         <span>An assortment</span>
-        <p className="pl-8">of tools/features</p>
+        <p className="pl-2 lg:pl-8">of tools/features</p>
         </div>
 
 

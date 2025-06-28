@@ -45,7 +45,7 @@ const newsItems = [
     date: "June 11, 2025",
     content: (
       <div className="flex space-x-1">
-        <Link href="home/learn" className="underline">Learn</Link>
+        <Link href="home/learn" className="underline">Study</Link>
         <span>Page re-design</span>
       </div>
     )
