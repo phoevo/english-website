@@ -1,9 +1,14 @@
 'use client'
 
-import React from 'react'
-import { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { toast } from 'sonner'
 import { account, databases, databaseId, usersCollectionId } from '@/data/appwrite'
-import { Button } from "@/components/ui/button"
+import { useUserStore } from '@/data/useUserStore'
+
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -11,43 +16,22 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { CreditCardIcon, Loader2 } from "lucide-react"
-import { Geist } from "next/font/google"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
-import { Toaster } from "@/components/ui/sonner"
-import { toast } from "sonner"
-import { unsubscribeUser } from '@/data/getData'
-import Link from 'next/link'
+import { Switch } from '@/components/ui/switch'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { CreditCardIcon, Link, Loader2 } from 'lucide-react'
+import { Toaster } from '@/components/ui/sonner'
+import { Label } from '@/components/ui/label'
 import CustomColors from './CustomColors'
+import { AlertDialogHeader, AlertDialogFooter, AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogDescription, AlertDialogTitle, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { unsubscribeUser } from '@/data/getData'
+import { Geist } from 'next/font/google'
 
+const geist = Geist({ subsets: ['latin'] });
 
-
-
-const geist = Geist({ subsets: ['latin'] })
 
 const Spinner = () => (
   <div className="flex flex-col gap-10 justify-center items-center py-10">
@@ -55,127 +39,125 @@ const Spinner = () => (
   </div>
 )
 
+const accountFormSchema = z.object({
+  username: z.string().min(2, { message: 'Username is too short. Requires at least 2 characters' }),
+  currentPassword: z.string().optional(),
+  newPassword: z.string().optional(),
+  isTeacher: z.boolean().optional(),
+}).refine(
+  (data) => !data.newPassword || (data.newPassword && data.currentPassword),
+  {
+    message: 'Current password is required to change password',
+    path: ['currentPassword'],
+  }
+);
 
 export default function ProfileLayout() {
-  const [user, setUser] = useState<any>(null)
-  const [isCheckingUser, setIsCheckingUser] = useState(true)
-  const [username, setUsername] = useState('')
-  const [formError, setFormError] = useState<string | null>(null)
-  const [isSaving, setIsSaving] = useState(false)
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const { user, isTeacher, fetchUser, setSubscribed, isSubscribed, setUser, setIsTeacher } = useUserStore();
 
-
-
-
-  const accountFormSchema = z.object({
-    username: z.string().min(2, { message: 'Username is too short. Requires at least 2 characters' }),
-    currentPassword: z.string().optional(),
-    newPassword: z.string().optional(),
-  }).refine(
-    (data) =>
-      !data.newPassword || (data.newPassword && data.currentPassword),
-    {
-      message: 'Current password is required to change password',
-      path: ['currentPassword'],
-    }
-  )
+  const [isCheckingUser, setIsCheckingUser] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const accountForm = useForm<z.infer<typeof accountFormSchema>>({
     resolver: zodResolver(accountFormSchema),
     defaultValues: {
-      username: '',
+      username: user?.name ?? '',
       currentPassword: '',
       newPassword: '',
+      isTeacher: isTeacher ?? false,
     },
-  })
+  });
 
+  useEffect(() => {
+    if (user) {
+      accountForm.reset({
+        username: user.name,
+        currentPassword: '',
+        newPassword: '',
+        isTeacher: isTeacher ?? false,
+      });
+    }
+  }, [user, isTeacher]);
 
+  useEffect(() => {
+    async function loadUser() {
+      setIsCheckingUser(true);
+      try {
+        await fetchUser();
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      } finally {
+        setIsCheckingUser(false);
+      }
+    }
+    loadUser();
+  }, [fetchUser]);
 
   const onAccountSubmit = async (values: z.infer<typeof accountFormSchema>) => {
-    setFormError(null)
-    setIsSaving(true)
+    setFormError(null);
+    setIsSaving(true);
 
     try {
       if (
         values.username === user?.name &&
-        !values.newPassword
+        !values.newPassword &&
+        values.isTeacher === isTeacher
       ) {
         toast('No changes detected', {
-          description: 'Please update your username or password before saving.',
-        })
-        setIsSaving(false)
-        return
+          description: 'Please update your username, role, or password before saving.',
+        });
+        setIsSaving(false);
+        return;
       }
 
       if (values.username !== user?.name) {
-        await account.updateName(values.username)
+        await account.updateName(values.username);
         toast('Username updated', {
           description: `Your username is now ${values.username}`,
-        })
+        });
       }
 
       if (values.newPassword) {
-        await account.updatePassword(values.newPassword, values.currentPassword)
+        await account.updatePassword(values.newPassword, values.currentPassword);
         toast('Password updated', {
           description: 'Your password has been changed successfully.',
-        })
-        accountForm.resetField('currentPassword')
-        accountForm.resetField('newPassword')
+        });
+        accountForm.resetField('currentPassword');
+        accountForm.resetField('newPassword');
       }
 
-      const updatedUser = await account.get()
-      setUser(updatedUser)
+      if (values.isTeacher !== isTeacher) {
+        if (!user) throw new Error('User not found');
+        await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
+          isTeacher: values.isTeacher,
+        });
+        setIsTeacher(values.isTeacher);
+        toast('Role updated', {
+          description: values.isTeacher ? 'You are now marked as a Teacher.' : 'Teacher role removed.',
+        });
+      }
 
+      const updatedUser = await account.get();
+      setUser({
+        $id: updatedUser.$id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isTeacher: values.isTeacher ?? false,
+      });
 
     } catch (err: any) {
-      console.error('Update error:', err)
-      setFormError(err?.message || 'Failed to update profile.')
+      console.error('Update error:', err);
+      setFormError(err?.message || 'Failed to update profile.');
       toast('Error', {
         description: err?.message || 'Failed to update profile.',
-      })
+      });
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
-  }
+  };
 
-
-
-
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const currentUser = await account.get()
-        setUser(currentUser)
-        setUsername(currentUser.name)
-        accountForm.setValue('username', currentUser.name)
-        accountForm.setValue("newPassword", "")
-        accountForm.setValue("currentPassword", "")
-      } catch {
-        setUser(null)
-      } finally {
-        setIsCheckingUser(false)
-      }
-    }
-
-    checkUser()
-  }, [])
-
-
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const user = await account.get();
-      setUser(user);
-
-      const doc = await databases.getDocument(databaseId, usersCollectionId, user.$id);
-      setIsSubscribed(doc.isSubscribed);
-    };
-
-    fetchUser();
-  }, []);
-
-
-  const handleUnsubscribe = async () => {
+   const handleUnsubscribe = async () => {
     if (!user) {
       console.log('No user found, exiting unsubscribe.');
       return; // If no user exists, we stop.
@@ -189,7 +171,7 @@ export default function ProfileLayout() {
       console.log('Unsubscribe response:', unsubscribeResponse);
 
       // Update subscription state
-      setIsSubscribed(false);
+      setSubscribed(false);
       console.log('Updated subscription state to false');
 
       // Trigger success toast
@@ -210,9 +192,9 @@ export default function ProfileLayout() {
 
 console.log(isSubscribed);
 
-
   return (
-    <main className={`flex justify-center items-center h-auto pt-5 ${geist.className}`}>
+    <main className="flex justify-center items-center h-auto pt-5">
+      <Toaster />
       <Tabs defaultValue="account" className="w-full max-w-md md:max-w-xl">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="account">Account</TabsTrigger>
@@ -221,97 +203,111 @@ console.log(isSubscribed);
         </TabsList>
 
         <TabsContent value="account">
-        <div>
-      <Toaster />
-    </div>
-  <Card className="bg-background">
-    {isCheckingUser ? (
-      <Spinner />
-    ) : user ? (
-      <>
+          <Card className="bg-background">
+            {isCheckingUser ? (
+              <Spinner />
+            ) : user ? (
+              <>
+                <CardHeader>
+                  <CardTitle>Account</CardTitle>
+                  <CardDescription>
+                    Make changes to your account here. Click save when you&apos;re done.
+                  </CardDescription>
+                </CardHeader>
 
-        <CardHeader>
-          <CardTitle>Account</CardTitle>
-          <CardDescription>
-            Make changes to your account here. Click save when you&apos;re done.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...accountForm}>
-            <form
-              onSubmit={accountForm.handleSubmit(onAccountSubmit)}
-              className="space-y-6"
-            >
-              {formError && (
-                <div className="text-sm text-red-500 bg-red-100 p-2 rounded-md">
-                  {formError}
-                </div>
-              )}
+                <CardContent>
+                  <Form {...accountForm}>
+                    <form onSubmit={accountForm.handleSubmit(onAccountSubmit)} className="space-y-6">
+                      {formError && (
+                        <div className="text-sm text-red-500 bg-red-100 p-2 rounded-md">
+                          {formError}
+                        </div>
+                      )}
 
-              <FormField
-                control={accountForm.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>New Username</FormLabel>
-                    <FormControl>
-                      <Input placeholder="yourname"{...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={accountForm.control}
-                name="currentPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Current Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter current password (optional)"
-                        {...field}
+                      <FormField
+                        control={accountForm.control}
+                        name="username"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>New Username</FormLabel>
+                            <FormControl>
+                              <Input placeholder="yourname" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
-              <FormField
-                control={accountForm.control}
-                name="newPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>New Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="New password (optional)"
-                        {...field}
+                      <FormField
+                        control={accountForm.control}
+                        name="currentPassword"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Current Password</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="password"
+                                placeholder="Enter current password (optional)"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
-              <Button type="submit" disabled={isSaving} className='cursor-pointer'>
-                {isSaving ? 'Saving...' : 'Save changes'}
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </>
-    ) : (
-      <p className="text-md text-center py-6">
-        Create an account or log in to access your account.
-      </p>
-    )}
-  </Card>
-</TabsContent>
+                      <FormField
+                        control={accountForm.control}
+                        name="newPassword"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>New Password</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="password"
+                                placeholder="New password (optional)"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={accountForm.control}
+                        name="isTeacher"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col ">
+                            <FormLabel>I am a Teacher</FormLabel>
+                            <p className="text-zinc-500 text-xs italic">
+                              If you don't use the Assignments page, you can safely ignore this
+                            </p>
+                            <FormControl>
+                              <Switch checked={field.value} onCheckedChange={field.onChange} />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+
+                      <Button type="submit" disabled={isSaving} className="cursor-pointer">
+                        {isSaving ? 'Saving...' : 'Save changes'}
+                      </Button>
+                    </form>
+                  </Form>
+                </CardContent>
+              </>
+            ) : (
+              <p className="text-md text-center py-6">
+                Create an account or log in to access your account.
+              </p>
+            )}
+          </Card>
+        </TabsContent>
+
+
+
+
 
 
 

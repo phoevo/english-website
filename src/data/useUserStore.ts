@@ -11,6 +11,7 @@ interface User {
   $id: string;
   name: string;
   email: string;
+  isTeacher: boolean;
 }
 
 interface Conversation {
@@ -29,8 +30,9 @@ interface UserState {
   customColors: string[];
   challengeCount: string[];
   taskCount: number;
-  lastActive: string | null; // ISO string
+  lastActive: string | null;
   streak: number;
+
   fetchUser: () => Promise<void>;
   setConversationComplete: (id: string) => Promise<void>;
   setSubscribed: (val: boolean) => void;
@@ -43,7 +45,10 @@ interface UserState {
   incrementTaskCount: () => Promise<void>;
   setLastActive: (iso: string) => void;
   setStreak: (val: number) => void;
-
+  getIsTeacher: () => boolean;
+  isTeacher: boolean;
+  setUser: (user: User) => void;
+  setIsTeacher: (val: boolean) => void;
 }
 
 export const useUserStore = create<UserState>((set, get) => ({
@@ -58,6 +63,7 @@ export const useUserStore = create<UserState>((set, get) => ({
   taskCount: 0,
   lastActive: null,
   streak: 0,
+  isTeacher: false,
 
   fetchUser: async () => {
     set({ loading: true });
@@ -77,11 +83,11 @@ export const useUserStore = create<UserState>((set, get) => ({
       const customColors = userDoc?.customColors || [];
       const challengeCount: string[] = userDoc?.challengeCount || [];
       const taskCount: number = typeof userDoc?.taskCount === "number" ? userDoc.taskCount : 0;
-        const lastActive = userDoc?.lastActive ?? null;
-    const streak = typeof userDoc?.streak === "number" ? userDoc.streak : 0;
-
+      const lastActive = userDoc?.lastActive ?? null;
+      const streak = typeof userDoc?.streak === "number" ? userDoc.streak : 0;
       const conversations: Conversation[] = [];
       const validConversationIds: string[] = [];
+      const isTeacher = !!userDoc?.isTeacher;
 
       for (const id of conversationIds) {
         try {
@@ -106,7 +112,13 @@ export const useUserStore = create<UserState>((set, get) => ({
       }
 
       set({
-        user: res,
+        user: {
+          $id: res.$id,
+          name: res.name,
+          email: res.email,
+          isTeacher,
+        },
+        isTeacher,
         isSubscribed,
         recentConversations: conversations,
         completeConversations,
@@ -121,6 +133,7 @@ export const useUserStore = create<UserState>((set, get) => ({
       console.error("Failed to fetch user or conversations:", error);
       set({
         user: null,
+        isTeacher: false,
         isSubscribed: false,
         recentConversations: [],
         completeConversations: [],
@@ -184,8 +197,7 @@ export const useUserStore = create<UserState>((set, get) => ({
   setCustomColors: (colors) => set({ customColors: colors }),
   setChallengeCount: (count) => set({ challengeCount: count }),
   setLastActive: (iso: string) => set({ lastActive: iso }),
-  setStreak: (val: number)    => set({ streak: val }),
-
+  setStreak: (val: number) => set({ streak: val }),
 
   incrementChallengeCount: async (challenge: string) => {
     const { user, challengeCount } = get();
@@ -235,4 +247,16 @@ export const useUserStore = create<UserState>((set, get) => ({
       console.error("Failed to increment task count:", err);
     }
   },
+
+  setUser: (user) => set({
+    user,
+    isTeacher: user.isTeacher,
+  }),
+
+  setIsTeacher: (val) => set((state) => ({
+    isTeacher: val,
+    user: state.user ? { ...state.user, isTeacher: val } : null,
+  })),
+
+  getIsTeacher: () => get().isTeacher,
 }));

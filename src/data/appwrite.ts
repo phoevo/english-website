@@ -1,4 +1,4 @@
-import { Client, Databases, Account, Storage } from 'appwrite'
+import { Client, Databases, Account, Storage, Query } from 'appwrite'
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
@@ -37,4 +37,23 @@ export const getConversationFromDB = async (documentId: string) => {
 
 export const getAudioFileUrl = (fileId: string) => {
   return storage.getFileView(audioBucketId, fileId);
+};
+
+export const searchUsers = async (searchText: string) => {
+  try {
+    const res = await databases.listDocuments(
+      databaseId,
+      usersCollectionId,
+      [
+        Query.or([
+          Query.search("name", searchText),
+          Query.search("email", searchText)
+        ])
+      ]
+    );
+    return res.documents;
+  } catch (error) {
+    console.error("Error searching users:", error);
+    return [];
+  }
 };
