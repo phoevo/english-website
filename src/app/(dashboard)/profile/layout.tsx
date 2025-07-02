@@ -160,21 +160,19 @@ export default function ProfileLayout() {
    const handleUnsubscribe = async () => {
     if (!user) {
       console.log('No user found, exiting unsubscribe.');
-      return; // If no user exists, we stop.
+      return;
     }
 
     console.log('Attempting to unsubscribe user with ID:', user.$id);
 
     try {
-      // Call the unsubscribe function
       const unsubscribeResponse = await unsubscribeUser(user.$id);
       console.log('Unsubscribe response:', unsubscribeResponse);
 
-      // Update subscription state
+
       setSubscribed(false);
       console.log('Updated subscription state to false');
 
-      // Trigger success toast
       toast.success('You have successfully unsubscribed!', {
         description: 'You will no longer have access to premium content.',
       });
@@ -182,7 +180,6 @@ export default function ProfileLayout() {
     } catch (error) {
       console.error('Unsubscription failed:', error);
 
-      // Show error toast in case of failure
       toast.error('Unsubscription failed. Please try again later.', {
         description: 'We encountered an error while processing your request.',
       });
@@ -281,7 +278,7 @@ console.log(isSubscribed);
                           <FormItem className="flex flex-col ">
                             <FormLabel>I am a Teacher</FormLabel>
                             <p className="text-zinc-500 text-xs italic">
-                              If you don't use the Assignments page, you can safely ignore this
+                              If you don&apos;t use the Assignments page, you can safely ignore this
                             </p>
                             <FormControl>
                               <Switch checked={field.value} onCheckedChange={field.onChange} />

@@ -15,7 +15,7 @@ function StudentPage() {
        <Card className='bg-background'>
         <CardHeader>
           <CardTitle>My Assigned Tasks</CardTitle>
-          <CardDescription>Your assigned tasks</CardDescription>
+          <CardDescription>Your tasks assigned by your teacher</CardDescription>
         </CardHeader>
         <CardContent>
           <p>Card Content</p>
@@ -25,15 +25,7 @@ function StudentPage() {
         </CardFooter>
       </Card>
 
-      <Card className='bg-background'>
-        <CardHeader>
-          <CardTitle>My Teachers</CardTitle>
-          <CardDescription></CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Card Content</p>
-        </CardContent>
-      </Card>
+
 
 
     </div>
