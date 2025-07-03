@@ -6,6 +6,7 @@ const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID
 const CONVERSATIONS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_CONVERSATIONS_COLLECTION_ID!;
 const DECKS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_DECKS_COLLECTION_ID!;
 const AUDIO_BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_AUDIO_BUCKET_ID!;
+const FRIEND_REQUESTS_ID = process.env.NEXT_PUBLIC_APPWRITE_FRIEND_REQUESTS_ID!;
 
 // Initialize the Appwrite client
 const client = new Client()
@@ -23,6 +24,7 @@ export const conversationsCollectionId = CONVERSATIONS_COLLECTION_ID
 export const usersCollectionId = USERS_COLLECTION_ID
 export const decksCollectionId = DECKS_COLLECTION_ID
 export const audioBucketId = AUDIO_BUCKET_ID
+export const friendRequestsId = FRIEND_REQUESTS_ID
 
 
 export const getConversationFromDB = async (documentId: string) => {
@@ -57,3 +59,13 @@ export const searchUsers = async (searchText: string) => {
     return [];
   }
 };
+
+export async function getUserById(userId: string) {
+  try {
+    const res = await databases.getDocument(databaseId, usersCollectionId, userId);
+    return res;
+  } catch (error) {
+    console.error("Failed to fetch user by ID:", error);
+    throw error;
+  }
+}

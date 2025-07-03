@@ -52,6 +52,7 @@ function SubscribePage() {
 };
 
 
+
   const paidOptions = [
     {
       title: "Monthly",
@@ -85,6 +86,34 @@ function SubscribePage() {
        ]
       }
     ]
+
+  const earlyPaidOptions = [
+  {
+    title: "Supporter Monthly",
+    price: "3.99",
+    stripePriceId: "price_early_monthly_399",
+    info: "Lower pricing during rollout",
+    desc: [
+      "Locked-in rate as long as you're subscribed.",
+      "Full access to all Pro features.",
+      "Thank you for being part of the early community.",
+    ],
+    note: "Available during early access",
+  },
+  {
+    title: "Supporter Lifetime",
+    price: "89.99",
+    stripePriceId: "price_early_lifetime_8999",
+    info: "One payment, lifetime access",
+    desc: [
+      "Locked-in rate, as long as your're subscribed.",
+      "Full acces to all Pro features. Forever.",
+      "No subscriptions, no renewals.",
+      "Supports continued development.",
+    ],
+    note: "Limited-time early access pricing",
+  },
+];
 
 
 
@@ -157,7 +186,7 @@ function SubscribePage() {
 
     <Dialog>
   <DialogTrigger asChild>
-    <Button variant={"secondary"} className="cursor-pointer" onClick={handleOptions}>
+    <Button variant={"secondary"} className="cursor-pointer" >
       {isSubscribed ? "Already subscribed. Change plan?" : "Explore Pro Options"}
     </Button>
   </DialogTrigger>
@@ -167,18 +196,23 @@ function SubscribePage() {
       <DialogHeader>
   <DialogTitle className='text-2xl'>Explore Pro Options</DialogTitle>
   <DialogDescription>
-    Choose the plan that works for you.
-  </DialogDescription>
+  These plans are part of our early access period and will increase as we continue building and improving Synomilo. Your rate is locked in and won’t change, even after future pricing updates.
+</DialogDescription>
+<DialogDescription>
+  Thank you for supporting our work and being part of the early supporters.
+</DialogDescription>
+
+
 
   <div className="flex flex-row justify-center items-center gap-2 mt-4">
-    {paidOptions.map((option, index) => (
+    {earlyPaidOptions.map((option, index) => (
       <div
         key={index}
-        className="flex flex-col justify-between items-center p-2 border-2 rounded-md w-1/3 h-80"
+        className="flex flex-col justify-between items-center p-2 border-1 rounded-md w-1/3 h-80 shadow-md"
       >
         <div className="flex flex-col items-center flex-grow">
           <Badge className="mb-2 bg-pink-500 text-white">{option.title} - ${option.price}</Badge>
-          <div className='mb-5'>{option.info}</div>
+          <div className='mb-5 text-sm font-semibold'>{option.info}</div>
           <ul className="text-sm list-disc marker:text-pink-500 space-y-1 text-left px-4 text-zinc-500 mb-2">
           {option.desc.map((item, i) => (
             <li key={i}>{item}</li>

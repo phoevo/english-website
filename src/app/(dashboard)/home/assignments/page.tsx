@@ -1,9 +1,8 @@
 "use client";
-import React, { useState } from "react";
-import { searchUsers } from "@/data/appwrite";
+import React, { useEffect, useState } from "react";
+import { searchUsers, getUserById } from "@/data/appwrite";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUserStore } from "@/data/useUserStore";
 import Link from "next/link";
@@ -11,14 +10,19 @@ import UserGuidePopover from "../../userGuide";
 import { ArrowRight, Plus } from "lucide-react";
 import StudentPage from "./StudentPage";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
 import { Geist } from "next/font/google";
-import { motion } from "motion/react";
+import { motion} from "motion/react";
+import { toast } from "sonner";
+import { fetchPendingRequests, hasPendingRequest, sendFriendRequest, updateRequestStatus } from "@/data/friendRequests";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+
 
 
 const geist = Geist({ subsets: ['latin'] });
@@ -29,14 +33,56 @@ function AssignmentsPage() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  const [pendingRequests, setPendingRequests] = useState<
+  { id: string; fromUserId: string; senderName: string }[]
+>([]);
+
+
 
   const handleSearch = async () => {
-    setSearchLoading(true);
-    const results = await searchUsers(searchQuery);
-    setSearchResults(results);
-    setSearchLoading(false);
-    setSearched(true);
+  setSearchLoading(true);
+  const results = await searchUsers(searchQuery);
+  const filteredResults = results.filter((u) => u.$id !== user?.$id);
+  setSearchResults(filteredResults);
+  setSearchLoading(false);
+  setSearched(true);
+};
+
+useEffect(() => {
+    async function loadRequests() {
+      try {
+        const requests = await fetchPendingRequests(user.$id);
+
+        const withNames = await Promise.all(
+          requests.map(async (req) => {
+            const sender = await getUserById(req.fromUserId);
+            return {
+              id: req.$id,
+              fromUserId: req.fromUserId,
+              senderName: sender.name || sender.email || "Unknown",
+            };
+          })
+        );
+
+        setPendingRequests(withNames);
+      } catch (error) {
+        console.error("Error loading pending requests:", error);
+      }
+    }
+
+    loadRequests();
+  }, [user]);
+
+  const handleAccept = async (requestId: string) => {
+    await updateRequestStatus(requestId, "accepted");
+    setPendingRequests((prev) => prev.filter((r) => r.id !== requestId));
   };
+
+  const handleDecline = async (requestId: string) => {
+    await updateRequestStatus(requestId, "declined");
+    setPendingRequests((prev) => prev.filter((r) => r.id !== requestId));
+  };
+
 
   if (loading) {
     return (
@@ -82,11 +128,16 @@ return (
         <p className="text-zinc-500">A shared workspace for Students and Teachers.</p>
         </div>
 
-      <div>
-        <div className="relative flex flex-col space-y-4 w-full max-w-md">
-  <Label htmlFor="search">
-    Search our database for your student or teacher. Username or email
-  </Label>
+
+    </div>
+
+    <div className="grid grid-cols-2 gap-6 mt-10 w-full">
+
+      <StudentPage />
+
+      <Card className="bg-background p-5">
+
+  <div className="relative flex flex-col space-y-4 w-full">
 
   <Popover open={searchLoading || searchResults.length > 0 || searched}>
     <PopoverTrigger asChild>
@@ -107,7 +158,7 @@ return (
       </div>
     </PopoverTrigger>
 
-    <PopoverContent align="start" className={`w-90 p-2 space-y-2 bg-background ${geist.className}`}>
+    <PopoverContent align="start" side="bottom" className={`w-100 h-max-100 p-2 space-y-2 bg-background ${geist.className}`}>
        <Button
       variant="outline"
       className="text-sm p-2 h-5 cursor-pointer"
@@ -129,7 +180,7 @@ return (
           {searchResults.map((u) => (
             <div
               key={u.$id}
-              className="p-2 border rounded-md bg-muted"
+              className="p-2 rounded-md border-1"
             >
               <div className="flex flex-row items-center justify-between">
                 <div className="flex flex-col">
@@ -137,27 +188,54 @@ return (
                   <span className="font-medium">{u.name || "N/A"}</span>
                   <Badge
                   className="text-xs h-5"
-                  variant="default">
+                  variant={u.isTeacher ? "default" : "secondary"}>
                     {u.isTeacher ? "Teacher" : "Student"}
                   </Badge>
               </div>
               <p className="text-sm text-muted-foreground">{u.email}</p>
               </div>
 
-              <Button
-                  variant="secondary"
-                  size="icon"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                  }}
-                  className="cursor-pointer h-5 w-5 self-center bg-green-500 hover:bg-green-500"
-                >
-                  <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
-                    <Plus className="h-4 w-4" />
-                  </motion.div>
-                </Button>
+             <Button
+              variant="secondary"
+              size="icon"
+              onClick={async (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                if (!user) {
+                  toast.error("You must be logged in to send a friend request.");
+                  return;
+                }
+
+                if (user.$id === u.$id) {
+                  toast.warning("You can't send a friend request to yourself.");
+                  return;
+                }
+
+                try {
+                  const alreadySent = await hasPendingRequest(user.$id, u.$id);
+                  if (alreadySent) {
+                    toast.info("You've already sent a friend request to this user.");
+                    return;
+                  }
+
+                  await sendFriendRequest(user.$id, u.$id);
+                  toast.success(`Friend request sent to ${u.name || u.email}`);
+                } catch (error) {
+                  toast.error("Failed to send friend request. Please try again.");
+                  console.error("Friend request error:", error);
+                }
+              }}
+              className="cursor-pointer h-5 w-5 self-center bg-green-500 hover:bg-green-600 shadow-md"
+            >
+              <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
+                <Plus className="h-4 w-4" />
+              </motion.div>
+            </Button>
+
+
             </div>
+
             </div>
 
 
@@ -166,32 +244,68 @@ return (
       )}
     </PopoverContent>
   </Popover>
+
+
+
+
+
+
+
+  <div className="">
+      <Tabs defaultValue="friends" className="w-full">
+  <TabsList className="w-full">
+    <TabsTrigger value="friends">Friends</TabsTrigger>
+    <TabsTrigger value="requests">Requests</TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="friends" className="">
+    <Card className="bg-background">
+  <CardContent>
+    <p>Card Content</p>
+  </CardContent>
+</Card>
+
+  </TabsContent>
+
+
+  <TabsContent value="requests">
+  <Card className="bg-background p-4">
+    {pendingRequests.length === 0 ? (
+      <p>No pending friend requests.</p>
+    ) : (
+      <ul className="space-y-3 max-h-64 overflow-y-auto">
+        {pendingRequests.map((request) => (
+          <li key={request.id} className="flex justify-between items-center border p-2 rounded">
+            <div>
+              <span className="font-medium">{request.senderName}</span> wants to be your friend.
+            </div>
+            <div className="flex gap-2">
+              <Button
+                variant="default"
+                onClick={() => handleAccept(request.id)}
+              >
+                Accept
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleDecline(request.id)}
+              >
+                Decline
+              </Button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
+  </Card>
+</TabsContent>
+
+</Tabs>
+  </div>
 </div>
 
-      </div>
-
-    </div>
-
-    <div className="grid grid-cols-2 gap-6 mt-10 w-full">
-
-      <StudentPage />
-
-
-<Card className='bg-background p-2'>
-
-
-
-
-        <CardHeader>
-          <CardTitle>My Teachers</CardTitle>
-          <CardDescription></CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Card Content</p>
-        </CardContent>
-
-
       </Card>
+
 
 
 

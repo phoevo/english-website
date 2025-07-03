@@ -44,13 +44,13 @@ function Page() {
              id="home-page-main"
              title="The Home Page"
              description="This is the main page where you can find a recap of your previous conversation and
-             vocabulary as well as daily challenges."
+             vocabulary, as well as News and Updates. "
              side="top"
              align="start"
             >
               {user ? (
-                 <h1 className="text-3xl font-normal">Welcome back, {user.name}</h1>
-              ): <h1 className="text-3xl font-normal">Welcome, New User</h1>}
+                 <h1 className="text-3xl font-light">Welcome back, {user.name}</h1>
+              ): <h1 className="text-3xl font-light">Welcome, New User</h1>}
 
             </UserGuidePopover>
 

@@ -162,8 +162,7 @@ export default function LandingPage() {
         <span className="px-1 text-pink-500">
           3.
         </span>
-        <span>An assortment</span>
-        <p className="pl-2 lg:pl-8">of tools/features</p>
+        Tools & Features
         </div>
 
 
