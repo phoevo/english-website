@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useUserStore } from "@/data/useUserStore";
 import Link from "next/link";
 import UserGuidePopover from "../../userGuide";
-import { ArrowRight, Plus } from "lucide-react";
+import { ArrowRight, CheckCircle, Plus } from "lucide-react";
 import StudentPage from "./StudentPage";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,7 +19,7 @@ import {
 import { Geist } from "next/font/google";
 import { motion} from "motion/react";
 import { toast } from "sonner";
-import { fetchPendingRequests, hasPendingRequest, sendFriendRequest, updateRequestStatus } from "@/data/friendRequests";
+import { fetchPendingRequests, hasPendingRequest, sendFriendRequest, updateRequestStatus, addFriend } from "@/data/friendRequests";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 
@@ -36,7 +36,7 @@ function AssignmentsPage() {
   const [pendingRequests, setPendingRequests] = useState<
   { id: string; fromUserId: string; senderName: string }[]
 >([]);
-
+const [friends, setFriends] = useState<any[]>([]);
 
 
   const handleSearch = async () => {
@@ -49,34 +49,77 @@ function AssignmentsPage() {
 };
 
 useEffect(() => {
-    async function loadRequests() {
-      try {
-        const requests = await fetchPendingRequests(user.$id);
+  async function loadFriends() {
+    if (!user?.friendsList || !Array.isArray(user.friendsList)) return;
 
-        const withNames = await Promise.all(
-          requests.map(async (req) => {
-            const sender = await getUserById(req.fromUserId);
-            return {
-              id: req.$id,
-              fromUserId: req.fromUserId,
-              senderName: sender.name || sender.email || "Unknown",
-            };
-          })
-        );
+    try {
+      const data = await Promise.all(
+        user.friendsList.map(async (friendId: string) => {
+          try {
+            return await getUserById(friendId);
+          } catch (err) {
+            console.error(`Failed to fetch user ${friendId}:`, err);
+            return null;
+          }
+        })
+      );
 
-        setPendingRequests(withNames);
-      } catch (error) {
-        console.error("Error loading pending requests:", error);
-      }
+      setFriends(data.filter(Boolean));
+    } catch (err) {
+      console.error("Error loading friends:", err);
     }
+  }
 
-    loadRequests();
-  }, [user]);
+  loadFriends();
+}, [user]);
 
-  const handleAccept = async (requestId: string) => {
+
+
+useEffect(() => {
+  async function loadRequests() {
+    try {
+      if (!user) return;
+
+      const requests = await fetchPendingRequests(user.$id);
+
+      const withNames = await Promise.all(
+        requests.map(async (req) => {
+          const sender = await getUserById(req.fromUserId);
+          return {
+            id: req.$id,
+            fromUserId: req.fromUserId,
+            senderName: sender.name || sender.email || "Unknown",
+          };
+        })
+      );
+
+      setPendingRequests(withNames);
+    } catch (error) {
+      console.error("Error loading pending requests:", error);
+    }
+  }
+
+  loadRequests();
+}, [user]);
+
+
+  const handleAccept = async (requestId: string, fromUserId: string) => {
+  try {
+    if (!user) return;
+
     await updateRequestStatus(requestId, "accepted");
+
+    await addFriend(user.$id, fromUserId);
+    await addFriend(fromUserId, user.$id);
+
     setPendingRequests((prev) => prev.filter((r) => r.id !== requestId));
-  };
+
+    toast.success("Friend request accepted!");
+  } catch (error) {
+    console.error("Error accepting friend request:", error);
+    toast.error("Something went wrong. Please try again.");
+  }
+};
 
   const handleDecline = async (requestId: string) => {
     await updateRequestStatus(requestId, "declined");
@@ -198,6 +241,12 @@ return (
              <Button
               variant="secondary"
               size="icon"
+              disabled={user.friendsList?.includes(u.$id)}
+              className={`cursor-pointer h-5 w-5 self-center shadow-md ${
+                user.friendsList?.includes(u.$id)
+                  ? "bg-muted text-muted-foreground"
+                  : "bg-green-500 hover:bg-green-600"
+              }`}
               onClick={async (e) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -209,6 +258,11 @@ return (
 
                 if (user.$id === u.$id) {
                   toast.warning("You can't send a friend request to yourself.");
+                  return;
+                }
+
+                if (user.friendsList?.includes(u.$id)) {
+                  toast.info("You're already friends.");
                   return;
                 }
 
@@ -226,12 +280,18 @@ return (
                   console.error("Friend request error:", error);
                 }
               }}
-              className="cursor-pointer h-5 w-5 self-center bg-green-500 hover:bg-green-600 shadow-md"
             >
-              <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
-                <Plus className="h-4 w-4" />
-              </motion.div>
+              {user.friendsList?.includes(u.$id) ? (
+                <motion.div animate={{ scale: 1 }} >
+                  <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                </motion.div>
+              ) : (
+                <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
+                  <Plus className="h-4 w-4" />
+                </motion.div>
+              )}
             </Button>
+
 
 
             </div>
@@ -261,8 +321,42 @@ return (
   <TabsContent value="friends" className="">
     <Card className="bg-background">
   <CardContent>
-    <p>Card Content</p>
-  </CardContent>
+  {friends.length === 0 ? (
+    <p className="text-muted-foreground">You have no friends yet.</p>
+  ) : (
+    <ul className="space-y-3">
+      {friends.map((f) => (
+  <li key={f.$id} className="flex justify-between items-center border p-3 rounded-md">
+    <div className="flex flex-col">
+      <div className="flex gap-2 items-center">
+
+        <div className="flex flex-row items-center border rounded-full p-1 gap-3 shadow-sm">
+        {f.isSubscribed ? (
+      <Badge className="text-foreground bg-pink-500 border-none">Pro</Badge>
+      ) : (
+        <Badge className="text-background bg-foreground border-none">Free</Badge>
+      )}
+        <span className="">{f.name || "Unnamed"}</span>
+
+        {f.streak !== undefined && (
+        <Badge className="border-none">{f.streak}</Badge>
+      )}
+      </div>
+
+        <Badge variant={f.isTeacher ? "default" : "secondary"}>
+          {f.isTeacher ? "Teacher" : "Student"}
+        </Badge>
+      </div>
+      <span className="text-sm text-muted-foreground">{f.email}</span>
+
+
+
+    </div>
+  </li>
+))}
+    </ul>
+  )}
+</CardContent>
 </Card>
 
   </TabsContent>
@@ -282,7 +376,7 @@ return (
             <div className="flex gap-2">
               <Button
                 variant="default"
-                onClick={() => handleAccept(request.id)}
+                onClick={() => handleAccept(request.id, request.fromUserId)}
               >
                 Accept
               </Button>

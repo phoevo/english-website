@@ -12,6 +12,7 @@ interface User {
   name: string;
   email: string;
   isTeacher: boolean;
+  friendsList?: string[];
 }
 
 interface Conversation {
@@ -64,6 +65,7 @@ export const useUserStore = create<UserState>((set, get) => ({
   lastActive: null,
   streak: 0,
   isTeacher: false,
+  friendsList: [],
 
   fetchUser: async () => {
     set({ loading: true });
@@ -117,6 +119,7 @@ export const useUserStore = create<UserState>((set, get) => ({
           name: res.name,
           email: res.email,
           isTeacher,
+          friendsList: userDoc?.friendsList || [],
         },
         isTeacher,
         isSubscribed,

@@ -1,5 +1,6 @@
 import { ID, Query } from "appwrite";
-import { databases, databaseId, friendRequestsId } from "./appwrite";
+import { databases, databaseId, friendRequestsId, usersCollectionId } from "./appwrite";
+import { toast } from "sonner";
 
 export async function sendFriendRequest(fromUserId: string, toUserId: string) {
   return await databases.createDocument(databaseId, friendRequestsId, ID.unique(), {
@@ -30,6 +31,35 @@ export async function fetchPendingRequests(userId: string) {
 export async function updateRequestStatus(requestId: string, status: "accepted" | "declined") {
   await databases.updateDocument(databaseId, friendRequestsId, requestId, {
     status,
-    respondedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
   });
 }
+
+export const addFriend = async (userId: string, fromUserId: string) => {
+   if (!userId || !fromUserId) {
+    console.error("Missing userId or fromUserId:", { userId, fromUserId });
+    throw new Error("Invalid parameters to addFriend");
+  }
+
+  try {
+    const userDoc = await databases.getDocument(databaseId, usersCollectionId, userId);
+    const currentFriends = userDoc.friendsList || [];
+
+    if (currentFriends.includes(fromUserId || userId)) {
+      toast.info("This user is already your friend.");
+      return;
+    }
+
+    const updatedFriends = [...currentFriends, fromUserId];
+
+    await databases.updateDocument(databaseId, usersCollectionId, userId, {
+      friendsList: updatedFriends,
+    });
+
+    toast.success("Friend added successfully!");
+  } catch (err) {
+    console.error("Error adding friend:", err);
+    toast.error("Failed to add friend. Please try again.");
+    throw err;
+  }
+};

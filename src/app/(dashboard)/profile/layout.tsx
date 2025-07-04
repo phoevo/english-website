@@ -21,7 +21,7 @@ import { Input } from '@/components/ui/input'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { CreditCardIcon, Link, Loader2 } from 'lucide-react'
+import { CreditCardIcon, Loader2 } from 'lucide-react'
 import { Toaster } from '@/components/ui/sonner'
 import { Label } from '@/components/ui/label'
 import CustomColors from './CustomColors'
@@ -29,6 +29,7 @@ import { AlertDialogHeader, AlertDialogFooter, AlertDialog, AlertDialogTrigger, 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { unsubscribeUser } from '@/data/getData'
 import { Geist } from 'next/font/google'
+import Link from 'next/link'
 
 const geist = Geist({ subsets: ['latin'] });
 
