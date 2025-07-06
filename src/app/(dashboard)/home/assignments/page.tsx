@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useUserStore } from "@/data/useUserStore";
 import Link from "next/link";
 import UserGuidePopover from "../../userGuide";
-import { ArrowRight, CheckCircle, Plus } from "lucide-react";
+import { ArrowRight, CheckCircle, Loader, Plus, } from "lucide-react";
 import StudentPage from "./StudentPage";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,16 +19,15 @@ import {
 import { Geist } from "next/font/google";
 import { motion} from "motion/react";
 import { toast } from "sonner";
-import { fetchPendingRequests, hasPendingRequest, sendFriendRequest, updateRequestStatus, addFriend } from "@/data/friendRequests";
+import { fetchPendingRequests, hasPendingRequest, sendFriendRequest, updateRequestStatus, addFriend, deleteFriendRequest } from "@/data/friendRequests";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
 
 
 
 const geist = Geist({ subsets: ['latin'] });
 
 function AssignmentsPage() {
-  const { user, loading } = useUserStore();
+  const { user, loading, friendsList, friends } = useUserStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -36,7 +35,10 @@ function AssignmentsPage() {
   const [pendingRequests, setPendingRequests] = useState<
   { id: string; fromUserId: string; senderName: string }[]
 >([]);
-const [friends, setFriends] = useState<any[]>([]);
+const [loadingRequestId, setLoadingRequestId] = useState<string | null>(null);
+
+
+// const [friends, setFriends] = useState<any[]>([]);
 
 
   const handleSearch = async () => {
@@ -48,30 +50,30 @@ const [friends, setFriends] = useState<any[]>([]);
   setSearched(true);
 };
 
-useEffect(() => {
-  async function loadFriends() {
-    if (!user?.friendsList || !Array.isArray(user.friendsList)) return;
+// useEffect(() => {
+//   async function loadFriends() {
+//     if (!user?.friendsList || !Array.isArray(user.friendsList)) return;
 
-    try {
-      const data = await Promise.all(
-        user.friendsList.map(async (friendId: string) => {
-          try {
-            return await getUserById(friendId);
-          } catch (err) {
-            console.error(`Failed to fetch user ${friendId}:`, err);
-            return null;
-          }
-        })
-      );
+//     try {
+//       const data = await Promise.all(
+//         user.friendsList.map(async (friendId: string) => {
+//           try {
+//             return await getUserById(friendId);
+//           } catch (err) {
+//             console.error(`Failed to fetch user ${friendId}:`, err);
+//             return null;
+//           }
+//         })
+//       );
 
-      setFriends(data.filter(Boolean));
-    } catch (err) {
-      console.error("Error loading friends:", err);
-    }
-  }
+//       setFriends(data.filter(Boolean));
+//     } catch (err) {
+//       console.error("Error loading friends:", err);
+//     }
+//   }
 
-  loadFriends();
-}, [user]);
+//   loadFriends();
+// }, [user]);
 
 
 
@@ -106,11 +108,13 @@ useEffect(() => {
   const handleAccept = async (requestId: string, fromUserId: string) => {
   try {
     if (!user) return;
+    setLoadingRequestId(requestId);
 
     await updateRequestStatus(requestId, "accepted");
 
     await addFriend(user.$id, fromUserId);
     await addFriend(fromUserId, user.$id);
+    await deleteFriendRequest(requestId);
 
     setPendingRequests((prev) => prev.filter((r) => r.id !== requestId));
 
@@ -118,12 +122,23 @@ useEffect(() => {
   } catch (error) {
     console.error("Error accepting friend request:", error);
     toast.error("Something went wrong. Please try again.");
+  } finally{
+    setLoadingRequestId(null);
   }
 };
 
   const handleDecline = async (requestId: string) => {
-    await updateRequestStatus(requestId, "declined");
-    setPendingRequests((prev) => prev.filter((r) => r.id !== requestId));
+    try{
+      setLoadingRequestId(requestId);
+      await updateRequestStatus(requestId, "declined");
+      await deleteFriendRequest(requestId);
+      setPendingRequests((prev) => prev.filter((r) => r.id !== requestId));
+  }
+    catch (error) {
+    toast.error("Failed to decline request.");
+  } finally {
+    setLoadingRequestId(null);
+  }
   };
 
 
@@ -174,11 +189,11 @@ return (
 
     </div>
 
-    <div className="grid grid-cols-2 gap-6 mt-10 w-full">
+    <div className="grid grid-cols-2 gap-6 mt-10 w-full h-full">
 
       <StudentPage />
 
-      <Card className="bg-background p-5">
+      <Card className="bg-background p-5 h-100 h-full">
 
   <div className="relative flex flex-col space-y-4 w-full">
 
@@ -203,8 +218,8 @@ return (
 
     <PopoverContent align="start" side="bottom" className={`w-100 h-max-100 p-2 space-y-2 bg-background ${geist.className}`}>
        <Button
-      variant="outline"
-      className="text-sm p-2 h-5 cursor-pointer"
+      variant="default"
+      className="w-15 h-5 cursor-pointer"
       onClick={() => {
         setSearchQuery("");
         setSearchResults([]);
@@ -292,10 +307,7 @@ return (
               )}
             </Button>
 
-
-
             </div>
-
             </div>
 
 
@@ -318,78 +330,107 @@ return (
     <TabsTrigger value="requests">Requests</TabsTrigger>
   </TabsList>
 
-  <TabsContent value="friends" className="">
-    <Card className="bg-background">
-  <CardContent>
-  {friends.length === 0 ? (
-    <p className="text-muted-foreground">You have no friends yet.</p>
+  <TabsContent value="friends">
+    <Card className="bg-muted flex flex-col p-2 border-none shadow-none">
+
+  {friendsList.length === 0 ? (
+    <p className="text-sm text-zinc-500">You have no friends yet.</p>
   ) : (
-    <ul className="space-y-3">
+
+    <div className="rounded-md space-y-2">
       {friends.map((f) => (
-  <li key={f.$id} className="flex justify-between items-center border p-3 rounded-md">
-    <div className="flex flex-col">
-      <div className="flex gap-2 items-center">
+        <div
+          key={f.$id}
+          className="flex bg-card justify-between p-4 rounded-lg bg-card shadow-sm"
+        >
+          <div className="flex flex-col gap-1">
+            <div className="flex gap-2 items-center">
+              <span className="font-semibold">{f.name || "Unnamed"}</span>
 
-        <div className="flex flex-row items-center border rounded-full p-1 gap-3 shadow-sm">
-        {f.isSubscribed ? (
-      <Badge className="text-foreground bg-pink-500 border-none">Pro</Badge>
-      ) : (
-        <Badge className="text-background bg-foreground border-none">Free</Badge>
-      )}
-        <span className="">{f.name || "Unnamed"}</span>
+              {f.isSubscribed ? (
+                <Badge className="text-foreground bg-pink-500 border-none">Pro</Badge>
+              ) : (
+                <Badge className="text-background bg-foreground border-none">Free</Badge>
+              )}
 
-        {f.streak !== undefined && (
-        <Badge className="border-none">{f.streak}</Badge>
-      )}
-      </div>
+              {f.streak !== undefined && (
+                <Badge className="border-none">{f.streak}</Badge>
+              )}
 
-        <Badge variant={f.isTeacher ? "default" : "secondary"}>
-          {f.isTeacher ? "Teacher" : "Student"}
-        </Badge>
-      </div>
-      <span className="text-sm text-muted-foreground">{f.email}</span>
+            <Badge variant={f.isTeacher ? "default" : "secondary"}>
+              {f.isTeacher ? "Teacher" : "Student"}
+            </Badge>
+
+            </div>
 
 
 
+            <span className="text-sm text-muted-foreground">{f.email}</span>
+          </div>
+        </div>
+      ))}
     </div>
-  </li>
-))}
-    </ul>
   )}
-</CardContent>
 </Card>
+
 
   </TabsContent>
 
 
   <TabsContent value="requests">
-  <Card className="bg-background p-4">
+  <Card className="bg-muted p-2 shadow-none border-none">
     {pendingRequests.length === 0 ? (
-      <p>No pending friend requests.</p>
+      <p className="text-sm text-zinc-500">No pending friend requests.</p>
     ) : (
-      <ul className="space-y-3 max-h-64 overflow-y-auto">
+      <div className="flex flex-col gap-2 rounded-md">
         {pendingRequests.map((request) => (
-          <li key={request.id} className="flex justify-between items-center border p-2 rounded">
+          <div key={request.id} className="flex bg-card justify-between items-center p-2 rounded-sm shadow-sm">
             <div>
-              <span className="font-medium">{request.senderName}</span> wants to be your friend.
+              <span className="font-semibold">{request.senderName}</span> wants to add you.
             </div>
-            <div className="flex gap-2">
-              <Button
-                variant="default"
+            <div className="flex flex-row items-center gap-2">
+               {loadingRequestId === request.id ? (
+                <Badge className="bg-green-500 h-5 w-13 text-muted-foreground">
+                  <Loader className="bg-green-500 animate-spin text-background"/>
+                </Badge>
+                ) : (
+              <Badge className="bg-green-500 hover:bg-green-600 cursor-pointer border-none"
+              onClick={() => handleAccept(request.id, request.fromUserId)}
+              >Accept
+              </Badge>
+              )}
+              {/* <Button
+                variant="secondary"
+                size="icon"
                 onClick={() => handleAccept(request.id, request.fromUserId)}
+                className="cursor-pointer h-5 w-5 self-center shadow-md text-foreground bg-green-500 hover:bg-green-600"
               >
-                Accept
-              </Button>
-              <Button
-                variant="outline"
+                 <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
+                  <Plus className="h-4 w-4" />
+                </motion.div>
+              </Button> */}
+
+
+
+              <Badge className="bg-red-500 hover:bg-red-600 cursor-pointer border-none"
+              onClick={() => handleDecline(request.id)}
+              >
+                Deny
+              </Badge>
+              {/* <Button
+                variant="secondary"
+                size='icon'
                 onClick={() => handleDecline(request.id)}
+                className="cursor-pointer h-5 w-5 self-center shadow-md text-foreground bg-red-500 hover:bg-red-600"
               >
-                Decline
-              </Button>
+                 <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
+                  <X className="h-4 w-4" />
+                </motion.div>
+              </Button> */}
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     )}
   </Card>
 </TabsContent>

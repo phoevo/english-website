@@ -12,6 +12,10 @@ import {
 } from "@/components/ui/card"
 import { useUserStore } from "@/data/useUserStore";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Send } from "lucide-react";
+import Assign from "./Assign";
+import { useRouter } from "next/navigation";
 
 
 interface ConversationCoverProps {
@@ -27,6 +31,9 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
   const completeConversations = useUserStore((state) => state.completeConversations);
   const isComplete = completeConversations.includes(conversationId);
   const user = useUserStore(state => state.user);
+  const {isTeacher} = useUserStore();
+
+  const router = useRouter();
 
     const handleClick = async () => {
       if (!user) {
@@ -45,19 +52,40 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
     };
 
   return (
-    <Link href={`conversations/${conversationId}`}>
+   // <Link href={`conversations/${conversationId}`}>
 
     <motion.div
       className=""
       whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.1 }}
-      onClick={handleClick}
+       onClick={() => {
+    handleClick();
+    router.push(`conversations/${conversationId}`);
+  }}
     >
         <Card className="w-70 h-70 bg-background">
     <CardHeader>
       <CardTitle className="flex justify-between items-center">
         {conversationTitle}
+        <div className="flex flex-col gap-1">
+
+
+          {isTeacher && <Assign
+                conversationId={conversationId}
+                trigger={
+                  <Badge variant="default"
+                  className="cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                    <Send/>Assign
+                  </Badge>
+                }
+              />}
+
         {isComplete && <Badge variant="outline" className="bg-green-500 max-h-6">Complete</Badge>}
+        </div>
         </CardTitle>
       <CardDescription className="border-b">{level}</CardDescription>
     </CardHeader>
@@ -67,7 +95,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
   </Card>
     </motion.div>
 
-  </Link>
+  //</Link>
   );
 }
 

@@ -91,9 +91,6 @@ if (!user) return null;
       userID: user.$id,
     }
 
-    console.log("Created deck:", newDeck)
-    // You can now send `newDeck` to your backend or state management
-
 
   return (
     <div className={geist.className}>

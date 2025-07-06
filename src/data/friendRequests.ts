@@ -56,10 +56,13 @@ export const addFriend = async (userId: string, fromUserId: string) => {
       friendsList: updatedFriends,
     });
 
-    toast.success("Friend added successfully!");
   } catch (err) {
     console.error("Error adding friend:", err);
     toast.error("Failed to add friend. Please try again.");
     throw err;
   }
 };
+
+export async function deleteFriendRequest(requestId: string) {
+  return await databases.deleteDocument(databaseId, friendRequestsId, requestId);
+}
