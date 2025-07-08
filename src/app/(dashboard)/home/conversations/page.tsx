@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useConversations } from "@/hooks/useConversations";
 import { Label } from "@/components/ui/label";
 import ConversationCover from "./ConversationCover";
-import { Geist } from "next/font/google";
+import { Geist, DM_Sans } from "next/font/google";
 import {
   Select,
   SelectContent,
@@ -28,6 +28,7 @@ import {
 
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
+const dmSans = DM_Sans({ subsets: ['latin'] });
 
 
 function ConversationsPage() {
@@ -68,13 +69,13 @@ function ConversationsPage() {
         side="top"
         align="start"
         >
-          <h1 className="text-3xl font-light">Conversations</h1>
+          <h1 className={`text-3xl font-normal ${dmSans.className}`}>Conversations</h1>
         </UserGuidePopover>
         </div>
 
 
 
-      <p className="text-zinc-500">Conversation material from all levels</p>
+      <p className="text-muted-foreground">Conversation material from all levels</p>
       <div className="flex flex-row">
 
         <div className="flex flex-col space-y-1 mt-5">

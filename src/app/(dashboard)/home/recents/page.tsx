@@ -15,6 +15,11 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card"
+import { DM_Sans } from "next/font/google";
+
+
+const dmSans = DM_Sans({ subsets: ['latin'] });
+
 
 function RecentsPage() {
   const { user, loading, recentConversations, setRecentConversations, completeConversations } = useUserStore();
@@ -77,11 +82,11 @@ function RecentsPage() {
           side="top"
           align="start"
           >
-          <h1 className="text-3xl font-light">Recent Conversations</h1>
+          <h1 className={`text-3xl font-normal ${dmSans.className}`}>Recent Conversations</h1>
           </UserGuidePopover>
         </div>
 
-          <p className="text-zinc-500">Conversations you&apos;ve interacted with will appear here.</p>
+          <p className="text-muted-foreground">Conversations you&apos;ve interacted with. For quick access.</p>
 
 
     <div className="mt-9">

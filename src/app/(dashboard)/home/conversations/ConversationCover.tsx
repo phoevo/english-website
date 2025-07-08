@@ -52,7 +52,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
     };
 
   return (
-   // <Link href={`conversations/${conversationId}`}>
+
 
     <motion.div
       className=""
@@ -63,17 +63,16 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
     router.push(`conversations/${conversationId}`);
   }}
     >
-        <Card className="w-70 h-70 bg-background">
+        <Card className="w-80 h-70 bg-background cursor-pointer">
     <CardHeader>
       <CardTitle className="flex justify-between items-center">
         {conversationTitle}
         <div className="flex flex-col gap-1">
 
-
           {isTeacher && <Assign
                 conversationId={conversationId}
                 trigger={
-                  <Badge variant="default"
+                  <Badge variant="outline"
                   className="cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -95,7 +94,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
   </Card>
     </motion.div>
 
-  //</Link>
+
   );
 }
 

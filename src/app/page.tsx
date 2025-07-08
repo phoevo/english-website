@@ -69,7 +69,7 @@ export default function LandingPage() {
       <div className="flex flex-col w-screen border-b bg-dots justify-center items-center gap-10">
         <div className="flex flex-col gap-1 items-center">
           <h1 className="text-5xl lg:text-8xl bg-background font-normal ">Synomilo</h1>
-          <div className="flex flex-row text-xl font-normal gap-2" >
+          <div className="flex flex-row text-1xl font-normal mt-1 gap-2" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div>
           <p className="text-zinc-500">Greek for: &quot;I conversate&quot;</p>
@@ -207,7 +207,7 @@ export default function LandingPage() {
     <span className="flex justify-center items-center h-20">
       <IterationCcw size={50} className="" />
     </span>
-    <div className="flex items-center justify-center text-center">Recent conversations</div>
+    <div className="flex items-center justify-center text-center">Recents</div>
   </motion.div>
 
   <motion.div
@@ -259,7 +259,7 @@ export default function LandingPage() {
     transition={{ delay: 0.2, duration: 0.1 }}
     >
   <span className="relative flex justify-center items-center h-20 w-20">
-    <Sword size={50}/>
+    <Sword size={50} className="rotate-45"/>
   </span>
   <div className="flex items-center justify-center text-center">Tasks</div>
 </motion.div>
@@ -306,26 +306,26 @@ export default function LandingPage() {
 
 
         <motion.div
-        className="flex flex-col justify-start items-center bg-accent w-auto p-10 m-10 border-1 shadow-md rounded-lg z-30"
+        className="flex flex-col justify-start items-center bg-background w-auto p-10 m-10 rounded-lg z-30"
         initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
 
           >
             <div>
-            <h2 className="text-3xl font-semibold bg-accent m-5">Looks good? Let’s get you started.</h2>
+            <h2 className="text-3xl lg:text-5xl font-normal m-5">Looks good? Let’s get you started.</h2>
 
             </div>
         <div
-        className={`flex flex-row gap-4 p-5 bg-accent h-auto md:flex-row ${geist.className}`}>
+        className={`flex flex-col lg:flex-row items-center gap-4 p-5 h-auto ${geist.className}`}>
         <Link href="/register">
           <Button className="cursor-pointer px-6 py-4">Get Started</Button>
         </Link>
         <Link href="/home">
-          <Button variant="outline" className=" cursor-pointer px-6 py-4 border-2">Try Without an Account</Button>
+          <Button variant="outline" className="cursor-pointer px-6 py-4">Try Without an Account</Button>
         </Link>
         <Link href="/subscribe">
-          <Button variant="ghost" className="shadow-[0_0_5px_1px_rgba] shadow-pink-500 cursor-pointer px-6 py-4">Pricing</Button>
+          <Button variant="outline" className="shadow-[0_0_5px_1px_rgba] shadow-pink-500 cursor-pointer px-6 py-4">Pricing</Button>
         </Link>
       </div>
       </motion.div>

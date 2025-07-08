@@ -7,13 +7,14 @@ const CONVERSATIONS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_CONVERSATIO
 const DECKS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_DECKS_COLLECTION_ID!;
 const AUDIO_BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_AUDIO_BUCKET_ID!;
 const FRIEND_REQUESTS_ID = process.env.NEXT_PUBLIC_APPWRITE_FRIEND_REQUESTS_ID!;
+const ASSIGNMENTS_ID = process.env.NEXT_PUBLIC_APPWRITE_ASSIGNMENTS_ID!;
 
-// Initialize the Appwrite client
+
 const client = new Client()
   .setEndpoint('https://cloud.appwrite.io/v1')
   .setProject(PROJECT_ID)
 
-// Services
+
 export const databases = new Databases(client)
 export const account = new Account(client)
 export const storage = new Storage(client);
@@ -25,6 +26,7 @@ export const usersCollectionId = USERS_COLLECTION_ID
 export const decksCollectionId = DECKS_COLLECTION_ID
 export const audioBucketId = AUDIO_BUCKET_ID
 export const friendRequestsId = FRIEND_REQUESTS_ID
+export const assignmentsId = ASSIGNMENTS_ID
 
 
 export const getConversationFromDB = async (documentId: string) => {

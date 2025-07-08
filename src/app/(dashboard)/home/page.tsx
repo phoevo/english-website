@@ -60,7 +60,7 @@ function Page() {
                 <Link href="/register" className="underline">create an account</Link> for full Home page experience.
               </p>
             ) : (
-              <p className="text-zinc-500">Here&apos;s where you left off</p>
+              <p className="text-muted-foreground">Here&apos;s where you left off</p>
             )}
             </div>
 
@@ -84,7 +84,7 @@ function Page() {
                   )}
                 </Link>
               ) : (
-                <p className="text-zinc-400">No recent conversations to continue.</p>
+                <p className="text-muted-foreground">No recent conversations to continue.</p>
               )}
               </CardContent>
               <CardFooter>
@@ -103,7 +103,7 @@ function Page() {
               </CardHeader>
               <CardContent>
                 {firstFiveWords.length === 0 ? (
-                  <p className="text-zinc-500">No words added yet.</p>
+                  <p className="text-muted-foreground">No words added yet.</p>
                   ) : (
                     <ul className="list-disc list-inside space-y-1">
                     {firstFiveWords.map((wordEntry, index) => {

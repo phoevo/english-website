@@ -78,7 +78,7 @@ const Navbar = () => {
               ): (
               <DailyTasks>
                 <Button variant="secondary" className="items-center shadow-sm cursor-pointer">
-                  <Sword /> {taskCount}
+                  <Sword className="rotate-45" /> {taskCount}
                 </Button>
               </DailyTasks>)}
 

@@ -9,13 +9,15 @@ import {
 } from "@/data/appwrite";
 
 interface User {
-  streak: undefined;
   isSubscribed: any;
   $id: string;
   name: string;
   email: string;
   isTeacher: boolean;
   friendsList?: string[];
+  streak?: number;
+  challengeCount?: string[];
+  taskCount?: number;
 }
 
 interface Conversation {
@@ -148,6 +150,11 @@ export const useUserStore = create<UserState>((set, get) => ({
           email: res.email,
           isTeacher,
           friendsList,
+          isSubscribed,
+          streak,
+          challengeCount,
+          taskCount,
+
         },
         isTeacher,
         isSubscribed,
@@ -162,7 +169,6 @@ export const useUserStore = create<UserState>((set, get) => ({
         streak,
       });
 
-      // ✅ Load full friend objects into the store
       await get().fetchFriends();
 
     } catch (error) {

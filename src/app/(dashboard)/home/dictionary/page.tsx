@@ -18,6 +18,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import WordBoard from "./wordBoard";
+import { DM_Sans } from "next/font/google";
+
+const dmSans = DM_Sans({ subsets: ['latin'] });
 
 
 
@@ -106,7 +109,7 @@ function DictionaryPage() {
           side="top"
           align="start"
         >
-          <h1 className="text-3xl font-light">Dictionary</h1>
+          <h1 className={`text-3xl font-normal ${dmSans.className}`}>Dictionary</h1>
         </UserGuidePopover>
 
         <p className="text-zinc-500">

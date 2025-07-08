@@ -21,11 +21,6 @@ const items = [
     icon: IterationCcw,
   },
   {
-    title: "Study",
-    url: "/home/study",
-    icon: GraduationCap,
-  },
-  {
     title: "Conversations",
     url: "/home/conversations",
     icon: BookOpen,

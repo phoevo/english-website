@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useUserStore } from "@/data/useUserStore";
 import Link from "next/link";
 import UserGuidePopover from "../../userGuide";
-import { ArrowRight, CheckCircle, Loader, Plus, } from "lucide-react";
+import { ArrowRight, CheckCircle, Loader, Plus, Sword, Swords, } from "lucide-react";
 import StudentPage from "./StudentPage";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import { Geist } from "next/font/google";
+import { Geist, DM_Sans } from "next/font/google";
 import { motion} from "motion/react";
 import { toast } from "sonner";
 import { fetchPendingRequests, hasPendingRequest, sendFriendRequest, updateRequestStatus, addFriend, deleteFriendRequest } from "@/data/friendRequests";
@@ -25,6 +25,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 
 const geist = Geist({ subsets: ['latin'] });
+const dmSans = DM_Sans({ subsets: ['latin'] });
+
+function getStreakBadgeClass(streak: number): string {
+  if (streak >= 100) {
+    return "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-300 text-black rounded-full animate-gradient uneven-glow bg-clip-padding";
+  } else if (streak >= 50) {
+    return "bg-gradient-to-r from-red-500 via-purple-500 to-cyan-300 text-white rounded-full animate-gradient ring-1 ring-foreground bg-clip-padding";
+  } else if (streak >= 30) {
+    return "bg-gradient-to-r from-blue-600 via-pink-600 to-purple-600 text-white rounded-full animate-gradient bg-clip-padding";
+  } else if (streak >= 10) {
+    return "bg-gradient-to-r from-emerald-400 to-blue-600 text-white bg-clip-padding";
+  } else if (streak >= 3) {
+    return "bg-green-500 text-white";
+  } else {
+    return "bg-foreground text-background";
+  }
+}
 
 function AssignmentsPage() {
   const { user, loading, friendsList, friends } = useUserStore();
@@ -181,9 +198,9 @@ return (
         side="top"
         align="start"
       >
-        <h1 className="text-3xl font-light">Assignments</h1>
+        <h1 className={`text-3xl font-normal ${dmSans.className}`}>Assignments</h1>
       </UserGuidePopover>
-        <p className="text-zinc-500">A shared workspace for Students and Teachers.</p>
+        <p className="text-muted-foreground">A shared workspace for Students and Teachers.</p>
         </div>
 
 
@@ -331,7 +348,7 @@ return (
   </TabsList>
 
   <TabsContent value="friends">
-    <Card className="bg-muted flex flex-col p-2 border-none shadow-none">
+    <Card className="bg-background flex flex-col p-2 border-none shadow-none">
 
   {friendsList.length === 0 ? (
     <p className="text-sm text-zinc-500">You have no friends yet.</p>
@@ -341,11 +358,19 @@ return (
       {friends.map((f) => (
         <div
           key={f.$id}
-          className="flex bg-card justify-between p-4 rounded-lg bg-card shadow-sm"
+          className="flex bg-card justify-between p-2 rounded-lg border-1 shadow-xs"
         >
           <div className="flex flex-col gap-1">
-            <div className="flex gap-2 items-center">
-              <span className="font-semibold">{f.name || "Unnamed"}</span>
+
+                <div>
+                <Badge variant={f.isTeacher ? "default" : "secondary"}>
+                  {f.isTeacher ? "Teacher" : "Student"}
+                </Badge>
+                <span className="text-sm text-muted-foreground px-1">{f.email}</span>
+                </div>
+            <div className="flex gap-2 items-center mt-2">
+
+              <div className="flex flex-row border-1 rounded-full p-1 h-8 shadow-xs">
 
               {f.isSubscribed ? (
                 <Badge className="text-foreground bg-pink-500 border-none">Pro</Badge>
@@ -353,19 +378,24 @@ return (
                 <Badge className="text-background bg-foreground border-none">Free</Badge>
               )}
 
+
+              <span className="font-normal px-2">{f.name || "Unnknown"}</span>
+
               {f.streak !== undefined && (
-                <Badge className="border-none">{f.streak}</Badge>
+                <div className="flex justify-center">
+                  <Badge className={getStreakBadgeClass(f.streak ?? 0)}>
+                    {f.streak ?? 0}
+                  </Badge>
+                </div>
               )}
 
-            <Badge variant={f.isTeacher ? "default" : "secondary"}>
-              {f.isTeacher ? "Teacher" : "Student"}
-            </Badge>
+              </div>
+
+
+            <Badge className="p-2" variant="secondary"> <Sword className="rotate-45"/> {f.taskCount || 0}</Badge>
+            <Badge className="p-2"> <Swords/> {f.challengeCount?.length || 0}</Badge>
 
             </div>
-
-
-
-            <span className="text-sm text-muted-foreground">{f.email}</span>
           </div>
         </div>
       ))}

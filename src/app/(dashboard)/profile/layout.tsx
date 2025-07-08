@@ -276,9 +276,9 @@ console.log(isSubscribed);
                         control={accountForm.control}
                         name="isTeacher"
                         render={({ field }) => (
-                          <FormItem className="flex flex-col ">
+                          <FormItem className="flex flex-col">
                             <FormLabel>I am a Teacher</FormLabel>
-                            <p className="text-zinc-500 text-xs italic">
+                            <p className="text-muted-foreground text-xs">
                               If you don&apos;t use the Assignments page, you can safely ignore this
                             </p>
                             <FormControl>
@@ -331,7 +331,7 @@ console.log(isSubscribed);
                   <CustomColors userId={user.$id} />
 
                   </>):
-                    <p className='text-zinc-500 text-sm'>Color customization is a paid feature</p>
+                    <p className='text-muted-foreground text-sm'>Color customization is a paid feature</p>
                   }
                 </div>
 
