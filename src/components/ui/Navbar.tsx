@@ -11,7 +11,7 @@ import { useUserStore } from "@/data/useUserStore";
 import { Geist, DM_Sans } from "next/font/google";
 import DailyTasks from "@/app/(dashboard)/home/dailyTasks";
 import Challenges from "@/app/(dashboard)/home/Challenges";
-import { Sword, Swords } from "lucide-react";
+import { LogOut, Sword, Swords } from "lucide-react";
 import {
   HoverCard,
   HoverCardTrigger,
@@ -129,7 +129,7 @@ const Navbar = () => {
               {loading ? (
                 <Skeleton className="w-20 h-10 rounded-md" />
               ) : user ? (
-                <Button onClick={handleLogout} variant="outline" className="cursor-pointer">Logout</Button>
+                <Button onClick={handleLogout} variant="outline" className="cursor-pointer"><LogOut/>Logout</Button>
               ) : (
                 <Link href={"/login"}>
                   <Button variant="outline" className="cursor-pointer">Log in</Button>

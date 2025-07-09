@@ -17,11 +17,12 @@ import {
 } from "@/data/appwrite";
 import { Query } from "appwrite";
 import { useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 
 type AssignmentWithConversation = {
   $id: string;
   conversationId: string;
-  status: "pending" | "completed";
+  status: "Pending" | "Completed";
   title: string;
   level: string;
   [key: string]: any;
@@ -47,7 +48,7 @@ function StudentPage() {
         const assignments = assignmentRes.documents;
         const conversationIds = assignments.map((a) => a.conversationId);
 
-        // ✅ Check AFTER fetching
+
         if (conversationIds.length === 0) {
           setAssignments([]);
           setLoading(false);
@@ -85,6 +86,26 @@ function StudentPage() {
     fetchAssignmentsWithConversations();
   }, [user]);
 
+  const handleMarkComplete = async (assignmentId: string) => {
+  try {
+    await databases.updateDocument(
+      databaseId,
+      assignmentsId,
+      assignmentId,
+      { status: "completed" }
+    );
+
+    setAssignments((prev) =>
+      prev.map((a) =>
+        a.$id === assignmentId ? { ...a, status: "Completed" } : a
+      )
+    );
+  } catch (err) {
+    console.error("Failed to update status:", err);
+  }
+};
+
+
   return (
     <Card className="bg-background">
       <CardHeader>
@@ -97,19 +118,39 @@ function StudentPage() {
         ) : assignments.length === 0 ? (
           <p>No assignments yet.</p>
         ) : (
-          <ul className="space-y-3">
+          <div className="space-y-3">
             {assignments.map((a) => (
-              <li
-                onClick={() => router.push(`conversations/${a.conversationId}`)}
-                className="cursor-pointer border p-4 rounded-md hover:bg-muted transition"
-                key={a.$id}
-              >
-                <h4 className="font-semibold">{a.title}</h4>
-                <p className="text-sm text-muted-foreground mb-1">Level: {a.level}</p>
-                <p className="text-xs">Status: {a.status}</p>
-              </li>
-            ))}
-          </ul>
+  <div
+    key={a.$id}
+    className="flex justify-between items-center border p-4 rounded-md hover:bg-muted transition"
+  >
+
+    <div
+      onClick={() => router.push(`conversations/${a.conversationId}`)}
+      className="cursor-pointer"
+    >
+      <h4 className="font-semibold">{a.title}</h4>
+      <p className="text-sm text-muted-foreground mb-1">Level: {a.level}</p>
+
+     <Badge variant={a.status === "Completed" ? "default" : "outline"}>
+      {a.status}
+    </Badge>
+
+    </div>
+
+    {a.status === "Pending" && (
+      <Badge
+        onClick={() => handleMarkComplete(a.$id)}
+        className="cursor-pointer"
+
+      >
+        Mark as Complete
+      </Badge>
+    )}
+  </div>
+))}
+
+          </div>
         )}
       </CardContent>
     </Card>

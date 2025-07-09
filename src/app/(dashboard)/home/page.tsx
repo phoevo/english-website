@@ -15,6 +15,9 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import News from "./News";
+import { DM_Sans } from "next/font/google";
+
+const dmSans = DM_Sans({ subsets: ['latin'] });
 
 
 function Page() {
@@ -49,8 +52,8 @@ function Page() {
              align="start"
             >
               {user ? (
-                 <h1 className="text-3xl font-light">Welcome back, {user.name}</h1>
-              ): <h1 className="text-3xl font-light">Welcome, New User</h1>}
+                 <h1 className={`text-3xl font-light ${dmSans.className}`}>Welcome back, {user.name}</h1>
+              ): <h1 className={`text-3xl font-light ${dmSans.className}`}>Welcome, New User</h1>}
 
             </UserGuidePopover>
 

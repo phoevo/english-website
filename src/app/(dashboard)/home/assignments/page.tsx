@@ -9,6 +9,7 @@ import Link from "next/link";
 import UserGuidePopover from "../../userGuide";
 import { ArrowRight, CheckCircle, Loader, Plus, Sword, Swords, } from "lucide-react";
 import StudentPage from "./StudentPage";
+import TeacherPage from "./TeacherPage";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -44,7 +45,7 @@ function getStreakBadgeClass(streak: number): string {
 }
 
 function AssignmentsPage() {
-  const { user, loading, friendsList, friends } = useUserStore();
+  const { user, loading, friendsList, friends, isTeacher } = useUserStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -208,9 +209,9 @@ return (
 
     <div className="grid grid-cols-2 gap-6 mt-10 w-full h-full">
 
-      <StudentPage />
+      {isTeacher ? <TeacherPage/> : <StudentPage />}
 
-      <Card className="bg-background p-5 h-100 h-full">
+      <Card className="bg-background p-5 h-full">
 
   <div className="relative flex flex-col space-y-4 w-full">
 
@@ -219,7 +220,7 @@ return (
       <div className="flex flex-row gap-2">
         <Input
           id="search"
-          placeholder="Enter username or email"
+          placeholder="Find your Student or Teacher by username/email"
           className="bg-muted"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -366,7 +367,7 @@ return (
                 <Badge variant={f.isTeacher ? "default" : "secondary"}>
                   {f.isTeacher ? "Teacher" : "Student"}
                 </Badge>
-                <span className="text-sm text-muted-foreground px-1">{f.email}</span>
+                <span className="text-sm text-muted-foreground px-2">{f.email}</span>
                 </div>
             <div className="flex gap-2 items-center mt-2">
 
@@ -408,13 +409,13 @@ return (
 
 
   <TabsContent value="requests">
-  <Card className="bg-muted p-2 shadow-none border-none">
+  <Card className="shadow-none border-none bg-background">
     {pendingRequests.length === 0 ? (
       <p className="text-sm text-zinc-500">No pending friend requests.</p>
     ) : (
       <div className="flex flex-col gap-2 rounded-md">
         {pendingRequests.map((request) => (
-          <div key={request.id} className="flex bg-card justify-between items-center p-2 rounded-sm shadow-sm">
+          <div key={request.id} className="flex justify-between items-center p-3 rounded-sm border-1">
             <div>
               <span className="font-semibold">{request.senderName}</span> wants to add you.
             </div>

@@ -11,7 +11,7 @@ import { Geist } from "next/font/google";
 import { databases, databaseId, assignmentsId } from "@/data/appwrite";
 import { ID, Query } from "appwrite";
 import { toast } from "sonner";
-import { Plus, Send } from "lucide-react";
+import { Check, Plus, Send } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface AssignProps {
@@ -129,7 +129,7 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
                       </div>
                     ) : isAssigned ? (
                       <div className="flex flex-row gap-1 items-center">
-                        <Send size={12} className="fill-current" />
+                        <Check size={13} className="" />
                         Assigned
                       </div>
                     ) : (

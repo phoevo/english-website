@@ -69,14 +69,14 @@ export default function LandingPage() {
       <div className="flex flex-col w-screen border-b bg-dots justify-center items-center gap-10">
         <div className="flex flex-col gap-1 items-center">
           <h1 className="text-5xl lg:text-8xl bg-background font-normal ">Synomilo</h1>
-          <div className="flex flex-row text-1xl font-normal mt-1 gap-2" >
+          <div className="flex flex-row bg-background text-1xl font-normal mt-1 gap-2" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div>
           <p className="text-zinc-500">Greek for: &quot;I conversate&quot;</p>
         </div>
 
         <div className="flex flex-col items-center gap-3">
-        <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-background mt-10"> An English learning platform focused on conversation</h2>
+        <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-background mt-10"> An English practice platform focused on conversation</h2>
         <h2 className="text-4xl font-semibold bg-background mt-10"/>
 
         <div className="flex flex-col max-w-4xl h-auto mb-20 lg:mb-20 bg-accent border-1 rounded-4xl justify-start items-center p-10 lg:p-15 space-y-6 shadow-md">
@@ -174,7 +174,7 @@ export default function LandingPage() {
     initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
-    transition={{ delay: 0.1, duration: 0.1 }}
+    transition={{ delay: 0.1, duration: 0.2 }}
     >
     <span className="flex justify-center items-center h-20">
       <Play size={50} className="fill-current" />
@@ -188,7 +188,7 @@ export default function LandingPage() {
  initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
-    transition={{ delay: 0.1, duration: 0.1 }}
+    transition={{ delay: 0.1, duration: 0.2 }}
     >
   <span className="relative flex justify-center items-center h-20 w-20">
     <MousePointer2 size={35} strokeWidth={1} fill="bg-foreground" className="absolute bottom-0 right-0" />
@@ -203,7 +203,7 @@ export default function LandingPage() {
    initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
-    transition={{ delay: 0.1, duration: 0.1 }}>
+    transition={{ delay: 0.1, duration: 0.2 }}>
     <span className="flex justify-center items-center h-20">
       <IterationCcw size={50} className="" />
     </span>
@@ -215,7 +215,7 @@ export default function LandingPage() {
   initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
-    transition={{ delay: 0.2, duration: 0.1 }}
+    transition={{ delay: 0.2, duration: 0.2 }}
     >
     <span className="flex justify-center items-center h-20">
       <GalleryHorizontalEnd size={50} className="fill-current" />
@@ -228,7 +228,7 @@ export default function LandingPage() {
   initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
-    transition={{ delay: 0.2, duration: 0.1 }}>
+    transition={{ delay: 0.2, duration: 0.2 }}>
     <span className="flex justify-center items-center h-20">
       <BookOpenCheck strokeWidth={2} size={50} />
     </span>
@@ -242,7 +242,7 @@ export default function LandingPage() {
    initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
-    transition={{ delay: 0.2, duration: 0.1 }}
+    transition={{ delay: 0.2, duration: 0.2 }}
     >
   <span className="relative flex justify-center items-center h-20 w-20">
     <Check size={35} strokeWidth={2} className="absolute bottom-0 right-2 text-green-500" />
@@ -256,7 +256,7 @@ export default function LandingPage() {
    initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
-    transition={{ delay: 0.2, duration: 0.1 }}
+    transition={{ delay: 0.2, duration: 0.2 }}
     >
   <span className="relative flex justify-center items-center h-20 w-20">
     <Sword size={50} className="rotate-45"/>
@@ -269,7 +269,7 @@ export default function LandingPage() {
    initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
-    transition={{ delay: 0.2, duration: 0.1 }}
+    transition={{ delay: 0.2, duration: 0.2 }}
     >
   <div className="relative flex justify-center items-center h-20 w-20">
     <Swords className="fill-current" size={50}/>
@@ -282,7 +282,7 @@ export default function LandingPage() {
   initial={{ opacity: 0, y: 100 }}
   whileInView={{ opacity: 1, y: 0 }}
   viewport={{ once: true, margin: "-100px" }}
-  transition={{ delay: 0.2, duration: 0.1 }}
+  transition={{ delay: 0.2, duration: 0.2 }}
 >
   <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-3 gap-1 p-4">
    <div className="flex justify-center"><Badge className="bg-foreground text-background">1</Badge></div>
@@ -310,7 +310,7 @@ export default function LandingPage() {
         initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-
+          transition={{ delay: 0.2, duration: 0.2 }}
           >
             <div>
             <h2 className="text-3xl lg:text-5xl font-normal m-5">Looks good? Let’s get you started.</h2>

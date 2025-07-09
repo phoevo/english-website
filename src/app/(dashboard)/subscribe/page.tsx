@@ -77,7 +77,7 @@ function SubscribePage() {
     {
       title: "Yearly",
       price:"49.99",
-      info: "Over 15% cheaper than monthly",
+      info: "Over 15% cheaper than Monthly",
       desc: [
         "Ideal for those who want to commit to a long-term journey.",
         "Pro access, billed yearly.",
@@ -144,12 +144,12 @@ function SubscribePage() {
       <Badge className='mb-4'>Free</Badge>
       <div className='flex justify-center'>
       <ul className='text-sm list-disc marker:text-popover-foreground space-y-1 justify-start'>
-        <li>Study page</li>
-        <li>Access to 10 Conversations</li>
+        <li>Access to 12 Conversations</li>
         <li>Hover</li>
         <li>Dictionary and Word Board</li>
         <li>Streaks</li>
         <li>Daily Tasks</li>
+        <li>Assignments Page</li>
       </ul>
       </div>
 
@@ -175,11 +175,11 @@ function SubscribePage() {
   </div>
 
 
-<div className='flex flex-col justify-between p-2 border-1 rounded-lg h-65 w-1/2 text-muted-foreground shadow-[0_0_3px_1px] shadow-pink-500'>
+<div className='flex flex-col justify-between p-2 border-1 rounded-lg h-65 w-1/2 shadow-[0_0_3px_1px] shadow-pink-500'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-4 bg-pink-500 text-white'>Pro</Badge>
       <div className='flex justify-center items-center'>
-      <ul className='text-sm list-disc marker:text-pink-500 space-y-1 w-full'>
+      <ul className='text-sm text-muted-foreground  list-disc marker:text-pink-500 space-y-1 w-full'>
         <li>Everything in Free</li>
         <li>All Conversations</li>
         <li>Audio for conversations</li>
