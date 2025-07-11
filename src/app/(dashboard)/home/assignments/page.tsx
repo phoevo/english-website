@@ -11,7 +11,7 @@ import { ArrowRight, CheckCircle, Loader, Plus, Sword, Swords, } from "lucide-re
 import StudentPage from "./StudentPage";
 import TeacherPage from "./TeacherPage";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card} from "@/components/ui/card";
 import {
   Popover,
   PopoverTrigger,
@@ -152,7 +152,7 @@ useEffect(() => {
       await deleteFriendRequest(requestId);
       setPendingRequests((prev) => prev.filter((r) => r.id !== requestId));
   }
-    catch (error) {
+    catch {
     toast.error("Failed to decline request.");
   } finally {
     setLoadingRequestId(null);
@@ -344,7 +344,7 @@ return (
   <div className="">
       <Tabs defaultValue="friends" className="w-full">
   <TabsList className="w-full">
-    <TabsTrigger value="friends">Friends</TabsTrigger>
+    <TabsTrigger value="friends">Connections</TabsTrigger>
     <TabsTrigger value="requests">Requests</TabsTrigger>
   </TabsList>
 
@@ -359,7 +359,7 @@ return (
       {friends.map((f) => (
         <div
           key={f.$id}
-          className="flex bg-card justify-between p-2 rounded-lg border-1 shadow-xs"
+          className="flex bg-background justify-between p-2 rounded-lg border-1 shadow-xs"
         >
           <div className="flex flex-col gap-1">
 

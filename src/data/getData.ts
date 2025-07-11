@@ -1,4 +1,4 @@
-import { account, databases } from "./appwrite";
+import { account, conversationsCollectionId, databaseId, databases, usersCollectionId } from "./appwrite";
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
@@ -62,5 +62,36 @@ export async function fetchConversations() {
   } catch (error) {
     console.error("Failed to fetch conversations:", error);
     throw error;
+  }
+}
+
+
+export async function getUserCount() {
+  try {
+    const response = await databases.listDocuments(
+      databaseId,
+      usersCollectionId,
+    );
+
+    const totalUsers = response.total;
+    return totalUsers;
+  } catch (err) {
+    console.error("Error fetching user count:", err);
+    return 0;
+  }
+}
+
+export async function getConversationCount() {
+  try {
+    const response = await databases.listDocuments(
+      databaseId,
+      conversationsCollectionId,
+    );
+
+    const totalConvos = response.total;
+    return totalConvos;
+  } catch (err) {
+    console.error("Error fetching convo count:", err);
+    return 0;
   }
 }

@@ -24,13 +24,12 @@ import { PasswordInput } from '@/components/ui/PasswordInput'
 
 import { account } from '@/data/appwrite'
 import { ID } from 'appwrite'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { ensureUserDocument } from '@/data/getData'
+import { useRouter } from 'next/navigation'
+import { useUserStore } from '@/data/useUserStore'
 
 
-
-// Define validation schema using Zod
 const formSchema = z
   .object({
     username: z
@@ -47,9 +46,11 @@ const formSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
     message: 'Passwords do not match',
-  })
+  });
+
 
 export default function Register() {
+  const { fetchUser } = useUserStore.getState()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,37 +66,55 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    setIsLoading(true);
-    console.log('Form submitted:');  // Added console log to verify submission
-    setError(null);
+  setIsLoading(true);
+  setError(null);
 
-    try {
-      // 1. Create Appwrite user account
-      const user = await account.create(
-        ID.unique(),
-        data.email,  // email
-        data.password,  // password
-        data.username  // username
-      );
-      console.log('User created:', user);  // Log user creation
-
-      // 2. Log the user in using email and password
-      await account.createEmailPasswordSession(data.email, data.password);
-      await ensureUserDocument();  // Directly authenticate with email and password
-
-      // 3. Redirect to the dashboard
-      router.push('/home');
-    } catch (err: unknown) {
-      console.error("Error during signup:", err);
-
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Something went wrong');
-      }
-      setIsLoading(false);
+  try {
+    const user = await account.create(
+      ID.unique(),
+      data.email,
+      data.password,
+      data.username
+    );
+    console.log('✅ Account created:', user);
+  } catch (err) {
+    console.error('❌ Failed to create account:', err);
+    setError('Failed to create account. Email may already be in use.');
+    setIsLoading(false);
+    return;
   }
+
+  try {
+    await account.createEmailPasswordSession(data.email, data.password);
+    console.log('✅ Session created');
+  } catch (err) {
+    console.error('❌ Failed to create session:', err);
+    setError('Account created, but failed to sign in. Try logging in manually.');
+    setIsLoading(false);
+    return;
+  }
+
+  try {
+    await ensureUserDocument();
+    console.log('✅ User document ensured');
+  } catch (err) {
+    console.error('⚠️ Failed to create user document:', err);
+  }
+
+  try {
+    await fetchUser()  // <== Add this line to update Zustand user store
+    console.log('✅ User store updated');
+  } catch (err) {
+    console.error('❌ Failed to fetch user for store:', err);
+    setError('Something went wrong. Please try logging in again.');
+    setIsLoading(false);
+    return;
+  }
+
+  router.push('/onboarding');
 };
+
+
 
 
   return (
@@ -190,6 +209,7 @@ export default function Register() {
                   </FormItem>
                 )}
               />
+
 
                 <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
                 {isLoading ? 'Signing Up...' : 'Sign Up'}

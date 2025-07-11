@@ -16,6 +16,7 @@ import {
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { toast } from "sonner";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
@@ -168,7 +169,13 @@ export function TestConversation() {
             <div className="flex flex-col space-y-1 items-center">
               <span className="font-bold">{word.type}</span>
               <span>{word.definition}</span>
-                <Button className="w-8 h-8 rounded-sm cursor-pointer" variant="outline">
+                <Button className="w-8 h-8 rounded-sm cursor-pointer" variant="outline"
+                onClick={() =>
+                  toast("Word added!", {
+                    description: "This is just a demo",
+                  })
+                }
+    >
                   <Plus />
                 </Button>
             </div>
@@ -179,7 +186,7 @@ export function TestConversation() {
   };
 
   return (
-    <div className="flex p-1 flex-col lg:flex-row bg-muted shadow-lg border rounded-lg">
+    <div className="flex p-1 flex-col lg:flex-row bg-muted rounded-lg">
       {/* Conversation section */}
       <div className="m-5 p-4 mt-5 border rounded-xl bg-background shadow-sm flex-1">
         <h2 className="text-lg sm:text-xl font-semibold mb-8 sm:mb-20">Conversation Title</h2>

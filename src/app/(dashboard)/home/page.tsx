@@ -52,8 +52,8 @@ function Page() {
              align="start"
             >
               {user ? (
-                 <h1 className={`text-3xl font-light ${dmSans.className}`}>Welcome back, {user.name}</h1>
-              ): <h1 className={`text-3xl font-light ${dmSans.className}`}>Welcome, New User</h1>}
+                 <h1 className={`text-3xl ${dmSans.className}`}>Welcome back, {user.name}</h1>
+              ): <h1 className={`text-3xl ${dmSans.className}`}>Welcome, New User</h1>}
 
             </UserGuidePopover>
 

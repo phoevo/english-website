@@ -13,6 +13,9 @@ import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, BookOpenCheck, Check, Gall
 import TestWordBoard from "./(dashboard)/TestWordBoard";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card"
+import { getUserCount, getConversationCount } from "@/data/getData";
+import { useEffect, useState } from "react";
 
 
 
@@ -51,13 +54,25 @@ const transitionImage = {
 
 
 export default function LandingPage() {
+  const [userCount, setUserCount] = useState(0);
+  const [convoCount, setConvoCount] = useState(0);
+
+  useEffect(() => {
+  getUserCount().then(setUserCount);
+}, []);
+
+useEffect(() => {
+  getConversationCount().then(setConvoCount);
+}, []);
+
+
   return (
-    <ScrollArea className={`flex bg-background flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
+    <ScrollArea className={`flex bg-landing-bg flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
        <nav className="sticky top-0 w-screen z-50">
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-12 lg:h-18">
             <h1 className="hidden lg:block text-xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
-            <div className={`flex absolute right-5 lg:right-10 gap-3 ${dmSans.className}`}>
+            <div className={`flex absolute right-5 lg:right-10 gap-3 ${geist.className}`}>
               <Link href={"/register"}> <Button className="hidden lg:block cursor-pointer">Sign Up</Button> </Link>
               <Link href={"/login"}> <Button className="hidden lg:block cursor-pointer" variant="secondary">Log in</Button> </Link>
               <ModeToggle />
@@ -67,33 +82,51 @@ export default function LandingPage() {
 
 
       <div className="flex flex-col w-screen border-b bg-dots justify-center items-center gap-10">
-        <div className="flex flex-col gap-1 items-center">
-          <h1 className="text-5xl lg:text-8xl bg-background font-normal ">Synomilo</h1>
-          <div className="flex flex-row bg-background text-1xl font-normal mt-1 gap-2" >
+        <div className="flex flex-col gap-2 items-center">
+          <h1 className="text-5xl lg:text-8xl bg-landing-bg font-normal ">Synomilo</h1>
+          <div className="flex flex-row bg-landing-bg text-1xl font-normal mt-3 gap-2" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div>
-          <p className="text-zinc-500">Greek for: &quot;I conversate&quot;</p>
+          <p className="text-zinc-500 bg-landing-bg">Greek for: &quot;I conversate&quot;</p>
         </div>
 
         <div className="flex flex-col items-center gap-3">
-        <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-background mt-10"> An English practice platform focused on conversation</h2>
-        <h2 className="text-4xl font-semibold bg-background mt-10"/>
+        <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10"> An English practice platform focused on conversation</h2>
+        <h2 className="text-4xl font-semibold bg-landing-bg mt-10"/>
 
-        <div className="flex flex-col max-w-4xl h-auto mb-20 lg:mb-20 bg-accent border-1 rounded-4xl justify-start items-center p-10 lg:p-15 space-y-6 shadow-md">
-          <p className={`text-md lg:text-xl leading-relaxed bg-accent ${dmSans.className}`}>Our goal is to help English learners start having
-            meaningful conversations faster by using methods inspired by Assimil — a trusted language learning approach that emphasizes
-             learning through natural, everyday dialogues. This helps keep students engaged and confident by practicing conversations that
-              reflect real-life situations.
-
-
-
+      <div className="flex flex-col lg:flex-row justify-center items-center p-5 gap-15 w-full">
+        <div className="flex flex-col max-w-4xl h-auto bg-card rounded-4xl justify-start items-center p-5 lg:p-5 space-y-4 ">
+          <p className={`text-md lg:text-xl leading-relaxed bg-card text-center ${dmSans.className}`}>
+          Synomilo helps English learners move beyond studying by giving them a place to actively practice.
+          It’s built for both tutors and students, with realistic conversations, progress tracking, and tools designed for real-world speaking.
+          Tutors can assign content and give feedback, while students can explore and practice on their own or during lessons.
           </p>
+          <p className="text-2xl font-semibold">It’s not a course. It’s where you come to rehearse for real life.</p>
         </div>
 
+        <div className="h-auto flex items-center">
+          <Card className={`w-auto h-auto flex flex-row gap-10 items-center p-5 ${dmSans .className}`}>
+            <div className="flex flex-col items-center space-y-2">
+              <p className="text-lg font-semibold">Join</p>
+              <p className="text-5xl font-bold">{userCount}</p>
+              <p className="text-lg font-semibold">Tutors and Students</p>
+            </div>
 
-        <div className="w-screen gap-10 flex flex-col justify-center items-center border-b bg-background">
+            <div className="flex flex-col items-center space-y-2">
+              <p className="text-lg font-semibold">Practice</p>
+              <p className="text-5xl font-bold">{convoCount}</p>
+              <p className="text-lg font-semibold">Conversations</p>
+            </div>
+
+          </Card>
+        </div>
+      </div>
+
+
+        <div className="w-screen gap-10 flex flex-col justify-center items-center border-b bg-landing-bg">
+
        <motion.div
-       className="sticky top-5 mb-20 z-30 p-5 bg-accent border-1 rounded-full shadow-lg"
+       className="sticky top-5 mb-20 z-30 p-5 bg-card border-1 rounded-full shadow-lg"
        initial={{ opacity: 0, y: 80 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true}}
@@ -131,12 +164,14 @@ export default function LandingPage() {
           transition={transition2}
         >
           <div className="flex flex-col lg:flex-row justify-end lg:mr-12 gap-10">
+
           <TestConversation />
+
           <p className="self-center w-40 text-2xl m-0 font-semibold"> <ArrowLeft size={40} className="text-pink-500"/>Highlight words types for easy reading</p>
           </div>
         </motion.div>
 
-        <div className="z-20 sticky top-30 left-43 text lg:left-0 lg:top-52 self-start m-4 mb-23  lg:text-3xl font-semibold">
+        <div className="z-20 sticky top-30 left-43 text lg:left-0 lg:top-52 self-start m-4 mb-23 lg:text-3xl font-semibold">
         <span className="px-1 text-pink-500 text">
           2.
         </span>
@@ -306,7 +341,7 @@ export default function LandingPage() {
 
 
         <motion.div
-        className="flex flex-col justify-start items-center bg-background w-auto p-10 m-10 rounded-lg z-30"
+        className="flex flex-col justify-start items-center bg-landing-bg w-auto p-10 m-10 rounded-lg z-30"
         initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -348,7 +383,7 @@ export default function LandingPage() {
       </div>
 
 
-      <div className="flex w-screen h-auto items-center justify-evenly flex-row bg-background p-40 border-b">
+      <div className="flex w-screen h-auto items-center justify-evenly flex-row bg-landing-bg p-40 border-b">
       <div className="sticky top-1/3 self-start border-b ">
         <motion.h1 className="text-5xl font-semibold"
          initial={{ opacity: 0 }}
@@ -448,7 +483,7 @@ export default function LandingPage() {
 
 
 
-      <div className="flex w-screen h-auto items-center justify-center flex-col bg-background p-40 border-b">
+      <div className="flex w-screen h-auto items-center justify-center flex-col bg-landing-bg p-40 border-b">
       <div className="">
         <motion.h1 className="text-5xl font-semibold flex justify-center"
          initial={{ opacity: 0 }}

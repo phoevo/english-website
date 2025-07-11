@@ -76,7 +76,7 @@ function FakeCreate({ children }: { children: React.ReactNode }) {
 }
 function TestWordBoard() {
   return (
-    <div className='h-auto bg-muted p-6 rounded-md shadow-md border-1 '>
+    <div className='h-auto bg-muted p-6 rounded-md '>
       <Card className='w-full h-full bg-background border border-muted rounded-md flex flex-col'>
         <CardHeader className='flex flex-col'>
           <CardTitle className='text-2xl'>Word Board</CardTitle>

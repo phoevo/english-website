@@ -30,7 +30,7 @@
 
   export function TestDictionary() {
     return (
-      <div className="flex flex-col bg-muted p-4 border-1 shadow-lg rounded-lg w-150">
+      <div className="flex flex-col bg-muted p-4 rounded-lg w-150">
 
         <div className="flex flex-row p-3">
         <div className="p-2 w-full border rounded-xl bg-background shadow-md">
