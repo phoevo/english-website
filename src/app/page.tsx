@@ -13,9 +13,19 @@ import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, BookOpenCheck, Check, Gall
 import TestWordBoard from "./(dashboard)/TestWordBoard";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card"
 import { getUserCount, getConversationCount } from "@/data/getData";
 import { useEffect, useState } from "react";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import TestConversationCover from "./(dashboard)/TestConversationCover";
+import TestFriends from "./(dashboard)/TestFriends";
 
 
 
@@ -98,8 +108,8 @@ useEffect(() => {
         <div className="flex flex-col max-w-4xl h-auto bg-card rounded-4xl justify-start items-center p-5 lg:p-5 space-y-4 ">
           <p className={`text-md lg:text-xl leading-relaxed bg-card text-center ${dmSans.className}`}>
           Synomilo helps English learners move beyond studying by giving them a place to actively practice.
-          It’s built for both tutors and students, with realistic conversations, progress tracking, and tools designed for real-world speaking.
-          Tutors can assign content and give feedback, while students can explore and practice on their own or during lessons.
+          With realistic conversations and tools built for real-world speaking, students can practice solo or with a tutor.
+          Tutors can already join sessions and guide students using Synomilo’s content — with dedicated tools for assigning, tracking, and giving feedback coming soon.
           </p>
           <p className="text-2xl font-semibold">It’s not a course. It’s where you come to rehearse for real life.</p>
         </div>
@@ -199,8 +209,6 @@ useEffect(() => {
         </span>
         Tools & Features
         </div>
-
-
 
        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-2 rounded-lg">
 
@@ -330,9 +338,59 @@ useEffect(() => {
 
   <div className="flex items-center justify-center text-center">Streaks</div>
 </motion.div>
-
-
 </div>
+
+
+
+ <div className="z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-72 self-start m-4 lg:text-3xl font-semibold">
+    <span className="px-1 text-pink-500">
+      4.
+    </span>
+      Tutors
+  </div>
+
+
+  <motion.div className="flex flex-col w-1/2 space-y-6 border-1 p-10 rounded-md shadow-md"
+  initial={{ opacity: 0, y: 100 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, margin: "-100px" }}
+  transition={{ delay: 0.2, duration: 0.2 }}
+  >
+    <div className="flex flex-row lg:text-4xl font-normal justify-start">Coming Soon</div>
+    <div className="text-xl text-muted-foreground">
+      As we enter beta, we’re creating dedicated tutor tools to make helping students
+      faster, easier, and more effective. Until then, use Synomilo solo or with your tutor—in person or online.
+    </div>
+
+    <div className="flex flex-col items-center py-5 font-normal">
+      <p className="text-3xl">But we’re going even further</p>
+      <p className="text-muted-foreground">Here's a sneak peek</p>
+      </div>
+
+    <div className="flex flex-col items-center space-y-6">
+
+      <div className=" flex flex-col gap-2 p-5 w-full rounded-md">
+        <p className="flex self-start text-xl">Find all your students in one place</p>
+        <TestFriends/>
+      </div>
+
+
+      <div className=" flex flex-col items-center gap-2 p-5 w-full rounded-md">
+        <p className="flex text-xl">Assign them any Conversation</p>
+        <TestConversationCover/>
+      </div>
+    </div>
+
+
+      <div className="flex flex-col space-y-3 text-xl text-muted-foreground">
+      <p>Soon, tutors will have their own UI to track Student's progress,
+      instantly see what they've been working on, and jump into the session prepared.</p>
+      <p>No lesson planning</p>
+      <p>No content prep</p>
+      <p>No scrambling for what to do next</p>
+      <p>Synomilo does the heavy lifting. Meet your Student or Tutor on your platform of choice and get started.</p>
+    </div>
+  </motion.div>
 
 
 

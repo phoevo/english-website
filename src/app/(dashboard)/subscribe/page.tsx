@@ -457,7 +457,6 @@ function SubscribePage() {
   </div>
 
 
-
 <div className='flex flex-col justify-between bg-background p-2 rounded-lg h-65 w-full shadow-[0_0_1px_1px] shadow-pink-500'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-4 bg-pink-500 text-white'>Pro</Badge>
@@ -546,7 +545,7 @@ function SubscribePage() {
   <ArrowDown size={30}/>
 </div>
 
-<Card className='h-auto w-auto bg-card mb-22'>
+<Card className='h-auto w-auto bg-card mb-22 shadow-none border-1'>
   <CardHeader>
     <CardTitle className='text-2xl'>More about Pricing and Subscriptions</CardTitle>
     <CardDescription>How Tutors and Students interact depends on who owns a subscription</CardDescription>

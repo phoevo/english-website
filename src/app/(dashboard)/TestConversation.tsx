@@ -52,7 +52,7 @@ const sampleConversation = [
       { text: "Hey,", type: "interjection", definition: "a greeting or call for attention" },
       { text: "I", type: "pronoun", definition: "refers to the speaker" },
       { text: "started", type: "verb", definition: "began something" },
-      { text: "learning", type: "verb", definition: "acquiring knowledge" },
+      { text: "practicing", type: "verb", definition: "repeat something to get better at it" },
       { text: "English", type: "noun", definition: "the English language" },
       { text: "on", type: "preposition", definition: "used to indicate a platform" },
       { text: "this", type: "determiner", definition: "referring to something nearby" },
@@ -125,7 +125,6 @@ export function TestConversation() {
     contraction: { color: "purple-500", enabled: false },
   });
 
-  // Disable hover by default on mobile (less than 768px)
   React.useEffect(() => {
     const handleResize = () => {
       setHoverEnabled(window.innerWidth >= 768);
@@ -188,7 +187,7 @@ export function TestConversation() {
   return (
     <div className="flex p-1 flex-col lg:flex-row bg-muted rounded-lg">
       {/* Conversation section */}
-      <div className="m-5 p-4 mt-5 border rounded-xl bg-background shadow-sm flex-1">
+      <div className="m-5 p-4 mt-5 border rounded-xl bg-card shadow-sm flex-1">
         <h2 className="text-lg sm:text-xl font-semibold mb-8 sm:mb-20">Conversation Title</h2>
         {sampleConversation.map((line, i) => (
           <div key={i} className="flex mb-6 flex-wrap lg:flex-nowrap">
@@ -202,7 +201,7 @@ export function TestConversation() {
 
       {/* Sidebar controls */}
       <div className="p-5 border-t lg:border-t-0 lg:border-l w-full lg:w-60">
-        <div className="flex flex-col items-center gap-4 bg-background p-4 rounded-lg shadow-md">
+        <div className="flex flex-col items-center gap-4 bg-card p-4 rounded-lg shadow-md">
           <span className="flex gap-2 items-center">
             <div className="rounded px-2 font-semibold ">Hover</div>
             <Switch checked={hoverEnabled} onCheckedChange={setHoverEnabled} />
@@ -212,7 +211,7 @@ export function TestConversation() {
             type="single"
             collapsible
             defaultValue="item-1"
-            className="w-full bg-background"
+            className="w-full bg-card"
           >
             <AccordionItem value="item-1">
               <AccordionTrigger>Word Classes</AccordionTrigger>
