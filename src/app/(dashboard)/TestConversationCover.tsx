@@ -30,7 +30,7 @@ function TestConversationCover() {
     <motion.div
       whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.1 }}
-      className="w-80"
+      className="w-80 bg-muted p-5 rounded-lg"
     >
       <Card className="bg-card w-auto h-80">
         <CardHeader>

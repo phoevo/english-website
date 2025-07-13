@@ -49,9 +49,20 @@ function ConversationsPage() {
     return <div className="p-10 text-center text-red-500">{error}</div>;
   }
 
-  const filtered = conversations.filter(conv =>
-    !selectedLevel || selectedLevel === "All" || conv.level === selectedLevel
-  );
+  const filtered = conversations.filter(conv => {
+  // Filter by level as before
+  const levelMatches = !selectedLevel || selectedLevel === "All" || conv.level === selectedLevel;
+
+  // Check if conversation is premium
+  const isProConversation = conv.isPro;
+
+  // User can access if not pro content, or if user is subscribed
+  const userCanAccess = isProConversation ? user?.isSubscribed : true;
+
+  return levelMatches && userCanAccess;
+});
+
+
 
   function showTest(){
     setTest(prevValue =>(!prevValue));

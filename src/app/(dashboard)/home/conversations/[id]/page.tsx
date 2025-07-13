@@ -9,7 +9,7 @@ import { Conversation } from "@/data/conversation";
 export default function ConversationPage() {
   const params = useParams();
 
-  // Assuming params.id will give you the conversation ID
+
   const conversationId = params.id ? (Array.isArray(params.id) ? params.id[0] : params.id) : "";
 
   const [conversation, setConversation] = useState<Conversation | null>(null);
@@ -21,7 +21,6 @@ export default function ConversationPage() {
       if (conversationId) {
         try {
           setLoading(true);
-          // Pass the conversationId (which is now just the number or string) to loadConversation
           const fetchedConversation = await loadConversation(conversationId);
 
           if (fetchedConversation) {

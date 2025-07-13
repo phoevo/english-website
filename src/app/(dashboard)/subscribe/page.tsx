@@ -281,17 +281,19 @@ function SubscribePage() {
 </div>
 
 
-<div className='flex flex-row w-1/2 mt-5 gap-15'>
+{/* <div className='flex flex-col w-1/2 mt-5 gap-15'> */}
+  <div className='flex flex-row justify-center w-full mt-5 gap-15'>
 
     <div className="flex flex-col border-1 p-2 rounded-lg space-y-5 w-1/2 h-auto">
       <CardHeader>
-      <CardTitle className="text-lg font-semibold">For Students</CardTitle>
+      {/* <CardTitle className="text-lg font-semibold">For Students</CardTitle> */}
     </CardHeader>
-    <CardContent className=''>
+    <CardContent>
 
      <div className='flex flex-col gap-5 w-full'>
 
-    <div className='flex flex-col gap-5'>
+    {/* <div className='flex flex-col gap-5'> */}
+       <div className='flex flex-row gap-5'>
   <div className='flex flex-col justify-between p-2 border-1 rounded-lg h-65 w-full text-muted-foreground'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-4'>Free</Badge>
@@ -413,7 +415,7 @@ function SubscribePage() {
   </div>
 
 
-  <div className="flex flex-col p-2 bg-muted shadow-md rounded-lg space-y-5 w-1/2 h-auto">
+  {/* <div className="flex flex-col p-2 bg-muted shadow-md rounded-lg space-y-5 w-1/2 h-auto">
       <CardHeader>
       <CardTitle className="text-lg font-semibold">For Tutors</CardTitle>
 
@@ -552,7 +554,7 @@ function SubscribePage() {
   </CardHeader>
 
   {tiers.map(renderTier)}
-</Card>
+</Card> */}
 
 {/* <Card className='h-auto w-2/3 bg-card m-22'>
   <CardHeader>
@@ -673,7 +675,7 @@ function SubscribePage() {
 
 </Card> */}
 
-
+</div>
 </div>
 
 </ScrollArea>

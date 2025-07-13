@@ -4,33 +4,31 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Geist } from "next/font/google";
 import { DM_Sans } from "next/font/google";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/components/ui/accordion"
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TestConversation } from "./(dashboard)/TestConversation";
 import TestDictionary from "./(dashboard)/TestDictionary";
-import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, BookOpenCheck, Check, GalleryHorizontalEnd, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
+import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, BookOpenCheck, Check, ChevronDown, EyeOff, GalleryHorizontalEnd, Info, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
 import TestWordBoard from "./(dashboard)/TestWordBoard";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { getUserCount, getConversationCount } from "@/data/getData";
 import { useEffect, useState } from "react";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import {Card} from "@/components/ui/card"
 import TestConversationCover from "./(dashboard)/TestConversationCover";
 import TestFriends from "./(dashboard)/TestFriends";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import CountUp from 'react-countup';
 
 
 
 
-console.log("Motion import:", motion);
+
 
 const geist = Geist({ subsets: ['latin'] });
 const dmSans = DM_Sans({ subsets: ['latin'] });
@@ -66,6 +64,7 @@ const transitionImage = {
 export default function LandingPage() {
   const [userCount, setUserCount] = useState(0);
   const [convoCount, setConvoCount] = useState(0);
+  const [showAbout, setShowAbout] = useState(false);
 
   useEffect(() => {
   getUserCount().then(setUserCount);
@@ -91,46 +90,90 @@ useEffect(() => {
     </nav>
 
 
-      <div className="flex flex-col w-screen border-b bg-dots justify-center items-center gap-10">
+      <div className="flex flex-col w-screen border-b bg-landing-bg justify-center items-center gap-10">
         <div className="flex flex-col gap-2 items-center">
-          <h1 className="text-5xl lg:text-8xl bg-landing-bg font-normal ">Synomilo</h1>
+          <h1 className="text-5xl lg:text-8xl bg-landing-bg font-normal pl-30">Synomilo
+            <span className="text-muted-foreground text-sm bg-muted rounded-full p-2">Early Access</span>
+          </h1>
           <div className="flex flex-row bg-landing-bg text-1xl font-normal mt-3 gap-2" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div>
           <p className="text-zinc-500 bg-landing-bg">Greek for: &quot;I conversate&quot;</p>
         </div>
 
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center gap-5">
         <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10"> An English practice platform focused on conversation</h2>
-        <h2 className="text-4xl font-semibold bg-landing-bg mt-10"/>
+        <p className="text-2xl bg-muted rounded-full py-2 px-4 font-normal">It's not a course. It's where you come to rehearse for real life.</p>
 
-      <div className="flex flex-col lg:flex-row justify-center items-center p-5 gap-15 w-full">
-        <div className="flex flex-col max-w-4xl h-auto bg-card rounded-4xl justify-start items-center p-5 lg:p-5 space-y-4 ">
-          <p className={`text-md lg:text-xl leading-relaxed bg-card text-center ${dmSans.className}`}>
-          Synomilo helps English learners move beyond studying by giving them a place to actively practice.
-          With realistic conversations and tools built for real-world speaking, students can practice solo or with a tutor.
-          Tutors can already join sessions and guide students using Synomilo’s content — with dedicated tools for assigning, tracking, and giving feedback coming soon.
-          </p>
-          <p className="text-2xl font-semibold">It’s not a course. It’s where you come to rehearse for real life.</p>
-        </div>
 
-        <div className="h-auto flex items-center">
-          <Card className={`w-auto h-auto flex flex-row gap-10 items-center p-5 ${dmSans .className}`}>
-            <div className="flex flex-col items-center space-y-2">
-              <p className="text-lg font-semibold">Join</p>
-              <p className="text-5xl font-bold">{userCount}</p>
-              <p className="text-lg font-semibold">Tutors and Students</p>
-            </div>
+      <div className="h-auto w-1/2 flex items-center">
+        <Card className={`w-full h-auto flex flex-row justify-evenly shadow-none border-none items-center p-5 ${dmSans.className}`}>
+          <div className="flex flex-col items-center space-y-2 w-1/2">
+            <p className="text-5xl font-bold text-center">
+              <CountUp end={686} duration={1.5} separator="," />
+            </p>
+            <p className="text-md font-semibold text-muted-foreground text-center">Users</p>
+          </div>
 
-            <div className="flex flex-col items-center space-y-2">
-              <p className="text-lg font-semibold">Practice</p>
-              <p className="text-5xl font-bold">{convoCount}</p>
-              <p className="text-lg font-semibold">Conversations</p>
-            </div>
-
-          </Card>
-        </div>
+          <div className="flex flex-col items-center space-y-2 w-1/2">
+            <p className="text-5xl font-bold text-center">
+              <CountUp end={31} duration={1.5} separator="," />
+            </p>
+            <p className="text-md font-semibold text-muted-foreground text-center">Conversations</p>
+          </div>
+        </Card>
       </div>
+
+
+        <div className="flex flex-row gap-5">
+
+          <Button variant="ghost"
+           onClick={() => setShowAbout(!showAbout)}
+            className="flex items-center gap-2 text-muted-foreground cursor-pointer">
+            {showAbout ? (
+              <>
+                <EyeOff className="w-4 h-4" />
+                Hide
+              </>
+            ) : (
+              <>
+                <Info className="w-4 h-4" />
+                About
+              </>
+            )}
+          </Button>
+
+
+        </div>
+
+        <motion.div
+
+          transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
+          className="flex flex-col max-w-4xl h-auto bg-card rounded-4xl justify-start items-center p-5 lg:p-5 space-y-4 "
+        >
+
+     <AnimatePresence>
+        {showAbout && (
+          <motion.div
+            layout
+            initial={{ opacity: 0, height: "auto" }}
+            animate={{ opacity: 1, height: "auto"}}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="flex flex-col max-w-4xl bg-card rounded-4xl justify-start items-center space-y-4 overflow-hidden"
+          >
+            <p className={`text-md lg:text-xl leading-relaxed bg-card text-center ${dmSans.className}`}>
+              Synomilo helps English learners move beyond studying by giving them a place to actively practice.
+              With realistic conversations and tools built for real-world speaking, students can practice solo or with a tutor.
+              Tutors can already join sessions and guide students using Synomilo’s content, with dedicated tools for assigning, tracking, and giving feedback coming soon.
+            </p>
+
+          </motion.div>
+        )}
+      </AnimatePresence>
+      </motion.div>
+
+
 
 
         <div className="w-screen gap-10 flex flex-col justify-center items-center border-b bg-landing-bg">
@@ -151,6 +194,9 @@ useEffect(() => {
           </div>
         </h1>
       </motion.div>
+
+
+
 
       <motion.div
       className="z-20 sticky top-30 lg:top-42 self-start m-2 lg:m-4 lg:mb-33 text-md lg:text-3xl font-semibold"
@@ -203,7 +249,7 @@ useEffect(() => {
         </motion.div>
 
 
-        <div className="z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-62 self-start m-4 lg:text-3xl font-semibold">
+        <div className="z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-62 lg:mb-14 self-start m-4 lg:text-3xl font-semibold">
         <span className="px-1 text-pink-500">
           3.
         </span>
@@ -357,13 +403,13 @@ useEffect(() => {
   transition={{ delay: 0.2, duration: 0.2 }}
   >
     <div className="flex flex-row lg:text-4xl font-normal justify-start">Coming Soon</div>
-    <div className="text-xl text-muted-foreground">
-      As we enter beta, we’re creating dedicated tutor tools to make helping students
-      faster, easier, and more effective. Until then, use Synomilo solo or with your tutor—in person or online.
+    <div className="text-lg text-muted-foreground">
+      As we enter early access, we’re creating dedicated tutor tools to make helping students
+      faster, easier, and more effective. Until then, use Synomilo solo or with your tutor, in person or online.
     </div>
 
     <div className="flex flex-col items-center py-5 font-normal">
-      <p className="text-3xl">But we’re going even further</p>
+      <p className="text-3xl">Tutors, these are for you</p>
       <p className="text-muted-foreground">Here's a sneak peek</p>
       </div>
 
@@ -382,12 +428,14 @@ useEffect(() => {
     </div>
 
 
-      <div className="flex flex-col space-y-3 text-xl text-muted-foreground">
-      <p>Soon, tutors will have their own UI to track Student's progress,
+      <div className="flex flex-col space-y-3 text-lg text-muted-foreground">
+        <p>Soon, tutors will have their own UI to track Student's progress,
       instantly see what they've been working on, and jump into the session prepared.</p>
-      <p>No lesson planning</p>
-      <p>No content prep</p>
-      <p>No scrambling for what to do next</p>
+        <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">Lesson finished early? No awkward filler</p>
+        <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">No lesson planning</p>
+        <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">No content prep</p>
+        <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">No scrambling for what to do next</p>
+
       <p>Synomilo does the heavy lifting. Meet your Student or Tutor on your platform of choice and get started.</p>
     </div>
   </motion.div>

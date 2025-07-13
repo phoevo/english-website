@@ -23,8 +23,8 @@ export const updateRecentConversations = async ({
       recentConversations: finalUpdated,
     });
 
-    console.log("✅ Recent conversations updated", finalUpdated);
+
   } catch (err) {
-    console.error("❌ Error updating recent conversations:", err);
+
   }
 };
