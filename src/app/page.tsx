@@ -405,7 +405,7 @@ useEffect(() => {
     <div className="flex flex-row lg:text-4xl font-normal justify-start">Coming Soon</div>
     <div className="text-lg text-muted-foreground">
       As we enter early access, we’re creating dedicated tutor tools to make helping students
-      faster, easier, and more effective. Until then, use Synomilo solo or with your tutor, in person or online.
+      faster, easier, and more effective. Until then, use Synomilo solo or screen-share with your tutor.
     </div>
 
     <div className="flex flex-col items-center py-5 font-normal">
@@ -450,7 +450,7 @@ useEffect(() => {
         className="flex flex-col justify-start items-center bg-landing-bg w-auto p-10 m-10 rounded-lg z-30"
         initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "-50px" }}
           transition={{ delay: 0.2, duration: 0.2 }}
           >
             <div>
@@ -465,7 +465,7 @@ useEffect(() => {
         <Link href="/home">
           <Button variant="outline" className="cursor-pointer px-6 py-4">Try Without an Account</Button>
         </Link>
-        <Link href="/subscribe">
+        <Link href="/pricing">
           <Button variant="outline" className="shadow-[0_0_5px_1px_rgba] shadow-pink-500 cursor-pointer px-6 py-4">Pricing</Button>
         </Link>
       </div>

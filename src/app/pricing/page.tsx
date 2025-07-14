@@ -25,6 +25,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { ArrowDown, Book, Briefcase, CircleArrowDown, CircleArrowUp, GraduationCap, Notebook, User } from 'lucide-react'
+import { motion, AnimatePresence } from "motion/react";
 
 
 const geist = Geist({ subsets: ['latin'] })
@@ -74,31 +75,31 @@ function renderTier(tier, idx) {
   const tutorIsPro = tier.tutorBadge === "Pro";
 
   return (
-    <CardContent key={idx} className='flex flex-row items-center justify-center'>
+    <CardContent key={idx} className='flex flex-col md:flex-row items-center justify-center gap-4 p-4'>
 
       <div className='w-auto flex flex-col items-center'>
-        <div className='flex items-center justify-center relative p-5'>
-          <User strokeWidth={1} size={90} />
-          <Notebook className="absolute bottom-5 ml-10 bg-card z-10" size={30} />
+        <div className='flex items-center justify-center relative p-3 md:p-5'>
+          <User strokeWidth={1} size={60} className="md:w-[90px] md:h-[90px]" />
+          <Notebook className="absolute bottom-3 md:bottom-5 ml-6 md:ml-10 bg-card z-10" size={20} />
         </div>
         <Badge className={studentIsPro ? "bg-pink-500" : ""}>{tier.studentBadge}</Badge>
       </div>
 
       <div className='w-auto flex flex-col items-center'>
-        <div className='flex items-center justify-center relative p-5'>
-          <User strokeWidth={1} size={90} />
-          <Briefcase className="absolute bottom-2 ml-10 bg-card z-10" size={40} />
+        <div className='flex items-center justify-center relative p-3 md:p-5'>
+          <User strokeWidth={1} size={60} className="md:w-[90px] md:h-[90px]" />
+          <Briefcase className="absolute bottom-1 md:bottom-2 ml-6 md:ml-10 bg-card z-10" size={25} />
         </div>
         <Badge className={tutorIsPro ? "bg-pink-500" : ""}>{tier.tutorBadge}</Badge>
       </div>
 
 
-      <div className='flex items-center justify-start relative w-2/3'>
-        <ul className='text-sm space-y-2'>
+      <div className='flex items-center justify-start relative w-full md:w-2/3'>
+        <ul className='text-xs md:text-sm space-y-2'>
           {tier.features.map((f, i) => (
             <li key={i} className='flex flex-row gap-1 items-center'>
               {f.icon}
-              {f.text}
+              <span className="text-center md:text-left">{f.text}</span>
             </li>
           ))}
         </ul>
@@ -123,47 +124,6 @@ function SubscribePage() {
     setIsVisible(!isVisible);
   }
 
-  const handleStudentSubscribe = async () => {
-  if (!user?.$id) {
-    router.push('/register');
-    return;
-  }
-
-  try {
-    if (isSubscribed) {
-      toast.error("You're already subscribed");
-      return;
-    }
-
-    await subscribeUser(user.$id);
-    setSubscribed(true);
-    toast.success("You are now subscribed!");
-  } catch (err) {
-    console.error("Subscription failed", err);
-    toast.error("Failed to subscribe. Make sure you're logged in or try again later.");
-  }
-};
-
- const handleTutorSubscribe = async () => {
-  if (!user?.$id) {
-    router.push('/register');
-    return;
-  }
-
-  try {
-    if (isSubscribed) {
-      toast.error("You're already subscribed");
-      return;
-    }
-
-    await subscribeUser(user.$id);
-    setSubscribed(true);
-    toast.success("You are now subscribed!");
-  } catch (err) {
-    console.error("Subscription failed", err);
-    toast.error("Failed to subscribe. Make sure you're logged in or try again later.");
-  }
-};
 
 
 
@@ -266,34 +226,38 @@ function SubscribePage() {
 
   return (
 
-    <ScrollArea className='w-full h-screen overflow-y-auto'>
-    <div className='flex flex-col justify-center items-center'>
+    <ScrollArea className={`w-full h-screen overflow-y-auto ${dmSans.className}`}>
+    <div className='flex flex-col justify-center items-center p-4 md:p-10'>
 
 
-    <div className="flex flex-col rounded-lg w-1/2 space-y-5 mt-5 h-auto ">
+    <div className="flex flex-col gap-2 items-center justify-center mt-10 rounded-lg w-full h-auto ">
+      <h1 className='text-3xl md:text-6xl font-normal text-center'>Choose the plan that best suits your needs</h1>
+      <p className='text-lg md:text-2xl text-muted-foreground text-center'>Early access pricing — lower rates while we grow.</p>
+      <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4, delay: 0.5 }}
+      className='text-sm md:text-xl bg-muted rounded-full p-2 text-center mx-4'>Start now and your price stays the same, even after release.</motion.div>
+    </div>
+
+
+ <div className='flex flex-col md:flex-row w-full md:w-full mt-10 gap-5 md:gap-15'>
+
+
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.1 }}
+      className="flex flex-col border-2 p-2 rounded-lg space-y-5 w-full md:w-full h-auto">
 
       <CardHeader>
-      <CardTitle className={`text-3xl font-normal ${dmSans.className}`}>Subscribe</CardTitle>
-      <CardDescription className='text-md'>
-        Subscribe to get access to the most Synomilo has to offer.
-      </CardDescription>
-    </CardHeader>
-</div>
-
-
-{/* <div className='flex flex-col w-1/2 mt-5 gap-15'> */}
-  <div className='flex flex-row justify-center w-full mt-5 gap-15'>
-
-    <div className="flex flex-col border-2 p-10 rounded-lg space-y-5 w-1/2 h-auto">
-      <CardHeader>
-      {/* <CardTitle className="text-lg font-semibold">For Students</CardTitle> */}
+      <CardTitle className="text-lg font-semibold">For Students</CardTitle>
     </CardHeader>
     <CardContent>
 
      <div className='flex flex-col gap-5 w-full'>
 
-    {/* <div className='flex flex-col gap-5'> */}
-       <div className='flex flex-row gap-5'>
+     <div className='flex flex-col gap-5'>
   <div className='flex flex-col justify-between p-2 border-2 rounded-lg h-65 w-full text-muted-foreground'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-4'>Free</Badge>
@@ -319,9 +283,9 @@ function SubscribePage() {
     Subscribed
   </Button>
 ) : (
-  <Link href="/home" className="w-full">
+  <Link href="/register" className="w-full">
     <Button variant="secondary" className="w-full cursor-pointer">
-      Remain on Free
+      Get started
     </Button>
   </Link>
 )}
@@ -353,7 +317,7 @@ function SubscribePage() {
     </Button>
   </DialogTrigger>
 
-  <DialogContent className={`min-w-2/3 h-auto p-10 ml-2 ${geist.className}`}>
+  <DialogContent className={`w-full max-w-4xl h-auto p-4 md:p-10 ml-2 ${geist.className}`}>
     <DialogHeader>
       <DialogHeader>
   <DialogTitle className='text-2xl'>See Student Plans</DialogTitle>
@@ -366,11 +330,11 @@ function SubscribePage() {
 
 
 
-  <div className="flex flex-row justify-center items-center gap-4 mt-4">
+  <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-4">
     {paidOptions.map((option, index) => (
       <div
         key={index}
-        className="flex flex-col justify-between p-4 border-1 rounded-xl w-1/3 h-80 shadow-md"
+        className="flex flex-col justify-between p-4 border-1 rounded-xl w-full md:w-1/3 h-80 shadow-md"
       >
          <div className="flex flex-col items-start">
           <div className='flex flex-row gap-2 items-center my-2'>
@@ -387,8 +351,7 @@ function SubscribePage() {
 
           <Button
           variant="outline"
-          className="mt-4 cursor-pointer"
-          onClick={handleStudentSubscribe}>
+          className="mt-4 cursor-pointer">
           Get {option.title}</Button>
 
 
@@ -412,10 +375,15 @@ function SubscribePage() {
 
 
     </CardContent>
-  </div>
+  </motion.div>
 
 
-  {/* <div className="flex flex-col p-2 bg-muted shadow-md rounded-lg space-y-5 w-1/2 h-auto">
+     <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+   className="flex flex-col p-2 bg-muted shadow-md rounded-lg space-y-5 w-full md:w-1/2 h-auto">
+
       <CardHeader>
       <CardTitle className="text-lg font-semibold">For Tutors</CardTitle>
 
@@ -448,11 +416,11 @@ function SubscribePage() {
     Subscribed
   </Button>
 ) : (
-  <Link href="/home" className="w-full">
-    <Button variant="secondary" className="w-full cursor-pointer">
-      Remain on Free
+
+    <Button variant="secondary" className="w-full cursor-pointer" disabled>
+      Coming Soon
     </Button>
-  </Link>
+
 )}
 
 
@@ -474,12 +442,13 @@ function SubscribePage() {
 
     <Dialog>
   <DialogTrigger asChild>
-    <Button variant="outline" className="cursor-pointer" >
-      {isSubscribed ? "Already subscribed. Change plan?" : "See Tutor Plans"}
+    <Button variant="outline" className="cursor-pointer" disabled >
+      Coming Soon
+      {/* {isSubscribed ? "Already subscribed. Change plan?" : "See Tutor Plans"} */}
     </Button>
   </DialogTrigger>
 
-  <DialogContent className={`min-w-2/3 h-auto p-10 ml-2 ${geist.className}`}>
+  <DialogContent className={`w-full max-w-4xl h-auto p-4 md:p-10 ml-2 ${geist.className}`}>
     <DialogHeader>
       <DialogHeader>
   <DialogTitle className='text-2xl'>See Monthly Tutor Plans</DialogTitle>
@@ -492,11 +461,11 @@ function SubscribePage() {
 
 
 
-  <div className="flex flex-row justify-center items-center gap-4 mt-4">
+  <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-4">
     {tutorPlans.map((plan, index) => (
   <div
     key={index}
-    className="flex flex-col p-4 border-1 rounded-xl w-1/3 h-65 shadow-md"
+    className="flex flex-col p-4 border-1 rounded-xl w-full md:w-1/3 h-65 shadow-md"
 
   >
     <div className="flex flex-col flex-grow items-start">
@@ -514,7 +483,7 @@ function SubscribePage() {
     <Button
       variant="outline"
       className="cursor-pointer w-full mt-auto"
-      onClick={handleTutorSubscribe}
+
     >
       Get {plan.title}
     </Button>
@@ -540,143 +509,31 @@ function SubscribePage() {
 
 
     </CardContent>
-  </div>
+  </motion.div>
+
+
 </div>
 
-<div>
+<motion.div
+  initial={{ opacity: 0, y: -210 }}
+  animate={{ opacity: 1, y: -100 }}
+  transition={{ duration: 0.3, delay: 1 }}
+>
   <ArrowDown size={30}/>
-</div>
+</motion.div>
 
-<Card className='h-auto w-auto bg-card mb-22 shadow-none border-1'>
+<Card className='h-auto w-full mb-5 bg-background shadow-md'>
   <CardHeader>
-    <CardTitle className='text-2xl'>More about Pricing and Subscriptions</CardTitle>
-    <CardDescription>How Tutors and Students interact depends on who owns a subscription</CardDescription>
+    <CardTitle className='text-lg md:text-2xl'>More about Pricing and Subscriptions</CardTitle>
+    <CardDescription className='text-sm md:text-base'>How Tutors and Students interact depends on who owns a subscription</CardDescription>
   </CardHeader>
 
   {tiers.map(renderTier)}
-</Card> */}
+</Card>
 
-{/* <Card className='h-auto w-2/3 bg-card m-22'>
-  <CardHeader>
-    <CardTitle className='text-2xl'>More about Pricing and Subscriptions</CardTitle>
-    <CardDescription>How Tutors and Students interact depends on who owns a subscription</CardDescription>
-
-  </CardHeader>
-
-  <CardContent className='flex flex-row'>
-
-    <div className='w-1/4 flex flex-col items-center'>
-    <div className='flex items-center justify-center relative p-5'>
-      <User strokeWidth={1} size={90} className='asbolute'/>
-      <Notebook size={30} className="absolute bottom-5 ml-10 bg-card z-10"/>
-    </div>
-      <Badge>Free</Badge>
-    </div>
-
-    <div className='flex items-center justify-center relative w-2/3'>
-      <ul className='text-md space-y-1'>
-        <li className='flex flex-row gap-1 items-center'> <CircleArrowDown className="text-red-500" size={18}/>Tutor can assign a total of 12 Conversations to Student</li>
-        <li className='flex flex-row gap-1 items-center'> <CircleArrowDown className="text-red-500" size={18}/>Student can not review and practice any Conversation in their own time</li>
-        <li className='flex flex-row gap-1 items-center'> <CircleArrowDown className="text-red-500" size={18}/>Tutor only has 2 active Student slots</li>
-      </ul>
-    </div>
-
-    <div className='w-1/4 flex flex-col items-center'>
-    <div className='flex items-center justify-center relative p-5'>
-      <User strokeWidth={1} size={90} className='asbolute'/>
-      <Briefcase size={40} className="absolute bottom-2 ml-10 bg-card z-10"/>
-    </div>
-      <Badge>Free</Badge>
-    </div>
-
-
-  </CardContent>
-
-  <CardContent className='flex flex-row'>
-
-    <div className='w-1/4 flex flex-col items-center'>
-    <div className='flex items-center justify-center relative p-5'>
-      <User strokeWidth={1} size={90} className='asbolute'/>
-      <Notebook size={30} className="absolute bottom-5 ml-10 bg-card z-10"/>
-    </div>
-      <Badge className='bg-pink-500'>Pro</Badge>
-    </div>
-
-    <div className='flex items-center justify-center relative w-2/3'>
-      <ul className='text-md space-y-1'>
-        <li className='flex flex-row gap-1 items-center'> <CircleArrowUp className="text-green-500" size={18}/>Tutor can assign any Conversation to student</li>
-        <li className='flex flex-row gap-1 items-center'> <CircleArrowUp className="text-green-500" size={18}/>Student can review and practice any Conversation in their own time</li>
-        <li className='flex flex-row gap-1 items-center'> <CircleArrowDown className="text-red-500" size={18}/>Tutor only has 2 active Student slots</li>
-      </ul>
-    </div>
-
-    <div className='w-1/4 flex flex-col items-center'>
-    <div className='flex items-center justify-center relative p-5'>
-      <User strokeWidth={1} size={90} className='asbolute'/>
-      <Briefcase size={40} className="absolute bottom-2 ml-10 bg-card z-10"/>
-    </div>
-      <Badge>Free</Badge>
-    </div>
-
-
-  </CardContent>
-
-  <CardContent className='flex flex-row items-center'>
-    <div className='w-1/4 flex flex-col items-center'>
-    <div className='flex items-center justify-center relative p-5'>
-      <User strokeWidth={1} size={90} className='asbolute'/>
-      <Notebook size={30} className="absolute bottom-5 ml-10 bg-card z-10"/>
-    </div>
-      <Badge>Free</Badge>
-    </div>
-
-    <div className='flex items-center justify-center relative w-2/3'>
-      <ul className='text-md space-y-1'>
-        <li className='flex flex-row gap-1 items-center'> <CircleArrowUp className="text-green-500" size={18}/>Tutor can assign any Conversation to student</li>
-        <li className='flex flex-row gap-1 items-center'> <CircleArrowDown className="text-red-500" size={18}/>Student can not review and practice any Conversation in their own time</li>
-        <li className='flex flex-row gap-1 items-center'> <CircleArrowUp className="text-green-500" size={18}/>Tutor has 5/15/30 active Student slots</li>
-      </ul>
-    </div>
-
-    <div className='w-1/4 flex flex-col items-center'>
-    <div className='flex items-center justify-center relative p-5'>
-      <User strokeWidth={1} size={90} className='asbolute'/>
-      <Briefcase size={40} className="absolute bottom-2 ml-10 bg-card z-10"/>
-    </div>
-      <Badge className='bg-pink-500'>Pro</Badge>
-    </div>
-  </CardContent>
-
-  <CardContent className='flex flex-row items-center'>
-    <div className='w-1/4 flex flex-col items-center'>
-    <div className='flex items-center justify-center relative p-5'>
-      <User strokeWidth={1} size={90} className='asbolute'/>
-      <Notebook size={30} className="absolute bottom-5 ml-10 bg-card z-10"/>
-    </div>
-      <Badge className='bg-pink-500'>Pro</Badge>
-    </div>
-
-    <div className='flex items-center justify-center relative w-2/3'>
-      <ul className='text-md space-y-1'>
-        <li className='flex flex-row gap-1 items-center'> <CircleArrowUp className="text-green-500" size={18}/>Tutor can assign any Conversation to student</li>
-        <li className='flex flex-row gap-1 items-center'> <CircleArrowUp className="text-green-500" size={18}/>Student can review and practice any Conversation in their own time</li>
-        <li className='flex flex-row gap-1 items-center'> <CircleArrowUp className="text-green-500" size={18}/>Tutor has 5/15/30 active Student slots</li>
-      </ul>
-    </div>
-
-    <div className='w-1/4 flex flex-col items-center'>
-    <div className='flex items-center justify-center relative p-5'>
-      <User strokeWidth={1} size={90} className='asbolute'/>
-      <Briefcase size={40} className="absolute bottom-2 ml-10 bg-card z-10"/>
-    </div>
-      <Badge className='bg-pink-500'>Pro</Badge>
-    </div>
-  </CardContent>
-
-</Card> */}
 
 </div>
-</div>
+
 
 </ScrollArea>
 

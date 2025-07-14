@@ -29,8 +29,8 @@ function getStreakBadgeClass(streak: number): string {
 const mockFriends = [
   {
     $id: "1",
-    name: "Alice Johnson",
-    email: "alice@example.com",
+    name: "Yuna",
+    email: "yunak33@example.com",
     isTeacher: false,
     isSubscribed: true,
     streak: 42,
@@ -39,8 +39,8 @@ const mockFriends = [
   },
   {
     $id: "2",
-    name: "Mr. Smith",
-    email: "smith@school.edu",
+    name: "Mateo Alonso",
+    email: "malonso@example.com",
     isTeacher: true,
     isSubscribed: false,
     streak: 12,
