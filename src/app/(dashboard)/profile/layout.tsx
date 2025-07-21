@@ -27,9 +27,10 @@ import { Label } from '@/components/ui/label'
 import CustomColors from './CustomColors'
 import { AlertDialogHeader, AlertDialogFooter, AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogDescription, AlertDialogTitle, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { unsubscribeUser } from '@/data/getData'
+import { unsubscribeUser2 } from '@/data/getData'
 import { Geist } from 'next/font/google'
 import Link from 'next/link'
+import { Client, Databases, Query } from 'appwrite'
 
 const geist = Geist({ subsets: ['latin'] });
 
@@ -158,34 +159,38 @@ export default function ProfileLayout() {
     }
   };
 
-   const handleUnsubscribe = async () => {
-    if (!user) {
-      console.log('No user found, exiting unsubscribe.');
-      return;
-    }
-
-    console.log('Attempting to unsubscribe user with ID:', user.$id);
-
-    try {
-      const unsubscribeResponse = await unsubscribeUser(user.$id);
-      console.log('Unsubscribe response:', unsubscribeResponse);
 
 
-      setSubscribed(false);
-      console.log('Updated subscription state to false');
+const handleUnsubscribe = async () => {
+  if (!user) {
+    console.log('No user found, exiting unsubscribe.');
+    return;
+  }
 
-      toast.success('You have successfully unsubscribed!', {
-        description: 'You will no longer have access to premium content.',
-      });
-      console.log('Toast triggered: Unsubscribed successfully');
-    } catch (error) {
-      console.error('Unsubscription failed:', error);
+  console.log('Attempting to unsubscribe user with ID:', user.$id);
 
-      toast.error('Unsubscription failed. Please try again later.', {
-        description: 'We encountered an error while processing your request.',
-      });
-    }
-  };
+  try {
+    const unsubscribeResponse = await unsubscribeUser2(user.$id);
+    console.log('Unsubscribe response:', unsubscribeResponse);
+
+    setSubscribed(false);
+    await fetchUser();
+
+    toast.success('You have successfully unsubscribed!', {
+      description: 'You will no longer have access to premium content.',
+    });
+
+  } catch (error) {
+    console.error('Unsubscription failed:', error);
+
+    toast.error('Unsubscription failed. Please try again later.', {
+      description: 'We encountered an error while processing your request.',
+    });
+  }
+};
+
+
+
 
 
 console.log(isSubscribed);
@@ -449,11 +454,17 @@ console.log(isSubscribed);
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className='cursor-pointer'>Go back</AlertDialogCancel>
-          <a href="/home">
-            <AlertDialogAction className='cursor-pointer' onClick={handleUnsubscribe}>
+
+            <AlertDialogAction
+              className="cursor-pointer"
+              onClick={async () => {
+                await handleUnsubscribe();
+                 // Only navigate AFTER unsubscribing
+              }}
+            >
               Unsubscribe
             </AlertDialogAction>
-          </a>
+
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

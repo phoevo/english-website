@@ -7,6 +7,7 @@ import {
   databaseId,
   getUserById,
 } from "@/data/appwrite";
+import { checkSubscriptionFromStripe } from "@/data/getData";
 
 interface User {
   isSubscribed: any;
@@ -95,103 +96,121 @@ export const useUserStore = create<UserState>((set, get) => ({
   set({ friends: fetchedFriends.filter((f): f is User => Boolean(f)) });
 },
 
-  fetchUser: async () => {
-    set({ loading: true });
 
+fetchUser: async () => {
+  set({ loading: true });
+
+  try {
+    const res = await account.get();
+    const userDoc = await databases.getDocument(databaseId, usersCollectionId, res.$id);
+
+    // Check subscription status directly from Stripe (most accurate)
+    let isSubscribed = false;
     try {
-      const res = await account.get();
-      const userDoc = await databases.getDocument(
-        databaseId,
-        usersCollectionId,
-        res.$id
-      );
-
-      const isSubscribed = userDoc?.isSubscribed ?? false;
-      const conversationIds: string[] = userDoc?.recentConversations || [];
-      const dictionaryWords = userDoc?.dictionaryWords || [];
-      const completeConversations: string[] = userDoc?.completeConversations || [];
-      const customColors = userDoc?.customColors || [];
-      const challengeCount: string[] = userDoc?.challengeCount || [];
-      const taskCount: number = typeof userDoc?.taskCount === "number" ? userDoc.taskCount : 0;
-      const lastActive = userDoc?.lastActive ?? null;
-      const streak = typeof userDoc?.streak === "number" ? userDoc.streak : 0;
-      const isTeacher = !!userDoc?.isTeacher;
-      const friendsList: string[] = userDoc?.friendsList || [];
-
-      const conversations: Conversation[] = [];
-      const validConversationIds: string[] = [];
-
-      for (const id of conversationIds) {
-        try {
-          const convo = await getConversationFromDB(id);
-          if (convo) {
-            conversations.push({
-              $id: convo.$id,
-              title: convo.title,
-              level: convo.level,
-            });
-            validConversationIds.push(convo.$id);
-          }
-        } catch {
-          console.warn(`Skipping deleted conversation ID: ${id}`);
-        }
-      }
-
-      if (validConversationIds.length !== conversationIds.length) {
+      console.log("Checking subscription status from Stripe...");
+      isSubscribed = await checkSubscriptionFromStripe(res.email);
+      console.log("Stripe subscription status:", isSubscribed);
+      
+      // Update user document if Stripe status is different
+      if (isSubscribed !== !!userDoc?.isSubscribed) {
+        console.log(`Updating user document: ${!!userDoc?.isSubscribed} -> ${isSubscribed}`);
         await databases.updateDocument(databaseId, usersCollectionId, res.$id, {
-          recentConversations: validConversationIds,
+          isSubscribed
         });
       }
+    } catch (stripeError) {
+      console.warn("Could not check Stripe, falling back to user document:", stripeError);
+      isSubscribed = !!userDoc?.isSubscribed;
+    }
 
-      set({
-        user: {
-          $id: res.$id,
-          name: res.name,
-          email: res.email,
-          isTeacher,
-          friendsList,
-          isSubscribed,
-          streak,
-          challengeCount,
-          taskCount,
 
-        },
+    // Other user data from document
+    const conversationIds: string[] = userDoc?.recentConversations || [];
+    const dictionaryWords = userDoc?.dictionaryWords || [];
+    const completeConversations: string[] = userDoc?.completeConversations || [];
+    const customColors = userDoc?.customColors || [];
+    const challengeCount: string[] = userDoc?.challengeCount || [];
+    const taskCount: number = typeof userDoc?.taskCount === "number" ? userDoc.taskCount : 0;
+    const lastActive = userDoc?.lastActive ?? null;
+    const streak = typeof userDoc?.streak === "number" ? userDoc.streak : 0;
+    const isTeacher = !!userDoc?.isTeacher;
+    const friendsList: string[] = userDoc?.friendsList || [];
+
+    // Fetch conversations (unchanged)
+    const conversations: Conversation[] = [];
+    const validConversationIds: string[] = [];
+
+    for (const id of conversationIds) {
+      try {
+        const convo = await getConversationFromDB(id);
+        if (convo) {
+          conversations.push({
+            $id: convo.$id,
+            title: convo.title,
+            level: convo.level,
+          });
+          validConversationIds.push(convo.$id);
+        }
+      } catch {
+        console.warn(`Skipping deleted conversation ID: ${id}`);
+      }
+    }
+
+    if (validConversationIds.length !== conversationIds.length) {
+      await databases.updateDocument(databaseId, usersCollectionId, res.$id, {
+        recentConversations: validConversationIds,
+      });
+    }
+
+    set({
+      user: {
+        $id: res.$id,
+        name: res.name,
+        email: res.email,
         isTeacher,
-        isSubscribed,
         friendsList,
-        recentConversations: conversations,
-        completeConversations,
-        dictionaryWords,
-        customColors,
+        isSubscribed,
+        streak,
         challengeCount,
         taskCount,
-        lastActive,
-        streak,
-      });
+      },
+      isTeacher,
+      isSubscribed,
+      friendsList,
+      recentConversations: conversations,
+      completeConversations,
+      dictionaryWords,
+      customColors,
+      challengeCount,
+      taskCount,
+      lastActive,
+      streak,
+    });
 
-      await get().fetchFriends();
+    await get().fetchFriends();
 
-    } catch (error) {
-      console.error("Failed to fetch user or conversations:", error);
-      set({
-        user: null,
-        isTeacher: false,
-        isSubscribed: false,
-        friendsList: [],
-        friends: [],
-        recentConversations: [],
-        completeConversations: [],
-        dictionaryWords: [],
-        customColors: [],
-        challengeCount: [],
-        taskCount: 0,
-        lastActive: null,
-        streak: 0,
-      });
-    } finally {
-      set({ loading: false });
-    }
-  },
+  } catch (error) {
+    console.error("Failed to fetch user or conversations:", error);
+    set({
+      user: null,
+      isTeacher: false,
+      isSubscribed: false,
+      friendsList: [],
+      friends: [],
+      recentConversations: [],
+      completeConversations: [],
+      dictionaryWords: [],
+      customColors: [],
+      challengeCount: [],
+      taskCount: 0,
+      lastActive: null,
+      streak: 0,
+    });
+  } finally {
+    set({ loading: false });
+  }
+},
+
 
   setConversationComplete: async (conversationId: string) => {
     const user = get().user;

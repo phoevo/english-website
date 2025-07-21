@@ -80,7 +80,7 @@ function renderTier(tier, idx) {
       <div className='w-auto flex flex-col items-center'>
         <div className='flex items-center justify-center relative p-3 md:p-5'>
           <User strokeWidth={1} size={60} className="md:w-[90px] md:h-[90px]" />
-          <Notebook className="absolute bottom-3 md:bottom-5 ml-6 md:ml-10 bg-card z-10" size={20} />
+          <Notebook className="absolute bottom-3 md:bottom-5 ml-6 md:ml-10 bg-background z-10" size={20} />
         </div>
         <Badge className={studentIsPro ? "bg-pink-500" : ""}>{tier.studentBadge}</Badge>
       </div>
@@ -88,7 +88,7 @@ function renderTier(tier, idx) {
       <div className='w-auto flex flex-col items-center'>
         <div className='flex items-center justify-center relative p-3 md:p-5'>
           <User strokeWidth={1} size={60} className="md:w-[90px] md:h-[90px]" />
-          <Briefcase className="absolute bottom-1 md:bottom-2 ml-6 md:ml-10 bg-card z-10" size={25} />
+          <Briefcase className="absolute bottom-1 md:bottom-4 ml-6 md:ml-10 bg-background z-10" size={25} />
         </div>
         <Badge className={tutorIsPro ? "bg-pink-500" : ""}>{tier.tutorBadge}</Badge>
       </div>
@@ -241,14 +241,14 @@ function SubscribePage() {
     </div>
 
 
- <div className='flex flex-col md:flex-row w-full md:w-full mt-10 gap-5 md:gap-15'>
+ <div className='flex flex-col md:flex-row w-full md:w-1/2 mt-10 gap-5 md:gap-15'>
 
 
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
-      className="flex flex-col border-2 p-2 rounded-lg space-y-5 w-full md:w-full h-auto">
+      className="flex flex-col p-2 border-2 rounded-lg space-y-5 w-full md:w-1/2 h-auto">
 
       <CardHeader>
       <CardTitle className="text-lg font-semibold">For Students</CardTitle>
@@ -317,7 +317,7 @@ function SubscribePage() {
     </Button>
   </DialogTrigger>
 
-  <DialogContent className={`w-full max-w-4xl h-auto p-4 md:p-10 ml-2 ${geist.className}`}>
+  <DialogContent className={`min-w-2/3 h-auto p-10 ml-2 ${geist.className}`}>
     <DialogHeader>
       <DialogHeader>
   <DialogTitle className='text-2xl'>See Student Plans</DialogTitle>
@@ -522,7 +522,7 @@ function SubscribePage() {
   <ArrowDown size={30}/>
 </motion.div>
 
-<Card className='h-auto w-full mb-5 bg-background shadow-md'>
+<Card className='h-auto w-2/3 mb-5 bg-background shadow-md'>
   <CardHeader>
     <CardTitle className='text-lg md:text-2xl'>More about Pricing and Subscriptions</CardTitle>
     <CardDescription className='text-sm md:text-base'>How Tutors and Students interact depends on who owns a subscription</CardDescription>

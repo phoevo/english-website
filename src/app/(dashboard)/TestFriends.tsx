@@ -41,7 +41,7 @@ const mockFriends = [
     $id: "2",
     name: "Mateo Alonso",
     email: "malonso@example.com",
-    isTeacher: true,
+    isTeacher: false,
     isSubscribed: false,
     streak: 12,
     taskCount: 15,

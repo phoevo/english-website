@@ -62,7 +62,12 @@ export default function Login() {
       } catch (err) {
       }
 
-      await account.createEmailPasswordSession(data.email, data.password);
+      const session = await account.createEmailPasswordSession(data.email, data.password);
+      
+      // Store JWT token for function calls
+      const jwt = await account.createJWT();
+      localStorage.setItem('jwt', jwt.jwt);
+      
       await ensureUserDocument();
       router.push('/home');
 

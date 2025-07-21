@@ -22,8 +22,8 @@ function TestConversationCover() {
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   const dummyStudents = [
-    { id: '1', name: 'Alice Johnson', email: 'alice@example.com', assigned: true },
-    { id: '2', name: 'Mr. Smith', email: 'smith@school.edu', assigned: false },
+    { id: '1', name: 'Yuna', email: 'yunak33@example.com', assigned: true },
+    { id: '2', name: 'Mateo Alonso', email: 'malosno@example.com', assigned: false },
   ];
 
   return (

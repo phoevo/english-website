@@ -447,11 +447,11 @@ useEffect(() => {
 
 
         <motion.div
-        className="flex flex-col justify-start items-center bg-landing-bg w-auto p-10 m-10 rounded-lg z-30"
+        className="flex flex-col justify-start items-center bg-landing-bg w-auto p-10 m-20 rounded-lg z-30"
         initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
-          transition={{ delay: 0.2, duration: 0.2 }}
+          transition={{ delay: 0.1, duration: 0.2 }}
           >
             <div>
             <h2 className="text-3xl lg:text-5xl font-normal m-5">Looks good? Let’s get you started.</h2>

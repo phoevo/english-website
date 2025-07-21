@@ -1,5 +1,6 @@
 import { Client, Databases, Account, Storage, Query } from 'appwrite'
 
+const ENDPOINT_ID = process.env.NEXT_PUBLIC_APPWRITE_FUNCTION_API_ENDPOINT!;
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
@@ -8,11 +9,15 @@ const DECKS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_DECKS_COLLECTION_ID
 const AUDIO_BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_AUDIO_BUCKET_ID!;
 const FRIEND_REQUESTS_ID = process.env.NEXT_PUBLIC_APPWRITE_FRIEND_REQUESTS_ID!;
 const ASSIGNMENTS_ID = process.env.NEXT_PUBLIC_APPWRITE_ASSIGNMENTS_ID!;
-
+const STRIPE_CUSTOMERS_ID = process.env.NEXT_PUBLIC_APPWRITE_STRIPE_CUSTOMERS_ID!;
+// SUBSCRIPTIONS_ID removed - no longer using subscriptions collection
+const STRIPE_SECRET_KEY = process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!;
+const STRIPE_WEBHOOK_SECRET = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET!;
 
 const client = new Client()
-  .setEndpoint('https://cloud.appwrite.io/v1')
+  .setEndpoint(ENDPOINT_ID)
   .setProject(PROJECT_ID)
+
 
 
 export const databases = new Databases(client)
@@ -27,6 +32,10 @@ export const decksCollectionId = DECKS_COLLECTION_ID
 export const audioBucketId = AUDIO_BUCKET_ID
 export const friendRequestsId = FRIEND_REQUESTS_ID
 export const assignmentsId = ASSIGNMENTS_ID
+// subscriptionsId removed - no longer using subscriptions collection
+export const stripeCustomersId = STRIPE_CUSTOMERS_ID
+export const stripeSecretKey = STRIPE_SECRET_KEY
+export const stripeWebhookSecret = STRIPE_WEBHOOK_SECRET
 
 
 export const getConversationFromDB = async (documentId: string) => {
