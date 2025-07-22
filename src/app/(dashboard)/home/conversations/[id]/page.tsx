@@ -2,13 +2,15 @@
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import ContentDisplay from "../ContentDisplay";
+import TeacherContentDisplay from "../TeacherContentDisplay";
 import { loadConversation } from "@/data/conversation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Conversation } from "@/data/conversation";
+import { useUserStore } from "@/data/useUserStore";
 
 export default function ConversationPage() {
   const params = useParams();
-
+  const { isTeacher, user, loading: userLoading } = useUserStore();
 
   const conversationId = params.id ? (Array.isArray(params.id) ? params.id[0] : params.id) : "";
 
@@ -43,7 +45,7 @@ export default function ConversationPage() {
     fetchConversation();
   }, [conversationId]);
 
-  if (loading) {
+  if (loading || userLoading) {
     return(
       <div className="grid grid-rows-[auto_1fr] h-full w-full bg-background text-foreground rounded-lg">
 
@@ -114,7 +116,11 @@ export default function ConversationPage() {
 
   return (
     <div className="flex flex-col w-full h-full">
-       <ContentDisplay conversation={conversation} />
+      {user?.isTeacher ? (
+        <TeacherContentDisplay conversation={conversation} />
+      ) : (
+        <ContentDisplay conversation={conversation} />
+      )}
     </div>
   );
 }

@@ -56,7 +56,8 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
     const isPro = conversation.isPro;
     const isSubscribed = user.isSubscribed;
 
-    if (isPro && !isSubscribed) {
+    // Teachers have access to all conversations, students need subscription for pro content
+    if (isPro && !isSubscribed && !isTeacher) {
       toast("This is a Pro conversation. Upgrade to access.");
       return; // Stop navigation
     }

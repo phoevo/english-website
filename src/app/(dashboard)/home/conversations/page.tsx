@@ -37,7 +37,7 @@ function ConversationsPage() {
   const [test, setTest] = useState(false);
 
   const {
-    loading: userLoading, user
+    loading: userLoading, user, isTeacher
   } = useUserStore();
 
 
@@ -56,8 +56,8 @@ function ConversationsPage() {
   // Check if conversation is premium
   const isProConversation = conv.isPro;
 
-  // User can access if not pro content, or if user is subscribed
-  const userCanAccess = isProConversation ? user?.isSubscribed : true;
+  // Teachers have access to all conversations, students need subscription for pro content
+  const userCanAccess = isTeacher || !isProConversation || user?.isSubscribed;
 
   return levelMatches && userCanAccess;
 });

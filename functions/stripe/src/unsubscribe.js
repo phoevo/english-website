@@ -15,24 +15,24 @@ async function handleUnsubscribe({ req, res, adminClient, log, error }) {
     }
 
     log("Initializing Stripe and Appwrite clients...");
-    
+
     // Debug environment variables
     log("Environment variables check:");
     log("NEXT_PUBLIC_STRIPE_SECRET_KEY:", process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY ? "✓ Present" : "✗ Missing");
     log("STRIPE_SECRET_KEY:", process.env.STRIPE_SECRET_KEY ? "✓ Present" : "✗ Missing");
-    
+
     // Use the same key pattern as other working functions
     const stripeKey = process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY;
-    
+
     if (!stripeKey) {
       error("ERROR: No Stripe secret key found in environment variables");
       return res.json({ error: "Missing Stripe API key" }, 500);
     }
-    
+
     const stripe = new Stripe(stripeKey, {
       apiVersion: "2023-08-16",
     });
-    
+
     log("Stripe initialized successfully with key");
     const databases = new Databases(adminClient);
 
