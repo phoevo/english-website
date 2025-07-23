@@ -16,6 +16,7 @@ interface DialogueLine {
 export interface Conversation {
   title: string;
   content: string | DialogueLine[];
+  isPro?: boolean;
 }
 
 // Function to parse dialogue from raw text
@@ -80,6 +81,7 @@ export const loadConversation = async (documentId: string) => {
     content: parsedContent,
     level: doc.level,
     audioFileId: doc.audioFileId,
+    isPro: doc.isPro,
 
   };
 

@@ -298,7 +298,7 @@ const hoverClass = hoverBackgroundColors[colorKey];
         {Array.isArray(rawDialogue) && rawDialogue.length > 0 ? (
           rawDialogue.map((line, i) => (
             <div key={i} className="flex flex-row mb-10">
-              <div className="font-semibold pr-6 border-r-1 border-gray-400 min-w-[100px] text-right">
+              <div className="font-semibold pr-6 border-r-1 border-zinc-500 min-w-[100px] text-right">
                 {line.speaker}
               </div>
               <div className="ml-6 flex flex-wrap gap-1">

@@ -20,12 +20,32 @@ export default function ConversationPage() {
 
   useEffect(() => {
     const fetchConversation = async () => {
-      if (conversationId) {
+      if (conversationId && user) {
         try {
           setLoading(true);
           const fetchedConversation = await loadConversation(conversationId);
 
           if (fetchedConversation) {
+            // Check authorization - same logic as ConversationCover
+            const isPro = fetchedConversation.isPro;
+            const isSubscribed = user.isSubscribed;
+
+            console.log("Authorization check:", {
+              isPro,
+              isSubscribed,
+              isTeacher,
+              userObject: user
+            });
+
+            // Teachers have access to all conversations, students need subscription for pro content
+            if (isPro && !isSubscribed && !isTeacher) {
+              console.log("Access denied: Pro conversation requires subscription");
+              setError("This is a Pro conversation. Upgrade to access.");
+              setLoading(false);
+              return;
+            }
+
+            console.log("Access granted");
             setConversation(fetchedConversation);
           } else {
             setError("Conversation not found.");
@@ -36,6 +56,9 @@ export default function ConversationPage() {
         } finally {
           setLoading(false);
         }
+      } else if (conversationId && !user) {
+        // Wait for user to load
+        return;
       } else {
         setError("Invalid conversation ID.");
         setLoading(false);
@@ -43,7 +66,7 @@ export default function ConversationPage() {
     };
 
     fetchConversation();
-  }, [conversationId]);
+  }, [conversationId, user, isTeacher]);
 
   if (loading || userLoading) {
     return(

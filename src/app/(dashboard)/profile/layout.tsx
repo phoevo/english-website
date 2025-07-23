@@ -277,7 +277,7 @@ console.log(isSubscribed);
                         )}
                       />
 
-                      <FormField
+                      {/* <FormField
                         control={accountForm.control}
                         name="isTeacher"
                         render={({ field }) => (
@@ -291,7 +291,7 @@ console.log(isSubscribed);
                             </FormControl>
                           </FormItem>
                         )}
-                      />
+                      /> */}
 
                       <Button type="submit" disabled={isSaving} className="cursor-pointer">
                         {isSaving ? 'Saving...' : 'Save changes'}
