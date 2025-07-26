@@ -149,16 +149,6 @@ function SubscribePage() {
         "Access to all existing and new content within the year of purchase.",
       ]
     },
-    {
-      title: "Lifetime",
-      price: "119.99",
-      info: "Break even after 2 years",
-      desc: [
-        "For those who see language as a life-long journey.",
-        "Pay once — it's yours forever. Come back anytime, even years later.",
-        "Lifetime access to Synomilo, including all future updates.",
-       ]
-      }
     ]
 
   const earlyPaidOptions = [
@@ -349,10 +339,29 @@ function SubscribePage() {
           </ul>
         </div>
 
-          <Button
-          variant="outline"
-          className="mt-4 cursor-pointer">
-          Get {option.title}</Button>
+     {!user ? (
+
+  <Link href="/register" className="w-full">
+    <Button variant="outline" className="w-full cursor-pointer">
+      Get started
+    </Button>
+  </Link>
+) : !isSubscribed ? (
+  <Link href="/subscribe" className="w-full">
+    <Button variant="outline" className="w-full cursor-pointer">
+      Get started
+    </Button>
+  </Link>
+) : (
+  <Button
+    variant="outline"
+    className="w-full cursor-not-allowed opacity-50"
+    disabled
+  >
+    Subscribed
+  </Button>
+)}
+
 
 
       </div>
@@ -480,13 +489,24 @@ function SubscribePage() {
         ))}
       </ul>
     </div>
+
+    {!user ? (
     <Button
+      variant="default"
+      className="cursor-pointer w-full mt-auto"
+
+    >
+      Get started
+    </Button>) :
+    (<Button
       variant="outline"
       className="cursor-pointer w-full mt-auto"
 
     >
       Get {plan.title}
-    </Button>
+    </Button>)
+    }
+
   </div>
 ))}
 

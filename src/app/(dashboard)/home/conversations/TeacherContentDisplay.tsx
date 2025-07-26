@@ -37,7 +37,7 @@ export default function TeacherContentDisplay({ conversation }: ConversationProp
 
   return (
     <div className="grid grid-rows-[auto_1fr] h-full w-full bg-background text-foreground rounded-lg">
-      <div className="border-b px-10 py-4 font-light text-2xl flex items-center justify-between">
+      <div className="border-b px-10 py-4 font-light text-2xl flex items-center gap-2">
         <span>{conversation.title}</span>
         <Badge variant="secondary" className="bg-blue-100 text-blue-800">
           Teacher View

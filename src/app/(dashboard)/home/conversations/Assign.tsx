@@ -75,7 +75,7 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
         studentId,
         teacherId,
         conversationId,
-        status: "pending",
+        status: "Pending",
       });
 
       toast.success("Assignment sent!");

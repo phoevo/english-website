@@ -104,24 +104,29 @@ fetchUser: async () => {
     const res = await account.get();
     const userDoc = await databases.getDocument(databaseId, usersCollectionId, res.$id);
 
-    // Check subscription status directly from Stripe (most accurate)
-    let isSubscribed = false;
-    try {
-      console.log("Checking subscription status from Stripe...");
-      isSubscribed = await checkSubscriptionFromStripe(res.email);
-      console.log("Stripe subscription status:", isSubscribed);
-      
-      // Update user document if Stripe status is different
-      if (isSubscribed !== !!userDoc?.isSubscribed) {
-        console.log(`Updating user document: ${!!userDoc?.isSubscribed} -> ${isSubscribed}`);
-        await databases.updateDocument(databaseId, usersCollectionId, res.$id, {
-          isSubscribed
-        });
-      }
-    } catch (stripeError) {
-      console.warn("Could not check Stripe, falling back to user document:", stripeError);
-      isSubscribed = !!userDoc?.isSubscribed;
-    }
+    // Use stored subscription status for fast loading
+    // Only check Stripe periodically or whefn explicitly needed
+    const isSubscribed = !!userDoc?.isSubscribed;
+
+    // Optionally check Stripe in background (don't await)
+    // This prevents blocking the UI but keeps data fresh
+    checkSubscriptionFromStripe(res.email)
+      .then(stripeStatus => {
+        if (stripeStatus !== isSubscribed) {
+          console.log(`Background sync: updating subscription ${isSubscribed} -> ${stripeStatus}`);
+          databases.updateDocument(databaseId, usersCollectionId, res.$id, {
+            isSubscribed: stripeStatus
+          }).catch(err => console.warn("Background subscription update failed:", err));
+
+          // Update the store immediately
+          set(state => ({
+            ...state,
+            isSubscribed: stripeStatus,
+            user: state.user ? { ...state.user, isSubscribed: stripeStatus } : null
+          }));
+        }
+      })
+      .catch(err => console.warn("Background Stripe check failed:", err));
 
 
     // Other user data from document
@@ -136,13 +141,18 @@ fetchUser: async () => {
     const isTeacher = !!userDoc?.isTeacher;
     const friendsList: string[] = userDoc?.friendsList || [];
 
-    // Fetch conversations (unchanged)
+    // Fetch conversations in parallel for better performance
     const conversations: Conversation[] = [];
     const validConversationIds: string[] = [];
 
-    for (const id of conversationIds) {
-      try {
-        const convo = await getConversationFromDB(id);
+    if (conversationIds.length > 0) {
+      const conversationPromises = conversationIds.map(id =>
+        getConversationFromDB(id).catch(() => null)
+      );
+
+      const fetchedConversations = await Promise.all(conversationPromises);
+
+      fetchedConversations.forEach((convo, index) => {
         if (convo) {
           conversations.push({
             $id: convo.$id,
@@ -150,16 +160,17 @@ fetchUser: async () => {
             level: convo.level,
           });
           validConversationIds.push(convo.$id);
+        } else {
+          console.warn(`Skipping deleted conversation ID: ${conversationIds[index]}`);
         }
-      } catch {
-        console.warn(`Skipping deleted conversation ID: ${id}`);
-      }
-    }
-
-    if (validConversationIds.length !== conversationIds.length) {
-      await databases.updateDocument(databaseId, usersCollectionId, res.$id, {
-        recentConversations: validConversationIds,
       });
+
+      // Update document in background if needed (don't await)
+      if (validConversationIds.length !== conversationIds.length) {
+        databases.updateDocument(databaseId, usersCollectionId, res.$id, {
+          recentConversations: validConversationIds,
+        }).catch(err => console.warn("Background conversation cleanup failed:", err));
+      }
     }
 
     set({
@@ -187,7 +198,8 @@ fetchUser: async () => {
       streak,
     });
 
-    await get().fetchFriends();
+    // Fetch friends in background to avoid blocking initial load
+    get().fetchFriends().catch(err => console.warn("Background friends fetch failed:", err));
 
   } catch (error) {
     console.error("Failed to fetch user or conversations:", error);

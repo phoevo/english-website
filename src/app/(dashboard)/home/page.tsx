@@ -27,18 +27,43 @@ import {
   AlertDialogTitle,
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Users, Calendar, Sword, Swords } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
 
 function Page() {
-  const { user, recentConversations, loading, dictionaryWords } = useUserStore();
+  const { user, recentConversations, loading, dictionaryWords, friends, isTeacher } = useUserStore();
   const searchParams = useSearchParams();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const conversation = recentConversations[0]; // get the first one
   const firstFiveWords = [...dictionaryWords].reverse().slice(0, 5);
+
+  // Teacher-specific data: recently active students
+  const studentFriends = friends?.filter(f => !f.isTeacher) || [];
+  const recentStudents = studentFriends
+    .filter(student => student.lastActive)
+    .sort((a, b) => new Date(b.lastActive || 0).getTime() - new Date(a.lastActive || 0).getTime())
+    .slice(0, 5);
+
+  // Helper function for streak badge styling (same as in assignments page)
+  function getStreakBadgeClass(streak: number): string {
+    if (streak >= 100) {
+      return "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-300 text-black rounded-full animate-gradient uneven-glow bg-clip-padding";
+    } else if (streak >= 50) {
+      return "bg-gradient-to-r from-red-500 via-purple-500 to-cyan-300 text-white rounded-full animate-gradient ring-1 ring-foreground bg-clip-padding";
+    } else if (streak >= 30) {
+      return "bg-gradient-to-r from-blue-600 via-pink-600 to-purple-600 text-white rounded-full animate-gradient bg-clip-padding";
+    } else if (streak >= 10) {
+      return "bg-gradient-to-r from-emerald-400 to-blue-600 text-white bg-clip-padding";
+    } else if (streak >= 3) {
+      return "bg-green-500 text-white";
+    } else {
+      return "bg-foreground text-background";
+    }
+  }
 
   useEffect(() => {
     const success = searchParams.get('success');
@@ -143,37 +168,110 @@ function Page() {
             </Card>
 
 
-            <Card className="bg-background">
-              <CardHeader>
-                <CardTitle>Recently saved words</CardTitle>
-                <CardDescription>Just to jog your memory</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {firstFiveWords.length === 0 ? (
-                  <p className="text-muted-foreground">No words added yet.</p>
+            {/* Conditional content based on user role */}
+            {isTeacher ? (
+              <Card className="bg-background">
+                <CardHeader>
+                  <CardTitle>Recently active students</CardTitle>
+                  <CardDescription>Students who have been active recently</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {recentStudents.length === 0 ? (
+                    <p className="text-muted-foreground">No recent student activity.</p>
+                  ) : (
+                    <ul className="space-y-3">
+                      {recentStudents.map((student, index) => {
+                        const lastActiveDate = student.lastActive ? new Date(student.lastActive) : null;
+                        const timeAgo = lastActiveDate ?
+                          Math.floor((Date.now() - lastActiveDate.getTime()) / (1000 * 60 * 60 * 24)) : null;
+
+                        return (
+                          <li key={index} className="flex justify-between items-center p-3 rounded-lg border hover:bg-muted/50 transition-colors">
+                            <div className="flex flex-col gap-1">
+                              <div>
+                                <Badge variant={student.isTeacher ? "default" : "secondary"}>
+                                  {student.isTeacher ? "Teacher" : "Student"}
+                                </Badge>
+                                <span className="text-sm text-muted-foreground px-2">{student.email}</span>
+                              </div>
+                              <div className="flex gap-2 items-center mt-2">
+                                <div className="flex flex-row border-1 rounded-full p-1 h-8 shadow-xs">
+                                  {student.isSubscribed ? (
+                                    <Badge className="text-foreground bg-pink-500 border-none">Pro</Badge>
+                                  ) : (
+                                    <Badge className="text-background bg-foreground border-none">Free</Badge>
+                                  )}
+                                  <span className="font-normal px-2">{student.name || "Unknown"}</span>
+                                  {student.streak !== undefined && (
+                                    <div className="flex justify-center">
+                                      <Badge className={getStreakBadgeClass(student.streak ?? 0)}>
+                                        {student.streak ?? 0}
+                                      </Badge>
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                                  <Calendar className="w-3 h-3" />
+                                  {timeAgo !== null ? 
+                                    `${timeAgo === 0 ? 'today' : `${timeAgo} days ago`}` : 
+                                    'unknown'
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge className="p-2" variant="secondary">
+                                <Sword className="rotate-45 w-3 h-3 mr-1" />
+                                {student.taskCount || 0}
+                              </Badge>
+                              <Badge className="p-2">
+                                <Swords className="w-3 h-3 mr-1" />
+                                {student.challengeCount?.length || 0}
+                              </Badge>
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </CardContent>
+                <CardFooter>
+                  <Link href={"/home/assignments"}>
+                    <Button variant="outline" className="cursor-pointer">View assignments</Button>
+                  </Link>
+                </CardFooter>
+              </Card>
+            ) : (
+              <Card className="bg-background">
+                <CardHeader>
+                  <CardTitle>Recently saved words</CardTitle>
+                  <CardDescription>Just to jog your memory</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {firstFiveWords.length === 0 ? (
+                    <p className="text-muted-foreground">No words added yet.</p>
                   ) : (
                     <ul className="list-disc list-inside space-y-1">
-                    {firstFiveWords.map((wordEntry, index) => {
-                      const [wordText] = wordEntry.split("::");
-                      const displayText = wordText
-                        .replace(/\/.*?\//g, "")
-                        .replace(/^\w/, (c) => c.toUpperCase());
+                      {firstFiveWords.map((wordEntry, index) => {
+                        const [wordText] = wordEntry.split("::");
+                        const displayText = wordText
+                          .replace(/\/.*?\//g, "")
+                          .replace(/^\w/, (c) => c.toUpperCase());
 
-                      return (
-                        <li key={index} className="text-md">{displayText}</li>
-                      );
-                    })}
-                  </ul>
-
-                    )}
-              </CardContent>
-              <CardFooter>
-                <Link href={"/home/dictionary"}>
-                 <Button variant="outline" className="cursor-pointer">View more</Button>
-                </Link>
-
-              </CardFooter>
-            </Card>
+                        return (
+                          <li key={index} className="text-md">{displayText}</li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </CardContent>
+                <CardFooter>
+                  <Link href={"/home/dictionary"}>
+                    <Button variant="outline" className="cursor-pointer">View more</Button>
+                  </Link>
+                </CardFooter>
+              </Card>
+            )}
           </div>
         )}
       </div>

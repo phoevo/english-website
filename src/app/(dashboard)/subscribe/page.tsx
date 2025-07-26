@@ -151,12 +151,18 @@
         return;
       }
 
+      // Show loading toast while redirecting to Stripe
+      toast.loading("Redirecting to payment...", { id: 'subscription-loading' });
+      
       await subscribeUser2(user.$id, plan);
-      //await getSubscription(user.$id)
-      setSubscribed(true);
-      toast.success("You are now subscribed!");
+      
+      // Note: Don't set subscription or show success here!
+      // The success will be handled after successful payment redirect back from Stripe
+      // The actual subscription status will be updated via webhook
+      
     } catch (err) {
       console.error("Subscription failed", err);
+      toast.dismiss('subscription-loading');
       toast.error("Failed to subscribe. Make sure you're logged in or try again later.");
     }
   };
@@ -417,9 +423,11 @@
 
             <Button
             variant="outline"
-            className="mt-4 cursor-pointer"
-            onClick={() => handleStudentSubscribe(option.planName)}>
-            Get {option.title}</Button>
+            className={`mt-4 ${!isTeacher ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'}`}
+            onClick={() => !isTeacher ? handleStudentSubscribe(option.planName) : null}
+            disabled={isTeacher}>
+            {!isTeacher ? `Get ${option.title}` : 'Requires Student Account'}
+            </Button>
 
 
         </div>
@@ -544,10 +552,11 @@
       </div>
       <Button
         variant="outline"
-        className="cursor-pointer w-full mt-auto"
-        onClick={handleTutorSubscribe}
+        className={`w-full mt-auto ${isTeacher ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'}`}
+        onClick={isTeacher ? handleTutorSubscribe : undefined}
+        disabled={!isTeacher}
       >
-        Get {plan.title}
+        {isTeacher ? `Get ${plan.title}` : 'Requires Tutor Account'}
       </Button>
     </div>
   ))}

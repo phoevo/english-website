@@ -10,6 +10,7 @@ import { toast } from 'sonner'
 
 import { databases, databaseId, usersCollectionId, account } from '@/data/appwrite'
 import { useUserStore } from '@/data/useUserStore'
+import { Notebook } from 'lucide-react'
 
 export default function Onboarding() {
   const [role, setRole] = useState<'student' | 'tutor' | null>(null)
@@ -47,17 +48,18 @@ export default function Onboarding() {
     <div className="flex flex-col w-1/2 gap-10">
       <CardHeader>
         <CardTitle className="text-2xl">I'm signing up as a...</CardTitle>
-        <CardDescription>Your role can be changed later</CardDescription>
+        <CardDescription>This cannot be changed later</CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-6">
         <RadioGroup
           value={role || ''}
           onValueChange={(val) => setRole(val as 'student' | 'tutor')}
+          className='flex flex-col lg:flex-row justify-between'
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="student" id="student" className='cursor-pointer' />
-            <Label className="text-md" htmlFor="student">Student</Label>
+            <Label className="text-md" htmlFor="student">Student </Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="tutor" id="tutor" className='cursor-pointer' />
@@ -68,7 +70,7 @@ export default function Onboarding() {
         <Button
           disabled={!role}
           onClick={handleFinish}
-          className="w-1/3 cursor-pointer"
+          className="w-auto cursor-pointer"
         >
           Continue
         </Button>

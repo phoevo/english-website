@@ -115,6 +115,16 @@ export default async function handlePayments({
           quantity: 1,
         },
       ],
+      // Explicitly enable receipt emails
+      invoice_creation: {
+        enabled: true,
+        invoice_data: {
+          description: `${plan} subscription`,
+          metadata: {
+            user_id: user.$id,
+          },
+        },
+      },
     });
 
     console.log("Checkout session created successfully:", checkoutSession.id);

@@ -81,9 +81,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
       className=""
       whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.1 }}
-       onClick={() => {
-    handleClick();
-  }}
+       onClick={() => {handleClick();}}
     >
         <Card className="w-80 h-70 bg-background cursor-pointer">
     <CardHeader>

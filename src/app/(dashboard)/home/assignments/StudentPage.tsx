@@ -92,7 +92,7 @@ function StudentPage() {
       databaseId,
       assignmentsId,
       assignmentId,
-      { status: "completed" }
+      { status: "Completed" }
     );
 
     setAssignments((prev) =>
@@ -132,7 +132,10 @@ function StudentPage() {
       <h4 className="font-semibold">{a.title}</h4>
       <p className="text-sm text-muted-foreground mb-1">Level: {a.level}</p>
 
-     <Badge variant={a.status === "Completed" ? "default" : "outline"}>
+     <Badge
+       variant={a.status === "Completed" ? "default" : "outline"}
+       className={a.status === "Completed" ? "bg-green-500 text-white" : ""}
+     >
       {a.status}
     </Badge>
 
