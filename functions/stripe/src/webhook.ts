@@ -58,6 +58,7 @@ export default async function handleWebhook({
     "invoice.upcoming",
     "invoice.marked_uncollectible",
     "invoice.payment_succeeded",
+    "invoice_payment.paid",
     "payment_intent.succeeded",
     "payment_intent.payment_failed",
     "payment_intent.canceled",

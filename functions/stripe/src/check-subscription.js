@@ -42,11 +42,15 @@ module.exports = async function handleCheckSubscription({
       limit: 1,
     });
 
+    console.log(`Found ${customers.data.length} customers for email:`, user.email);
+
     if (customers.data.length === 0) {
-      return res.json({ isSubscribed: false });
+      console.log("No customer found in Stripe");
+      return res.json({ isSubscribed: false, reason: "No customer found" });
     }
 
     const customerId = customers.data[0].id;
+    console.log("Customer ID:", customerId);
 
     // Check for active subscriptions
     const subscriptions = await stripe.subscriptions.list({
@@ -54,11 +58,26 @@ module.exports = async function handleCheckSubscription({
       status: 'active',
     });
 
+    console.log(`Found ${subscriptions.data.length} active subscriptions`);
+    
+    // Also check for all subscriptions (to debug)
+    const allSubscriptions = await stripe.subscriptions.list({
+      customer: customerId,
+      status: 'all',
+    });
+    
+    console.log(`Total subscriptions (all statuses): ${allSubscriptions.data.length}`);
+    allSubscriptions.data.forEach((sub, index) => {
+      console.log(`Subscription ${index + 1}: Status=${sub.status}, Created=${new Date(sub.created * 1000).toISOString()}`);
+    });
+
     const isSubscribed = subscriptions.data.length > 0;
 
     return res.json({ 
       isSubscribed,
-      planCount: subscriptions.data.length 
+      planCount: subscriptions.data.length,
+      totalSubscriptions: allSubscriptions.data.length,
+      customerId 
     });
 
   } catch (error) {
