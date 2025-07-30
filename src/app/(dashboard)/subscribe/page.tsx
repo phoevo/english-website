@@ -153,13 +153,13 @@
 
       // Show loading toast while redirecting to Stripe
       toast.loading("Redirecting to payment...", { id: 'subscription-loading' });
-      
+
       await subscribeUser2(user.$id, plan);
-      
+
       // Note: Don't set subscription or show success here!
       // The success will be handled after successful payment redirect back from Stripe
       // The actual subscription status will be updated via webhook
-      
+
     } catch (err) {
       console.error("Subscription failed", err);
       toast.dismiss('subscription-loading');

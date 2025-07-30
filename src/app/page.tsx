@@ -84,6 +84,9 @@ useEffect(() => {
             <div className={`flex absolute right-5 lg:right-10 gap-3 ${geist.className}`}>
               <Link href={"/register"}> <Button className="hidden lg:block cursor-pointer">Sign Up</Button> </Link>
               <Link href={"/login"}> <Button className="hidden lg:block cursor-pointer" variant="secondary">Log in</Button> </Link>
+              <Link href="/pricing">
+              <Button variant="outline" className="shadow-[0_0_5px_1px_rgba] shadow-pink-500 cursor-pointer px-6 py-4">Pricing</Button>
+              </Link>
               <ModeToggle />
             </div>
         </div>
@@ -489,7 +492,7 @@ useEffect(() => {
       </div>
 
 
-      <div className="flex w-screen h-auto items-center justify-evenly flex-row bg-landing-bg p-40 border-b">
+      {/*<div className="flex w-screen h-auto items-center justify-evenly flex-row bg-landing-bg p-40 border-b">
       <div className="sticky top-1/3 self-start border-b ">
         <motion.h1 className="text-5xl font-semibold"
          initial={{ opacity: 0 }}
@@ -613,8 +616,10 @@ useEffect(() => {
         </div>
       </div>
 
+      */}
+
     <div className="flex w-screen h-auto items-center justify-center flex-col bg-accent pt-20">
-      <h1 className="text-5xl font-semibold">Some quick questions you may have</h1>
+      <h2 className="text-3xl lg:text-5xl font-normal m-5">Some questions you may have</h2>
       <Accordion type="single" collapsible className="flex flex-col justify-center w-200 p-10">
       <AccordionItem value="item-1">
         <AccordionTrigger className="text-xl cursor-pointer">Is it free?</AccordionTrigger>
