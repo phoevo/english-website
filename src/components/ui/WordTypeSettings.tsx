@@ -26,25 +26,24 @@ interface Props {
 
 export const WordTypeSettings: React.FC<Props> = ({ wordTypes, toggleWordType }) => {
   return (
-         <>
-            {(Object.keys(wordTypes) as WordTypeKey[]).map((key) => (
-              <div
-                key={key}
-                className={`${
-                  wordTypes[key].enabled ? "bg-muted" : "bg-background"
-                } flex items-center rounded-md cursor-pointer w-35 border-1 hover:bg-muted`}
-                onClick={() => toggleWordType(key)}
-              >
-                <div className="flex p-1">
-                  {/* <Dot size={30} className={textColorMap[key]} /> */}
-                  {key.charAt(0).toUpperCase() + key.slice(1)}
-                </div>
-                <div className="ml-auto pr-2">
-                  {wordTypes[key].enabled ? <Check size={17} /> : ""}
-                </div>
-              </div>
-            ))}
-          </>
-
+    <div className="grid grid-cols-3 lg:flex lg:flex-col gap-2">
+      {(Object.keys(wordTypes) as WordTypeKey[]).map((key) => (
+        <div
+          key={key}
+          className={`${
+            wordTypes[key].enabled ? "bg-muted" : "bg-background"
+          } flex items-center justify-between rounded-md cursor-pointer p-1 border-1 hover:bg-muted`}
+          onClick={() => toggleWordType(key)}
+        >
+          <div className="flex items-center truncate">
+            {/* <Dot size={30} className={textColorMap[key]} /> */}
+            <span className="text-xs lg:text-sm truncate">{key.charAt(0).toUpperCase() + key.slice(1)}</span>
+          </div>
+          <div className="flex-shrink-0 ml-1">
+            {wordTypes[key].enabled ? <Check size={14} className="lg:w-[17px] lg:h-[17px]" /> : ""}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 };

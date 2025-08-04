@@ -59,7 +59,7 @@ const mockRequests = [
 
 function TestFriends() {
   return (
-    <div className="bg-muted p-5 rounded-lg">
+    <div className="bg-muted w-100 lg:w-full p-5 rounded-lg">
     <Card className={`p-5 w-full h-auto bg-card shadow-md ${geist.className}`}>
       <Tabs defaultValue="friends" className="w-full">
         <TabsList className="w-full mb-4">

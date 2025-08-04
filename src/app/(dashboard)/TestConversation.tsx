@@ -185,7 +185,7 @@ export function TestConversation() {
   };
 
   return (
-    <div className="flex p-1 flex-col lg:flex-row bg-muted rounded-lg">
+    <div className="flex p-1 flex-col lg:flex-row bg-muted rounded-lg lg:m-0">
       {/* Conversation section */}
       <div className="m-5 p-4 mt-5 border rounded-xl bg-card shadow-sm flex-1">
         <h2 className="text-lg sm:text-xl font-semibold mb-8 sm:mb-20">Conversation Title</h2>

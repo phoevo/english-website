@@ -9,7 +9,7 @@ import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/c
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TestConversation } from "./(dashboard)/TestConversation";
 import TestDictionary from "./(dashboard)/TestDictionary";
-import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, BookOpenCheck, Check, ChevronDown, EyeOff, GalleryHorizontalEnd, Info, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
+import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BookOpenCheck, Check, ChevronDown, EyeOff, GalleryHorizontalEnd, Info, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
 import TestWordBoard from "./(dashboard)/TestWordBoard";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
@@ -80,12 +80,12 @@ useEffect(() => {
        <nav className="sticky top-0 w-screen z-50">
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-12 lg:h-18">
-            <h1 className="hidden lg:block text-xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
+            <h1 className="hidden lg:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
             <div className={`flex absolute right-5 lg:right-10 gap-3 ${geist.className}`}>
               <Link href={"/register"}> <Button className="hidden lg:block cursor-pointer">Sign Up</Button> </Link>
               <Link href={"/login"}> <Button className="hidden lg:block cursor-pointer" variant="secondary">Log in</Button> </Link>
               <Link href="/pricing">
-              <Button variant="outline" className="shadow-[0_0_5px_1px_rgba] shadow-pink-500 cursor-pointer px-6 py-4">Pricing</Button>
+              <Button variant="outline" className="hidden lg:block shadow-[0_0_5px_1px_rgba] shadow-pink-500 cursor-pointer">Pricing</Button>
               </Link>
               <ModeToggle />
             </div>
@@ -95,9 +95,13 @@ useEffect(() => {
 
       <div className="flex flex-col w-screen border-b bg-landing-bg justify-center items-center gap-10">
         <div className="flex flex-col gap-2 items-center">
-          <h1 className="text-5xl lg:text-8xl bg-landing-bg font-normal pl-30">Synomilo
-            <span className="text-muted-foreground text-sm bg-muted rounded-full p-2">Early Access</span>
-          </h1>
+
+          <div className="flex flex-col items-center lg:flex-row lg:items-end">
+            <h1 className="lg:pl-25 text-6xl lg:text-8xl bg-landing-bg font-normal">Synomilo</h1>
+            <span className="text-muted-foreground w-auto text-xs lg:text-sm bg-muted p-1 lg:p-2 rounded-full">Early Access</span>
+
+          </div>
+
           <div className="flex flex-row bg-landing-bg text-1xl font-normal mt-3 gap-2" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div>
@@ -106,20 +110,20 @@ useEffect(() => {
 
         <div className="flex flex-col items-center gap-5">
         <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10"> An English practice platform focused on conversation</h2>
-        <p className="text-2xl bg-muted rounded-full py-2 px-4 font-normal">It's not a course. It's where you come to rehearse for real life.</p>
+        <p className="lg:text-2xl text-center m-2 bg-muted rounded-full py-2 px-4 font-normal">It's not a course. It's where you come to rehearse for real life.</p>
 
 
-      <div className="h-auto w-1/2 flex items-center">
+      <div className="h-auto w-full lg:w-1/2 flex items-center">
         <Card className={`w-full h-auto flex flex-row justify-evenly shadow-none border-none items-center p-5 ${dmSans.className}`}>
           <div className="flex flex-col items-center space-y-2 w-1/2">
-            <p className="text-5xl font-bold text-center">
+            <p className="text-4xl lg:text-5xl font-bold text-center">
               <CountUp end={686} duration={1.5} separator="," />
             </p>
             <p className="text-md font-semibold text-muted-foreground text-center">Users</p>
           </div>
 
           <div className="flex flex-col items-center space-y-2 w-1/2">
-            <p className="text-5xl font-bold text-center">
+            <p className="text-4xl lg:text-5xl font-bold text-center">
               <CountUp end={31} duration={1.5} separator="," />
             </p>
             <p className="text-md font-semibold text-muted-foreground text-center">Conversations</p>
@@ -222,15 +226,18 @@ useEffect(() => {
           viewport={{ once: true, margin: "-50px" }}
           transition={transition2}
         >
-          <div className="flex flex-col lg:flex-row justify-end lg:mr-12 gap-10">
+          <div className="flex flex-col m-2 lg:flex-row justify-end lg:mr-12 lg:gap-10">
 
           <TestConversation />
 
-          <p className="self-center w-40 text-2xl m-0 font-semibold"> <ArrowLeft size={40} className="text-pink-500"/>Highlight words types for easy reading</p>
+          <p className="lg:self-center lg:w-40 text-2xl font-semibold p-10 lg:p-0">
+            <ArrowUp size={40} className="text-pink-500 lg:hidden"/>
+            <ArrowLeft size={40} className="text-pink-500 hidden lg:block"/>
+            Highlight words types for easy reading</p>
           </div>
         </motion.div>
 
-        <div className="z-20 sticky top-30 left-43 text lg:left-0 lg:top-52 self-start m-4 mb-23 lg:text-3xl font-semibold">
+        <div className="hidden lg:block z-20 sticky top-30 left-43 text lg:left-0 lg:top-52 self-start m-4 mb-23 lg:text-3xl font-semibold">
         <span className="px-1 text-pink-500 text">
           2.
         </span>
@@ -245,21 +252,21 @@ useEffect(() => {
           viewport={{ once: true, margin: "0px" }}
           transition={transitionImage}
         >
-          <div className="flex items-center justify-center gap-10">
+          <div className="flex flex-col lg:flex-row items-center justify-center gap-10">
             <TestDictionary />
             <TestWordBoard/>
           </div>
         </motion.div>
 
 
-        <div className="z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-62 lg:mb-14 self-start m-4 lg:text-3xl font-semibold">
+        <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-62 lg:mb-14 self-start m-4 lg:text-3xl font-semibold">
         <span className="px-1 text-pink-500">
           3.
         </span>
         Tools & Features
         </div>
 
-       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-2 rounded-lg">
+       <div className="grid grid-cols-2 m-2 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-2 rounded-lg">
 
     <motion.div
     className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
@@ -391,7 +398,7 @@ useEffect(() => {
 
 
 
- <div className="z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-72 self-start m-4 lg:text-3xl font-semibold">
+ <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-72 self-start m-4 lg:text-3xl font-semibold">
     <span className="px-1 text-pink-500">
       4.
     </span>
@@ -399,7 +406,7 @@ useEffect(() => {
   </div>
 
 
-  <motion.div className="flex flex-col w-1/2 space-y-6 border-1 p-10 rounded-md shadow-md"
+  <motion.div className="flex flex-col lg:w-1/2 space-y-6 border-1 p-10 rounded-md shadow-md"
   initial={{ opacity: 0, y: 100 }}
   whileInView={{ opacity: 1, y: 0 }}
   viewport={{ once: true, margin: "-100px" }}
