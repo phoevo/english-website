@@ -186,13 +186,13 @@ useEffect(() => {
         <div className="w-screen gap-10 flex flex-col justify-center items-center border-b bg-landing-bg">
 
        <motion.div
-       className="sticky top-5 mb-20 z-30 p-5 bg-card border-1 rounded-full shadow-lg"
+       className="sticky top-5 mb-20 z-30 p-3 lg:p-5 bg-card border-1 rounded-full shadow-lg"
        initial={{ opacity: 0, y: 80 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true}}
           transition={transition1}>
         <h1
-          className="text-2xl font-semibold"
+          className="text-xl lg:text-2xl font-semibold"
 
         >
           <div className="flex flex-row gap-2 items-center">
@@ -406,27 +406,27 @@ useEffect(() => {
   </div>
 
 
-  <motion.div className="flex flex-col lg:w-1/2 space-y-6 border-1 p-10 rounded-md shadow-md"
+  <motion.div className="flex flex-col w-full lg:w-1/2 space-y-6 border-1 p-10 rounded-md shadow-md"
   initial={{ opacity: 0, y: 100 }}
   whileInView={{ opacity: 1, y: 0 }}
   viewport={{ once: true, margin: "-100px" }}
   transition={{ delay: 0.2, duration: 0.2 }}
   >
-    <div className="flex flex-row lg:text-4xl font-normal justify-start">Coming Soon</div>
-    <div className="text-lg text-muted-foreground">
+    <div className="flex flex-row text-2xl lg:text-4xl font-normal justify-start">Coming Soon</div>
+    <p className="text-md lg:text-lg text-muted-foreground">
       As we enter early access, we’re creating dedicated tutor tools to make helping students
       faster, easier, and more effective. Until then, use Synomilo solo or screen-share with your tutor.
-    </div>
+    </p>
 
     <div className="flex flex-col items-center py-5 font-normal">
-      <p className="text-3xl">Tutors, these are for you</p>
+      <p className="text-2xl lg:text-3xl">Tutors, these are for you</p>
       <p className="text-muted-foreground">Here's a sneak peek</p>
       </div>
 
     <div className="flex flex-col items-center space-y-6">
 
-      <div className=" flex flex-col gap-2 p-5 w-full rounded-md">
-        <p className="flex self-start text-xl">Find all your students in one place</p>
+      <div className=" flex flex-col items-center gap-2 lg:p-5 w-full rounded-md">
+        <p className="flex text-lg lg:self-start lg:text-xl">Find all your students in one place</p>
         <TestFriends/>
       </div>
 
@@ -438,8 +438,8 @@ useEffect(() => {
     </div>
 
 
-      <div className="flex flex-col space-y-3 text-lg text-muted-foreground">
-        <p>Soon, tutors will have their own UI to track Student's progress,
+      <div className="flex flex-col space-y-3 text-md lg:text-lg text-muted-foreground">
+        <p className="">Soon, tutors will have their own UI to track Student's progress,
       instantly see what they've been working on, and jump into the session prepared.</p>
         <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">Lesson finished early? No awkward filler</p>
         <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">No lesson planning</p>
@@ -457,7 +457,7 @@ useEffect(() => {
 
 
         <motion.div
-        className="flex flex-col justify-start items-center bg-landing-bg w-auto p-10 m-20 rounded-lg z-30"
+        className="flex flex-col justify-start items-center text-center bg-landing-bg w-full lg:p-10 m-20 rounded-lg z-30"
         initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}

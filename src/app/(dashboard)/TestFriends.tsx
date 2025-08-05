@@ -85,14 +85,14 @@ function TestFriends() {
 
                       <div className="flex flex-row gap-2">
 
-                      <div className="flex flex-row border rounded-full p-1 gap-1">
+                      <div className="flex flex-row items-center border rounded-full p-1 gap-1">
                         {f.isSubscribed ? (
                         <Badge className="bg-pink-500 text-white">Pro</Badge>
                       ) : (
                         <Badge className="bg-foreground text-background">Free</Badge>
                       )}
 
-                        {f.name}
+                        <p className="text-sm">{f.name}</p>
 
                         {f.streak !== undefined && (
                         <Badge className={getStreakBadgeClass(f.streak)}>
