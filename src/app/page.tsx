@@ -206,7 +206,7 @@ useEffect(() => {
 
 
       <motion.div
-      className="z-20 sticky top-30 lg:top-42 self-start m-2 lg:m-4 lg:mb-33 text-md lg:text-3xl font-semibold"
+      className="hidden lg:block z-20 sticky top-30 lg:top-42 self-start m-2 lg:m-4 lg:mb-33 text-md lg:text-3xl font-semibold"
       initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-200px"}}
@@ -406,7 +406,7 @@ useEffect(() => {
   </div>
 
 
-  <motion.div className="flex flex-col w-full lg:w-1/2 space-y-6 border-1 p-10 rounded-md shadow-md"
+  <motion.div className="flex flex-col w-full lg:w-1/2 space-y-6 lg:border-1 p-10 rounded-md shadow-md"
   initial={{ opacity: 0, y: 100 }}
   whileInView={{ opacity: 1, y: 0 }}
   viewport={{ once: true, margin: "-100px" }}
@@ -457,7 +457,7 @@ useEffect(() => {
 
 
         <motion.div
-        className="flex flex-col justify-start items-center text-center bg-landing-bg w-full lg:p-10 m-20 rounded-lg z-30"
+        className="flex flex-col justify-start items-center text-center bg-landing-bg w-full lg:p-10 m-20 z-30"
         initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
@@ -625,7 +625,7 @@ useEffect(() => {
 
       */}
 
-    <div className="flex w-screen h-auto items-center justify-center flex-col bg-accent pt-20">
+    <div className="flex w-screen h-auto items-center justify-center flex-col bg-accent">
       <h2 className="text-3xl lg:text-5xl font-normal m-5">Some questions you may have</h2>
       <Accordion type="single" collapsible className="flex flex-col justify-center w-200 p-10">
       <AccordionItem value="item-1">
