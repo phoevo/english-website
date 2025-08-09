@@ -74,6 +74,54 @@ useEffect(() => {
   getConversationCount().then(setConvoCount);
 }, []);
 
+  const questions = [
+          {
+            question: "Is it free?",
+            answer: "There are free and paid options"
+          },
+          {
+            question: "What do I get with the paid option?",
+            answer: (
+              <>
+                You get access to:
+                <ul className="list-disc pl-5">
+                  <li>Conversation Audio</li>
+                  <li>All existing and future conversations to go through at your own pace.</li>
+                  <li>Color customization</li>
+                </ul>
+                <p className="flex items-center gap-2 text-[18px] pt-5">
+                  Find out more on the{" "}
+                  <Link
+                    className="underline underline-offset-5 hover:underline-offset-10 transition-all duration-300"
+                    href="/pricing"
+                  >
+                    Pricing
+                  </Link>{" "}
+                  page.
+                </p>
+              </>
+            )
+          },
+          {
+            question: "Do I need an account?",
+            answer: (
+              <>
+                <p>Quick answer: No.</p>
+                <p className="pt-5">
+                  But if you want to keep track of your progress, you will need an account. It&apos;s free.
+                </p>
+              </>
+            )
+          },
+          {
+            question: "Do I need to download anything?",
+            answer: <>Nope, it runs entirely in your browser.</>
+          },
+
+
+
+        ]
+
 
   return (
     <ScrollArea className={`flex bg-landing-bg flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
@@ -457,7 +505,7 @@ useEffect(() => {
 
 
         <motion.div
-        className="flex flex-col justify-start items-center text-center bg-landing-bg w-full lg:p-10 m-20 z-30"
+        className="flex flex-col justify-start items-center text-center bg-landing-bg w-full lg:p-20 m-0 z-30"
         initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
@@ -625,62 +673,49 @@ useEffect(() => {
 
       */}
 
+
+
     <div className="flex w-screen h-auto items-center justify-center flex-col bg-accent">
-      <h2 className="text-3xl lg:text-5xl font-normal m-5">Some questions you may have</h2>
-      <Accordion type="single" collapsible className="flex flex-col justify-center w-200 p-10">
-      <AccordionItem value="item-1">
-        <AccordionTrigger className="text-xl cursor-pointer">Is it free?</AccordionTrigger>
-        <AccordionContent className="text-[18px]">
-          There are free and paid options.
-        </AccordionContent>
-      </AccordionItem>
+      <h2 className="text-3xl lg:text-5xl font-normal m-10">Some questions you may have</h2>
 
-      <AccordionItem value="item-2">
-        <AccordionTrigger className="text-xl cursor-pointer">What do I get with the paid option?</AccordionTrigger>
-        <AccordionContent className="text-[18px] ">You get access to:
-          <ul className="list-disc pl-5">
-          <li>Conversation Audio</li>
-          <li>All existing and future conversations to go through at your own pace.</li>
-          <li>Color customization</li>
-          </ul>
-          <p className="flex items-center gap-2 text-[18px] pt-5">Find out more on the
-           <Link className="underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href="/subscribe">Subscriptions</Link>page.</p>
+      <Accordion className="w-full p-10 lg:w-1/2" type="single" collapsible>
+      {questions.map((question, index) => (
+        <AccordionItem key={index} value={`item-${index}`}>
+          <AccordionTrigger className="text-lg lg:text-lg cursor-pointer">
+            {question.question}
+          </AccordionTrigger>
+          <AccordionContent className="text-md lg:text-lg text-muted-foreground">
+            {question.answer}
           </AccordionContent>
-      </AccordionItem>
-
-      <AccordionItem value="item-3">
-        <AccordionTrigger className="text-xl cursor-pointer">Do I need an account?</AccordionTrigger>
-        <AccordionContent className="text-[18px]">
-        <p>Quick answer: No.</p>
-        <p className="pt-5">But if you want to keep track of your progress, you will need an account. It&apos;s free.</p>
-        </AccordionContent>
-      </AccordionItem>
-
+        </AccordionItem>
+      ))}
     </Accordion>
+
+
     </div>
 
-    <footer className="sticky bot-0 w-full bg-landing-bg z-50 shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)]">
-        <div className="flex justify-around items-center h-40 ">
-          <div className="flex justify-center w-60">
-            <ul className="flex flex-col gap-2">
-              <Link href="/">About</Link>
-              <Link href="/">Contact</Link>
-              <Link href="/">Pricing</Link>
-            </ul>
-          </div>
-          <div className="flex justify-center w-60">
-            <h1 className="text-2xl font-normal">Synomilo</h1>
-          </div>
+      <footer className="mb-[env(safe-area-inset-bottom)] lg:mb-0 w-screen lg:w-full bg-landing-bg z-50 shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)]">
+  <div className="flex flex-row lg:flex-row items-center h-auto lg:h-40 gap-5 p-10">
+    <div className="flex justify-center w-1/3">
+      <ul className="flex flex-col text-xs lg:text-md gap-2">
+        <Link href="/">About</Link>
+        <Link href="/">Contact</Link>
+        <Link href="/">Pricing</Link>
+      </ul>
+    </div>
+    <div className="flex justify-center w-1/3">
+      <h1 className="text-xl lg:text-2xl font-normal">Synomilo</h1>
+    </div>
+    <div className="flex justify-center w-1/3">
+      <ul className="flex justify-center text-xs lg:text-md flex-col gap-2">
+        <Link href="/">Terms of Service</Link>
+        <Link href="/">Privacy Policy</Link>
+        <Link href="/">Refund and Cancellation Policy</Link>
+      </ul>
+    </div>
+  </div>
+</footer>
 
-            <div className="flex justify-center w-60">
-            <ul className="flex justify-center text-1xl flex-col gap-2">
-            <Link href="/">Terms of Service</Link>
-            <Link href="/">Privacy Policy</Link>
-            <Link href="/">Refund and Cancellation Policy</Link>
-            </ul>
-            </div>
-        </div>
-    </footer>
 
 
     </ScrollArea>
