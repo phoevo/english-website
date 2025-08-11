@@ -24,6 +24,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import CountUp from 'react-countup';
+import TestTeacherPage from "./(dashboard)/TestTeacherPage";
 
 
 
@@ -150,15 +151,15 @@ useEffect(() => {
 
           </div>
 
-          <div className="flex flex-row bg-landing-bg text-1xl font-normal mt-3 gap-2" >
+          {/* <div className="flex flex-row bg-landing-bg text-1xl font-normal mt-3 gap-2" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
-          </div>
-          <p className="text-zinc-500 bg-landing-bg">Greek for: &quot;I conversate&quot;</p>
+          </div> */}
+          <p className="text-zinc-500 bg-landing-bg">Greek for: &quot;I converse&quot;</p>
         </div>
 
         <div className="flex flex-col items-center gap-5">
-        <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10"> An English practice platform focused on conversation</h2>
-        <p className="lg:text-2xl text-center m-2 bg-muted rounded-full py-2 px-4 font-normal">It's not a course. It's where you come to rehearse for real life.</p>
+        <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10">Practice English conversation</h2>
+        <p className="lg:text-2xl text-center m-2 bg-muted rounded-full py-2 px-4 font-normal">Rehearse for real life.</p>
 
 
       <div className="h-auto w-full lg:w-1/2 flex items-center">
@@ -468,7 +469,7 @@ useEffect(() => {
 
     <div className="flex flex-col items-center py-5 font-normal">
       <p className="text-2xl lg:text-3xl">Tutors, these are for you</p>
-      <p className="text-muted-foreground">Here's a sneak peek</p>
+      <p className="text-muted-foreground">Here's what's coming</p>
       </div>
 
     <div className="flex flex-col items-center space-y-6">
@@ -482,6 +483,11 @@ useEffect(() => {
       <div className=" flex flex-col items-center gap-2 p-5 w-full rounded-md">
         <p className="flex text-xl">Assign them any Conversation</p>
         <TestConversationCover/>
+      </div>
+
+      <div className=" flex flex-col items-center gap-2 p-5 w-full rounded-md">
+        <p className="flex text-xl">View progress on assigned Conversations</p>
+        <TestTeacherPage/>
       </div>
     </div>
 

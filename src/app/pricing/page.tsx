@@ -36,39 +36,40 @@ const tiers = [
     tutorBadge: "Free",
     studentBadge: "Free",
     features: [
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor can assign a total of 12 Conversations to Student" },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student cannot review and practice any Conversation in their own time" },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor only has 2 active Student slots" },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor can only assign up to 12 conversations" },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can’t review or practice conversations on their own" },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor limited to 2 active student slots" },
     ],
   },
   {
     tutorBadge: "Free",
     studentBadge: "Pro",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any Conversation to Student" },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Student can review and practice any Conversation in their own time" },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor only has 2 active Student slots" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Student can review and practice anytime" },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor still limited to 2 active student slots" },
     ],
   },
   {
     tutorBadge: "Pro",
     studentBadge: "Free",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any Conversation to Student" },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student cannot review and practice any Conversation in their own time" },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor has 5/15/30 active Student slots" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation" },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can’t review or practice on their own" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can manage 5, 15, or 30 active students" },
     ],
   },
   {
     tutorBadge: "Pro",
     studentBadge: "Pro",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any Conversation to Student" },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Student can review and practice any Conversation in their own time" },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor has 5/15/30 active Student slots" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Student can review and practice anytime" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can manage 5, 15, or 30 active students" },
     ],
   },
 ];
+
 
 function renderTier(tier, idx) {
   const studentIsPro = tier.studentBadge === "Pro";
@@ -538,6 +539,7 @@ function SubscribePage() {
   initial={{ opacity: 0, y: -210 }}
   animate={{ opacity: 1, y: -100 }}
   transition={{ duration: 0.3, delay: 1 }}
+  className='hidden lg:block'
 >
   <ArrowDown size={30}/>
 </motion.div>

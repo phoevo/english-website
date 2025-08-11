@@ -118,7 +118,7 @@ export default function Register() {
 
 
   return (
-    <div className="flex flex-col w-100 gap-10">
+    <div className="flex flex-col w-full lg:w-2/3 gap-10">
       <CardHeader>
         <CardTitle className="text-2xl">Sign up</CardTitle>
         <CardDescription>
@@ -140,7 +140,7 @@ export default function Register() {
                   <FormItem className="grid gap-2">
                     <FormLabel htmlFor="username">Username</FormLabel>
                     <FormControl>
-                      <Input id="username" placeholder="YourUsername" {...field} />
+                      <Input id="username" placeholder="Username" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -157,7 +157,7 @@ export default function Register() {
                     <FormControl>
                       <Input
                         id="email"
-                        placeholder="john@mail.com"
+                        placeholder="user@mail.com"
                         type="email"
                         autoComplete="email"
                         {...field}
@@ -178,7 +178,7 @@ export default function Register() {
                     <FormControl>
                       <PasswordInput
                         id="password"
-                        placeholder="******"
+                        placeholder="*********"
                         autoComplete="new-password"
                         {...field}
                       />
@@ -200,7 +200,7 @@ export default function Register() {
                     <FormControl>
                       <PasswordInput
                         id="confirmPassword"
-                        placeholder="******"
+                        placeholder="*********"
                         autoComplete="new-password"
                         {...field}
                       />

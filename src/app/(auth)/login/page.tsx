@@ -63,11 +63,11 @@ export default function Login() {
       }
 
       const session = await account.createEmailPasswordSession(data.email, data.password);
-      
+
       // Store JWT token for function calls
       const jwt = await account.createJWT();
       localStorage.setItem('jwt', jwt.jwt);
-      
+
       await ensureUserDocument();
       router.push('/home');
 
@@ -88,7 +88,7 @@ export default function Login() {
 
 
   return (
-    <div className="flex flex-col w-100 gap-10">
+    <div className="flex flex-col w-full lg:w-2/3 gap-10">
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>

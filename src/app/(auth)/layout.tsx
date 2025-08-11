@@ -32,13 +32,13 @@ export default function AuthLayout({ children }: { children: React.ReactNode }){
 
 
 
-      <div className="flex justify-center items-center w-1/2 h-screen bg-muted hover:w-2/3 transition-all duration-500 ease-in-out">
+      <div className="flex hidden lg:block justify-center items-center w-1/2 h-screen bg-muted">
       <div className="flex justify-center items-center h-100 w-100 rounded-xl bg-red-500">Images showing app</div>
       </div>
 
-      <div className="flex justify-center items-center w-1/2 h-screen bg-background hover:w-2/3 transition-all duration-500 ease-in-out">
+      <div className="flex justify-center items-center w-full lg:w-1/2 h-screen bg-background">
 
-        <div className="flex justify-center items-center border-1 shadow-md rounded-lg w-150 h-180">
+        <div className="flex justify-center items-center border-none lg:border-1 lg:shadow-md rounded-lg w-screen lg:w-2/3 h-3/4">
 
           {children}
 
@@ -46,6 +46,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }){
         </div>
 
       </div>
+
 
 
 
