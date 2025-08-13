@@ -157,7 +157,7 @@ useEffect(() => {
 
         <div className="flex flex-col items-center gap-5">
         <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10">Focused on Real Conversation</h2>
-        <p className="lg:text-xl text-center m-2 bg-muted rounded-full py-2 px-4 font-normal">This isnt't study. It's rehearsal.</p>
+        <p className="lg:text-xl text-center m-2 bg-muted rounded-full py-2 px-4 font-normal">This isn't study. It's rehearsal.</p>
 
 
       <div className="h-auto w-full lg:w-1/2 flex items-center">

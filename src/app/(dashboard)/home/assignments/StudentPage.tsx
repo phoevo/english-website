@@ -18,6 +18,7 @@ import {
 import { Query } from "appwrite";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type AssignmentWithConversation = {
   $id: string;
@@ -107,12 +108,14 @@ function StudentPage() {
 
 
   return (
-    <Card className="bg-background">
+    <Card className="bg-background h-5/6">
       <CardHeader>
         <CardTitle>My Assigned Tasks</CardTitle>
         <CardDescription>Your tasks assigned by your teacher</CardDescription>
       </CardHeader>
-      <CardContent>
+      <ScrollArea className="px-5 overflow-y-auto">
+
+
         {loading ? (
           <p>Loading...</p>
         ) : assignments.length === 0 ? (
@@ -127,8 +130,7 @@ function StudentPage() {
 
     <div
       onClick={() => router.push(`conversations/${a.conversationId}`)}
-      className="cursor-pointer"
-    >
+      className="cursor-pointer">
       <h4 className="font-semibold">{a.title}</h4>
       <p className="text-sm text-muted-foreground mb-1">Level: {a.level}</p>
 
@@ -145,6 +147,7 @@ function StudentPage() {
       <Badge
         onClick={() => handleMarkComplete(a.$id)}
         className="cursor-pointer"
+        variant="secondary"
 
       >
         Mark as Complete
@@ -155,7 +158,9 @@ function StudentPage() {
 
           </div>
         )}
-      </CardContent>
+
+
+      </ScrollArea>
     </Card>
   );
 }

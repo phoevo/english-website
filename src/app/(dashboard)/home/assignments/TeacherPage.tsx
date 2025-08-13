@@ -94,7 +94,7 @@ function TeacherPage() {
   }, [selectedStudentId]);
 
   return (
-    <Card className="bg-background">
+    <Card className="flex flex-col h-full min-h-0 bg-background">
       <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
 
         <div className="flex flex-col gap-4">
@@ -119,7 +119,7 @@ function TeacherPage() {
         </Select>
       </CardHeader>
 
-      <CardContent className="">
+      <CardContent className="flex-1 min-h-0 overflow-y-auto">
       {selectedStudentId ? (
         loading ? (
           <p>Loading...</p>

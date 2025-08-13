@@ -22,6 +22,7 @@ import { motion} from "motion/react";
 import { toast } from "sonner";
 import { fetchPendingRequests, hasPendingRequest, sendFriendRequest, updateRequestStatus, addFriend, deleteFriendRequest } from "@/data/friendRequests";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 
 
@@ -180,7 +181,7 @@ useEffect(() => {
     }
 
 return (
-  <div className="m-10 flex flex-col w-full">
+  <div className="m-10 flex flex-col w-full h-full">
 
     <div className="flex flex-row justify-between items-center gap-10">
       <div className="flex flex-col space-y-5">
@@ -207,11 +208,11 @@ return (
 
     </div>
 
-    <div className="grid grid-cols-2 gap-6 mt-10 w-full h-full">
+    <div className="grid grid-cols-2 gap-6 mt-10">
 
       {isTeacher ? <TeacherPage/> : <StudentPage />}
 
-      <Card className="bg-background p-5 h-full">
+      <Card className="bg-background p-5 h-5/6">
 
   <div className="relative flex flex-col space-y-4 w-full">
 
@@ -254,7 +255,7 @@ return (
         ) : (
           <ul className="space-y-2">
           {searchResults.map((u) => (
-            <div
+            <ScrollArea
               key={u.$id}
               className="p-2 rounded-md border-1"
             >
@@ -264,7 +265,7 @@ return (
                   <span className="font-medium">{u.name || "N/A"}</span>
                   <Badge
                   className="text-xs h-5"
-                  variant={u.isTeacher ? "default" : "secondary"}>
+                  variant={u.isTeacher ? "outline" : "secondary"}>
                     {u.isTeacher ? "Teacher" : "Student"}
                   </Badge>
               </div>
@@ -326,7 +327,7 @@ return (
             </Button>
 
             </div>
-            </div>
+            </ScrollArea>
 
 
           ))}
@@ -355,7 +356,7 @@ return (
     <p className="text-sm text-zinc-500">You have no friends yet.</p>
   ) : (
 
-    <div className="rounded-md space-y-2">
+    <div className="rounded-md space-y-4">
       {friends.map((f) => (
         <div
           key={f.$id}
@@ -364,7 +365,7 @@ return (
           <div className="flex flex-col gap-1">
 
                 <div>
-                <Badge variant={f.isTeacher ? "default" : "secondary"}>
+                <Badge variant={f.isTeacher ? "outline" : "secondary"}>
                   {f.isTeacher ? "Teacher" : "Student"}
                 </Badge>
                 <span className="text-sm text-muted-foreground px-2">{f.email}</span>
