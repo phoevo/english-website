@@ -60,12 +60,10 @@ const transitionImage = {
 
 
 
-
-
 export default function LandingPage() {
   const [userCount, setUserCount] = useState(0);
   const [convoCount, setConvoCount] = useState(0);
-  const [showAbout, setShowAbout] = useState(false);
+  const [showAbout, setShowAbout] = useState(true);
 
   useEffect(() => {
   getUserCount().then(setUserCount);
@@ -131,7 +129,7 @@ useEffect(() => {
         <div className="flex items-center h-12 lg:h-18">
             <h1 className="hidden lg:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
             <div className={`flex absolute right-5 lg:right-10 gap-3 ${geist.className}`}>
-              <Link href={"/register"}> <Button className="hidden lg:block cursor-pointer">Sign Up</Button> </Link>
+              <Link href={"/register"}> <Button className="hidden lg:block cursor-pointer">Sign up</Button> </Link>
               <Link href={"/login"}> <Button className="hidden lg:block cursor-pointer" variant="secondary">Log in</Button> </Link>
               <Link href="/pricing">
               <Button variant="outline" className="hidden lg:block shadow-[0_0_5px_1px_rgba] shadow-pink-500 cursor-pointer">Pricing</Button>
@@ -158,8 +156,8 @@ useEffect(() => {
         </div>
 
         <div className="flex flex-col items-center gap-5">
-        <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10">Practice English conversation</h2>
-        <p className="lg:text-2xl text-center m-2 bg-muted rounded-full py-2 px-4 font-normal">Rehearse for real life.</p>
+        <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10">Focused on Real Conversation</h2>
+        <p className="lg:text-xl text-center m-2 bg-muted rounded-full py-2 px-4 font-normal">This isnt't study. It's rehearsal.</p>
 
 
       <div className="h-auto w-full lg:w-1/2 flex items-center">
