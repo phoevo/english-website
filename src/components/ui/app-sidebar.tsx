@@ -62,10 +62,10 @@ export function AppSidebar() {
             <SidebarMenu>
 
               <SidebarMenuItem key="Classroom">
-                  <SidebarMenuButton asChild>
-                    <Link href="/home/assignments">
+                  <SidebarMenuButton asChild disabled>
+                    <Link href="">
                       <ClipboardCheck />
-                      <span>Assignments</span>
+                      <span>Coming soon</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
