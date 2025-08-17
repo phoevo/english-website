@@ -116,6 +116,21 @@ useEffect(() => {
             question: "Do I need to download anything?",
             answer: <>Nope, it runs entirely in your browser.</>
           },
+          {
+            question: "What if my tutor/student already has a subsciption?",
+            answer:
+            <>
+            <p>You get some benefits too, even if you remain on the free tier.</p>
+            <p>See how they interact on the{" "}
+              <Link
+                    className="underline underline-offset-5 hover:underline-offset-10 transition-all duration-300"
+                    href="/pricing"
+                  >
+                    Pricing
+                  </Link>{" "} page.</p>
+
+            </>
+          },
 
 
 
@@ -145,7 +160,7 @@ useEffect(() => {
 
           <div className="flex flex-col items-center lg:flex-row lg:items-end">
             <h1 className="lg:pl-25 text-6xl lg:text-8xl bg-landing-bg font-normal">Synomilo</h1>
-            <span className="text-muted-foreground w-auto text-xs lg:text-sm bg-muted p-1 lg:p-2 rounded-full">Early Access</span>
+            <span className="text-muted-foreground w-auto text-xs lg:text-sm bg-muted px-2 py-1 lg:p-2 rounded-full">Early Access</span>
 
           </div>
 
@@ -157,7 +172,7 @@ useEffect(() => {
 
         <div className="flex flex-col items-center gap-5">
         <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10">Focused on Real Conversation</h2>
-        <p className="lg:text-xl text-center m-2 bg-muted rounded-full py-2 px-4 font-normal">This isnt't study. It's rehearsal.</p>
+        <p className="lg:text-xl text-center m-2 bg-muted rounded-full py-2 px-4 font-normal">This isn't theory. It's rehearsal for when you're face to face.</p>
 
 
       <div className="h-auto w-full lg:w-1/2 flex items-center">
@@ -282,6 +297,48 @@ useEffect(() => {
             <ArrowLeft size={40} className="text-pink-500 hidden lg:block"/>
             Highlight words types for easy reading</p>
           </div>
+        </motion.div>
+
+        {/* Why this works */}
+        <motion.div
+          className="flex flex-col w-full lg:w-1/2 space-y-6 lg:border-1 p-10 rounded-md lg:shadow-md"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.25 }}
+        >
+
+            <h3 className="text-2xl lg:text-4xl font-normal">Why this works</h3>
+            <p className="text-md lg:text-lg text-muted-foreground">
+              Reading and listening to real conversations builds pattern recognition. You see how words, grammar,
+              and rhythm actually show up in everyday speech and not as isolated rules. It's best to learn phrases, not individual words.
+            </p>
+            <ul className="pl-5 text-md lg:text-lg space-y-4">
+
+              <li>
+                <p>Train your ear</p>
+                <p className="self-start px-4 py-2 text-muted-foreground rounded-lg lg:rounded-full">
+                Hearing natural phrasing trains your ear so speaking feels familiar.</p>
+              </li>
+
+              <li>
+                <p>Context sticks</p>
+                <p className="self-start px-4 py-2 text-muted-foreground rounded-full">
+                Vocabulary learned inside a story is easier to remember and reuse.</p>
+              </li>
+
+               <li>
+                <p>Focused attention</p>
+                <p className="self-start px-4 py-2 text-muted-foreground  rounded-full">
+                Color-coded word types help you notice structure without breaking flow.</p>
+              </li>
+
+            </ul>
+            <p className="text-md lg:text-lg text-muted-foreground">
+              Simulating the experience is rehearsal. You practice before the real conversation, so when
+              you’re face to face, you’re ready.
+            </p>
+
         </motion.div>
 
         <div className="hidden lg:block z-20 sticky top-30 left-43 text lg:left-0 lg:top-52 self-start m-4 mb-23 lg:text-3xl font-semibold">
@@ -462,7 +519,7 @@ useEffect(() => {
     <div className="flex flex-row text-2xl lg:text-4xl font-normal justify-start">Coming Soon</div>
     <p className="text-md lg:text-lg text-muted-foreground">
       As we enter early access, we’re creating dedicated tutor tools to make helping students
-      faster, easier, and more effective. Until then, use Synomilo solo or screen-share with your tutor.
+      faster, easier, and more effective. Until then, students can use Synomilo solo or screen-share with their tutor.
     </p>
 
     <div className="flex flex-col items-center py-5 font-normal">
@@ -479,7 +536,7 @@ useEffect(() => {
 
 
       <div className=" flex flex-col items-center gap-2 p-5 w-full rounded-md">
-        <p className="flex text-xl">Assign them any Conversation</p>
+        <p className="flex text-xl">Assign them Conversations</p>
         <TestConversationCover/>
       </div>
 
@@ -491,14 +548,14 @@ useEffect(() => {
 
 
       <div className="flex flex-col space-y-3 text-md lg:text-lg text-muted-foreground">
-        <p className="">Soon, tutors will have their own UI to track Student's progress,
+        <p className="">Soon, tutors will have their own UI to track student's progress,
       instantly see what they've been working on, and jump into the session prepared.</p>
         <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">Lesson finished early? No awkward filler</p>
         <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">No lesson planning</p>
         <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">No content prep</p>
         <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">No scrambling for what to do next</p>
 
-      <p>Synomilo does the heavy lifting. Meet your Student or Tutor on your platform of choice and get started.</p>
+      <p>Synomilo does the heavy lifting. Meet your student or tutor on your usual platform of choice you're ready to go.</p>
     </div>
   </motion.div>
 
