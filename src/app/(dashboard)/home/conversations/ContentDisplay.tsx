@@ -25,6 +25,16 @@ import { AudioPlayer } from "./AudioPlayer";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { backgroundColors, hoverBackgroundColors } from "@/data/color";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
 
 
 
@@ -170,14 +180,6 @@ React.useEffect(() => {
   });
 }, [customColors]);
 
-
-
-
-
-
-
-
-
   function cleanWord(rawWord: string) {
     return rawWord
       .toLowerCase()
@@ -185,8 +187,6 @@ React.useEffect(() => {
       .replace(/[.,!?—;:()"]/g, "")
       .trim();
   }
-
-
 
   const toggleWordType = (key: WordTypeKey) => {
     setWordTypes(prev => ({
@@ -201,22 +201,17 @@ React.useEffect(() => {
   const tickIcon = <Check size={17} />;
   const addIcon = <Plus/>
 
-
-const renderWord = (word: Word, index: number) => {
+  const renderWord = (word: Word, index: number) => {
   const wordType = wordTypes[word.type];
   if (!word?.text || !wordType) return null;
 
   const displayText = word.text.replace(/\/.*?\//g, "");
-
   const colorKey = wordType.colorKey;
-const baseClass = backgroundColors[colorKey];
-const hoverClass = hoverBackgroundColors[colorKey];
-
-
+  const baseClass = backgroundColors[colorKey];
+  const hoverClass = hoverBackgroundColors[colorKey];
   const isEnabled = wordType.enabled;
   const appliedColor = isEnabled ? baseClass : "";
   const appliedHover = hoverEnabled ? hoverClass : "";
-
   const wordString = `${cleanWord(word.text)}::${word.definition}`;
   const alreadySaved = savedWords.includes(wordString);
 
@@ -283,6 +278,32 @@ const hoverClass = hoverBackgroundColors[colorKey];
   };
 
 
+  // Mobile Settings Drawer Component
+  const MobileSettingsDrawer = () => (
+    <div className="lg:hidden">
+      <Drawer>
+        <DrawerTrigger className="text-sm shadow-sm bg-background border-1 rounded-md p-1">Word Classes</DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Word Class Settings</DrawerTitle>
+            <DrawerDescription>Select word classes to highlight</DrawerDescription>
+          </DrawerHeader>
+          <div className="px-4 pb-4">
+
+            <div className="bg-background rounded-md p-2 flex flex-col gap-2">
+              <WordTypeSettings wordTypes={wordTypes} toggleWordType={toggleWordType} />
+            </div>
+          </div>
+          <DrawerFooter>
+            <DrawerClose className="cursor-pointer underline">
+              Close
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </div>
+  );
+
   return (
 
     <div className="grid grid-rows-[auto_1fr] h-full w-full bg-background text-foreground rounded-lg">
@@ -292,13 +313,13 @@ const hoverClass = hoverBackgroundColors[colorKey];
   </div>
 
 
-  <div className="grid grid-cols-[6fr_1fr] overflow-hidden h-full">
+  <div className="grid grid-cols-1 lg:grid-cols-[6fr_1fr] overflow-hidden h-full">
     <ScrollArea className="h-full w-full overflow-y-auto">
       <div className="p-5 text-lg">
         {Array.isArray(rawDialogue) && rawDialogue.length > 0 ? (
           rawDialogue.map((line, i) => (
-            <div key={i} className="flex flex-row mb-10">
-              <div className="font-semibold pr-6 border-r-1 border-zinc-500 min-w-[100px] text-right">
+            <div key={i} className="flex flex-col md:flex-col lg:flex-row mb-10">
+              <div className="font-semibold lg:pr-6 lg:border-r-1 border-zinc-500 min-w-[100px] ">
                 {line.speaker}
               </div>
               <div className="ml-6 flex flex-wrap gap-1">
@@ -337,7 +358,7 @@ const hoverClass = hoverBackgroundColors[colorKey];
     </ScrollArea>
 
 
-    <div className="p-5 h-full border-l-1">
+    <div className="p-5 h-full border-l-1 hidden lg:block">
       <div className="flex flex-col items-center gap-4">
 
         <span className="flex gap-1 items-center">
@@ -359,17 +380,19 @@ const hoverClass = hoverBackgroundColors[colorKey];
     </div>
 
       </div>
-    <div className="flex items-center justify-center h-8 w-auto bg-background border-t-1 rounded-bl-md">
+    <div className="flex flex-col p-2 items-center justify-center h-full w-full bg-background border-t-1 rounded-bl-md">
+      <MobileSettingsDrawer/>
   {audioLoading ? (
-    <Skeleton className="h-2 w-1/2 rounded-xl" />
+    <Skeleton className="" />
   ) : audioUrl ? (
     isSubscribed ? (
-      <AudioPlayer src={audioUrl} />
+        <AudioPlayer src={audioUrl} />
     ) : (
-      <span className="text-zinc-500">Subscription required</span>
+        <span className="text-zinc-500">Subscription required</span>
     )
   ) : (
-    <span className="text-zinc-500">No audio found</span>
+      <span className="text-zinc-500">No audio found</span>
+
   )}
 </div>
 

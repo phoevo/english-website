@@ -6,6 +6,9 @@ import Link from "next/link";
 import { Menu } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
+import { DM_Sans } from "next/font/google";
+
+const dmSans = DM_Sans({ subsets: ['latin'] });
 
 type MobileRightSidebarProps = {
   userName?: string;
@@ -21,7 +24,7 @@ export function MobileRightSidebar({
   actions,
 }: MobileRightSidebarProps) {
   return (
-    <div className="lg:hidden">
+    <div className={`lg:hidden md:hidden absolute right-10 mt-200 bg-foreground text-background rounded-full ${dmSans.className}`}>
       <Sheet>
         <SheetTrigger asChild>
           <Button size="icon" variant="ghost" aria-label="Open menu" className="cursor-pointer">
@@ -29,7 +32,7 @@ export function MobileRightSidebar({
           </Button>
         </SheetTrigger>
 
-        <SheetContent side="right" className="w-80 p-0">
+        <SheetContent side="right" className={`w-50 p-0 ${dmSans.className}`}>
           <div className="flex flex-col">
             <SheetHeader className="p-4 border-b">
               <SheetTitle>Menu</SheetTitle>
