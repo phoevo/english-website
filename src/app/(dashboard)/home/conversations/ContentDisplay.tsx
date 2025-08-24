@@ -283,7 +283,7 @@ React.useEffect(() => {
     <div className="lg:hidden">
       <Drawer>
         <DrawerTrigger className="text-sm shadow-sm bg-background border-1 rounded-md p-1">Word Classes</DrawerTrigger>
-        <DrawerContent>
+        <DrawerContent className={`${geist.className}`}>
           <DrawerHeader>
             <DrawerTitle>Word Class Settings</DrawerTitle>
             <DrawerDescription>Select word classes to highlight</DrawerDescription>

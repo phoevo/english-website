@@ -35,6 +35,7 @@ export const WordTypeSettings: React.FC<Props> = ({ wordTypes, toggleWordType })
           } flex items-center justify-between rounded-md cursor-pointer p-1 border-1 hover:bg-muted`}
           onClick={(e) => {
             e.stopPropagation();
+            e.preventDefault();
             toggleWordType(key);
           }}
         >
