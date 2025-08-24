@@ -1,8 +1,9 @@
-const { Messaging, ID } = require("node-appwrite");
+const sdk = require("node-appwrite");
 
 module.exports = async function handleSendEmail({ req, res, client, adminClient }) {
   try {
     const { type, userEmail, userName } = req.bodyJson;
+    console.log(`[send-email] type=${type} userEmail=${userEmail} userName=${userName}`);
 
     if (!type || !userEmail || !userName) {
       return res.json({ 
@@ -11,16 +12,8 @@ module.exports = async function handleSendEmail({ req, res, client, adminClient 
     }
 
     // Initialize messaging with admin client
-    const messaging = new Messaging(adminClient);
+    const messaging = new sdk.Messaging(adminClient);
     
-    // Get the email provider ID from environment variables
-    const EMAIL_PROVIDER_ID = process.env.APPWRITE_EMAIL_PROVIDER_ID;
-    
-    if (!EMAIL_PROVIDER_ID) {
-      return res.json({ 
-        error: "Email provider not configured" 
-      }, 500);
-    }
 
     let subject, content;
 
@@ -117,20 +110,45 @@ module.exports = async function handleSendEmail({ req, res, client, adminClient 
         }, 400);
     }
 
-    // Send the email
-    const message = await messaging.createEmail(
-      ID.unique(),
-      subject,
-      content,
-      [], // topics
-      [userEmail], // targets (recipients)
-      [], // cc
-      [], // bcc
-      [], // attachments
-      false, // draft
-      true, // html
-      EMAIL_PROVIDER_ID
-    );
+    // Attempt to resolve email to an Appwrite user ID and send to that user
+    let userId = null;
+    try {
+      const users = new sdk.Users(adminClient);
+      const result = await users.list([sdk.Query.equal('email', userEmail)]);
+      console.log(`[send-email] lookup total=${result.total}`);
+      if (result.total > 0) {
+        userId = result.users?.[0]?.$id || result.documents?.[0]?.$id || result.users?.[0]?.$id;
+        console.log(`[send-email] found userId=${userId}`);
+      } else {
+        console.log(`[send-email] no user found for email=${userEmail}`);
+      }
+    } catch (e) {
+      console.log(`[send-email] lookup error (ignored):`, e?.message || e);
+    }
+
+    if (userId) {
+      console.log(`[send-email] sending via Messaging to userId=${userId}`);
+      const message = await messaging.createEmail(
+        sdk.ID.unique(),
+        subject,
+        content,
+        [], // topics
+        [userId], // users (Appwrite user IDs)
+        [], // targets
+        [], // cc
+        [], // bcc
+        [], // attachments
+        false, // draft
+        true   // html
+      );
+
+      console.log(`[send-email] queued message id=${message.$id}`);
+      return res.json({ success: true, messageId: message.$id, message: `${type} email sent successfully to ${userEmail}` }, 200);
+    } else {
+      // If user not found, don't error to avoid leaking info.
+      console.log(`[send-email] skipping send (no user for email=${userEmail})`);
+      return res.json({ success: true }, 200);
+    }
 
     console.log('✅ Email sent successfully:', message);
     
