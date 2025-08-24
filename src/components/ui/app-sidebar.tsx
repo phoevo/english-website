@@ -11,6 +11,10 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
+import { DM_Sans } from "next/font/google";
+
+const dmSans = DM_Sans({ subsets: ['latin'] });
+
 
 
 // Menu items.
@@ -37,11 +41,11 @@ const items = [
 
 export function AppSidebar() {
   return (
-    <Sidebar className="w-60 h-auto mb-2 rounded-lg absolute">
+    <Sidebar className="h-auto mb-2 rounded-lg absolute">
       <SidebarContent className="bg-background">
         <SidebarGroup>
           <SidebarGroupLabel>Explore</SidebarGroupLabel>
-          <SidebarGroupContent>
+          <SidebarGroupContent className={`${dmSans.className}`}>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
@@ -54,18 +58,18 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
-          </SidebarGroupContent>
+          </SidebarGroupContent >
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Classroom</SidebarGroupLabel>
-          <SidebarGroupContent>
+          <SidebarGroupContent className={`${dmSans.className}`}>
             <SidebarMenu>
 
               <SidebarMenuItem key="Classroom">
-                  <SidebarMenuButton asChild>
-                    <Link href="/home/assignments">
+                  <SidebarMenuButton asChild disabled>
+                    <Link href="">
                       <ClipboardCheck />
-                      <span>Assignments</span>
+                      <span>Coming soon</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

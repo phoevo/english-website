@@ -78,6 +78,8 @@ function renderTier(tier, idx) {
   return (
     <CardContent key={idx} className='flex flex-col md:flex-row items-center justify-center gap-4 p-4'>
 
+    <div className='flex flex-row'>
+
       <div className='w-auto flex flex-col items-center'>
         <div className='flex items-center justify-center relative p-3 md:p-5'>
           <User strokeWidth={1} size={60} className="md:w-[90px] md:h-[90px]" />
@@ -93,6 +95,9 @@ function renderTier(tier, idx) {
         </div>
         <Badge className={tutorIsPro ? "bg-pink-500" : ""}>{tier.tutorBadge}</Badge>
       </div>
+
+    </div>
+
 
 
       <div className='flex items-center justify-start relative w-full md:w-2/3'>
@@ -218,10 +223,10 @@ function SubscribePage() {
   return (
 
     <ScrollArea className={`w-full h-screen overflow-y-auto ${dmSans.className}`}>
-    <div className='flex flex-col justify-center items-center p-4 md:p-10'>
+    <div className='flex flex-col justify-center items-center gap-2 mb-15 lg:mb-0 p-4 md:p-10'>
 
 
-    <div className="flex flex-col gap-2 items-center justify-center mt-10 rounded-lg w-full h-auto ">
+    <div className="flex flex-col md:flex-col gap-2 items-center justify-center mt-10 rounded-lg w-full h-auto ">
       <h1 className='text-3xl md:text-6xl font-normal text-center'>Choose the plan that best suits your needs</h1>
       <p className='text-lg md:text-2xl text-muted-foreground text-center'>Early access pricing — lower rates while we grow.</p>
       <motion.div
@@ -232,7 +237,7 @@ function SubscribePage() {
     </div>
 
 
- <div className='flex flex-col md:flex-row w-full md:w-1/2 mt-10 gap-5 md:gap-15'>
+ <div className='flex flex-col md:flex-row lg:flex-row w-full md:w-full lg:w-2/3 mt-10 gap-5 md:gap-15'>
 
 
     <motion.div
@@ -246,7 +251,7 @@ function SubscribePage() {
     </CardHeader>
     <CardContent>
 
-     <div className='flex flex-col gap-5 w-full'>
+     <div className='flex flex-col md:flex-col gap-5 w-full'>
 
      <div className='flex flex-col gap-5'>
   <div className='flex flex-col justify-between p-2 border-2 rounded-lg h-65 w-full text-muted-foreground'>
@@ -311,8 +316,8 @@ function SubscribePage() {
   <DialogContent className={`min-w-2/3 h-auto p-10 ml-2 ${geist.className}`}>
     <DialogHeader>
       <DialogHeader>
-  <DialogTitle className='text-2xl'>See Student Plans</DialogTitle>
-  <DialogDescription>
+  <DialogTitle className='lg:text-2xl'>See Student Plans</DialogTitle>
+  <DialogDescription className='lg:text-md'>
   These plans are part of our early access period and will increase as we continue building and improving Synomilo. Your rate is locked in and won’t change, even after future pricing updates.
 </DialogDescription>
 <DialogDescription>
@@ -321,19 +326,19 @@ function SubscribePage() {
 
 
 
-  <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-4">
+  <div className="flex flex-col md:flex-col lg:flex-row justify-center items-center gap-4 mt-4">
     {paidOptions.map((option, index) => (
       <div
         key={index}
-        className="flex flex-col justify-between p-4 border-1 rounded-xl w-full md:w-1/3 h-80 shadow-md"
+        className="flex flex-col justify-between p-4 border-1 rounded-xl w-full md:w-full lg:w-1/3 h-60 lg:h-90 shadow-md"
       >
          <div className="flex flex-col items-start">
           <div className='flex flex-row gap-2 items-center my-2'>
-            <h1 className='text-xl font-semibold'>{option.title}</h1>
+            <h1 className='lg:text-xl font-semibold'>{option.title}</h1>
             <Badge className="bg-pink-500 text-white">${option.price}</Badge>
           </div>
-          <div className='mb-5 text-sm text-muted-foreground'>{option.info}</div>
-          <ul className="list-disc text-sm marker:text-pink-500 space-y-1 px-4 text-muted-foreground mb-2">
+          <div className='mb-4 text-sm text-muted-foreground'>{option.info}</div>
+          <ul className="list-disc text-xs text-left lg:items-center lg:text-sm marker:text-pink-500 space-y-1 px-4 text-muted-foreground mb-2">
           {option.desc.map((item, i) => (
             <li key={i}>{item}</li>
           ))}
@@ -544,7 +549,7 @@ function SubscribePage() {
   <ArrowDown size={30}/>
 </motion.div>
 
-<Card className='h-auto w-2/3 mb-5 bg-background shadow-md'>
+<Card className='h-auto w-full lg:w-2/3 mb-5 bg-background shadow-md'>
   <CardHeader>
     <CardTitle className='text-lg md:text-2xl'>More about Pricing and Subscriptions</CardTitle>
     <CardDescription className='text-sm md:text-base'>How Tutors and Students interact depends on who owns a subscription</CardDescription>

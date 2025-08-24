@@ -18,12 +18,13 @@ import {
   HoverCardContent,
 } from "@/components/ui/hover-card";
 import { Flame } from "lucide-react";
+import { MobileRightSidebar } from "./MobileRightSidebar";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
 function getStreakColor(streak: number) {
-  if (streak < 1 && streak <= 2) return "bg-foreground text-background";
+  if (streak >= 1 && streak <= 2) return "bg-foreground text-background";
   if (streak >= 3 && streak <= 9) return "bg-green-500 text-white";
   if (streak >= 10 && streak <= 29) return "bg-gradient-to-r from-emerald-400 to-blue-600 bg-clip-padding text-white ";
   if (streak >= 30 && streak <= 49)
@@ -58,73 +59,64 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-center h-18">
-          <div className="flex items-center gap-20">
-            <Link href={"/"} className={`text-3xl font-normal absolute left-10 ${dmSans.className}`}>Synomilo</Link>
-            <Link href="/home" className="text-xl font-semibold text-primary font-mono  hover:underline underline-offset-10 decoration-zinc-600">
+        <div className="flex items-center justify-center h-10 md:h-18 lg:h-18">
+          <div className="flex items-center gap-8 lg:gap-20">
+            <Link href={"/"} className={`lg:text-3xl md:text-xl font-normal absolute left-10 ${dmSans.className}`}>Synomilo</Link>
+            <Link href="/home" className="hidden md:flex lg:flex md:text-lg lg:text-xl font-semibold text-primary font-mono hover:underline underline-offset-10 decoration-zinc-600 transition-all duration-300">
               Home
             </Link>
-            <Link href="/profile" className="text-xl font-semibold text-primary font-mono hover:underline underline-offset-10 decoration-zinc-600 transition-all duration-300">
+            <Link href="/profile" className="hidden md:flex lg:flex md:text-lg lg:text-xl font-semibold md:pr-30 text-primary font-mono hover:underline underline-offset-10 decoration-zinc-600 transition-all duration-300">
               Profile
             </Link>
 
-
-
-            <div className="flex items-center gap-5 absolute right-10">
+            <div className="hidden md:flex lg:flex items-center lg:gap-5 md:gap-2 absolute md:right-5 lg:right-10">
               <div className="flex flex-row items-center gap-2 pr-0">
+                {loading ? (
+                  <Skeleton className="w-[56px] h-[36px]"/>
+                ): (
+                <DailyTasks>
+                  <Button variant="secondary" className="items-center shadow-sm cursor-pointer">
+                    <Sword className="rotate-45" /> {taskCount}
+                  </Button>
+                </DailyTasks>)}
 
                 {loading ? (
-                <Skeleton className="w-[56px] h-[36px]"/>
-              ): (
-              <DailyTasks>
-                <Button variant="secondary" className="items-center shadow-sm cursor-pointer">
-                  <Sword className="rotate-45" /> {taskCount}
-                </Button>
-              </DailyTasks>)}
+                  <Skeleton className="w-[56px] h-[36px]"/>
+                ): (
+                isSubscribed &&
+                <Challenges>
+                  <Button className="flex items-center cursor-pointer">
+                    <Swords/> {challengeCount.length}
+                  </Button>
+                </Challenges>)}
+              </div>
 
               {loading ? (
-                <Skeleton className="w-[56px] h-[36px]"/>
-              ): (
-              isSubscribed &&
-              <Challenges>
-                <Button
-                className="flex items-center cursor-pointer">
-                  <Swords/> {challengeCount.length}
-                </Button>
-              </Challenges>)}
+                <Skeleton className="w-[180px] h-[36px] rounded-full" />
+              ) : (
+                <div className={`flex flex-row items-center justify-start border-1 rounded-full shadow-xs`}>
+                  <Link href="/subscribe" className="cursor-pointer">
+                    <Badge className={`m-1 ${isSubscribed ? "bg-pink-500 text-foreground" : ""}`}>
+                      {isSubscribed ? "Pro" : "Free"}
+                    </Badge>
+                  </Link>
+                  {user ? (<p className="mx-2">{user.name}</p>) : (<p className="mx-2">Guest</p>) }
 
-              </div>
-
-
-             {loading ? (
-              <Skeleton className="w-[180px] h-[36px] rounded-full" />
-            ) : (
-              <div className={`flex flex-row items-center justify-start border-1 rounded-full shadow-xs`}>
-                <Link href="/subscribe" className="cursor-pointer">
-                  <Badge className={`m-1 ${isSubscribed ? "bg-pink-500 text-foreground" : ""}`}>
-                    {isSubscribed ? "Pro" : "Free"}
-                  </Badge>
-                </Link>
-                {user ? (<p className="mx-2">{user.name}</p>) : (<p className="mx-2">Guest</p>) }
-
-                {user && <HoverCard>
-            <HoverCardTrigger asChild>
-              <Badge
-                className={`m-1 cursor-pointer ${badgeColor}`}
-                aria-label={`Current streak: ${streak}`}
-              >
-                {streak}
-              </Badge>
-            </HoverCardTrigger>
-            <HoverCardContent side="top" align="center" className={`${dmSans.className} w-auto text-xs`}>
-              Your current daily streak
-            </HoverCardContent>
-          </HoverCard>}
-
-
-              </div>
-            )}
-
+                  {user && <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <Badge
+                        className={`m-1 cursor-pointer ${badgeColor}`}
+                        aria-label={`Current streak: ${streak}`}
+                      >
+                        {streak}
+                      </Badge>
+                    </HoverCardTrigger>
+                    <HoverCardContent side="top" align="center" className={`${dmSans.className} w-auto text-xs`}>
+                      Your current daily streak
+                    </HoverCardContent>
+                  </HoverCard>}
+                </div>
+              )}
 
               {loading ? (
                 <Skeleton className="w-20 h-10 rounded-md" />
@@ -138,6 +130,46 @@ const Navbar = () => {
 
               <ModeToggle />
             </div>
+
+            <MobileRightSidebar
+              userName={user ? user.name : "Guest"}
+              isSubscribed={isSubscribed}
+              streak={streak}
+              actions={
+                <div className={`lg:hidden flex flex-col gap-2 ${dmSans.className}`}>
+                  {loading ? (
+                    <Skeleton className="w-[56px] h-[36px]" />
+                  ) : (
+                    <DailyTasks>
+                      <Button variant="secondary" className="cursor-pointer">
+                        <Sword className="rotate-45" /> {taskCount}
+                      </Button>
+                    </DailyTasks>
+                  )}
+                  {loading ? (
+                    <Skeleton className="w-[56px] h-[36px]" />
+                  ) : (
+                    isSubscribed && (
+                      <Challenges>
+                        <Button className="cursor-pointer">
+                          <Swords /> {challengeCount.length}
+                        </Button>
+                      </Challenges>
+                    )
+                  )}
+                  {user ? (
+                    <Button onClick={handleLogout} variant="outline" className="cursor-pointer">
+                      <LogOut /> Logout
+                    </Button>
+                  ) : (
+                    <Link href={"/login"}>
+                      <Button variant="outline" className="cursor-pointer">Log in</Button>
+                    </Link>
+                  )}
+                  <ModeToggle />
+                </div>
+              }
+            />
           </div>
         </div>
       </div>

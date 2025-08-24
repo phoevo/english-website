@@ -33,7 +33,11 @@ export const WordTypeSettings: React.FC<Props> = ({ wordTypes, toggleWordType })
           className={`${
             wordTypes[key].enabled ? "bg-muted" : "bg-background"
           } flex items-center justify-between rounded-md cursor-pointer p-1 border-1 hover:bg-muted`}
-          onClick={() => toggleWordType(key)}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            toggleWordType(key);
+          }}
         >
           <div className="flex items-center truncate">
             {/* <Dot size={30} className={textColorMap[key]} /> */}

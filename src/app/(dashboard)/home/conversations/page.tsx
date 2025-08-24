@@ -136,7 +136,7 @@ function ConversationsPage() {
         </div>
       </div>
 
-      <div className="grid mt-10 grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid mt-10 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
         {filtered.map(conv => (
           <ConversationCover
             key={conv.$id}

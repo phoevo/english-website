@@ -91,7 +91,7 @@ function Page() {
   }
 
   return (
-    <div className="w-full m-10">
+    <div className="w-full mx-auto px-4 sm:px-6 lg:px-10 mt-6">
           <AlertDialog open={showSuccessMessage} onOpenChange={setShowSuccessMessage}>
       <AlertDialogContent className={`bg-background border-green-400 ${dmSans.className}`}>
         <AlertDialogHeader>
@@ -111,7 +111,7 @@ function Page() {
     </AlertDialog>
 
       <div className="flex flex-col gap-3">
-        <div className="flex flex-col w-2/3 space-y-4 h-full">
+        <div className="flex flex-col w-full lg:w-2/3 space-y-4 h-full">
             <UserGuidePopover
              id="home-page-main"
              title="The Home Page"
@@ -121,8 +121,8 @@ function Page() {
              align="start"
             >
               {user ? (
-                 <h1 className={`text-3xl ${dmSans.className}`}>Welcome back, {user.name}</h1>
-              ): <h1 className={`text-3xl ${dmSans.className}`}>Welcome, New User</h1>}
+                 <h1 className={`text-2xl sm:text-3xl ${dmSans.className}`}>Welcome back, {user.name}</h1>
+              ): <h1 className={`text-2xl sm:text-3xl ${dmSans.className}`}>Welcome, New User</h1>}
 
             </UserGuidePopover>
 
@@ -136,8 +136,8 @@ function Page() {
             )}
             </div>
 
-          <div className="flex flex-row gap-4">
-          <div className="flex flex-col w-2/3">
+          <div className="flex flex-col lg:flex-row gap-4">
+          <div className="flex flex-col w-full lg:w-2/3">
           {user && (
             <div className="flex flex-col space-y-4">
               <Card className="bg-background">
@@ -212,8 +212,8 @@ function Page() {
                                 </div>
                                 <div className="flex items-center gap-1 text-sm text-muted-foreground">
                                   <Calendar className="w-3 h-3" />
-                                  {timeAgo !== null ? 
-                                    `${timeAgo === 0 ? 'today' : `${timeAgo} days ago`}` : 
+                                  {timeAgo !== null ?
+                                    `${timeAgo === 0 ? 'today' : `${timeAgo} days ago`}` :
                                     'unknown'
                                   }
                                 </div>
@@ -276,7 +276,7 @@ function Page() {
         )}
       </div>
 
-      <div className="w-1/3">
+      <div className="w-full lg:w-1/3 mt-6 lg:mt-0">
           <News />
       </div>
   </div>
