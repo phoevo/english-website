@@ -12,7 +12,7 @@ function homeLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={`flex h-screen w-auto ${geist.className}`}>
       <div className='flex h-auto w-auto'>
-       <SidebarProvider defaultOpen={false}>
+       <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <main className="">
         <SidebarTrigger />
