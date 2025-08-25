@@ -61,7 +61,10 @@ module.exports = async function handleSendResetNotice({ req, res, adminClient })
           [],           // bcc
           [],           // attachments
           false,        // draft
-          true          // html
+          true,
+          null,
+          "no-reply@synomilo.com",
+          "Synomilo"         // html
         );
         console.log(`[reset-notice] queued message id=${msg.$id}`);
       } else {

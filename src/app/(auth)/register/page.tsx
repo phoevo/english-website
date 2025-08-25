@@ -134,7 +134,7 @@ export default function Register() {
 
 
   return (
-    <div className="flex flex-col w-full lg:w-2/3 gap-10">
+    <div className="flex flex-col w-full lg:full gap-10">
       <CardHeader>
         <CardTitle className="text-2xl">Sign up</CardTitle>
         <CardDescription>

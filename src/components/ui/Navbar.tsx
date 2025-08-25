@@ -59,7 +59,7 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-center h-10 md:h-18 lg:h-18">
+        <div className="flex items-center justify-center lg:pl-30 h-10 md:h-18 lg:h-18">
           <div className="flex items-center gap-8 lg:gap-20">
             <Link href={"/"} className={`lg:text-3xl md:text-xl font-normal absolute left-10 ${dmSans.className}`}>Synomilo</Link>
             <Link href="/home" className="hidden md:flex lg:flex md:text-lg lg:text-xl font-semibold text-primary font-mono hover:underline underline-offset-10 decoration-zinc-600 transition-all duration-300">

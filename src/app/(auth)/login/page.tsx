@@ -88,7 +88,7 @@ export default function Login() {
 
 
   return (
-    <div className="flex flex-col w-full lg:w-2/3 gap-10">
+    <div className="flex flex-col w-full lg:w-full gap-10">
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>
