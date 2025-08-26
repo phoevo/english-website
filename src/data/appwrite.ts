@@ -1,6 +1,6 @@
 import { Client, Databases, Account, Storage, Query } from 'appwrite'
 
-const ENDPOINT_ID = process.env.NEXT_PUBLIC_APPWRITE_FUNCTION_API_ENDPOINT!;
+const ENDPOINT_ID = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!;
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;

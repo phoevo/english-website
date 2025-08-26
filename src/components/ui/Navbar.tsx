@@ -59,7 +59,7 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-center h-10 md:h-18 lg:h-18">
+        <div className="flex items-center justify-center lg:pl-30 md:pr-30 h-10 md:h-18 lg:h-18">
           <div className="flex items-center gap-8 lg:gap-20">
             <Link href={"/"} className={`lg:text-3xl md:text-xl font-normal absolute left-10 ${dmSans.className}`}>Synomilo</Link>
             <Link href="/home" className="hidden md:flex lg:flex md:text-lg lg:text-xl font-semibold text-primary font-mono hover:underline underline-offset-10 decoration-zinc-600 transition-all duration-300">
@@ -69,13 +69,13 @@ const Navbar = () => {
               Profile
             </Link>
 
-            <div className="hidden md:flex lg:flex items-center lg:gap-5 md:gap-2 absolute md:right-5 lg:right-10">
+            <div className="hidden md:flex lg:flex items-center lg:gap-3 md:gap-2 absolute md:right-5 lg:right-10">
               <div className="flex flex-row items-center gap-2 pr-0">
                 {loading ? (
                   <Skeleton className="w-[56px] h-[36px]"/>
                 ): (
                 <DailyTasks>
-                  <Button variant="secondary" className="items-center shadow-sm cursor-pointer">
+                  <Button variant="secondary" className="items-center md:w-10 lg:w-auto shadow-sm cursor-pointer">
                     <Sword className="rotate-45" /> {taskCount}
                   </Button>
                 </DailyTasks>)}
@@ -85,7 +85,7 @@ const Navbar = () => {
                 ): (
                 isSubscribed &&
                 <Challenges>
-                  <Button className="flex items-center cursor-pointer">
+                  <Button className="flex items-center md:w-10 lg:w-auto cursor-pointer">
                     <Swords/> {challengeCount.length}
                   </Button>
                 </Challenges>)}

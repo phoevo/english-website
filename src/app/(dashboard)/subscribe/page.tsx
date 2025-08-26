@@ -316,22 +316,6 @@
       </CardHeader>
   </div>
 
-  <Card className="mt-3 w-full md:w-2/3 bg-background">
-    <CardHeader>
-      <CardTitle className="text-xl">At a glance: who gets what</CardTitle>
-      <CardDescription>
-        Subscriptions can belong to Students or Tutors. Here’s how it works:
-      </CardDescription>
-    </CardHeader>
-    <CardContent>
-      <ul className="list-disc marker:text-pink-500 space-y-2 text-sm md:text-base px-4 text-muted-foreground">
-        <li><span className="text-foreground font-medium">Student Pro</span>: The student can access all Conversations and practice anytime. Their Tutor (even on Free) can assign any Conversation.</li>
-        <li><span className="text-foreground font-medium">Tutor Pro</span>: The tutor can manage more active students (5/15/30) and assign any Conversation. Students still need <span className="text-foreground font-medium">Student Pro</span> to self-practice.</li>
-        <li><span className="text-foreground font-medium">Both Free</span>: Tutor can assign up to 12 total Conversations and has 2 active Student slots. Students cannot self-practice.</li>
-      </ul>
-    </CardContent>
-  </Card>
-
 
   {/* <div className='flex flex-col w-1/2 mt-5 gap-15'> */}
     <div className='flex flex-row justify-center w-full mt-5 gap-15'>
@@ -345,7 +329,7 @@
       <div className='flex flex-col gap-5 w-full'>
 
       {/* <div className='flex flex-col gap-5'> */}
-        <div className='flex flex-row gap-5'>
+        <div className='flex flex-col md:flex-col lg:flex-row gap-5'>
     <div className='flex flex-col justify-between p-2 border-2 rounded-lg h-65 w-full text-muted-foreground'>
       <div className='flex flex-col items-center flex-grow'>
         <Badge className='mb-4'>Free</Badge>

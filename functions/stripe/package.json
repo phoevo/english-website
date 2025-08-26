@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "stripe": "^12.0.0",
-    "node-appwrite": "^9.0.0"
+    "node-appwrite": "^14.0.0"
   },
   "devDependencies": {
     "typescript": "^5.4.5"

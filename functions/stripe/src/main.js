@@ -8,6 +8,7 @@ const handleGetSubscription = require("./get-subscription.js");
 const handleUnsubscribe = require("./unsubscribe.js");
 const handleCheckSubscription = require("./check-subscription.js");
 const handleSendEmail = require("./send-email.js");
+const handleSendResetNotice = require("./send-reset-notice.js");
 
 // Main handler
 module.exports = async function main({ req, res, log, error }) {
@@ -27,8 +28,14 @@ module.exports = async function main({ req, res, log, error }) {
   const PROJECT_ID = process.env.APPWRITE_FUNCTION_PROJECT_ID || process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || "";
   const API_KEY = process.env.APPWRITE_API_KEY || "";
 
+  log("Has admin API key:", Boolean(API_KEY));
+  log("Project ID present:", Boolean(PROJECT_ID));
+
   // Admin client: privileged access using API Key (from function env, not headers)
-  const adminClient = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(PROJECT_ID).setKey(API_KEY);
+  const adminClient = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(PROJECT_ID);
+  if (API_KEY) {
+    adminClient.setKey(API_KEY);
+  }
 
   // Authenticated user client: using JWT
   const client = new Client()
@@ -36,8 +43,9 @@ module.exports = async function main({ req, res, log, error }) {
     .setProject(PROJECT_ID)
     .setJWT(req.headers["x-appwrite-user-jwt"] || "");
 
-  // Check if JWT is provided for user authentication (except for webhook)
-  if (req.path !== "/webhook" && !req.headers["x-appwrite-user-jwt"]) {
+  // Allow unauthenticated for specific public routes
+  const isPublicRoute = ["/webhook", "/send-reset-notice"].includes(req.path);
+  if (!isPublicRoute && !req.headers["x-appwrite-user-jwt"]) {
     error("No JWT token provided");
     return res.json({ error: "Authentication required" }, 401);
   }
@@ -72,6 +80,14 @@ module.exports = async function main({ req, res, log, error }) {
       case "/send-email":
         log("Calling send-email handler");
         return await handleSendEmail({ req, res, client, adminClient });
+
+      case "/send-reset-notice":
+        log("Calling send-reset-notice handler");
+        if (!API_KEY) {
+          error("Missing APPWRITE_API_KEY env var; cannot call Messaging (messages.write)");
+          return res.json({ success: true }, 200); // avoid leaking config but stop early
+        }
+        return await handleSendResetNotice({ req, res, adminClient });
 
       default:
         error("Invalid path provided:", req.path);

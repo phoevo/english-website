@@ -227,6 +227,7 @@ console.log(isSubscribed);
                         </div>
                       )}
 
+                      <div className='border-b pb-6'>
                       <FormField
                         control={accountForm.control}
                         name="username"
@@ -234,12 +235,14 @@ console.log(isSubscribed);
                           <FormItem>
                             <FormLabel>New Username</FormLabel>
                             <FormControl>
-                              <Input placeholder="yourname" {...field} />
+                              <Input placeholder="Username" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+
+                      </div>
 
                       <FormField
                         control={accountForm.control}
@@ -250,7 +253,7 @@ console.log(isSubscribed);
                             <FormControl>
                               <Input
                                 type="password"
-                                placeholder="Enter current password (optional)"
+                                placeholder="Enter current password"
                                 {...field}
                               />
                             </FormControl>
@@ -268,7 +271,7 @@ console.log(isSubscribed);
                             <FormControl>
                               <Input
                                 type="password"
-                                placeholder="New password (optional)"
+                                placeholder="New password"
                                 {...field}
                               />
                             </FormControl>

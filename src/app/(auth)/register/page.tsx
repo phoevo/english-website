@@ -28,6 +28,7 @@ import { useState } from 'react'
 import { ensureUserDocument } from '@/data/getData'
 import { useRouter } from 'next/navigation'
 import { useUserStore } from '@/data/useUserStore'
+import { sendWelcomeEmail } from '@/services/emailService'
 
 
 const formSchema = z
@@ -94,11 +95,26 @@ export default function Register() {
     return;
   }
 
+  // Create and store a JWT so we can call our function that requires user auth
+  try {
+    const jwt = await account.createJWT();
+    localStorage.setItem('jwt', jwt.jwt);
+  } catch (err) {
+    console.error('⚠️ Failed to create JWT (welcome email will be skipped):', err);
+  }
+
   try {
     await ensureUserDocument();
     console.log('✅ User document ensured');
   } catch (err) {
     console.error('⚠️ Failed to create user document:', err);
+  }
+
+  // Fire-and-forget welcome email; don't block the UX if it fails
+  try {
+    await sendWelcomeEmail({ userEmail: data.email, userName: data.username });
+  } catch (err) {
+    console.warn('Welcome email failed (non-blocking):', err);
   }
 
   try {
@@ -118,7 +134,7 @@ export default function Register() {
 
 
   return (
-    <div className="flex flex-col w-full lg:w-2/3 gap-10">
+    <div className="flex flex-col w-full lg:full gap-10">
       <CardHeader>
         <CardTitle className="text-2xl">Sign up</CardTitle>
         <CardDescription>

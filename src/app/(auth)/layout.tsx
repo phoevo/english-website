@@ -3,6 +3,7 @@
 import ModeToggle from "@/components/ui/ModeToggle";
 import Link from "next/link";
 import { Montserrat, Raleway, Geist, Geist_Mono } from "next/font/google";
+import LeftSide from "./LeftSide";
 
 
 const raleway = Raleway({ subsets: ['latin'] });
@@ -32,13 +33,13 @@ export default function AuthLayout({ children }: { children: React.ReactNode }){
 
 
 
-      <div className="flex hidden lg:block justify-center items-center w-1/2 h-screen bg-muted">
-      <div className="flex justify-center items-center h-100 w-100 rounded-xl bg-red-500">Images showing app</div>
+      <div className="flex hidden lg:block justify-center items-center w-1/2 h-screen">
+        <LeftSide/>
       </div>
 
-      <div className="flex justify-center items-center w-full lg:w-1/2 h-screen bg-background">
+      <div className="flex justify-center items-center w-full lg:w-1/2 h-screen bg-">
 
-        <div className="flex justify-center items-center border-none lg:border-1 lg:shadow-md rounded-lg w-screen lg:w-2/3 h-3/4">
+        <div className="flex justify-center items-center border-none lg:border-1 rounded-lg w-2/3 h-3/4">
 
           {children}
 
