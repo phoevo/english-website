@@ -16,6 +16,9 @@ export default function LeftSide() {
     "bg-lime-300",
     "bg-violet-500",
     "bg-pink-500",
+    "bg-cyan-700",
+    "bg-orange-500",
+    "bg-fuchsia-600"
   ];
 
   const NUM_ROWS = 8;
