@@ -13,7 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Check, Plus } from "lucide-react";
+import { AArrowDownIcon, AArrowUpIcon, Check, Plus } from "lucide-react";
 import { WordTypeSettings } from "@/components/ui/WordTypeSettings";
 import { Button } from "@/components/ui/button";
 import { databases, storage } from "@/data/appwrite";
@@ -117,6 +117,7 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   const isComplete = completeConversations.includes(conversation.$id);
   const [audioUrl, setAudioUrl] = React.useState<string | null>(null);
   const [audioLoading, setAudioLoading] = React.useState(true);
+  const [fontSize, setFontSize] = React.useState(16)
 
     React.useEffect(() => {
   const fetchAudioUrl = async () => {
@@ -140,8 +141,6 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   fetchAudioUrl();
 }, [conversation]);
 
-
-console.log(customColors)
 
 const [wordTypes, setWordTypes] = React.useState<Record<WordTypeKey, WordTypeData>>({
   noun: { colorKey: "pink500", enabled: false },
@@ -246,9 +245,10 @@ React.useEffect(() => {
         <HoverCard openDelay={50} closeDelay={50}>
           <HoverCardTrigger asChild>
             <span
-            className={`text-base rounded transition-colors ${
+            className={`rounded transition-colors ${
               hoverEnabled ? "cursor-pointer" : ""
             } ${appliedHover} ${appliedColor}`}
+            style={{ fontSize }}
           >
             {displayText}
           </span>
@@ -315,11 +315,11 @@ React.useEffect(() => {
 
   <div className="grid grid-cols-1 lg:grid-cols-[6fr_1fr] overflow-hidden h-full">
     <ScrollArea className="h-full w-full overflow-y-auto">
-      <div className="p-5 text-lg">
+      <div className="p-5">
         {Array.isArray(rawDialogue) && rawDialogue.length > 0 ? (
           rawDialogue.map((line, i) => (
             <div key={i} className="flex flex-col md:flex-col lg:flex-row mb-10">
-              <div className="font-semibold lg:pr-6 lg:border-r-1 border-zinc-500 min-w-[100px] ">
+              <div className="font-semibold text-lg lg:pr-6 lg:border-r-1 border-zinc-500 min-w-[100px] ">
                 {line.speaker}
               </div>
               <div className="ml-6 flex flex-wrap gap-1">
@@ -359,18 +359,40 @@ React.useEffect(() => {
 
 
     <div className="p-5 h-full border-l-1 hidden lg:block">
-      <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-col items-center gap-5">
 
         <span className="flex gap-1 items-center">
-          <div className="bg-pink-500 rounded px-1">Hover</div>
+          <div className="bg-red-500 rounded px-1 text-sm">Hover</div>
           <Switch checked={hoverEnabled} onCheckedChange={setHoverEnabled} />
         </span>
 
+        <div className="flex flex-row items-center gap-2">
+          <h1 className="text-sm">Font Size</h1>
+          <div className="flex flex-row border-1 rounded-sm">
+            <Button
+              size={"sm"}
+              variant={"ghost"}
+              className="rounded-none cursor-pointer text-lg"
+              onClick={() => setFontSize((s) => Math.min(s + 2, 24))}
+            >
+              +
+            </Button>
+            <Button
+              size={"sm"}
+              variant={"ghost"}
+              className="border-l-1 bg-muted rounded-none cursor-pointer text-lg"
+              onClick={() => setFontSize((s) => Math.max(s - 2, 14))}
+            >
+              -
+            </Button>
+          </div>
+        </div>
+
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
-            <AccordionTrigger>Word Classes</AccordionTrigger>
+            <AccordionTrigger className="p-0 font-normal text-sm">Word Classes</AccordionTrigger>
             <AccordionContent>
-              <div className="bg-background rounded-md p-2 flex flex-col gap-2">
+              <div className="p-2 flex flex-col gap-2">
                 <WordTypeSettings wordTypes={wordTypes} toggleWordType={toggleWordType} />
               </div>
             </AccordionContent>
@@ -381,7 +403,32 @@ React.useEffect(() => {
 
       </div>
     <div className="flex flex-col p-2 items-center justify-center h-full w-full bg-background border-t-1 rounded-bl-md">
-      <MobileSettingsDrawer/>
+      <div className="flex flex-row items-center gap-5">
+        <MobileSettingsDrawer/>
+
+        <div className="flex flex-row items-center gap-2 lg:hidden">
+          <h1 className="text-sm">Font Size</h1>
+          <div className="flex flex-row border-1 rounded-sm">
+            <Button
+              size={"lg"}
+              variant={"ghost"}
+              className="rounded-none cursor-pointer text-lg"
+              onClick={() => setFontSize((s) => Math.min(s + 2, 24))}
+            >
+              +
+            </Button>
+            <Button
+              size={"lg"}
+              variant={"ghost"}
+              className="border-l-1 bg-muted rounded-none cursor-pointer text-lg"
+              onClick={() => setFontSize((s) => Math.max(s - 2, 14))}
+            >
+              -
+            </Button>
+          </div>
+        </div>
+
+      </div>
   {audioLoading ? (
     <Skeleton className="" />
   ) : audioUrl ? (

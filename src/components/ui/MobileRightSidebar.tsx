@@ -24,7 +24,7 @@ export function MobileRightSidebar({
   actions,
 }: MobileRightSidebarProps) {
   return (
-    <div className={`lg:hidden md:hidden absolute right-10 mt-200 bg-foreground text-background rounded-full ${dmSans.className}`}>
+    <div className={`lg:hidden md:hidden absolute right-2 mt-20 bg-foreground text-background rounded-full ${dmSans.className}`}>
       <Sheet>
         <SheetTrigger asChild>
           <Button size="icon" variant="ghost" aria-label="Open menu" className="cursor-pointer">

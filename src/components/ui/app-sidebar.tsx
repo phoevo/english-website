@@ -69,7 +69,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild disabled>
                     <Link href="">
                       <ClipboardCheck />
-                      <span>Coming soon</span>
+                      <span className="text-muted-foreground">Coming soon</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
