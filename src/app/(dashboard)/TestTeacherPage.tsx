@@ -81,7 +81,7 @@ function TestTeacherPage() {
       transition={{ duration: 0.1 }}
       className="w-full lg:w-2/3 bg-muted p-5 rounded-lg"
     >
-      <Card className="bg-card w-auto h-100">
+      <Card className={`bg-card w-auto h-100 ${geist.className}`}>
         <CardHeader className="flex flex-col gap-2">
           <div className="flex justify-between items-start">
             <div className="flex flex-col gap-2">

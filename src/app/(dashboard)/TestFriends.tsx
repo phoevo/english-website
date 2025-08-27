@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Sword, Swords } from "lucide-react";
 import { Geist } from "next/font/google";
+import { motion } from "motion/react";
 
 
 const geist = Geist({ subsets: ['latin'] });
@@ -59,12 +60,15 @@ const mockRequests = [
 
 function TestFriends() {
   return (
-    <div className="bg-muted w-100 lg:w-full p-5 rounded-lg">
+    <motion.div
+      whileHover={{ scale: 1.0080 }}
+      transition={{ duration: 0.1 }}
+     className="bg-muted w-100 lg:w-full p-5 rounded-lg">
     <Card className={`p-5 w-full h-auto bg-card shadow-md ${geist.className}`}>
       <Tabs defaultValue="friends" className="w-full">
         <TabsList className="w-full mb-4">
-          <TabsTrigger value="friends">Connections</TabsTrigger>
-          <TabsTrigger value="requests">Requests</TabsTrigger>
+          <TabsTrigger className="cursor-pointer" value="friends">Connections</TabsTrigger>
+          <TabsTrigger className="cursor-pointer" value="requests">Requests</TabsTrigger>
         </TabsList>
 
         {/* Friends Tab */}
@@ -148,7 +152,7 @@ function TestFriends() {
         </TabsContent>
       </Tabs>
     </Card>
-    </div>
+    </motion.div>
   );
 }
 

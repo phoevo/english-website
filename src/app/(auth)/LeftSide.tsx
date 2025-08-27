@@ -58,7 +58,7 @@ export default function LeftSide() {
       // Fade in once with render delay
       gsap.to(box, {
         opacity: 1,
-        delay: 0.01 * index, // same stagger
+        delay: 0.005 * index, // same stagger
       });
     });
   }, []);

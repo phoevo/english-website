@@ -34,7 +34,7 @@ function TestConversationCover() {
     >
       <Card className="bg-card w-auto h-80">
         <CardHeader>
-          <CardTitle className="flex justify-between items-start gap-2">
+          <CardTitle className={`lex justify-between items-start gap-2 ${geist.className}`}>
             <p className='w-auto'>Conversation Title</p>
 
             <div className="flex flex-col gap-1 items-end">
@@ -78,7 +78,7 @@ function TestConversationCover() {
           </CardTitle>
           <CardDescription className="border-b">B1</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className={`${geist.className}`}>
           <p className="text-sm text-muted-foreground">
             Conversations will have short descriptions to help students and tutors quickly understand the context.
           </p>

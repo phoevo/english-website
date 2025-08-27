@@ -159,20 +159,45 @@ useEffect(() => {
         <div className="flex flex-col gap-2 items-center">
 
           <div className="flex flex-col items-center lg:flex-row lg:items-end">
-            <h1 className="lg:pl-25 text-6xl lg:text-8xl bg-landing-bg font-normal">Synomilo</h1>
+             <motion.div
+            layout
+            initial={{ opacity: 0, height: "auto" }}
+            animate={{ opacity: 1, height: "auto"}}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="lg:pl-25 text-6xl lg:text-8xl bg-landing-bg font-normal">Synomilo
             <span className="text-muted-foreground w-auto text-xs lg:text-sm bg-muted px-2 py-1 lg:p-2 rounded-full">Early Access</span>
+
+            </motion.div>
+
 
           </div>
 
           {/* <div className="flex flex-row bg-landing-bg text-1xl font-normal mt-3 gap-2" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div> */}
-          <p className="text-zinc-500 bg-landing-bg">Greek for: &quot;I converse&quot;</p>
+
+           <motion.div
+            layout
+            initial={{ opacity: 0, height: "auto" }}
+            animate={{ opacity: 1, height: "auto"}}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="text-zinc-500 bg-landing-bg">Greek for: &quot;I converse&quot;
+            </motion.div>
         </div>
 
         <div className="flex flex-col items-center gap-5">
-        <h2 className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10">Focused on Real Conversation</h2>
+
+         <motion.div
+            layout
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ delay:0.2, duration: 0.5, ease: "easeInOut" }}
+        className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10">Focused on Real Conversation
         <p className="lg:text-xl text-center m-2 bg-muted rounded-full py-2 px-4 font-normal">This isn't theory. It's rehearsal for when you're face to face.</p>
+        </motion.div>
 
 
       <div className="h-auto w-full lg:w-1/2 flex items-center">
@@ -195,7 +220,12 @@ useEffect(() => {
 
 
         <div className="flex flex-row gap-5">
-
+          <motion.div
+            layout
+            initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ delay:0.2, duration: 0.5, ease: "easeInOut" }}>
           <Button variant="ghost"
            onClick={() => setShowAbout(!showAbout)}
             className="flex items-center gap-2 text-muted-foreground cursor-pointer">
@@ -211,6 +241,9 @@ useEffect(() => {
               </>
             )}
           </Button>
+
+          </motion.div>
+
 
 
         </div>
@@ -228,7 +261,7 @@ useEffect(() => {
             initial={{ opacity: 0, height: "auto" }}
             animate={{ opacity: 1, height: "auto"}}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
             className="flex flex-col max-w-4xl bg-card rounded-4xl justify-start items-center space-y-4 overflow-hidden"
           >
             <p className={`text-md lg:text-xl leading-relaxed bg-card text-center ${dmSans.className}`}>
@@ -745,7 +778,7 @@ useEffect(() => {
           <AccordionTrigger className="text-lg lg:text-lg cursor-pointer">
             {question.question}
           </AccordionTrigger>
-          <AccordionContent className="text-md lg:text-lg text-muted-foreground">
+          <AccordionContent className="text-md lg:text-md text-[16fpx]">
             {question.answer}
           </AccordionContent>
         </AccordionItem>

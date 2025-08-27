@@ -233,7 +233,7 @@ function SubscribePage() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, delay: 0.5 }}
-      className='text-sm md:text-xl bg-muted rounded-full p-2 text-center mx-4'>Start now and your price stays the same, even after release.</motion.div>
+      className='text-sm md:text-xl bg-muted rounded-full p-2 text-center mx-4'>Start now and your price stays the same, even after full release.</motion.div>
     </div>
 
 
