@@ -58,79 +58,91 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-center lg:pl-30 h-10 md:h-18 lg:h-18">
-          <div className="flex items-center gap-8 lg:gap-15">
-            <Link href={"/"} className={`lg:text-3xl md:text-xl font-normal absolute left-10 ${dmSans.className}`}>Synomilo</Link>
-            <Link href="/home" className="hidden md:flex lg:flex md:text-lg lg:text-xl font-semibold text-primary font-mono hover:underline underline-offset-10 decoration-zinc-600 transition-all duration-300">
+      <div className="px-4">
+        <div className="grid grid-cols-5 items-center h-10 md:h-18 lg:h-18 gap-x-3">
+          {/* Left*/}
+          <div className="justify-center col-start-1 col-end-2">
+            <Link href={"/"} className={`lg:text-3xl md:text-xl font-normal ${dmSans.className}`}>Synomilo</Link>
+          </div>
+
+          {/* Center */}
+          <div className="justify-self-center hidden lg:col-start-3 lg:col-end-3 md:col-start-2 md:col-end-4 md:flex md:justify-self- lg:flex lg:justify-self-center lg:gap-12 items-center gap-8">
+            <Link href="/home" className="md:text-lg lg:text-xl font-semibold text-primary font-mono hover:underline underline-offset-10 decoration-zinc-600 transition-all duration-300">
               Home
             </Link>
-            <Link href="/profile" className="hidden md:flex lg:flex md:text-lg lg:text-xl font-semibold md:pr-30 text-primary font-mono hover:underline underline-offset-10 decoration-zinc-600 transition-all duration-300">
+            <Link href="/profile" className="md:text-lg lg:text-xl font-semibold text-primary font-mono hover:underline underline-offset-10 decoration-zinc-600 transition-all duration-300">
               Profile
             </Link>
+          </div>
 
-            <div className="hidden md:flex lg:flex items-center lg:gap-3 md:gap-2 absolute md:right-5 lg:right-10">
-              <div className="flex flex-row items-center gap-2 pr-0">
-                {loading ? (
-                  <Skeleton className="w-[56px] h-[36px]"/>
-                ): (
-                <DailyTasks>
-                  <Button variant="secondary" className="items-center md:w-10 lg:w-auto shadow-sm cursor-pointer">
-                    <Sword className="rotate-45" /> {taskCount}
-                  </Button>
-                </DailyTasks>)}
-
-                {loading ? (
-                  <Skeleton className="w-[56px] h-[36px]"/>
-                ): (
-                isSubscribed &&
-                <Challenges>
-                  <Button className="flex items-center md:w-10 lg:w-auto cursor-pointer">
-                    <Swords/> {challengeCount.length}
-                  </Button>
-                </Challenges>)}
-              </div>
+          {/* Right */}
+          <div className="justify-self-end col-start-5 col-end-6 hidden md:flex lg:flex items-center md:gap-2 lg:gap-2">
+            <div className="flex flex-row items-center gap-2 pr-0">
+              {loading ? (
+                <Skeleton className="w-[56px] h-[36px]"/>
+              ): (
+              <DailyTasks>
+                <Button variant="secondary" className="items-center lg:w-auto shadow-sm cursor-pointer">
+                  <Sword className="rotate-45" /> {taskCount}
+                </Button>
+              </DailyTasks>)}
 
               {loading ? (
-                <Skeleton className="w-[180px] h-[36px] rounded-full" />
-              ) : (
-                <div className={`flex flex-row items-center justify-start border-1 rounded-full shadow-xs`}>
-                  <Link href="/subscribe" className="cursor-pointer">
-                    <Badge className={`m-1 ${isSubscribed ? "bg-pink-500 text-foreground" : ""}`}>
-                      {isSubscribed ? "Pro" : "Free"}
-                    </Badge>
-                  </Link>
-                  {user ? (<p className="mx-2">{user.name}</p>) : (<p className="mx-2">Guest</p>) }
-
-                  {user && <HoverCard>
-                    <HoverCardTrigger asChild>
-                      <Badge
-                        className={`m-1 cursor-pointer ${badgeColor}`}
-                        aria-label={`Current streak: ${streak}`}
-                      >
-                        {streak}
-                      </Badge>
-                    </HoverCardTrigger>
-                    <HoverCardContent side="top" align="center" className={`${dmSans.className} w-auto text-xs`}>
-                      Your current daily streak
-                    </HoverCardContent>
-                  </HoverCard>}
-                </div>
-              )}
-
-              {loading ? (
-                <Skeleton className="w-20 h-10 rounded-md" />
-              ) : user ? (
-                <Button onClick={handleLogout} variant="outline" className="cursor-pointer"><LogOut/>Logout</Button>
-              ) : (
-                <Link href={"/login"}>
-                  <Button variant="outline" className="cursor-pointer">Log in</Button>
-                </Link>
-              )}
-
-              <ModeToggle />
+                <Skeleton className="w-[56px] h-[36px]"/>
+              ): (
+              isSubscribed &&
+              <Challenges>
+                <Button className="flex items-center lg:w-auto cursor-pointer">
+                  <Swords/> {challengeCount.length}
+                </Button>
+              </Challenges>)}
             </div>
 
+            {loading ? (
+              <Skeleton className="w-[180px] h-[36px] rounded-full" />
+            ) : (
+              <div className={`flex flex-row items-center justify-start border-1 rounded-full shadow-xs`}>
+                <Link href="/subscribe" className="cursor-pointer">
+                  <Badge className={`m-1 ${isSubscribed ? "bg-pink-500 text-foreground" : ""}`}>
+                    {isSubscribed ? "Pro" : "Free"}
+                  </Badge>
+                </Link>
+                {user ? (<p className="mx-2">{user.name}</p>) : (<p className="mx-2">Guest</p>) }
+
+                {user && <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Badge
+                      className={`m-1 cursor-pointer ${badgeColor}`}
+                      aria-label={`Current streak: ${streak}`}
+                    >
+                      {streak}
+                    </Badge>
+                  </HoverCardTrigger>
+                  <HoverCardContent side="top" align="center" className={`${dmSans.className} w-auto text-xs`}>
+                    Your current daily streak
+                  </HoverCardContent>
+                </HoverCard>}
+              </div>
+            )}
+
+            {loading ? (
+              <Skeleton className="w-20 h-10 rounded-md" />
+            ) : user ? (
+            <Button onClick={handleLogout} variant="outline" className="cursor-pointer flex items-center gap-2">
+              <LogOut className="h-4 w-4" />
+              <span className="hidden lg:inline">Logout</span>
+            </Button>
+            ) : (
+              <Link href={"/login"}>
+                <Button variant="outline" className="cursor-pointer">Log in</Button>
+              </Link>
+            )}
+
+            <ModeToggle />
+          </div>
+
+          {/* Right: Mobile menu trigger */}
+          <div className="justify-self-end col-start-3 col-end-4 md:hidden">
             <MobileRightSidebar
               userName={user ? user.name : "Guest"}
               isSubscribed={isSubscribed}
