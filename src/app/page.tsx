@@ -161,8 +161,9 @@ useEffect(() => {
           <div className="flex flex-col items-center lg:flex-row lg:items-end">
              <motion.div
             layout
-            initial={{ opacity: 0, height: "auto" }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, height: "auto"}}
+            whileInView={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="lg:pl-25 text-6xl lg:text-8xl bg-landing-bg font-normal">Synomilo
@@ -179,8 +180,9 @@ useEffect(() => {
 
            <motion.div
             layout
-            initial={{ opacity: 0, height: "auto" }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, height: "auto"}}
+            whileInView={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="text-zinc-500 bg-landing-bg">Greek for: &quot;I converse&quot;
@@ -191,16 +193,22 @@ useEffect(() => {
 
          <motion.div
             layout
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ delay:0.2, duration: 0.5, ease: "easeInOut" }}
+            transition={{duration: 0.3, ease: "easeInOut" }}
         className=" text-3xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10">Focused on Real Conversation
         <p className="lg:text-xl text-center m-2 bg-muted rounded-full py-2 px-4 font-normal">This isn't theory. It's rehearsal for when you're face to face.</p>
         </motion.div>
 
 
-      <div className="h-auto w-full lg:w-1/2 flex items-center">
+       <motion.div
+            layout
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{duration: 0.3, ease: "easeInOut" }}
+      className="h-auto w-full lg:w-1/2 flex items-center">
         <Card className={`w-full h-auto flex flex-row justify-evenly shadow-none border-none items-center p-5 ${dmSans.className}`}>
           <div className="flex flex-col items-center space-y-2 w-1/2">
             <p className="text-4xl lg:text-5xl font-bold text-center">
@@ -216,16 +224,16 @@ useEffect(() => {
             <p className="text-md font-semibold text-muted-foreground text-center">Conversations</p>
           </div>
         </Card>
-      </div>
+      </motion.div>
 
 
         <div className="flex flex-row gap-5">
           <motion.div
             layout
-            initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1}}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ delay:0.2, duration: 0.5, ease: "easeInOut" }}>
+            transition={{duration: 0.2, ease: "easeInOut" }}>
           <Button variant="ghost"
            onClick={() => setShowAbout(!showAbout)}
             className="flex items-center gap-2 text-muted-foreground cursor-pointer">
@@ -261,13 +269,13 @@ useEffect(() => {
             initial={{ opacity: 0, height: "auto" }}
             animate={{ opacity: 1, height: "auto"}}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
             className="flex flex-col max-w-4xl bg-card rounded-4xl justify-start items-center space-y-4 overflow-hidden"
           >
-            <p className={`text-md lg:text-xl leading-relaxed bg-card text-center ${dmSans.className}`}>
+            <p className={`text-md lg:text-lg leading-relaxed bg-card text-center ${dmSans.className}`}>
               Synomilo helps English learners move beyond studying by giving them a place to actively practice.
               With realistic conversations and tools built for real-world speaking, students can practice solo or with a tutor.
-              Tutors can already join sessions and guide students using Synomilo’s content, with dedicated tools for assigning, tracking, and giving feedback coming soon.
+              Tutors can already join sessions and guide students through screen sharing. Dedicated tools for assigning, tracking, and giving feedback are coming soon.
             </p>
 
           </motion.div>
