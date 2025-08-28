@@ -102,7 +102,7 @@ export default function LeftSide() {
             },
             duration: 0.18,
             ease: "sine.out",
-            overwrite: true,
+            overwrite: "auto",
           });
         } else {
           gsap.to(el, {
@@ -124,7 +124,7 @@ export default function LeftSide() {
 
     const onLeave = () => {
       for (const el of boxes) {
-        gsap.to(el, { css: { "--repelX": "0px", "--repelY": "0px" }, duration: 0.35, ease: "sine.out" });
+        gsap.to(el, { css: { "--repelX": "0px", "--repelY": "0px" }, duration: 0.35, ease: "sine.out", overwrite: "auto" });
       }
     };
 

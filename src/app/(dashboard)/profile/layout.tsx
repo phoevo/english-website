@@ -233,7 +233,7 @@ console.log(isSubscribed);
                         name="username"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>New Username</FormLabel>
+                            <FormLabel>Change Username</FormLabel>
                             <FormControl>
                               <Input placeholder="Username" {...field} />
                             </FormControl>
@@ -249,7 +249,7 @@ console.log(isSubscribed);
                         name="currentPassword"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Current Password</FormLabel>
+                            <FormLabel>Change Password</FormLabel>
                             <FormControl>
                               <Input
                                 type="password"
@@ -267,11 +267,10 @@ console.log(isSubscribed);
                         name="newPassword"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>New Password</FormLabel>
                             <FormControl>
                               <Input
                                 type="password"
-                                placeholder="New password"
+                                placeholder="Enter new password"
                                 {...field}
                               />
                             </FormControl>
@@ -328,18 +327,19 @@ console.log(isSubscribed);
             </CardHeader>
             <CardContent className="space-y-1">
               <div className="space-y-0">
-                <Label htmlFor="toggle" className='font-bold mb-2'>Color customization
+
+                <Label className="font-medium mb-2">Color Customization
                   </Label>
 
-                  {isSubscribed && user ?(
+                  { user ?(
                   <>
-                  <p className='text-sm text-muted-foreground'>Select a word type and select it&apos;s color. <span className='text-red-500 font-normal m-0 text-sm'>
+                  <p className='text-sm text-muted-foreground'>Select a word type and select it&apos;s color. Save when you're done. <span className='text-red-500 font-normal m-0 text-sm'>
                     Certain background and text color combinations could make reading harder.</span>
                     </p>
                   <CustomColors userId={user.$id} />
 
                   </>):
-                    <p className='text-muted-foreground text-sm'>Color customization is a paid feature</p>
+                    <p className='text-muted-foreground text-sm'>Create an account or log in to access your billing.</p>
                   }
                 </div>
 
@@ -364,7 +364,7 @@ console.log(isSubscribed);
     <Spinner />
   ) : user ? (
     <div className="flex flex-col gap-2">
-      <Card className="bg-background">
+      {/* <Card className="bg-background">
         <CardHeader>
           <CardTitle>Credit Card</CardTitle>
           <CardDescription>Update your payment details</CardDescription>
@@ -422,7 +422,7 @@ console.log(isSubscribed);
             Update
           </Button>
         </CardFooter>
-      </Card>
+      </Card> */}
 
      <Card className="bg-background">
   <CardHeader>

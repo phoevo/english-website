@@ -19,6 +19,7 @@ import { Geist } from "next/font/google"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useUserStore } from "@/data/useUserStore"
 import { backgroundColors } from "@/data/color"
+import Link from "next/link"
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!
 const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!
@@ -50,7 +51,7 @@ const defaultColorKeys = [
 ]
 
 export default function CustomColors({ userId }: { userId: string }) {
-  const { customColors, setCustomColors } = useUserStore()
+  const { isSubscribed, customColors, setCustomColors } = useUserStore()
   const [openPickerIndex, setOpenPickerIndex] = useState<number | null>(null)
 
   const displayColors =
@@ -146,7 +147,14 @@ export default function CustomColors({ userId }: { userId: string }) {
       )}
 
       <div className="flex gap-4 mt-4 justify-center">
-        <Button className="cursor-pointer" onClick={savePreferences}>Save Preferences</Button>
+        {isSubscribed ? (
+        <Button className="cursor-pointer" onClick={savePreferences}>Save Preferences</Button>)
+        :
+
+        (<Link href="/subscribe">
+          <Button>Requires Pro</Button>
+          </Link>)
+    }
 
         <AlertDialog>
           <AlertDialogTrigger asChild>

@@ -88,7 +88,7 @@ useEffect(() => {
                   <li>All existing and future conversations to go through at your own pace.</li>
                   <li>Color customization</li>
                 </ul>
-                <p className="flex items-center gap-2 text-[18px] pt-5">
+                <p className="flex items-center gap-2 pt-5">
                   Find out more on the{" "}
                   <Link
                     className="underline underline-offset-5 hover:underline-offset-10 transition-all duration-300"
@@ -786,7 +786,7 @@ useEffect(() => {
           <AccordionTrigger className="text-lg lg:text-lg cursor-pointer">
             {question.question}
           </AccordionTrigger>
-          <AccordionContent className="text-md lg:text-md text-[16fpx]">
+          <AccordionContent className="text-md lg:text-md text-[16px]">
             {question.answer}
           </AccordionContent>
         </AccordionItem>
