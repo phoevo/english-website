@@ -37,7 +37,7 @@ const tiers = [
     studentBadge: "Free",
     features: [
       { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor can only assign up to 12 conversations" },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can’t review or practice conversations on their own" },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can’t review or practice conversations in their own" },
       { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor limited to 2 active student slots" },
     ],
   },
@@ -55,7 +55,7 @@ const tiers = [
     studentBadge: "Free",
     features: [
       { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation" },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can’t review or practice on their own" },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can’t review or practice in their own" },
       { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can manage 5, 15, or 30 active students" },
     ],
   },
