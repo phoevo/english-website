@@ -13,6 +13,7 @@ const STRIPE_CUSTOMERS_ID = process.env.NEXT_PUBLIC_APPWRITE_STRIPE_CUSTOMERS_ID
 // SUBSCRIPTIONS_ID removed - no longer using subscriptions collection
 const STRIPE_SECRET_KEY = process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!;
 const STRIPE_WEBHOOK_SECRET = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET!;
+const FEEDBACK_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_FEEDBACK_COLLECTION_ID!;
 
 const client = new Client()
   .setEndpoint(ENDPOINT_ID)
@@ -36,6 +37,7 @@ export const assignmentsId = ASSIGNMENTS_ID
 export const stripeCustomersId = STRIPE_CUSTOMERS_ID
 export const stripeSecretKey = STRIPE_SECRET_KEY
 export const stripeWebhookSecret = STRIPE_WEBHOOK_SECRET
+export const feedbackCollectionId = FEEDBACK_COLLECTION_ID
 
 
 export const getConversationFromDB = async (documentId: string) => {

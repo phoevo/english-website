@@ -1,0 +1,239 @@
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { BadgePlus, Bug, Lightbulb, MessageCircle, X, CheckCircle, Check } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useUserStore } from "@/data/useUserStore";
+import { databaseId, databases, feedbackCollectionId } from "@/data/appwrite";
+import UserGuidePopover from "../../userGuide";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardDescription,
+  CardTitle,
+  CardHeader,
+  CardContent,
+} from "@/components/ui/card";
+import { DM_Sans } from "next/font/google";
+import { ID } from "appwrite";
+
+
+const dmSans = DM_Sans({ subsets: ['latin'] });
+
+
+function FeedbackPage() {
+  const { user, loading, recentConversations, setRecentConversations, completeConversations } = useUserStore();
+  const [, setDeletingId] = useState<string | null>(null);
+
+  // Feedback form state
+  const [selectedTag, setSelectedTag] = useState<
+    "bug" | "suggestion" | "missing" | "general" | null
+  >(null);
+  const [message, setMessage] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError(null);
+    if (!selectedTag) {
+      setError("Please select a tag.");
+      return;
+    }
+    if (!message.trim()) {
+      setError("Please enter your feedback.");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const doc = await databases.createDocument(
+        databaseId,
+        feedbackCollectionId,
+        ID.unique(),
+        {
+          tag: selectedTag!,
+          feedback: message.trim(),
+          name: name.trim() || undefined,
+          email: email.trim() || undefined,
+        }
+      );
+      // Reset
+      setMessage("");
+      setName("");
+      setEmail("");
+      setSelectedTag(null);
+      setSubmitted(true);
+    } catch (e: any) {
+      console.error("Failed to submit feedback:", e);
+      setError("Failed to submit feedback. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="m-10 space-y-8">
+        <Skeleton className="w-[300px] h-[32px]" />
+        <Skeleton className="w-[400px] h-[15px]" />
+        <Skeleton className="w-[392px] h-[82px] opacity-50 mt-5" />
+        <Skeleton className="w-[392px] h-[82px] opacity-25" />
+        <Skeleton className="w-[392px] h-[82px] opacity-15" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="m-10">
+        <p>
+          Please <Link href="/login" className="underline">log in</Link> or{" "}
+          <Link href="/register" className="underline">create an account</Link> to view your recent conversations.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-full space-y-5 m-10">
+      <div>
+        <UserGuidePopover
+          id="feedback-page"
+          title="Feedback Page"
+          description="As we recently launched, we are practically begging for feedback. Please take the time to write about the things you liked, disliked or are missing."
+          side="top"
+          align="start"
+          >
+          <h1 className={`text-3xl font-normal ${dmSans.className}`}>Feedback</h1>
+          </UserGuidePopover>
+        </div>
+
+          <p className="text-muted-foreground">Feedback from our users is crucial at this stage of launch.
+          </p>
+
+      {/* Feedback form */}
+      <Card className="bg-background">
+        <CardHeader>
+          <CardTitle className="text-xl">Send feedback</CardTitle>
+          <CardDescription>
+            Pick a tag, write your feedback, and optionally leave your name and email.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="tag">Tag</Label>
+              <div className="flex flex-wrap gap-2">
+                <Badge
+                  role="button"
+                  aria-pressed={selectedTag === "bug"}
+                  variant={"outline"}
+                  onClick={() => { setSelectedTag("bug"); setSubmitted(false); }}
+                  className={`${selectedTag === "bug" ? "bg-foreground text-background" : ""} cursor-pointer select-none`}
+                >
+                  <Bug/>Bug
+                </Badge>
+                <Badge
+                  role="button"
+                  aria-pressed={selectedTag === "suggestion"}
+                  variant={"outline"}
+                  onClick={() => { setSelectedTag("suggestion"); setSubmitted(false); }}
+                  className={`${selectedTag === "suggestion" ? "bg-amber-500 text-foreground" : ""} cursor-pointer select-none`}
+
+                >
+                  <Lightbulb/>Suggestion
+                </Badge>
+                <Badge
+                  role="button"
+                  aria-pressed={selectedTag === "missing"}
+                  variant={"outline"}
+                  onClick={() => { setSelectedTag("missing"); setSubmitted(false); }}
+                  className={`${selectedTag === "missing" ? "bg-pink-500 text-foreground" : ""} cursor-pointer select-none`}
+                >
+                  <BadgePlus/>Missing feature
+                </Badge>
+                <Badge
+                  role="button"
+                  aria-pressed={selectedTag === "general"}
+                  variant={"outline"}
+                  onClick={() => { setSelectedTag("general"); setSubmitted(false); }}
+                  className={`${selectedTag === "general" ? "bg-green-500 text-foreground" : ""} cursor-pointer select-none`}
+                >
+                  <MessageCircle/>General feedback
+                </Badge>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="message">Your feedback</Label>
+              <textarea
+                id="message"
+                value={message}
+                onChange={(e) => { setMessage(e.target.value); if (submitted) setSubmitted(false); }}
+                aria-invalid={!!error && !message.trim()}
+                placeholder="Tell us what’s on your mind..."
+                className="border-input placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex min-h-28 w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+              />
+              {error && !message.trim() && (
+                <p className="text-xs text-destructive">{error}</p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Name (optional)</Label>
+                <Input
+                  id="name"
+                  value={name}
+                  onChange={(e) => { setName(e.target.value); if (submitted) setSubmitted(false); }}
+                  placeholder="Your name"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email (optional)</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); if (submitted) setSubmitted(false); }}
+                  placeholder="you@example.com"
+                />
+              </div>
+            </div>
+
+            <div className="pt-2">
+             <Button
+                type="submit"
+                disabled={submitting}
+                className="cursor-pointer transition-all duration-500 inline-flex items-center justify-center"
+              >
+                {submitting ? (
+                  "Submitting..."
+                ) : submitted ? (
+                  <span className="inline-flex items-center gap-2">
+                    <Check className="h-4 w-4 text-green-500" />
+                    Submitted. Thank you!
+                  </span>
+                ) : (
+                  "Submit"
+                )}
+              </Button>
+
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+
+  );
+}
+
+export default FeedbackPage;

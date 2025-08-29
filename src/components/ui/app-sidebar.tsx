@@ -1,4 +1,4 @@
-import { BookOpen, BookMarked, ArrowUpRight, GraduationCap, IterationCcw, Users, ClipboardCheck } from "lucide-react"
+import { BookOpen, BookMarked, ArrowUpRight, GraduationCap, IterationCcw, Users, ClipboardCheck, MessageCirclePlus } from "lucide-react"
 
 import {
   Sidebar,
@@ -74,6 +74,21 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
 
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Early Access</SidebarGroupLabel>
+          <SidebarGroupContent className={`${dmSans.className}`}>
+            <SidebarMenu>
+              <SidebarMenuItem key="Classroom">
+                  <SidebarMenuButton asChild>
+                      <Link href="/home/feedback">
+                      <MessageCirclePlus/>
+                      <span className="">Feedback</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
