@@ -128,10 +128,9 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
 
     try {
       const result = await storage.getFileView(audioBucketId, conversation.audioFileId);
-      console.log("Audio preview URL:", result);
+
       setAudioUrl(result);
     } catch (err) {
-      console.error("Error fetching audio preview:", err);
       setAudioUrl(null);
     } finally {
       setAudioLoading(false);
