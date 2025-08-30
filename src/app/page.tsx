@@ -197,8 +197,10 @@ useEffect(() => {
             whileInView={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, height: 0 }}
             transition={{duration: 0.3, ease: "easeInOut" }}
-        className=" text-2xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10">Focused on Real Conversation
-        <p className="text-sm lg:text-xl text-center m-2 bg-muted rounded-full py-2 px-4 font-normal">This isn't theory. It's rehearsal for when you're face to face.</p>
+            >
+
+        <p className="text-2xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10">Focused on Real Conversation</p>
+        <p className="flex justify-center text-sm lg:text-xl m-2 text-muted-foreground">This isn't theory. It's rehearsal for when you're face to face.</p>
         </motion.div>
 
 

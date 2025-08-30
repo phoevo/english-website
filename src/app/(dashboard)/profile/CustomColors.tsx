@@ -152,7 +152,7 @@ export default function CustomColors({ userId }: { userId: string }) {
         :
 
         (<Link href="/subscribe">
-          <Button>Requires Pro</Button>
+          <Button>Save Preferences</Button>
           </Link>)
     }
 

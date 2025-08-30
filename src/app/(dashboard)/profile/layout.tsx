@@ -328,18 +328,19 @@ console.log(isSubscribed);
             <CardContent className="space-y-1">
               <div className="space-y-0">
 
-                <Label className="font-medium mb-2">Color Customization
+                <Label className="font-medium mb-2"> Highlight Color Customization
                   </Label>
 
-                  { user ?(
+                  {isSubscribed && user ?(
                   <>
                   <p className='text-sm text-muted-foreground'>Select a word type and select it&apos;s color. Save when you're done. <span className='text-red-500 font-normal m-0 text-sm'>
                     Certain background and text color combinations could make reading harder.</span>
                     </p>
+
                   <CustomColors userId={user.$id} />
 
                   </>):
-                    <p className='text-muted-foreground text-sm'>Create an account or log in to access your billing.</p>
+                    <p className='text-muted-foreground text-sm'>Requires subscription</p>
                   }
                 </div>
 

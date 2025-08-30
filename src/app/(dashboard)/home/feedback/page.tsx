@@ -122,7 +122,7 @@ function FeedbackPage() {
       {/* Feedback form */}
       <Card className="bg-background">
         <CardHeader>
-          <CardTitle className="text-xl">Send feedback</CardTitle>
+          <CardTitle className="text-2xl">Send feedback</CardTitle>
           <CardDescription>
             Pick a tag, write your feedback, and optionally leave your name and email.
           </CardDescription>

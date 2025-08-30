@@ -1,3 +1,4 @@
+import React from "react"
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/ui/app-sidebar'
 import { Geist } from "next/font/google";
@@ -12,7 +13,11 @@ function homeLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={`flex h-screen w-auto ${geist.className}`}>
       <div className='flex h-auto w-auto'>
-       <SidebarProvider defaultOpen={true}>
+       <SidebarProvider
+         defaultOpen={true}
+         className="md:[--app-sidebar-width:10rem] lg:[--app-sidebar-width:16rem]"
+         style={{ "--sidebar-width": "var(--app-sidebar-width, 16rem)" } as React.CSSProperties}
+       >
       <AppSidebar />
       <main className="">
         <SidebarTrigger />
