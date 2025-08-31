@@ -40,7 +40,7 @@ function getStreakColor(streak: number) {
 
 
 const Navbar = () => {
-  const { user, loading, isSubscribed, challengeCount, taskCount, streak, setStreak, friendsList } = useUserStore();
+  const { user, loading, isSubscribed, setSubscribed, challengeCount, taskCount, streak, setStreak, friendsList } = useUserStore();
   const router = useRouter();
 
 
@@ -102,11 +102,33 @@ const Navbar = () => {
               <Skeleton className="w-[180px] h-[36px] rounded-full" />
             ) : (
               <div className={`flex flex-row items-center justify-start border-1 rounded-full shadow-xs`}>
-                <Link href="/subscribe" className="cursor-pointer">
-                  <Badge className={`m-1 ${isSubscribed ? "bg-pink-500 text-foreground" : ""}`}>
-                    {isSubscribed ? "Pro" : "Free"}
+
+
+                  <div className="flex flex-row rounded-full border-1 m-1">
+                  <Badge
+                    onClick={() => setSubscribed(false)}
+                    className={`flex-1 text-center rounded-full cursor-pointer transition ${
+                      !isSubscribed
+                        ? "bg-foreground text-background"
+                        : "bg-background text-muted-foreground"
+                    }`}
+                  >
+                    Free
                   </Badge>
-                </Link>
+                  <Badge
+                  onClick={() => setSubscribed(true)}
+                    className={`flex-1 text-center rounded-full cursor-pointer transition ${
+                      isSubscribed
+                        ? "bg-pink-500 text-white"
+                        : "bg-gray-100 text-gray-500"
+                    }`}
+                  >
+                    Pro
+                  </Badge>
+                </div>
+
+
+
                 {user ? (<p className="mx-2">{user.name}</p>) : (<p className="mx-2">Guest</p>) }
 
                 {user && <HoverCard>

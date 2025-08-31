@@ -45,25 +45,30 @@ export default function Onboarding() {
 
 
   return (
-    <div className="flex flex-col w-1/2 gap-10">
+    <div className="flex flex-col w-full gap-10">
       <CardHeader>
-        <CardTitle className="text-2xl">I'm signing up as a...</CardTitle>
-        <CardDescription>This cannot be changed later</CardDescription>
+        <CardTitle className="text-xl">Thanking you for signing up to the Synomilo beta</CardTitle>
+        <CardDescription>Any feedback is highly appreciated</CardDescription>
       </CardHeader>
+
+        <CardContent className='space-y-5'>
+          <p>During the beta, you will be able to freely switch between the free and pro tiers in the navigation menu.</p>
+          <p>For now, continue with a student account.</p>
+        </CardContent>
 
       <CardContent className="space-y-6">
         <RadioGroup
           value={role || ''}
           onValueChange={(val) => setRole(val as 'student' | 'tutor')}
-          className='flex flex-col lg:flex-row justify-between'
+          className='flex flex-col lg:flex-row justify-evenly'
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="student" id="student" className='cursor-pointer' />
             <Label className="text-md" htmlFor="student">Student </Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="tutor" id="tutor" className='cursor-pointer' />
-            <Label className="text-md" htmlFor="tutor">Tutor</Label>
+            <RadioGroupItem disabled value="tutor" id="tutor" className='cursor-pointer' />
+            <Label className="text-md text-muted-foreground" htmlFor="tutor">Tutor (coming soon)</Label>
           </div>
         </RadioGroup>
 

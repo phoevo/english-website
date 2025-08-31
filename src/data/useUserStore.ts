@@ -7,10 +7,10 @@ import {
   databaseId,
   getUserById,
 } from "@/data/appwrite";
-import { checkSubscriptionFromStripe } from "@/data/getData";
+// import { checkSubscriptionFromStripe } from "@/data/getData"; // Disabled in beta to avoid overriding local tier
 
 interface User {
-  isSubscribed: any;
+  isSubscribed: boolean;
   $id: string;
   name: string;
   email: string;
@@ -109,24 +109,24 @@ fetchUser: async () => {
     const isSubscribed = !!userDoc?.isSubscribed;
 
     // Optionally check Stripe in background (don't await)
-    // This prevents blocking the UI but keeps data fresh
-    checkSubscriptionFromStripe(res.email)
-      .then(stripeStatus => {
-        if (stripeStatus !== isSubscribed) {
-          console.log(`Background sync: updating subscription ${isSubscribed} -> ${stripeStatus}`);
-          databases.updateDocument(databaseId, usersCollectionId, res.$id, {
-            isSubscribed: stripeStatus
-          }).catch(err => console.warn("Background subscription update failed:", err));
-
-          // Update the store immediately
-          set(state => ({
-            ...state,
-            isSubscribed: stripeStatus,
-            user: state.user ? { ...state.user, isSubscribed: stripeStatus } : null
-          }));
-        }
-      })
-      .catch(err => console.warn("Background Stripe check failed:", err));
+    // Disabled in beta: avoid overriding manual tier selection
+    // checkSubscriptionFromStripe(res.email)
+    //   .then(stripeStatus => {
+    //     if (stripeStatus !== isSubscribed) {
+    //       console.log(`Background sync: updating subscription ${isSubscribed} -> ${stripeStatus}`);
+    //       databases.updateDocument(databaseId, usersCollectionId, res.$id, {
+    //         isSubscribed: stripeStatus
+    //       }).catch(err => console.warn("Background subscription update failed:", err));
+    //
+    //       // Update the store immediately
+    //       set(state => ({
+    //         ...state,
+    //         isSubscribed: stripeStatus,
+    //         user: state.user ? { ...state.user, isSubscribed: stripeStatus } : null
+    //       }));
+    //     }
+    //   })
+    //   .catch(err => console.warn("Background Stripe check failed:", err));
 
 
     // Other user data from document
@@ -255,7 +255,25 @@ fetchUser: async () => {
     }
   },
 
-  setSubscribed: (val: boolean) => set({ isSubscribed: val }),
+  setSubscribed: (val: boolean) => {
+    // Update local state immediately for snappy UI
+    set((state) => ({
+      isSubscribed: val,
+      user: state.user ? { ...state.user, isSubscribed: val } : state.user,
+    }));
+
+    // Persist to Appwrite (fire-and-forget)
+    const currentUser = get().user;
+    if (currentUser) {
+      databases
+        .updateDocument(databaseId, usersCollectionId, currentUser.$id, {
+          isSubscribed: val,
+        })
+        .catch((err) => {
+          console.error("Failed to update subscription status:", err);
+        });
+    }
+  },
   setRecentConversations: (conversations) => set({ recentConversations: conversations }),
   setDictionaryWords: (words) => set({ dictionaryWords: words }),
   setCustomColors: (colors) => set({ customColors: colors }),

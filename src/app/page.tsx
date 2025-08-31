@@ -166,8 +166,8 @@ useEffect(() => {
             whileInView={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="flex flex-col items-center lg:flex-row lg:pl-25 text-6xl lg:text-8xl bg-landing-bg font-normal">Synomilo
-            <span className="text-muted-foreground lg:w-auto text-xs lg:text-sm bg-muted px-2 py-1 lg:p-2 rounded-full">Early Access</span>
+            className="flex flex-col items-center lg:flex-row lg:pl-20 text-6xl lg:text-8xl bg-landing-bg font-normal">Synomilo
+            <span className="text-muted-foreground lg:w-auto text-sm lg:text-lg font-capital uppercase bg-muted px-3 py-1 lg:px-3 rounded-full">Beta</span>
 
             </motion.div>
 

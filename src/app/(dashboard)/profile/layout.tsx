@@ -193,7 +193,7 @@ const handleUnsubscribe = async () => {
 
 
 
-console.log(isSubscribed);
+
 
   return (
     <main className="flex justify-center items-center h-auto pt-5">
