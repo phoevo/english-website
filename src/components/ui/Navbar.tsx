@@ -115,12 +115,13 @@ const Navbar = () => {
                   >
                     Free
                   </Badge>
+
                   <Badge
                   onClick={() => setSubscribed(true)}
                     className={`flex-1 text-center rounded-full cursor-pointer transition ${
                       isSubscribed
-                        ? "bg-pink-500 text-white"
-                        : "bg-gray-100 text-gray-500"
+                        ? "bg-pink-500 text-foreground"
+                        : "bg-background text-gray-500"
                     }`}
                   >
                     Pro

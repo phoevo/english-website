@@ -11,11 +11,13 @@ import { toast } from 'sonner'
 import { databases, databaseId, usersCollectionId, account } from '@/data/appwrite'
 import { useUserStore } from '@/data/useUserStore'
 import { Notebook } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 
 export default function Onboarding() {
   const [role, setRole] = useState<'student' | 'tutor' | null>(null)
   const router = useRouter()
   const { user, setIsTeacher } = useUserStore()
+  const [isPro, setIsPro] = useState(false)
 
   const handleFinish = async () => {
   if (!role) {
@@ -53,8 +55,36 @@ export default function Onboarding() {
 
         <CardContent className='space-y-5'>
           <p>During the beta, you will be able to freely switch between the free and pro tiers in the navigation menu.</p>
+          <div className='flex flex-row gap-2 items-center'>
+          <p>As so</p>
+          <div className="flex flex-row w-20 rounded-full border-1 m-1">
+                  <Badge
+                    onClick={() => setIsPro(false)}
+                    className={`flex-1 text-center rounded-full cursor-pointer transition ${
+                      !isPro
+                        ? "bg-foreground text-background"
+                        : "bg-background text-muted-foreground"
+                    }`}
+                  >
+                    Free
+                  </Badge>
+
+                  <Badge
+                  onClick={() => setIsPro(true)}
+                    className={`flex-1 text-center rounded-full cursor-pointer transition ${
+                      isPro
+                        ? "bg-pink-500 text-foreground"
+                        : "bg-background text-gray-500"
+                    }`}
+                  >
+                    Pro
+                  </Badge>
+                </div>
+                </div>
           <p>For now, continue with a student account.</p>
         </CardContent>
+
+
 
       <CardContent className="space-y-6">
         <RadioGroup
