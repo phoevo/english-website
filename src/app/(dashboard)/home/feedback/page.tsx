@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { BadgePlus, Bug, Lightbulb, MessageCircle, X, CheckCircle, Check } from "lucide-react";
+import { BadgePlus, Bug, Lightbulb, MessageCircle, X, CheckCircle, Check, IterationCcw } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUserStore } from "@/data/useUserStore";
 import { databaseId, databases, feedbackCollectionId } from "@/data/appwrite";
@@ -103,7 +103,7 @@ function FeedbackPage() {
   }
 
   return (
-    <div className="h-full space-y-5 m-10">
+    <div className="h-full w-full space-y-5 m-10">
       <div>
         <UserGuidePopover
           id="feedback-page"
@@ -119,8 +119,10 @@ function FeedbackPage() {
           <p className="text-muted-foreground">Feedback from our users is crucial at this stage of launch.
           </p>
 
+      <div className="flex flex-col lg:flex-row w-full gap-10">
+
       {/* Feedback form */}
-      <Card className="bg-background">
+      <Card className="bg-background w-full lg:w-1/2">
         <CardHeader>
           <CardTitle className="text-2xl">Send feedback</CardTitle>
           <CardDescription>
@@ -231,6 +233,36 @@ function FeedbackPage() {
           </form>
         </CardContent>
       </Card>
+
+
+      <Card className="bg-background w-full lg:w-1/2">
+  <CardHeader>
+    <CardTitle className="text-2xl">Suggestions/Potential Issues</CardTitle>
+    <CardDescription></CardDescription>
+  </CardHeader>
+  <CardContent>
+    <ul className="list-disc px-4 py-2 space-y-2 rounded-md">
+      <li>Did the design and layout feel clear and accessible to you?</li>
+      <li>Is there any feature you wish existed?</li>
+      <li className="">How do the
+        <Badge className="bg-foreground text-background mx-1">Free</Badge>
+        and
+        <Badge className="bg-pink-500 text-foreground mx-1">Pro</Badge>
+        tiers compare? Did
+        <Badge className="bg-foreground text-background mx-1">Free</Badge>
+        contain enough content? Is
+        <Badge className="bg-pink-500 text-foreground mx-1">Pro</Badge>
+        worth upgrading to?</li>
+        <li>Was there something you liked the most and want to see more of?</li>
+        <li>Do any of the pages feel too empty?</li>
+    </ul>
+  </CardContent>
+
+
+</Card>
+
+      </div>
+
     </div>
 
   );

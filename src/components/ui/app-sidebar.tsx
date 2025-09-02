@@ -44,7 +44,7 @@ export function AppSidebar() {
     <Sidebar className="h-auto mb-2 rounded-lg absolute md:[--sidebar-width:10rem] lg:[--sidebar-width:16rem]">
       <SidebarContent className="bg-background">
         <SidebarGroup>
-          <SidebarGroupLabel>Explore</SidebarGroupLabel>
+          <SidebarGroupLabel>App</SidebarGroupLabel>
           <SidebarGroupContent className={`${dmSans.className}`}>
             <SidebarMenu>
               {items.map((item) => (
@@ -78,7 +78,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Early Access</SidebarGroupLabel>
+          <SidebarGroupLabel>Beta</SidebarGroupLabel>
           <SidebarGroupContent className={`${dmSans.className}`}>
             <SidebarMenu>
               <SidebarMenuItem key="Classroom">
