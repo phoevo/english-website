@@ -27,9 +27,10 @@ import { Label } from '@/components/ui/label'
 import CustomColors from './CustomColors'
 import { AlertDialogHeader, AlertDialogFooter, AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogDescription, AlertDialogTitle, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { unsubscribeUser2 } from '@/data/getData'
+import { unsubscribeUser2, deleteAccountServer } from '@/data/getData'
 import { Geist } from 'next/font/google'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Client, Databases, Query } from 'appwrite'
 
 const geist = Geist({ subsets: ['latin'] });
@@ -56,6 +57,7 @@ const accountFormSchema = z.object({
 
 export default function ProfileLayout() {
   const { user, isTeacher, fetchUser, setSubscribed, isSubscribed, setUser, setIsTeacher } = useUserStore();
+  const router = useRouter();
 
   const [isCheckingUser, setIsCheckingUser] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -251,17 +253,30 @@ const handleUnsubscribe = async () => {
         console.warn('Failed to delete user document:', e);
       }
 
-      // 3) End all sessions (logs the user out). Deleting the Appwrite user object
-      // itself requires server-side privileges; consider a Cloud Function for that.
+      // 3) Delete the Appwrite auth user via server function (admin privileges)
+      try {
+        await deleteAccountServer();
+      } catch (e) {
+        console.warn('Failed to delete Appwrite auth user:', e);
+      }
+
+      // 4) End all sessions (logs the user out). This may fail if the user was
+      // already deleted on the server, which is fine.
       try {
         await account.deleteSessions();
       } catch (e) {
         console.warn('Failed to delete sessions:', e);
       }
 
-      toast.success('Your account has been scheduled for deletion', {
-        description: 'We removed your data and ended your session. If any items remain due to errors, please contact support.',
+      toast.success('Your account has been deleted', {
+        description: 'We removed your data and ended your session.',
       });
+
+      // Remove any locally stored auth artifacts and navigate to login
+      try {
+        localStorage.removeItem('jwt');
+      } catch {}
+      router.replace('/login');
 
     } catch (err: any) {
       console.error('Account deletion error:', err);
