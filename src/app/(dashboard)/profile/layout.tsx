@@ -45,7 +45,7 @@ const accountFormSchema = z.object({
   username: z.string().min(2, { message: 'Username is too short. Requires at least 2 characters' }),
   currentPassword: z.string().optional(),
   newPassword: z.string().optional(),
-  isTeacher: z.boolean().optional(),
+
 }).refine(
   (data) => !data.newPassword || (data.newPassword && data.currentPassword),
   {
@@ -55,7 +55,7 @@ const accountFormSchema = z.object({
 );
 
 export default function ProfileLayout() {
-  const { user, isTeacher, fetchUser, setSubscribed, isSubscribed, setUser, setIsTeacher } = useUserStore();
+  const { user, fetchUser, setSubscribed, isSubscribed, setUser,} = useUserStore();
 
   const [isCheckingUser, setIsCheckingUser] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -67,7 +67,6 @@ export default function ProfileLayout() {
       username: user?.name ?? '',
       currentPassword: '',
       newPassword: '',
-      isTeacher: isTeacher ?? false,
     },
   });
 
@@ -77,10 +76,9 @@ export default function ProfileLayout() {
         username: user.name,
         currentPassword: '',
         newPassword: '',
-        isTeacher: isTeacher ?? false,
       });
     }
-  }, [user, isTeacher]);
+  }, [user]);
 
   useEffect(() => {
     async function loadUser() {
@@ -103,9 +101,7 @@ export default function ProfileLayout() {
     try {
       if (
         values.username === user?.name &&
-        !values.newPassword &&
-        values.isTeacher === isTeacher
-      ) {
+        !values.newPassword) {
         toast('No changes detected', {
           description: 'Please update your username, role, or password before saving.',
         });
@@ -129,23 +125,11 @@ export default function ProfileLayout() {
         accountForm.resetField('newPassword');
       }
 
-      if (values.isTeacher !== isTeacher) {
-        if (!user) throw new Error('User not found');
-        await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
-          isTeacher: values.isTeacher,
-        });
-        setIsTeacher(values.isTeacher);
-        toast('Role updated', {
-          description: values.isTeacher ? 'You are now marked as a Teacher.' : 'Teacher role removed.',
-        });
-      }
-
       const updatedUser = await account.get();
       setUser({
         $id: updatedUser.$id,
         name: updatedUser.name,
         email: updatedUser.email,
-        isTeacher: values.isTeacher ?? false,
       });
 
     } catch (err: any) {
@@ -278,23 +262,6 @@ const handleUnsubscribe = async () => {
                           </FormItem>
                         )}
                       />
-
-                      {/* <FormField
-                        control={accountForm.control}
-                        name="isTeacher"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-col">
-                            <FormLabel>I am a Teacher</FormLabel>
-                            <p className="text-muted-foreground text-xs">
-                              If you don&apos;t use the Assignments page, you can safely ignore this
-                            </p>
-                            <FormControl>
-                              <Switch checked={field.value} onCheckedChange={field.onChange} />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      /> */}
-
                       <Button type="submit" disabled={isSaving} className="cursor-pointer">
                         {isSaving ? 'Saving...' : 'Save changes'}
                       </Button>

@@ -15,8 +15,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage(): JSX.Element {
   const effectiveDate: string = "2025-09-02"; // Update to your actual effective date
   const companyName: string = "Synomilo";
-  const companyAddress: string = "[Company Address, City, Country]";
-  const contactEmail: string = "[contact@example.com]";
+  const contactEmail: string = "synomilo@gmail.com";
   const dpoContact: string | null = null; // e.g., "privacy@example.com" if applicable
 
   return (
