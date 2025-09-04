@@ -13,6 +13,7 @@
             "events": [],
             "scopes": [
                 "users.read",
+                "users.write",
                 "databases.read",
                 "databases.write",
                 "collections.read",

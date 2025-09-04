@@ -9,6 +9,7 @@ const handleUnsubscribe = require("./unsubscribe.js");
 const handleCheckSubscription = require("./check-subscription.js");
 const handleSendEmail = require("./send-email.js");
 const handleSendResetNotice = require("./send-reset-notice.js");
+const handleDeleteAccount = require("./delete-account.js");
 
 // Main handler
 module.exports = async function main({ req, res, log, error }) {
@@ -88,6 +89,10 @@ module.exports = async function main({ req, res, log, error }) {
           return res.json({ success: true }, 200); // avoid leaking config but stop early
         }
         return await handleSendResetNotice({ req, res, adminClient });
+
+      case "/delete-account":
+        log("Calling delete-account handler");
+        return await handleDeleteAccount({ req, res, client, adminClient, log, error });
 
       default:
         error("Invalid path provided:", req.path);
