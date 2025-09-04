@@ -239,21 +239,43 @@ export async function unsubscribeUser2(userId: string) {
   // Send only user_id in the payload
   const payload = JSON.stringify({ user_id: userId });
 
- const response = await functions.createExecution(
-  "68794e830018a53dcad6",
-  payload,
-  false,
-  "/unsubscribe",
-  "POST",
-  { "content-type": "application/json" }  // Add this headers param
-);
-
+  const response = await functions.createExecution(
+    "68794e830018a53dcad6",
+    payload,
+    false,
+    "/unsubscribe",
+    "POST",
+    { "content-type": "application/json" }
+  );
 
   if (response.status !== "completed") {
     throw new Error("Failed to unsubscribe user");
   }
 
   return JSON.parse(response.responseBody);
+}
+
+export async function deleteAccountServer(): Promise<void> {
+  // Uses the current user's JWT to authenticate the request to the Appwrite Function
+  const jwt = await account.createJWT();
+  const client = new Client()
+    .setEndpoint("https://cloud.appwrite.io/v1")
+    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
+    .setJWT(jwt.jwt);
+
+  const functions = new Functions(client);
+
+  const response = await functions.createExecution(
+    "68794e830018a53dcad6",
+    undefined,
+    false,
+    "/delete-account",
+    "POST"
+  );
+
+  if (response.status !== "completed") {
+    throw new Error("Failed to delete account");
+  }
 }
 
 // Simple function to check subscription via Appwrite function

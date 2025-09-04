@@ -813,7 +813,7 @@ useEffect(() => {
     <div className="flex justify-center w-1/3">
       <ul className="flex justify-center text-xs lg:text-md flex-col gap-2">
         <Link href="/">Terms of Service</Link>
-        <Link href="/">Privacy Policy</Link>
+        <Link href="/privacy">Privacy Policy</Link>
         <Link href="/">Refund and Cancellation Policy</Link>
       </ul>
     </div>

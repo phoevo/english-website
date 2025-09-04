@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { account, databases, databaseId, usersCollectionId } from '@/data/appwrite'
+import { account, databases, databaseId, usersCollectionId, decksCollectionId, friendRequestsId, assignmentsId } from '@/data/appwrite'
 import { useUserStore } from '@/data/useUserStore'
 
 import { Button } from '@/components/ui/button'
@@ -27,9 +27,10 @@ import { Label } from '@/components/ui/label'
 import CustomColors from './CustomColors'
 import { AlertDialogHeader, AlertDialogFooter, AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogDescription, AlertDialogTitle, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { unsubscribeUser2 } from '@/data/getData'
+import { unsubscribeUser2, deleteAccountServer } from '@/data/getData'
 import { Geist } from 'next/font/google'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Client, Databases, Query } from 'appwrite'
 
 const geist = Geist({ subsets: ['latin'] });
@@ -45,21 +46,21 @@ const accountFormSchema = z.object({
   username: z.string().min(2, { message: 'Username is too short. Requires at least 2 characters' }),
   currentPassword: z.string().optional(),
   newPassword: z.string().optional(),
-
-}).refine(
-  (data) => !data.newPassword || (data.newPassword && data.currentPassword),
-  {
-    message: 'Current password is required to change password',
-    path: ['currentPassword'],
-  }
-);
+});
 
 export default function ProfileLayout() {
-  const { user, fetchUser, setSubscribed, isSubscribed, setUser,} = useUserStore();
+  const { user, fetchUser, setSubscribed, isSubscribed, setUser } = useUserStore();
+  const router = useRouter();
 
   const [isCheckingUser, setIsCheckingUser] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  // Deletion dialog state
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [confirmText, setConfirmText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const canConfirmDelete = confirmText.trim().toLowerCase() === "delete";
 
   const accountForm = useForm<z.infer<typeof accountFormSchema>>({
     resolver: zodResolver(accountFormSchema),
@@ -178,6 +179,91 @@ const handleUnsubscribe = async () => {
 
 
 
+  const handleDeleteAccount = async () => {
+    if (!user) return;
+    setIsDeleting(true);
+
+    const userId = user.$id;
+
+    const safeDeleteDocs = async (
+      collectionId: string,
+      queries: any[]
+    ) => {
+      try {
+        const res = await databases.listDocuments(databaseId, collectionId, queries);
+        // Delete sequentially to avoid rate limits
+        for (const doc of res.documents as any[]) {
+          try {
+            await databases.deleteDocument(databaseId, collectionId, doc.$id);
+          } catch (e) {
+            console.warn(`Failed to delete doc ${doc.$id} in ${collectionId}:`, e);
+          }
+        }
+      } catch (e) {
+        console.warn(`Failed to list documents in ${collectionId}:`, e);
+      }
+    };
+
+    try {
+      // 0) Best-effort: unsubscribe/cancel billing first
+      try {
+        await unsubscribeUser2(userId);
+      } catch (e) {
+        console.warn('Unsubscribe step failed or not applicable:', e);
+      }
+
+      // 1) Delete user-owned content
+      await safeDeleteDocs(decksCollectionId, [Query.equal('userID', userId)]);
+
+      // Friend requests (both directions)
+      await safeDeleteDocs(friendRequestsId, [Query.equal('fromUserId', userId)]);
+      await safeDeleteDocs(friendRequestsId, [Query.equal('toUserId', userId)]);
+
+      // Assignments (as student or teacher)
+      await safeDeleteDocs(assignmentsId, [Query.equal('studentId', userId)]);
+      await safeDeleteDocs(assignmentsId, [Query.equal('teacherId', userId)]);
+
+      // 2) Delete user document last
+      try {
+        await databases.deleteDocument(databaseId, usersCollectionId, userId);
+      } catch (e) {
+        console.warn('Failed to delete user document:', e);
+      }
+
+      // 3) Delete the Appwrite auth user via server function (admin privileges)
+      try {
+        await deleteAccountServer();
+      } catch (e) {
+        console.warn('Failed to delete Appwrite auth user:', e);
+      }
+
+      // 4) End all sessions (logs the user out). This may fail if the user was
+      // already deleted on the server, which is fine.
+      try {
+        await account.deleteSessions();
+      } catch (e) {
+        console.warn('Failed to delete sessions:', e);
+      }
+
+      toast.success('Your account has been deleted', {
+        description: 'We removed your data and ended your session.',
+      });
+
+      // Remove any locally stored auth artifacts and navigate to login
+      try {
+        localStorage.removeItem('jwt');
+      } catch {}
+      router.replace('/login');
+
+    } catch (err: any) {
+      console.error('Account deletion error:', err);
+      toast.error('Failed to delete account. Please try again.');
+    } finally {
+      setIsDeleting(false);
+      setConfirmText("");
+      setDeleteDialogOpen(false);
+    }
+  };
 
   return (
     <main className="flex justify-center items-center h-auto pt-5">
@@ -275,6 +361,56 @@ const handleUnsubscribe = async () => {
               </p>
             )}
           </Card>
+
+
+          <Card className='bg-background mt-2'>
+            <CardHeader>
+              <CardTitle>Account Deletion</CardTitle>
+              <CardDescription>Delete your account, subscription, progress, everything. You were never here.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <AlertDialog open={deleteDialogOpen} onOpenChange={(open) => { setDeleteDialogOpen(open); if (!open) setConfirmText(""); }}>
+                <AlertDialogTrigger asChild>
+                  <Button variant={'destructive'} className="cursor-pointer">Delete account</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className={geist.className}>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Confirm account deletion</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action is permanent. It will delete your account and associated data (including subscription status and progress). To confirm, type "delete" below.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirm-delete" className="text-sm">Type "delete" to confirm</Label>
+                    <Input
+                      id="confirm-delete"
+                      placeholder="delete"
+                      value={confirmText}
+                      onChange={(e) => setConfirmText(e.target.value)}
+                    />
+                    {!canConfirmDelete && confirmText.length > 0 && (
+                      <p className="text-xs text-muted-foreground">Please type exactly: delete</p>
+                    )}
+                  </div>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className='cursor-pointer'>Go back</AlertDialogCancel>
+                    <AlertDialogAction
+                      variant="destructive"
+                      className="cursor-pointer"
+                      disabled={!canConfirmDelete || isDeleting}
+                      onClick={async () => {
+                        if (!canConfirmDelete || isDeleting) return;
+                        await handleDeleteAccount();
+                      }}
+                    >
+                      {isDeleting ? 'Deleting…' : 'Delete account'}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </CardContent>
+
+          </Card>
         </TabsContent>
 
 
@@ -293,7 +429,7 @@ const handleUnsubscribe = async () => {
               <CardDescription>Customize your account</CardDescription>
             </CardHeader>
             <CardContent className="space-y-1">
-              <div className="space-y-0">
+          <div className="space-y-0">
 
                 <Label className="font-medium mb-2"> Highlight Color Customization
                   </Label>
@@ -310,11 +446,6 @@ const handleUnsubscribe = async () => {
                     <p className='text-muted-foreground text-sm'>Requires subscription</p>
                   }
                 </div>
-
-
-
-
-
             </CardContent>
 
           </Card>
