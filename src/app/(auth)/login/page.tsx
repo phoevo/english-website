@@ -14,6 +14,7 @@ import { PasswordInput } from '@/components/ui/PasswordInput'
 import { account } from '@/data/appwrite'
 import { ensureUserDocument } from '@/data/getData'
 
+
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
   password: z

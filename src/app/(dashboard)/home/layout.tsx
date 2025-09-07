@@ -7,7 +7,11 @@ import ChallengeWatcher from '@/data/ChallengeWatcher';
 
 const geist = Geist({ subsets: ['latin'] });
 
-
+import type { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Your dashboard overview, recent conversations, and updates.",
+};
 
 function homeLayout({ children }: { children: React.ReactNode }) {
   return (
