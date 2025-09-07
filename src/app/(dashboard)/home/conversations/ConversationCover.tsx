@@ -70,7 +70,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
     });
 
     router.push(`conversations/${conversationId}`);
-    setIsLoading(false)
+
   } catch (err) {
     console.error("Error fetching or updating conversation:", err);
   }

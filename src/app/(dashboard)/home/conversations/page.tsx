@@ -25,6 +25,7 @@ import {
   AlertDialogCancel,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
@@ -136,7 +137,8 @@ function ConversationsPage() {
         </div>
       </div>
 
-      <div className="grid mt-10 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+    <ScrollArea className="h-3/4">
+      <div className="grid p-1 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
         {filtered.map(conv => (
           <ConversationCover
             key={conv.$id}
@@ -148,6 +150,7 @@ function ConversationsPage() {
           />
         ))}
       </div>
+    </ScrollArea>
     </div>
   );
 }
