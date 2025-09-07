@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "motion/react";
 import { updateRecentConversations } from "@/data/updateRecentConversations";
 import Link from "next/link";
@@ -13,7 +13,7 @@ import {
 import { useUserStore } from "@/data/useUserStore";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Send } from "lucide-react";
+import { Send, LoaderCircle } from "lucide-react";
 import Assign from "./Assign";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -34,8 +34,8 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
   const isComplete = completeConversations.includes(conversationId);
   const user = useUserStore(state => state.user);
   const {isTeacher} = useUserStore();
-
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
    const handleClick = async () => {
   if (!user) {
@@ -46,6 +46,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
   try {
     // 1. Fetch the conversation details
     const conversation = await getConversationFromDB(conversationId);
+    setIsLoading(true);
 
     if (!conversation) {
       toast.error("Conversation not found.");
@@ -69,6 +70,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
     });
 
     router.push(`conversations/${conversationId}`);
+    setIsLoading(false)
   } catch (err) {
     console.error("Error fetching or updating conversation:", err);
   }
@@ -85,8 +87,13 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
     >
         <Card className="w-full lg:w-full lg:h-70 bg-background cursor-pointer">
     <CardHeader>
-      <CardTitle className="flex justify-between items-center">
-        {conversationTitle}
+      <CardTitle className="flex flex-row justify-between items-center">
+        <div className="flex flex-row items-center gap-1">
+          {conversationTitle}
+          {isLoading && <LoaderCircle className="animate-spin" size={15}/>}
+        </div>
+
+
         <div className="flex flex-col gap-1">
 
           {isTeacher && <Assign
