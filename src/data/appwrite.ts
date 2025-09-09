@@ -1,4 +1,4 @@
-import { Client, Databases, Account, Storage, Query } from 'appwrite'
+import { Client, Databases, Account, Storage, Query, ID } from 'appwrite'
 
 const ENDPOINT_ID = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!;
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
@@ -10,10 +10,10 @@ const AUDIO_BUCKET_ID = process.env.NEXT_PUBLIC_APPWRITE_AUDIO_BUCKET_ID!;
 const FRIEND_REQUESTS_ID = process.env.NEXT_PUBLIC_APPWRITE_FRIEND_REQUESTS_ID!;
 const ASSIGNMENTS_ID = process.env.NEXT_PUBLIC_APPWRITE_ASSIGNMENTS_ID!;
 const STRIPE_CUSTOMERS_ID = process.env.NEXT_PUBLIC_APPWRITE_STRIPE_CUSTOMERS_ID!;
-// SUBSCRIPTIONS_ID removed - no longer using subscriptions collection
 const STRIPE_SECRET_KEY = process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!;
 const STRIPE_WEBHOOK_SECRET = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET!;
 const FEEDBACK_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_FEEDBACK_COLLECTION_ID!;
+const NEWS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_NEWS_COLLECTION_ID!;
 
 const client = new Client()
   .setEndpoint(ENDPOINT_ID)
@@ -38,6 +38,7 @@ export const stripeCustomersId = STRIPE_CUSTOMERS_ID
 export const stripeSecretKey = STRIPE_SECRET_KEY
 export const stripeWebhookSecret = STRIPE_WEBHOOK_SECRET
 export const feedbackCollectionId = FEEDBACK_COLLECTION_ID
+export const newsCollectionId = NEWS_COLLECTION_ID
 
 
 export const getConversationFromDB = async (documentId: string) => {
@@ -80,5 +81,45 @@ export async function getUserById(userId: string) {
   } catch (error) {
     console.error("Failed to fetch user by ID:", error);
     throw error;
+  }
+}
+
+// News helpers
+export type NewsDocument = {
+  $id: string;
+  tag: string;
+  title: string;
+  color?: string;
+  content: string;
+  $createdAt: string;
+  $updatedAt?: string;
+};
+
+export async function listNewsDocuments(): Promise<NewsDocument[]> {
+  try {
+    const res = await databases.listDocuments(
+      databaseId,
+      newsCollectionId,
+      [Query.orderDesc("$createdAt")]
+    );
+    return res.documents as unknown as NewsDocument[];
+  } catch (error) {
+    console.error("Failed to list news documents:", error);
+    return [];
+  }
+}
+
+export async function createNewsDocument(data: { tag: string; title?: string; content: string; color?: string; }): Promise<NewsDocument | null> {
+  try {
+    const res = await databases.createDocument(
+      databaseId,
+      newsCollectionId,
+      ID.unique(),
+      data
+    );
+    return res as unknown as NewsDocument;
+  } catch (error) {
+    console.error("Failed to create news document:", error);
+    return null;
   }
 }

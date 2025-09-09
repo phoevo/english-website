@@ -96,7 +96,7 @@ function FeedbackPage() {
       <div className="m-10">
         <p>
           Please <Link href="/login" className="underline">log in</Link> or{" "}
-          <Link href="/register" className="underline">create an account</Link> to view your recent conversations.
+          <Link href="/register" className="underline">create an account</Link> to provide feeback.
         </p>
       </div>
     );

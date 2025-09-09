@@ -34,7 +34,7 @@ const Challenges = ({ children }: { children: ReactNode }) => {
         <PopoverContent
           side="bottom"
           align="center"
-          className={`bg-background w-100 ${dmSans.className}`}
+          className={`bg-background w-full lg:w-100 ${dmSans.className}`}
         >
 
 

@@ -7,8 +7,10 @@ import { Menu } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import React from "react";
 import { DM_Sans } from "next/font/google";
+import { useUserStore } from "@/data/useUserStore";
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
+
 
 type MobileRightSidebarProps = {
   userName?: string;
@@ -17,12 +19,16 @@ type MobileRightSidebarProps = {
   actions?: React.ReactNode; // extra actions like tasks, challenges, logout, theme
 };
 
+
 export function MobileRightSidebar({
   userName = "Guest",
   isSubscribed = false,
   streak,
   actions,
 }: MobileRightSidebarProps) {
+  const { setSubscribed } = useUserStore();
+
+
   return (
     <div className={`lg:hidden md:hidden absolute right-2 mt-20 bg-foreground text-background rounded-full ${dmSans.className}`}>
       <Sheet>
@@ -40,9 +46,28 @@ export function MobileRightSidebar({
 
             <div className="p-4 flex flex-col gap-4">
               <div className="flex items-center gap-2">
-                <Badge className={isSubscribed ? "bg-pink-500 text-foreground" : ""}>
-                  {isSubscribed ? "Pro" : "Free"}
-                </Badge>
+                <div className="flex flex-row rounded-full border-1 m-1">
+                  <Badge
+                    onClick={() => setSubscribed(false)}
+                    className={`flex-1 text-center rounded-full cursor-pointer transition ${
+                      !isSubscribed
+                        ? "bg-foreground text-background"
+                        : "bg-background text-muted-foreground"
+                    }`}
+                  >
+                    Free
+                  </Badge>
+                  <Badge
+                    onClick={() => setSubscribed(true)}
+                    className={`flex-1 text-center rounded-full cursor-pointer transition ${
+                      isSubscribed
+                        ? "bg-pink-500 text-foreground"
+                        : "bg-background text-gray-500"
+                    }`}
+                  >
+                    Pro
+                  </Badge>
+                </div>
                 <span className="text-sm">{userName}</span>
                 {typeof streak === "number" && (
                   <Badge title="Current streak" className="ml-auto">{streak}</Badge>

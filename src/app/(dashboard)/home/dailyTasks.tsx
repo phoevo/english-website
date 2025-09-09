@@ -40,7 +40,7 @@ const allTasks = [
 
 const getDailyChallenges = () => {
   const shuffled = [...allTasks].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, 5);
+  return shuffled.slice(0, 4);
 };
 
 const DailyTasks = ({ children }: { children: ReactNode }) => {
@@ -98,12 +98,15 @@ const DailyTasks = ({ children }: { children: ReactNode }) => {
 
   return (
     <div className={dmSans.className}>
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <Popover modal open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>{children}</PopoverTrigger>
         <PopoverContent
           side="bottom"
           align="center"
-          className={`bg-background w-full ${dmSans.className}`}
+          className={`bg-background w-screen lg:m-0 lg:w-full ${dmSans.className}`}
+
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          onCloseAutoFocus={(e) => e.preventDefault()}
         >
 
 
@@ -137,6 +140,7 @@ const DailyTasks = ({ children }: { children: ReactNode }) => {
                         checked={false}
                         onCheckedChange={() => {}}
                         className="cursor-pointer"
+
                       />
                     </AlertDialogTrigger>
                     <AlertDialogContent className={geist.className}>
@@ -169,13 +173,13 @@ const DailyTasks = ({ children }: { children: ReactNode }) => {
                   <Checkbox
                     checked={false}
                     onCheckedChange={() => toggleChallenge(challenge)}
-                    className="cursor-pointer"
+                    className="lg:cursor-pointer"
                   />
                 )
               ) : (
                 <Checkbox checked disabled />
               )}
-              <span className={isDone ? "line-through text-muted-foreground" : ""}>
+              <span className={isDone ? "line-through text-muted-foreground text-sm lg:text-md" : "text-sm lg:text-md"}>
                 {challenge}
               </span>
             </div>

@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/popover";
 import CountUp from 'react-countup';
 import TestTeacherPage from "./(dashboard)/TestTeacherPage";
+import ConversationCover from "./(dashboard)/home/conversations/ConversationCover";
 
 
 
@@ -214,14 +215,14 @@ useEffect(() => {
         <Card className={`w-full h-auto flex flex-row justify-evenly shadow-none border-none items-center p-5 ${dmSans.className}`}>
           <div className="flex flex-col items-center space-y-2 w-1/2">
             <p className="text-4xl lg:text-5xl font-bold text-center">
-              <CountUp end={686} duration={1.5} separator="," />
+              <CountUp end={userCount} duration={1.5} separator="," />
             </p>
             <p className="text-md font-semibold text-muted-foreground text-center">Users</p>
           </div>
 
           <div className="flex flex-col items-center space-y-2 w-1/2">
             <p className="text-4xl lg:text-5xl font-bold text-center">
-              <CountUp end={31} duration={1.5} separator="," />
+              <CountUp end={convoCount} duration={1.5} separator="," />
             </p>
             <p className="text-md font-semibold text-muted-foreground text-center">Conversations</p>
           </div>
