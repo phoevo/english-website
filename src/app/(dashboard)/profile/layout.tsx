@@ -176,9 +176,6 @@ const handleUnsubscribe = async () => {
 
 
 
-
-
-
   const handleDeleteAccount = async () => {
     if (!user) return;
     setIsDeleting(true);
@@ -191,7 +188,6 @@ const handleUnsubscribe = async () => {
     ) => {
       try {
         const res = await databases.listDocuments(databaseId, collectionId, queries);
-        // Delete sequentially to avoid rate limits
         for (const doc of res.documents as any[]) {
           try {
             await databases.deleteDocument(databaseId, collectionId, doc.$id);
@@ -205,40 +201,32 @@ const handleUnsubscribe = async () => {
     };
 
     try {
-      // 0) Best-effort: unsubscribe/cancel billing first
       try {
         await unsubscribeUser2(userId);
       } catch (e) {
         console.warn('Unsubscribe step failed or not applicable:', e);
       }
 
-      // 1) Delete user-owned content
       await safeDeleteDocs(decksCollectionId, [Query.equal('userID', userId)]);
 
-      // Friend requests (both directions)
       await safeDeleteDocs(friendRequestsId, [Query.equal('fromUserId', userId)]);
       await safeDeleteDocs(friendRequestsId, [Query.equal('toUserId', userId)]);
 
-      // Assignments (as student or teacher)
       await safeDeleteDocs(assignmentsId, [Query.equal('studentId', userId)]);
       await safeDeleteDocs(assignmentsId, [Query.equal('teacherId', userId)]);
 
-      // 2) Delete user document last
       try {
         await databases.deleteDocument(databaseId, usersCollectionId, userId);
       } catch (e) {
         console.warn('Failed to delete user document:', e);
       }
 
-      // 3) Delete the Appwrite auth user via server function (admin privileges)
       try {
         await deleteAccountServer();
       } catch (e) {
         console.warn('Failed to delete Appwrite auth user:', e);
       }
 
-      // 4) End all sessions (logs the user out). This may fail if the user was
-      // already deleted on the server, which is fine.
       try {
         await account.deleteSessions();
       } catch (e) {
@@ -249,7 +237,6 @@ const handleUnsubscribe = async () => {
         description: 'We removed your data and ended your session.',
       });
 
-      // Remove any locally stored auth artifacts and navigate to login
       try {
         localStorage.removeItem('jwt');
       } catch {}
@@ -276,11 +263,12 @@ const handleUnsubscribe = async () => {
         </TabsList>
 
         <TabsContent value="account">
-          <Card className="bg-background">
+
             {isCheckingUser ? (
               <Spinner />
             ) : user ? (
               <>
+          <Card className="bg-background">
                 <CardHeader>
                   <CardTitle>Account</CardTitle>
                   <CardDescription>
@@ -354,12 +342,8 @@ const handleUnsubscribe = async () => {
                     </form>
                   </Form>
                 </CardContent>
-              </>
-            ) : (
-              <p className="text-md text-center py-6">
-                Create an account or log in to access your account.
-              </p>
-            )}
+
+
           </Card>
 
 
@@ -411,6 +395,12 @@ const handleUnsubscribe = async () => {
             </CardContent>
 
           </Card>
+          </>
+          ) : (
+              <p className="text-md text-center py-6">
+                Create an account or log in to access your account.
+              </p>
+            )}
         </TabsContent>
 
 

@@ -143,11 +143,11 @@ useEffect(() => {
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-12 lg:h-18">
             <h1 className="hidden lg:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
-            <div className={`flex absolute right-5 lg:right-10 gap-3 ${geist.className}`}>
-              <Link href={"/register"}> <Button className="hidden lg:block cursor-pointer">Sign up</Button> </Link>
-              <Link href={"/login"}> <Button className="hidden lg:block cursor-pointer" variant="secondary">Log in</Button> </Link>
+            <div className={`flex absolute right-5 lg:right-10 gap-1 ${geist.className}`}>
+              <Link href={"/register"}> <Button className="hidden lg:block cursor-pointer" variant={"ghost"}>Sign up</Button> </Link>
+              <Link href={"/login"}> <Button className="hidden lg:block cursor-pointer" variant="ghost">Log in</Button> </Link>
               <Link href="/pricing">
-              <Button variant="outline" className="hidden lg:block shadow-[0_0_5px_1px_rgba] shadow-pink-500 cursor-pointer">Pricing</Button>
+              <Button variant="ghost" className="hidden lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Pricing</Button>
               </Link>
               <ModeToggle />
             </div>
