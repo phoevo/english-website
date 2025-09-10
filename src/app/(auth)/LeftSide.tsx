@@ -21,7 +21,7 @@ export default function LeftSide() {
     "bg-fuchsia-600"
   ];
 
-  const NUM_ROWS = 8;
+  const NUM_ROWS = 10;
   const RECT_PER_ROW = 10;
 
   const generateRect = () => ({

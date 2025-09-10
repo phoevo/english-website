@@ -40,22 +40,23 @@ module.exports = async function handleSendEmail({ req, res, client, adminClient 
                 </div>
                 <div class="content">
                   <h2>Hi ${userName},</h2>
-                  <p>Thank you for signing up to Synomilo. We're excited to have you on board as part of our early access. we are dedicated to helping English learners.</p>
+                  <p>Thank you for signing up to Synomilo. We're excited to have you on board as part of our early access.</p>
 
                   <h3>Here's what you can do next:</h3>
                   <ul>
-                    <li>Read the guides on each section</li>
+                    <li>Read the guides on each page</li>
                     <li>Browse our learning materials</li>
                     <li>Start your first conversation</li>
                     <li>Start and maintain your learning streak</li>
+                    <li>Tell us what you like/dislike! We're craving feedback at this stage of launch.</li>
                   </ul>
 
                   <h3>Here's what's coming soon</h3>
                   <ul>
-                    <li>Tutor integration: no more sharing your screen with your tutor</li>
-                    <li>Tutors can assign and track their student's progress.</li>
-                    <li>Start your first conversation</li>
-                    <li>Connect with other learners</li>
+                    <li>We are going to try our best to integrate popular requests from your feedback.</li>
+                    <li>Tutor integration: No more sharing your screen with your tutor, they will have their own UI soon.</li>
+                    <li>Tutors can assign conversations for out-of-class practice as well as track what you've done.</li>
+                    <li>Paid options for students and tutors</li>
                   </ul>
 
                   <p><strong>The Synomilo Team</strong></p>
@@ -89,7 +90,7 @@ module.exports = async function handleSendEmail({ req, res, client, adminClient 
                 </div>
                 <div class="content">
                   <h2>Hi ${userName},</h2>
-                  <p>We received a request to reset your password for your English Website account.</p>
+                  <p>We received a request to reset your password for your Synomilo account.</p>
 
                   <p>If you requested this password reset, please click the link below to create a new password:</p>
 

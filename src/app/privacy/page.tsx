@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPage(): JSX.Element {
-  const effectiveDate: string = "2025-09-02"; // Update to your actual effective date
+  const effectiveDate: string = "2025-09-10"; // Update to your actual effective date
   const companyName: string = "Synomilo";
   const contactEmail: string = "synomilo@gmail.com";
   const dpoContact: string | null = null; // e.g., "privacy@example.com" if applicable
@@ -119,6 +119,17 @@ export default function PrivacyPage(): JSX.Element {
             account information at any time by contacting us at {contactEmail}.
           </p>
         </section>
+
+        <section className="mb-6">
+          <h2 className="text-2xl font-semibold mb-2">Account deletion</h2>
+          <p>
+            You may delete your account at any time from within your account settings.
+            When you delete your account, all personal information (including your
+            email, username, and any associated data) is permanently erased from our
+            systems. We do not retain backups of deleted accounts.
+          </p>
+        </section>
+
 
         <section className="mb-6">
           <h2 className="text-2xl font-semibold mb-2">Your rights</h2>

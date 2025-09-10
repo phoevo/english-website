@@ -88,6 +88,7 @@ useEffect(() => {
                   <li>Conversation Audio</li>
                   <li>All existing and future conversations to go through at your own pace.</li>
                   <li>Color customization</li>
+                  <li>Challenges</li>
                 </ul>
                 <p className="flex items-center gap-2 pt-5">
                   Find out more on the{" "}
@@ -98,17 +99,6 @@ useEffect(() => {
                     Pricing
                   </Link>{" "}
                   page.
-                </p>
-              </>
-            )
-          },
-          {
-            question: "Do I need an account?",
-            answer: (
-              <>
-                <p>Quick answer: No.</p>
-                <p className="pt-5">
-                  But if you want to keep track of your progress, you will need an account. It&apos;s free.
                 </p>
               </>
             )
@@ -144,11 +134,11 @@ useEffect(() => {
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-12 lg:h-18">
             <h1 className="hidden lg:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
-            <div className={`flex absolute right-5 lg:right-10 gap-1 ${geist.className}`}>
-              <Link href={"/register"}> <Button className="hidden lg:block cursor-pointer" variant={"ghost"}>Sign up</Button> </Link>
-              <Link href={"/login"}> <Button className="hidden lg:block cursor-pointer" variant="ghost">Log in</Button> </Link>
+            <div className={`flex absolute right-5 md:right-5 lg:right-10 md:gap-0 lg:gap-1 ${geist.className}`}>
+              <Link href={"/register"}> <Button className="hidden md:block lg:block cursor-pointer" variant={"ghost"}>Sign up</Button> </Link>
+              <Link href={"/login"}> <Button className="hidden md:block lg:block cursor-pointer" variant="ghost">Log in</Button> </Link>
               <Link href="/pricing">
-              <Button variant="ghost" className="hidden lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Pricing</Button>
+              <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Pricing</Button>
               </Link>
               <ModeToggle />
             </div>
@@ -625,11 +615,8 @@ useEffect(() => {
         <Link href="/register">
           <Button className="cursor-pointer px-6 py-4">Get Started</Button>
         </Link>
-        <Link href="/home">
-          <Button variant="outline" className="cursor-pointer px-6 py-4">Try Without an Account</Button>
-        </Link>
         <Link href="/pricing">
-          <Button variant="outline" className="shadow-[0_0_5px_1px_rgba] shadow-pink-500 cursor-pointer px-6 py-4">Pricing</Button>
+          <Button variant="outline" className="hover:shadow-[0_0_3px_1px_rgba] hover:shadow-pink-500 cursor-pointer px-6 py-4">Pricing</Button>
         </Link>
       </div>
       </motion.div>

@@ -53,7 +53,6 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
       return;
     }
 
-    // 2. Check access
     const isPro = conversation.isPro;
     const isSubscribed = user.isSubscribed;
 

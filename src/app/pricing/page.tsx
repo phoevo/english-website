@@ -56,7 +56,7 @@ const tiers = [
     features: [
       { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation" },
       { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can’t review or practice in their own" },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can manage 5, 15, or 30 active students" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can manage unlimited active students" },
     ],
   },
   {
@@ -65,7 +65,7 @@ const tiers = [
     features: [
       { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation" },
       { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Student can review and practice anytime" },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can manage 5, 15, or 30 active students" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can manage unlimited active students" },
     ],
   },
 ];
@@ -248,6 +248,7 @@ function SubscribePage() {
 
       <CardHeader>
       <CardTitle className="text-lg font-semibold">For Students</CardTitle>
+      <CardDescription>Billed on how long their subscription lasts</CardDescription>
     </CardHeader>
     <CardContent>
 
@@ -401,6 +402,7 @@ function SubscribePage() {
 
       <CardHeader>
       <CardTitle className="text-lg font-semibold">For Tutors</CardTitle>
+      <CardDescription>Billed on how many students they manage</CardDescription>
 
     </CardHeader>
     <CardContent className=''>
@@ -414,7 +416,7 @@ function SubscribePage() {
       <div className='flex justify-center'>
       <ul className='text-sm list-disc marker:text-popover-foreground space-y-1 justify-start'>
         <li>All Conversations, but in read-only</li>
-        <li>Features are limited</li>
+        <li>Assignments page</li>
         <li>Manage up to 2 active Students</li>
 
       </ul>
@@ -448,7 +450,7 @@ function SubscribePage() {
       <div className='flex justify-center items-center'>
       <ul className='text-sm text-muted-foreground  list-disc marker:text-pink-500 space-y-1 w-full'>
         <li>Everything Student Pro has</li>
-        <li>Manage up to 5, 15 and 30 Students</li>
+        <li>Manage unlimited active Students</li>
 
       </ul>
       </div>

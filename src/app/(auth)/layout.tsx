@@ -32,7 +32,6 @@ export default function AuthLayout({ children }: { children: React.ReactNode }){
       </div>
 
 
-
       <div className="flex hidden lg:block justify-center items-center w-1/2 h-screen">
         <LeftSide/>
       </div>
@@ -47,9 +46,6 @@ export default function AuthLayout({ children }: { children: React.ReactNode }){
         </div>
 
       </div>
-
-
-
 
     </div>
   );

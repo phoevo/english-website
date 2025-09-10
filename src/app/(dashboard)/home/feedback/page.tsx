@@ -81,12 +81,18 @@ function FeedbackPage() {
 
   if (loading) {
     return (
+      <div className="flex flex-col w-full">
+
       <div className="m-10 space-y-8">
         <Skeleton className="w-[300px] h-[32px]" />
         <Skeleton className="w-[400px] h-[15px]" />
-        <Skeleton className="w-[392px] h-[82px] opacity-50 mt-5" />
-        <Skeleton className="w-[392px] h-[82px] opacity-25" />
-        <Skeleton className="w-[392px] h-[82px] opacity-15" />
+      </div>
+
+        <div className="flex flex-row mx-10 gap-10">
+          <Skeleton className="w-1/2 h-100" />
+          <Skeleton className="w-1/2 h-100" />
+        </div>
+
       </div>
     );
   }
@@ -241,7 +247,7 @@ function FeedbackPage() {
     <CardDescription></CardDescription>
   </CardHeader>
   <CardContent>
-    <ul className="list-disc px-4 py-2 space-y-2 rounded-md">
+    <ul className="list-disc px-4 py-2 space-y-2 rounded-md text-muted-foreground">
       <li>Did the design and layout feel clear and accessible to you?</li>
       <li>Is there any feature you wish existed?</li>
       <li className="">How do the
