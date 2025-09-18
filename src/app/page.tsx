@@ -268,7 +268,7 @@ useEffect(() => {
             <p className={`text-md lg:text-lg leading-relaxed bg-card text-center ${dmSans.className}`}>
               Synomilo helps English learners move beyond studying by giving them a place to actively practice.
               With realistic conversations and tools built for real-world speaking, students can practice solo or with a tutor.
-              Tutors can already join sessions and guide students through screen sharing. Dedicated tools for assigning, tracking, and giving feedback are coming soon.
+              Tutors can already join sessions and guide students through screen sharing. Dedicated tutor tools for assigning, tracking, and giving feedback are coming soon.
             </p>
 
           </motion.div>
@@ -616,7 +616,7 @@ useEffect(() => {
           <Button className="cursor-pointer px-6 py-4">Get Started</Button>
         </Link>
         <Link href="/pricing">
-          <Button variant="outline" className="hover:shadow-[0_0_3px_1px_rgba] hover:shadow-pink-500 cursor-pointer px-6 py-4">Pricing</Button>
+          <Button variant="outline" className="hover:shadow-[0_0_3px_0.5px_rgba] hover:shadow-pink-500 cursor-pointer px-6 py-4">Pricing</Button>
         </Link>
       </div>
       </motion.div>
@@ -790,9 +790,8 @@ useEffect(() => {
   <div className="flex flex-row lg:flex-row items-center h-auto lg:h-40 gap-5 p-10">
     <div className="flex justify-center w-1/3">
       <ul className="flex flex-col text-xs lg:text-md gap-2">
-        <Link href="/">About</Link>
-        <Link href="/">Contact</Link>
-        <Link href="/">Pricing</Link>
+        <Link href="/about">About</Link>
+        <Link href="/pricing">Pricing</Link>
       </ul>
     </div>
     <div className="flex justify-center w-1/3">
@@ -800,9 +799,9 @@ useEffect(() => {
     </div>
     <div className="flex justify-center w-1/3">
       <ul className="flex justify-center text-xs lg:text-md flex-col gap-2">
-        <Link href="/">Terms of Service</Link>
         <Link href="/privacy">Privacy Policy</Link>
-        <Link href="/">Refund and Cancellation Policy</Link>
+        <Link href="/ToS">Terms of Service</Link>
+        {/*<Link href="/">Refund and Cancellation Policy</Link>*/}
       </ul>
     </div>
   </div>

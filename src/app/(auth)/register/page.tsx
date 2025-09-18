@@ -241,7 +241,7 @@ export default function Register() {
                           aria-invalid={!!form.formState.errors.acceptedTerms}
                         />
                       </FormControl>
-                      <FormLabel className="text-sm font-normal">
+                      <FormLabel className="flex text-sm font-normal">
                         I agree to the{' '}
                         <Link href="/ToS" className="underline">Terms of Service</Link>{' '}
                         and{' '}

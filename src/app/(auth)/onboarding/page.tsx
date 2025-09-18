@@ -54,6 +54,12 @@ export default function Onboarding() {
       </CardHeader>
 
         <CardContent className='space-y-5'>
+
+           <div className="p-3 rounded-xl bg-muted text-sm text-muted-foreground flex items-start gap-2">
+            <p>
+              Synomilo is designed for online lessons. For the best experience, we recommend using a laptop or desktop screen rather than a mobile device.
+            </p>
+        </div>
           <p>During the beta, you will be able to freely switch between the free and pro tiers in the navigation menu.</p>
           <div className='flex flex-row gap-2 items-center'>
           <p>As so</p>

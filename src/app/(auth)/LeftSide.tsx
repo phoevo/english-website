@@ -21,7 +21,7 @@ export default function LeftSide() {
     "bg-fuchsia-600"
   ];
 
-  const NUM_ROWS = 10;
+  const NUM_ROWS = 8;
   const RECT_PER_ROW = 10;
 
   const generateRect = () => ({
@@ -140,7 +140,7 @@ export default function LeftSide() {
   return (
     <div
       ref={containerRef}
-      className="relative flex flex-col gap-15 h-full w-full p-10 overflow-hidden bg-popover"
+      className="relative flex flex-col justify-evenly gap-15 h-full w-full p-10 overflow-hidden bg-popover"
     >
       {rowData.map((row, rowIndex) => (
         <div key={rowIndex} className="highlight-row flex gap-3 whitespace-nowrap">

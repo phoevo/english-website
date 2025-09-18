@@ -247,7 +247,7 @@ function FeedbackPage() {
     <CardDescription></CardDescription>
   </CardHeader>
   <CardContent>
-    <ul className="list-disc px-4 py-2 space-y-2 rounded-md text-muted-foreground">
+    <ul className="list-disc px-4 py-2 space-y-2 rounded-md text-sm">
       <li>Did the design and layout feel clear and accessible to you?</li>
       <li>Is there any feature you wish existed?</li>
       <li className="">How do the
