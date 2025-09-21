@@ -1,10 +1,13 @@
 import { account, conversationsCollectionId, databaseId, databases, usersCollectionId, } from "./appwrite";
 import { Client, Functions, Query } from "appwrite";
 
+
+const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!;
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
 const CONVERSATIONS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_CONVERSATIONS_COLLECTION_ID!;
+
 
 export async function ensureUserDocument() {
   const user = await account.get();
@@ -51,7 +54,7 @@ export async function subscribeUser2(documentId: string, plan: string): Promise<
     localStorage.setItem('jwt', jwt.jwt);
 
     const client = new Client()
-      .setEndpoint("https://cloud.appwrite.io/v1")
+      .setEndpoint(APPWRITE_ENDPOINT)
       .setProject(PROJECT_ID)
       .setJWT(jwt.jwt);
 
@@ -118,7 +121,7 @@ export async function fixSubscriptionStatus(userId: string): Promise<void> {
     localStorage.setItem('jwt', jwt.jwt);
 
     const client = new Client()
-      .setEndpoint("https://cloud.appwrite.io/v1")
+      .setEndpoint(APPWRITE_ENDPOINT)
       .setProject(PROJECT_ID)
       .setJWT(jwt.jwt);
 
@@ -199,7 +202,7 @@ export async function getUserPlan(): Promise<"free" | "pro"> {
   try {
     const jwt = await account.createJWT();
     const client = new Client()
-      .setEndpoint("https://cloud.appwrite.io/v1")
+      .setEndpoint(APPWRITE_ENDPOINT)
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
       .setJWT(jwt.jwt);
 
@@ -230,7 +233,7 @@ export async function getUserPlan(): Promise<"free" | "pro"> {
 export async function unsubscribeUser2(userId: string) {
   const jwt = await account.createJWT();
   const client = new Client()
-    .setEndpoint("https://cloud.appwrite.io/v1")
+    .setEndpoint(APPWRITE_ENDPOINT)
     .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
     .setJWT(jwt.jwt);
 
@@ -259,7 +262,7 @@ export async function deleteAccountServer(): Promise<void> {
   // Uses the current user's JWT to authenticate the request to the Appwrite Function
   const jwt = await account.createJWT();
   const client = new Client()
-    .setEndpoint("https://cloud.appwrite.io/v1")
+    .setEndpoint(APPWRITE_ENDPOINT)
     .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
     .setJWT(jwt.jwt);
 
@@ -283,7 +286,7 @@ export async function checkSubscriptionFromStripe(userEmail: string): Promise<bo
   try {
     const jwt = await account.createJWT();
     const client = new Client()
-      .setEndpoint("https://cloud.appwrite.io/v1")
+      .setEndpoint(APPWRITE_ENDPOINT)
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
       .setJWT(jwt.jwt);
 
@@ -309,11 +312,10 @@ export async function checkSubscriptionFromStripe(userEmail: string): Promise<bo
   }
 }
 
-// Function to sync user's isSubscribed field with Stripe
 export async function syncUserSubscriptionStatusWithStripe(userId: string): Promise<void> {
   try {
     const hasActiveSubscription = await checkSubscriptionStatusFromStripe(userId);
-    
+
     // Update the user's isSubscribed field based on Stripe
     await databases.updateDocument(
       process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
@@ -321,7 +323,7 @@ export async function syncUserSubscriptionStatusWithStripe(userId: string): Prom
       userId,
       { isSubscribed: hasActiveSubscription }
     );
-    
+
     console.log(`User ${userId} isSubscribed status synced with Stripe to:`, hasActiveSubscription);
   } catch (error) {
     console.error("Error syncing user subscription status with Stripe:", error);
@@ -329,7 +331,6 @@ export async function syncUserSubscriptionStatusWithStripe(userId: string): Prom
   }
 }
 
-// Legacy function - keeping for backward compatibility but will use user document instead
 export async function checkSubscriptionStatus(userId: string): Promise<boolean> {
   try {
     // Just get the subscription status from the user document instead
@@ -338,7 +339,7 @@ export async function checkSubscriptionStatus(userId: string): Promise<boolean> 
       process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!,
       userId
     );
-    
+
     return !!userDoc?.isSubscribed;
   } catch (error) {
     console.error("Error checking subscription status from user document:", error);

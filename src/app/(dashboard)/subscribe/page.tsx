@@ -425,7 +425,7 @@
             variant="outline"
             className={`mt-4 ${!isTeacher ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'}`}
             onClick={() => !isTeacher ? handleStudentSubscribe(option.planName) : null}
-            disabled>
+            >
             Disabled during beta testing
             </Button>
 
