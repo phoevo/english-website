@@ -155,7 +155,8 @@ if (!user) return null;
               <ScrollArea className="h-80 border-1 rounded-md bg-background">
                 <ul className="space-y-1 text-sm">
                   {wordList.map((entry, idx) => {
-                    const wordOnly = entry.split("::")[0].trim(); // This is what we show
+                    const wordOnly = entry.split("::")[0].trim();
+                    const wordClean = wordOnly.split("/")[0].trim();
                     return (
                       <li key={idx} className="flex items-center space-x-2 px-2 py-1 rounded">
                         <Checkbox
@@ -167,7 +168,7 @@ if (!user) return null;
                           htmlFor={`word-${idx}`}
                           className="text-sm"
                         >
-                          {wordOnly}
+                          {wordClean}
                         </label>
                       </li>
                     );

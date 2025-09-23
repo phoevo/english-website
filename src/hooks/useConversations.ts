@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchConversations } from "@/data/getData"; // or wherever your function lives
-
+import { fetchConversations } from "@/data/getData";
 export function useConversations() {
   const [conversations, setConversations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
