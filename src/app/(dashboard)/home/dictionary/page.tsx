@@ -25,12 +25,12 @@ const dmSans = DM_Sans({ subsets: ['latin'] });
 
 
 function getWordDetails(wordText: string) {
-  const lowerCaseWord = wordText.toLowerCase();
+  const key = wordText.toLowerCase().replace(/\s+/g, "_");
 
   for (const sectionKey in vocabIndex) {
     const section = vocabIndex[sectionKey];
-    if (section[lowerCaseWord]) {
-      return section[lowerCaseWord];
+    if (section[key]) {
+      return section[key];
     }
   }
 
@@ -112,7 +112,7 @@ function DictionaryPage() {
           <h1 className={`text-3xl font-normal ${dmSans.className}`}>Dictionary</h1>
         </UserGuidePopover>
 
-        <p className="text-zinc-500">
+        <p className="text-muted-foreground">
           Words you&apos;ve saved will appear here, along with word classes and definitions.
         </p>
       </div>
@@ -150,10 +150,10 @@ function DictionaryPage() {
                               <AccordionTrigger className="justify-between w-full cursor-pointer">
                                 <div className="flex flex-col">
                                   <div className="flex flex-row items-center gap-2">
-                                    <div className="font-bold text-base">{displayText}</div>
-                                    <div className="italic text-zinc-500">{details?.type}</div>
+                                    <div className="font-semibold text-base">{displayText}</div>
+                                    <div className="italic text-muted-foreground">{details?.type}</div>
                                   </div>
-                                  <div className="text-zinc-500">{details?.definition}</div>
+                                  <div className="text-muted-foreground">{details?.definition}</div>
                                 </div>
                               </AccordionTrigger>
 
@@ -163,7 +163,7 @@ function DictionaryPage() {
                                 </AccordionContent>
                               )}
                               {!details && (
-                                <div className="italic text-sm">No additional info found.</div>
+                                <div className="italic text-sm text-muted-foreground">No additional info found.</div>
                               )}
                             </AccordionItem>
                           </Accordion>
@@ -184,7 +184,7 @@ function DictionaryPage() {
                   );
                 })}
               </AnimatePresence>
-              <div className="flex justify-center text-zinc-500">end</div>
+              <div className="flex justify-center text-muted-foreground">end</div>
             </div>
           </ScrollArea>
         ) : (
