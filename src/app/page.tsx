@@ -86,7 +86,7 @@ useEffect(() => {
                 You get access to:
                 <ul className="list-disc pl-5">
                   <li>Conversation Audio</li>
-                  <li>All existing and future conversations to go through at your own pace.</li>
+                  <li>All existing and future conversations</li>
                   <li>Color customization</li>
                   <li>Challenges</li>
                 </ul>
@@ -371,6 +371,13 @@ useEffect(() => {
             <p className="text-md lg:text-lg text-muted-foreground">
               Simulating the experience is rehearsal. You practice before the real conversation, so when
               you’re face to face, you’re ready.
+            </p>
+
+            <h3 className="text-2xl lg:text-4xl font-normal mt-5">AI</h3>
+             <p className="text-md lg:text-lg text-muted-foreground">
+             We don’t use AI to create our conversations. Every conversation is written by native English speakers,
+             ensuring they sound as natural as possible and reflect real spoken English. For now, we only use AI
+             for audio, but as we grow, we plan to record and use audio from native speakers.
             </p>
 
         </motion.div>

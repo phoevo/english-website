@@ -34,7 +34,7 @@ export default function AboutPage(): JSX.Element {
       Traditional language learning relies heavily on grammar drills, sentence
       structure exercises, and worksheets. Matching words to definitions or
       circling correct answers does little to prepare students for real communication. Many learners know the rules but
-      still freeze when it matters.
+      still freeze when the times comes to respond, and theres no notes infront of them for help.
     </p>
 
     <h2 className="text-2xl font-semibold mb-2">The Approach</h2>
@@ -48,7 +48,7 @@ export default function AboutPage(): JSX.Element {
     <h2 className="text-2xl font-semibold mb-2">For Students and Tutors</h2>
     <p className="mb-4">
       Synomilo can be used independently or together with a tutor. Students can
-      practice scenarios on their own witht he available tools, or work through them
+      practice scenarios on their own with the available tools, or work through them
       in a live lesson for immediate feedback. Tutors can run conversation-based
       classes without spending time writing dialogues or searching online for
       specific situations. Synomilo provides ready-to-use material so both sides
@@ -57,9 +57,9 @@ export default function AboutPage(): JSX.Element {
 
     <h2 className="text-2xl font-semibold mb-2">The Outcome</h2>
     <p className="mb-4">
-      Students learn to respond naturally, adapt in real time, and build
-      confidence. Tutors save time and gain a reliable framework for lessons.
-      When the need arises—whether in class, at work, or in life.
+      Students get to practice responding naturally, adapting in the moment, and building their confidence.
+      And for tutors, it saves time and gives them a solid framework to lean on, whether it’s for the whole
+       lesson or just part of it.
     </p>
   </ScrollArea>
 </main>

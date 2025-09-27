@@ -36,8 +36,8 @@ const tiers = [
     tutorBadge: "Free",
     studentBadge: "Free",
     features: [
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor can only assign up to 12 conversations" },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can’t review or practice conversations in their own" },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor can only assign up to 12 conversations (Student in Free)" },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can review only 12 conversations in their own time." },
       { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor limited to 2 active student slots" },
     ],
   },
@@ -449,7 +449,7 @@ function SubscribePage() {
       <Badge className='mb-4 bg-pink-500 text-white'>Pro</Badge>
       <div className='flex justify-center items-center'>
       <ul className='text-sm text-muted-foreground  list-disc marker:text-pink-500 space-y-1 w-full'>
-        <li>Everything Student Pro has</li>
+        <li>Everything in Free</li>
         <li>Manage unlimited active Students</li>
 
       </ul>
@@ -554,7 +554,7 @@ function SubscribePage() {
 <Card className='h-auto w-full lg:w-2/3 mb-5 bg-background shadow-md'>
   <CardHeader>
     <CardTitle className='text-lg md:text-2xl'>More about Pricing and Subscriptions</CardTitle>
-    <CardDescription className='text-sm md:text-base'>How Tutors and Students interact depends on who owns a subscription</CardDescription>
+    <CardDescription className='text-sm md:text-base'>How Students and Tutors interact depends on who owns a subscription</CardDescription>
   </CardHeader>
 
   {tiers.map(renderTier)}

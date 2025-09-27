@@ -25,7 +25,7 @@ type MockAssignmentWithConversation = {
 function TestTeacherPage() {
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
 
-  const dummyStudents = [
+  const Students = [
     { id: '1', name: 'Yuna', email: 'yunak33@example.com' },
     { id: '2', name: 'Mateo Alonso', email: 'malosno@example.com' },
   ];
@@ -97,12 +97,12 @@ function TestTeacherPage() {
             onValueChange={(value) => setSelectedStudentId(value)}
             value={selectedStudentId || ""}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full cursor-pointer">
               <SelectValue placeholder="Select Student" />
             </SelectTrigger>
-            <SelectContent className={`${geist.className}`}>
-              {dummyStudents.map((student) => (
-                <SelectItem key={student.id} value={student.id}>
+            <SelectContent className={`cursor-pointer ${geist.className}`}>
+              {Students.map((student) => (
+                <SelectItem key={student.id} value={student.id} className='cursor-pointer'>
                   {student.name}
                 </SelectItem>
               ))}

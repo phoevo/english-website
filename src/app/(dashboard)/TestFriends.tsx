@@ -108,10 +108,10 @@ function TestFriends() {
                         </div>
 
                         <Badge className="p-2" variant="secondary">
-                          <Sword className="rotate-45 mr-1" size={16} /> {f.taskCount || 0}
+                          <Sword className="rotate-45" size={16} />{f.taskCount || 0}
                         </Badge>
                         <Badge className="p-2">
-                          <Swords className="mr-1" size={16} /> {f.challengeCount?.length || 0}
+                          <Swords className="" size={16} />{f.challengeCount?.length || 0}
                         </Badge>
                       </div>
 

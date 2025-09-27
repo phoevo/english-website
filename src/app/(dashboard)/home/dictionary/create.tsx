@@ -161,8 +161,8 @@ if (!user) return null;
                       <li key={idx} className="flex items-center space-x-2 px-2 py-1 rounded">
                         <Checkbox
                           id={`word-${idx}`}
-                          checked={selectedWords.includes(entry)} // Store full "word::definition"
-                          onCheckedChange={() => toggleWord(entry)} // Toggle full entry
+                          checked={selectedWords.includes(entry)}
+                          onCheckedChange={() => toggleWord(entry)}
                         />
                         <label
                           htmlFor={`word-${idx}`}

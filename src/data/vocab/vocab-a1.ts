@@ -267,7 +267,7 @@ export const vocabA1: Record<string, { text: string; type: string; definition: s
   "level": { text: "level", type: "noun", definition: "a floor in a building", context: "It’s on level 1, near the exit." },
   "exit": { text: "exit", type: "noun", definition: "a door or way out of a place", context: "It’s on level 1, near the exit." },
   "come": { text: "come", type: "verb", definition: "to move toward someone or something", context: "Come with me." },
-  "thanks": { text: "thanks", type: "interjection", definition: "a word to show you are grateful", context: "Thanks, this is a really big place." },
+  "thanks": { text: "thanks", type: "interjection", definition: "short form of Thank you", context: "Thanks, this is a really big place." },
   "place": { text: "place", type: "noun", definition: "a space or area", context: "This is a really big place." },
   "big": { text: "big", type: "adjective", definition: "large in size", context: "This is a really big place." },
   "easy": { text: "easy", type: "adjective", definition: "not difficult", context: "It’s easy to get lost." },

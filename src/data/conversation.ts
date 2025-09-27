@@ -19,7 +19,7 @@ export interface Conversation {
   isPro?: boolean;
 }
 
-// Function to parse dialogue from raw text
+
 export const parseDialogue = (rawDialogue: string, vocab: Record<string, { type: string; definition: string; context: string; }>) => {
   const parsedDialogue = rawDialogue
     .trim()
@@ -40,7 +40,7 @@ export const parseDialogue = (rawDialogue: string, vocab: Record<string, { type:
           const vocabEntry = vocab[cleaned];
 
           return {
-            text: rawWord,
+            text: rawWord.replace(/_/g," "),
             type: vocabEntry?.type ?? "unknown",
             definition: vocabEntry?.definition,
             context: vocabEntry?.context,
@@ -68,7 +68,7 @@ export const loadConversation = async (documentId: string) => {
   try {
     parsedContent = JSON.parse(doc.content);
   } catch {
-    parsedContent = parseDialogue(doc.content, vocab); // pass vocab
+    parsedContent = parseDialogue(doc.content, vocab);
   }
 
   return {
