@@ -87,8 +87,8 @@ const flashcards = [...rawWords].map((entry) => {
   }
 
   return (
-    <div className='h-full'>
-      <Card className='w-full h-full bg-background border-1 flex flex-col'>
+    <div className='h-screen lg:h-full'>
+      <Card className='w-full h-full bg-background lg:border-1 flex flex-col'>
         <CardHeader className='flex flex-col'>
           <CardTitle className='text-2xl'>Word Board</CardTitle>
 
@@ -119,7 +119,7 @@ const flashcards = [...rawWords].map((entry) => {
           </div>
         </CardHeader>
 
-        {/* Conditionally show MyDecks component */}
+
         {showMyDecks ? (
           <CardContent className="flex-grow">
             <MyDecks onSelectDeck={(deck) => {
@@ -134,7 +134,7 @@ const flashcards = [...rawWords].map((entry) => {
         ) : (
           <CardContent className="flex-grow">
 
-            <div className='w-full h-full border-1 rounded-md shadow-xs p-5 flex items-center justify-center'>
+            <div className='w-full h-full lg:border-1 rounded-md lg:shadow-xs lg:p-5 flex items-center justify-center'>
                <motion.div
               layout
               className="w-full h-full"
@@ -144,7 +144,7 @@ const flashcards = [...rawWords].map((entry) => {
               transition={{ duration: 0.2, ease: "easeOut" }}
               >
               {!isGameActive ? (
-                <p className="text-zinc-500 text-center">Choose one of your saved decks or Quick Start for all your words.</p>
+                <p className="text-muted-foreground text-center">Choose one of your saved decks or Quick Start for all your words.</p>
               ) : (
                 <div
                   className="w-full h-full flex flex-col justify-center items-center space-y-4"
@@ -163,7 +163,7 @@ const flashcards = [...rawWords].map((entry) => {
             >
               {/* Front side */}
               <div
-                className="absolute w-full h-full border rounded-lg p-8 bg-background flex flex-col items-center justify-center cursor-pointer shadow-md"
+                className="absolute w-full h-full border rounded-lg lg:p-8 bg-background flex flex-col items-center justify-center cursor-pointer shadow-md"
                 style={{
                   backfaceVisibility: 'hidden',
                 }}

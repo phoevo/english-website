@@ -42,7 +42,7 @@ const items = [
 export function AppSidebar() {
   return (
     <Sidebar className="h-auto mb-2 rounded-lg absolute md:[--sidebar-width:10rem] lg:[--sidebar-width:16rem]">
-      <SidebarContent className="bg-background">
+      <SidebarContent className={`${dmSans.className}`}>
         <SidebarGroup>
           <SidebarGroupLabel>App</SidebarGroupLabel>
           <SidebarGroupContent className={`${dmSans.className}`}>

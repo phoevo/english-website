@@ -97,7 +97,7 @@ if (!user) return null;
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger>{children}</PopoverTrigger>
         <PopoverContent
-          side="right"
+          side="bottom"
           align="start"
           className={`z-50 rounded-3xl bg-background shadow-lg p-4 w-80 mb-2 ${geist.className}`}
         >
@@ -152,7 +152,7 @@ if (!user) return null;
               </label>
             </div>
 
-              <ScrollArea className="h-80 border-1 rounded-md bg-background">
+              <ScrollArea className="h-50 border-1 rounded-md bg-background">
                 <ul className="space-y-1 text-sm">
                   {wordList.map((entry, idx) => {
                     const wordOnly = entry.split("::")[0].trim();

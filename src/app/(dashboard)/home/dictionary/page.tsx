@@ -192,7 +192,6 @@ function DictionaryPage() {
         )}
       </div>
 
-      {/* Word Pad / Flashcard Area */}
       <div className="lg:w-2/3 lg:h-full">
         <WordBoard />
       </div>
