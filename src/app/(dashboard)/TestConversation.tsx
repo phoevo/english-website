@@ -193,7 +193,7 @@ export function TestConversation() {
             <div className="font-semibold pr-10 lg:pr-4 mr-4 lg:border-r border-gray-300 min-w-[100px] text-right">
               {line.speaker}
             </div>
-            <div className="flex flex-wrap">{line.words.map((word, j) => renderWord(word, j))}</div>
+            <div className="flex flex-wrap">{line.words.map((word, j) => renderWord(word as Word, j))}</div>
           </div>
         ))}
       </div>
