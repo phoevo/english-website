@@ -1,5 +1,5 @@
 import { account, conversationsCollectionId, databaseId, databases, usersCollectionId, } from "./appwrite";
-import { Client, Functions, Query } from "appwrite";
+import { Client, Functions } from "appwrite";
 
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!;
@@ -17,8 +17,11 @@ export async function ensureUserDocument() {
   try {
     // Try to get the user document by ID
     await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, userId);
-  } catch (err: any) {
-    if (err.code === 404) {
+  } catch (err: unknown) {
+    const code = (typeof err === 'object' && err && 'code' in err && typeof (err as { code?: unknown }).code === 'number')
+      ? (err as { code: number }).code
+      : undefined;
+    if (code === 404) {
       // If not found, create it
       await databases.createDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
         userId: userId,

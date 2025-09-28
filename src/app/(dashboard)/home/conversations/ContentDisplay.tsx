@@ -13,7 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { AArrowDownIcon, AArrowUpIcon, Check, Plus } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import { WordTypeSettings } from "@/components/ui/WordTypeSettings";
 import { Button } from "@/components/ui/button";
 import { databases, storage } from "@/data/appwrite";
@@ -130,7 +130,7 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
       const result = await storage.getFileView(audioBucketId, conversation.audioFileId);
 
       setAudioUrl(result);
-    } catch (err) {
+    } catch {
       setAudioUrl(null);
     } finally {
       setAudioLoading(false);
@@ -199,95 +199,91 @@ React.useEffect(() => {
   const tickIcon = <Check size={17} />;
   const addIcon = <Plus/>
 
-  const renderWord = (word: Word, index: number) => {
-  const wordType = wordTypes[word.type];
-  if (!word?.text || !wordType) return null;
+  function RenderWord({ word }: { word: Word }) {
+    const [isOpen, setIsOpen] = React.useState(false);
+    const isMobile = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
 
-  const displayText = word.text.replace(/\/.*?\//g, "");
-  const colorKey = wordType.colorKey;
-  const baseClass = backgroundColors[colorKey];
-  const hoverClass = hoverBackgroundColors[colorKey];
-  const isEnabled = wordType.enabled;
-  const appliedColor = isEnabled ? baseClass : "";
-  const appliedHover = hoverEnabled ? hoverClass : "";
-  const wordString = `${cleanWord(word.text)}::${word.definition}`;
-  const alreadySaved = savedWords.includes(wordString);
+    const wordType = wordTypes[word.type];
+    if (!word?.text || !wordType) return null;
 
-  const [isOpen, setIsOpen] = React.useState(false);
-  const isMobile = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
-  const showHoverColor = hoverEnabled || isMobile && isOpen;
-  const appliedHoverMobile = showHoverColor ? hoverClass : "";
+    const displayText = word.text.replace(/\/.*?\//g, "");
+    const colorKey = wordType.colorKey;
+    const baseClass = backgroundColors[colorKey];
+    const hoverClass = hoverBackgroundColors[colorKey];
+    const isEnabled = wordType.enabled;
+    const appliedColor = isEnabled ? baseClass : "";
+    const wordString = `${cleanWord(word.text)}::${word.definition}`;
+    const alreadySaved = savedWords.includes(wordString);
 
+    const showHoverColor = hoverEnabled || (isMobile && isOpen);
+    const appliedHoverMobile = showHoverColor ? hoverClass : "";
 
+    async function addDictionary(wordString: string) {
+      if (!userId) {
+        toast("Account required", {
+          description: "You need to log in or create an account to save words.",
+        });
+        return;
+      }
 
-  async function addDictionary(wordString: string) {
-    if (!userId) {
-      toast("Account required", {
-        description: "You need to log in or create an account to save words.",
-      });
-      return;
+      if (savedWords.includes(wordString)) return;
+
+      const updatedWords = [...savedWords, wordString];
+      setDictionaryWords(updatedWords);
+      toast.success(`Added "${wordString.split("::")[0]}" to your dictionary`);
+
+      try {
+        await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
+          dictionaryWords: updatedWords,
+        });
+      } catch (err) {
+        console.error("Error saving word:", err);
+        toast.error("Something went wrong. Word might not be saved.");
+      }
     }
 
-    if (savedWords.includes(wordString)) return;
+    return (
+      <>
+        <HoverCard
+          open={isMobile ? isOpen : undefined}
+          onOpenChange={isMobile ? setIsOpen : undefined}
+          openDelay={100}
+          closeDelay={0}
+        >
+          <HoverCardTrigger asChild>
+            <span
+              onClick={() => isMobile && setIsOpen(!isOpen)}
+              className={`rounded transition-colors cursor-pointer ${appliedHoverMobile} ${appliedColor}`}
+              style={{ fontSize }}
+            >
+              {displayText}
+            </span>
+          </HoverCardTrigger>
 
-    const updatedWords = [...savedWords, wordString];
-    setDictionaryWords(updatedWords);
-    toast.success(`Added "${wordString.split("::")[0]}" to your dictionary`);
-
-    try {
-      await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
-        dictionaryWords: updatedWords,
-      });
-    } catch (err) {
-      console.error("Error saving word:", err);
-      toast.error("Something went wrong. Word might not be saved.");
-    }
+          {(hoverEnabled || isMobile) && word.definition && (
+            <HoverCardContent className={`flex flex-col text-sm ${geist.className}`}>
+              <div className="flex flex-col items-center justify-center gap-1">
+                <span className="font-bold">{word.type}</span>
+                <span>{word.definition}</span>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    !alreadySaved &&
+                    addDictionary(`${cleanWord(word.text)}::${word.definition}`)
+                  }
+                  className="w-4 h-5 rounded-sm cursor-pointer"
+                  disabled={alreadySaved}
+                  title={alreadySaved ? "Already saved" : "Add"}
+                >
+                  {alreadySaved ? tickIcon : addIcon}
+                </Button>
+              </div>
+            </HoverCardContent>
+          )}
+        </HoverCard>
+      </>
+    );
   }
-
-  return (
-    <React.Fragment key={index}>
-      <HoverCard
-        open={isMobile ? isOpen : undefined}
-        onOpenChange={isMobile ? setIsOpen : undefined}
-        openDelay={100}
-        closeDelay={0}
-      >
-
-        <HoverCardTrigger asChild>
-          <span
-            onClick={() => isMobile && setIsOpen(!isOpen)}
-            className={`rounded transition-colors cursor-pointer ${appliedHoverMobile} ${appliedColor}`}
-            style={{ fontSize }}
-          >
-            {displayText}
-          </span>
-
-        </HoverCardTrigger>
-
-        {(hoverEnabled || isMobile) && word.definition && (
-          <HoverCardContent className={`flex flex-col text-sm ${geist.className}`}>
-            <div className="flex flex-col items-center justify-center gap-1">
-              <span className="font-bold">{word.type}</span>
-              <span>{word.definition}</span>
-              <Button
-                variant="outline"
-                onClick={() =>
-                  !alreadySaved &&
-                  addDictionary(`${cleanWord(word.text)}::${word.definition}`)
-                }
-                className="w-4 h-5 rounded-sm cursor-pointer"
-                disabled={alreadySaved}
-                title={alreadySaved ? "Already saved" : "Add"}
-              >
-                {alreadySaved ? tickIcon : addIcon}
-              </Button>
-            </div>
-          </HoverCardContent>
-        )}
-      </HoverCard>
-    </React.Fragment>
-  );
-};
 
 
 
@@ -336,7 +332,9 @@ React.useEffect(() => {
                 {line.speaker}
               </div>
               <div className="ml-6 flex flex-wrap gap-1">
-                {line.words.map((word, j) => renderWord(word, j))}
+                {line.words.map((word, j) => (
+                  <RenderWord key={j} word={word} />
+                ))}
               </div>
             </div>
           ))

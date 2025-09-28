@@ -39,7 +39,7 @@ export default function Login() {
         `${window.location.origin}/home`, // success redirect
         `${window.location.origin}/login`         // failure redirect
       );
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Google login error:', error)
       setFormError('Failed to authenticate with Google.')
     }
@@ -59,10 +59,10 @@ export default function Login() {
       try {
         await account.get(); // succeeds if logged in
         await account.deleteSession('current'); // log out
-      } catch (err) {
+      } catch {
       }
 
-      const session = await account.createEmailPasswordSession(data.email, data.password);
+      await account.createEmailPasswordSession(data.email, data.password);
 
       // Store JWT token for function calls
       const jwt = await account.createJWT();
@@ -71,12 +71,13 @@ export default function Login() {
       await ensureUserDocument();
       router.push('/home');
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
-      if (error.code === 429) {
+      const err = (error ?? {}) as { code?: number; message?: string };
+      if (typeof err.code === 'number' && err.code === 429) {
         setFormError("Too many login attempts. Please wait a moment and try again.");
-      } else if (error?.message) {
-        setFormError(error.message);
+      } else if (typeof err.message === 'string') {
+        setFormError(err.message);
       } else {
         setFormError("Something went wrong. Please try again.");
       }

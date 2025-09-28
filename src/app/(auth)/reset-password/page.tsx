@@ -47,9 +47,13 @@ export default function ResetPassword() {
     try {
       await account.updateRecovery(userId, secret, values.password)
       setSuccess(true)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Password reset error:', err)
-      setError(err?.message || 'Failed to reset password. Please try again.')
+      const message =
+        err && typeof err === 'object' && 'message' in err && typeof (err as { message?: unknown }).message === 'string'
+          ? (err as { message: string }).message
+          : 'Failed to reset password. Please try again.'
+      setError(message)
     } finally {
       setIsLoading(false)
     }

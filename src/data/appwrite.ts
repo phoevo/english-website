@@ -45,7 +45,7 @@ export const getConversationFromDB = async (documentId: string) => {
   try {
     const response = await databases.getDocument(databaseId, conversationsCollectionId, documentId)
     return response
-  } catch (error: any) {
+  } catch {
     console.warn(`Conversation ${documentId} could not be fetched. It may have been deleted.`)
     return null
   }

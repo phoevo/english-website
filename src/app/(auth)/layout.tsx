@@ -2,19 +2,12 @@
 
 import ModeToggle from "@/components/ui/ModeToggle";
 import Link from "next/link";
-import { Montserrat, Raleway, Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import LeftSide from "./LeftSide";
 
 
-const raleway = Raleway({ subsets: ['latin'] });
-const montserrat = Montserrat({ subsets: ['latin'] });
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
 })
 

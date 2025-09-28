@@ -133,11 +133,15 @@ export default function ProfileLayout() {
         email: updatedUser.email,
       });
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Update error:', err);
-      setFormError(err?.message || 'Failed to update profile.');
+      const message =
+        err && typeof err === 'object' && 'message' in err && typeof (err as { message?: unknown }).message === 'string'
+          ? (err as { message: string }).message
+          : 'Failed to update profile.';
+      setFormError(message);
       toast('Error', {
-        description: err?.message || 'Failed to update profile.',
+        description: message,
       });
     } finally {
       setIsSaving(false);
@@ -184,11 +188,11 @@ const handleUnsubscribe = async () => {
 
     const safeDeleteDocs = async (
       collectionId: string,
-      queries: any[]
+      queries: string[]
     ) => {
       try {
         const res = await databases.listDocuments(databaseId, collectionId, queries);
-        for (const doc of res.documents as any[]) {
+        for (const doc of (res.documents as Array<{ $id: string }>)) {
           try {
             await databases.deleteDocument(databaseId, collectionId, doc.$id);
           } catch (e) {
@@ -242,7 +246,7 @@ const handleUnsubscribe = async () => {
       } catch {}
       router.replace('/login');
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Account deletion error:', err);
       toast.error('Failed to delete account. Please try again.');
     } finally {

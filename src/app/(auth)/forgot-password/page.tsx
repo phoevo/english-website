@@ -34,9 +34,13 @@ export default function ForgetPassword() {
       const redirectUrl = `${window.location.origin}/reset-password`
       await account.createRecovery(values.email, redirectUrl)
       setSuccess(true)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Password recovery error:', err)
-      setError(err?.message || 'Failed to send recovery email. Please try again.')
+      const message =
+        err && typeof err === 'object' && 'message' in err && typeof (err as { message?: unknown }).message === 'string'
+          ? (err as { message: string }).message
+          : 'Failed to send recovery email. Please try again.'
+      setError(message)
     } finally {
       setIsLoading(false)
     }
