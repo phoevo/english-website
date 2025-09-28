@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/PasswordInput'
 import { account } from '@/data/appwrite'
 import { ensureUserDocument } from '@/data/getData'
+import type { OAuthProvider } from 'appwrite'
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -35,7 +36,7 @@ export default function Login() {
     try {
       // This opens a new window for Google OAuth
       await account.createOAuth2Session(
-        "google",
+        'google' as OAuthProvider,
         `${window.location.origin}/home`, // success redirect
         `${window.location.origin}/login`         // failure redirect
       );
