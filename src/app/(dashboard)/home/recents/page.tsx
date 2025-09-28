@@ -73,7 +73,7 @@ function RecentsPage() {
   }
 
   return (
-    <div className="h-full space-y-5 m-10">
+    <div className="h-full space-y-3 lg:space-y-5 m-5 lg:m-10">
       <div>
         <UserGuidePopover
           id="recents-page"
@@ -82,11 +82,11 @@ function RecentsPage() {
           side="top"
           align="start"
           >
-          <h1 className={`text-3xl font-normal ${dmSans.className}`}>Recent Conversations</h1>
+          <h1 className={`text-2xl lg:text-3xl font-normal ${dmSans.className}`}>Recent Conversations</h1>
           </UserGuidePopover>
         </div>
 
-          <p className="text-muted-foreground">Conversations you&apos;ve interacted with. For quick access.</p>
+          <p className="text-sm lg:text-base text-muted-foreground">Conversations you&apos;ve interacted with. For quick access.</p>
 
 
     <div className="mt-9">

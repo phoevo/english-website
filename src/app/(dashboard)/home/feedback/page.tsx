@@ -109,7 +109,7 @@ function FeedbackPage() {
   }
 
   return (
-    <div className="h-full w-full space-y-5 m-10">
+    <div className="h-full w-full space-y-3 lg:space-y-5 m-5 lg:m-10">
       <div>
         <UserGuidePopover
           id="feedback-page"
@@ -118,11 +118,11 @@ function FeedbackPage() {
           side="top"
           align="start"
           >
-          <h1 className={`text-3xl font-normal ${dmSans.className}`}>Feedback</h1>
+          <h1 className={`text-2xl lg:text-3xl font-normal ${dmSans.className}`}>Feedback</h1>
           </UserGuidePopover>
         </div>
 
-          <p className="text-muted-foreground">Feedback from our users is crucial at this stage of launch.
+          <p className="text-sm lg:text-base text-muted-foreground">Feedback from our users is crucial at this stage of launch.
           </p>
 
       <div className="flex flex-col lg:flex-row w-full gap-10">

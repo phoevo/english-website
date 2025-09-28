@@ -213,68 +213,82 @@ React.useEffect(() => {
   const wordString = `${cleanWord(word.text)}::${word.definition}`;
   const alreadySaved = savedWords.includes(wordString);
 
+  const [isOpen, setIsOpen] = React.useState(false);
+  const isMobile = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
+  const showHoverColor = hoverEnabled || isMobile && isOpen;
+  const appliedHoverMobile = showHoverColor ? hoverClass : "";
 
 
-    async function addDictionary(wordString: string) {
-      if (!userId) {
-        toast("Account required", {
-          description: "You need to log in or create an account to save words.",
-        });
-        return;
-      }
 
-      if (savedWords.includes(wordString)) return;
-
-      const updatedWords = [...savedWords, wordString];
-      setDictionaryWords(updatedWords);
-      toast.success(`Added "${wordString.split("::")[0]}" to your dictionary`);
-
-      try {
-        await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
-          dictionaryWords: updatedWords,
-        });
-      } catch (err) {
-        console.error("Error saving word:", err);
-        toast.error("Something went wrong. Word might not be saved.");
-      }
+  async function addDictionary(wordString: string) {
+    if (!userId) {
+      toast("Account required", {
+        description: "You need to log in or create an account to save words.",
+      });
+      return;
     }
 
-    return (
-      <React.Fragment key={index}>
-        <HoverCard openDelay={50} closeDelay={50}>
-          <HoverCardTrigger asChild>
-            <span
-            className={`rounded transition-colors ${
-              hoverEnabled ? "cursor-pointer" : ""
-            } ${appliedHover} ${appliedColor}`}
+    if (savedWords.includes(wordString)) return;
+
+    const updatedWords = [...savedWords, wordString];
+    setDictionaryWords(updatedWords);
+    toast.success(`Added "${wordString.split("::")[0]}" to your dictionary`);
+
+    try {
+      await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
+        dictionaryWords: updatedWords,
+      });
+    } catch (err) {
+      console.error("Error saving word:", err);
+      toast.error("Something went wrong. Word might not be saved.");
+    }
+  }
+
+  return (
+    <React.Fragment key={index}>
+      <HoverCard
+        open={isMobile ? isOpen : undefined}
+        onOpenChange={isMobile ? setIsOpen : undefined}
+        openDelay={100}
+        closeDelay={0}
+      >
+
+        <HoverCardTrigger asChild>
+          <span
+            onClick={() => isMobile && setIsOpen(!isOpen)}
+            className={`rounded transition-colors cursor-pointer ${appliedHoverMobile} ${appliedColor}`}
             style={{ fontSize }}
           >
             {displayText}
           </span>
 
-          </HoverCardTrigger>
-          {hoverEnabled && word.definition && (
-            <HoverCardContent className={`flex flex-col text-sm ${geist.className}`}>
-              <div className="flex flex-col items-center justify-center gap-1">
-                <span className="font-bold">{word.type}</span>
-                <span>{word.definition}</span>
+        </HoverCardTrigger>
 
-                <Button
-                  variant="outline"
-                  onClick={() => !alreadySaved && addDictionary(`${cleanWord(word.text)}::${word.definition}`)}
-                  className="w-4 h-5 rounded-sm cursor-pointer"
-                  disabled={alreadySaved}
-                  title={alreadySaved ? "Already saved" : "Add"}
-                >
-                  {alreadySaved ? tickIcon : addIcon}
-                </Button>
-              </div>
-            </HoverCardContent>
-          )}
-        </HoverCard>
-      </React.Fragment>
-    );
-  };
+        {(hoverEnabled || isMobile) && word.definition && (
+          <HoverCardContent className={`flex flex-col text-sm ${geist.className}`}>
+            <div className="flex flex-col items-center justify-center gap-1">
+              <span className="font-bold">{word.type}</span>
+              <span>{word.definition}</span>
+              <Button
+                variant="outline"
+                onClick={() =>
+                  !alreadySaved &&
+                  addDictionary(`${cleanWord(word.text)}::${word.definition}`)
+                }
+                className="w-4 h-5 rounded-sm cursor-pointer"
+                disabled={alreadySaved}
+                title={alreadySaved ? "Already saved" : "Add"}
+              >
+                {alreadySaved ? tickIcon : addIcon}
+              </Button>
+            </div>
+          </HoverCardContent>
+        )}
+      </HoverCard>
+    </React.Fragment>
+  );
+};
+
 
 
   // Mobile Settings Drawer Component

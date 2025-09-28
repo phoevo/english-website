@@ -97,10 +97,10 @@ function DictionaryPage() {
   }
 
   return (
-  <div className="w-full h-auto m-10">
+  <div className="w-full h-auto m-5 lg:m-10">
 
     <div className="flex flex-col h-1/6">
-      <div className="flex flex-col w-2/3 space-y-5 h-full">
+      <div className="flex flex-col lg:w-2/3 space-y-3 lg:space-y-5 h-full">
         <UserGuidePopover
           id="dictionary-page"
           title="The Dictionary Page"
@@ -109,21 +109,21 @@ function DictionaryPage() {
           side="top"
           align="start"
         >
-          <h1 className={`text-3xl font-normal ${dmSans.className}`}>Dictionary</h1>
+          <h1 className={`text-2xl lg:text-3xl font-normal ${dmSans.className}`}>Dictionary</h1>
         </UserGuidePopover>
 
-        <p className="text-muted-foreground">
+        <div className="text-sm lg:text-base text-muted-foreground">
           Words you&apos;ve saved will appear here, along with word classes and definitions.
-        </p>
+        </div>
       </div>
     </div>
 
 
-    <div className="flex flex-row gap-4 h-5/6">
+    <div className="flex flex-col lg:flex-row gap-4 h-full lg:h-5/6">
       {/* Dictionary Word List */}
-      <div className="flex flex-col w-1/2 h-full space-y-5 border-1 rounded-2xl shadow-sm">
+      <div className="flex flex-col lg:w-1/2 h-full space-y-5 border-1 rounded-2xl shadow-sm">
         {dictionaryWords.length > 0 ? (
-          <ScrollArea className="h-full">
+          <ScrollArea className="h-full mx-1">
             <div className="grid gap-4 p-3 pb-4 m-1 rounded-md">
 
               <AnimatePresence>
@@ -143,12 +143,12 @@ function DictionaryPage() {
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ duration: 0.2, delay: index * 0.03, ease: "easeOut" }}
                     >
-                      <div className="border-b h-min-15 rounded flex flex-row justify-between items-center text-md px-5">
-                        <div className="flex flex-row flex-1 items-center gap-5">
+                      <div className="border-b h-min-15 rounded flex flex-row justify-between items-center text-md lg:px-5">
+                        <div className="flex flex-row flex-1 items-center">
                           <Accordion type="single" collapsible>
                             <AccordionItem value={`item-${index}`}>
                               <AccordionTrigger className="justify-between w-full cursor-pointer">
-                                <div className="flex flex-col">
+                                <div className="flex flex-col text-xs lg:text-sm">
                                   <div className="flex flex-row items-center gap-2">
                                     <div className="font-semibold text-base">{displayText}</div>
                                     <div className="italic text-muted-foreground">{details?.type}</div>
@@ -159,7 +159,7 @@ function DictionaryPage() {
 
                               {details?.context && (
                                 <AccordionContent>
-                                  <div className="py-2 text-base">{details.context}</div>
+                                  <div className="text-xs lg:text-sm">{details.context}</div>
                                 </AccordionContent>
                               )}
                               {!details && (
@@ -193,7 +193,7 @@ function DictionaryPage() {
       </div>
 
       {/* Word Pad / Flashcard Area */}
-      <div className="w-2/3 h-full">
+      <div className="lg:w-2/3 lg:h-full">
         <WordBoard />
       </div>
     </div>

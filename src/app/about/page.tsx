@@ -18,7 +18,7 @@ export default function AboutPage(): JSX.Element {
   return (
    <main className={`pt-10 max-w-4xl mx-auto prose prose-neutral ${geist.className}`}>
   <ScrollArea className="h-screen overflow-y-auto px-2">
-    <h1 className={`text-4xl sm:text-5xl md:text-6xl font-normal mb-3 ${dmSans.className}`}>
+    <h1 className={`text-4xl sm:text-5xl md:text-6xl font-normal mb-10 ${dmSans.className}`}>
       About
     </h1>
 

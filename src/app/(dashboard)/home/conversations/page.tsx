@@ -70,7 +70,7 @@ function ConversationsPage() {
   }
 
   return (
-    <div className="m-10 space-y-4">
+    <div className="m-5 lg:m-10 space-y-3 lg:space-y-5">
       <div>
 
         <UserGuidePopover
@@ -81,13 +81,13 @@ function ConversationsPage() {
         side="top"
         align="start"
         >
-          <h1 className={`text-3xl font-normal ${dmSans.className}`}>Conversations</h1>
+          <h1 className={`text-2xl lg:text-3xl font-normal ${dmSans.className}`}>Conversations</h1>
         </UserGuidePopover>
         </div>
 
 
 
-      <p className="text-muted-foreground">Conversation material from all levels</p>
+      <p className="text-sm lg:text-base text-muted-foreground">Conversation material from all levels</p>
       <div className="flex flex-row">
 
         <div className="flex flex-col space-y-1 mt-5">
