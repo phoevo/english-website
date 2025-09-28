@@ -3,9 +3,6 @@
 import { useState, useEffect } from 'react'
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import React from 'react'
-import { useSearchParams } from 'next/navigation'
-import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogTitle } from '@/components/ui/alert-dialog'
-import { CheckCircle } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -29,19 +26,7 @@ const dmSans = DM_Sans({ subsets: ['latin'] });
 
 export function SubscribeClient() {
   const {isSubscribed, user} = useUserStore();
-  const searchParams = useSearchParams();
-  const [showCancelMessage, setShowCancelMessage] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    const canceled = searchParams.get('canceled');
-
-    if (canceled === 'true') {
-      setShowCancelMessage(true);
-      const timer = setTimeout(() => setShowCancelMessage(false), 8000);
-      return () => clearTimeout(timer);
-    }
-  }, [searchParams]);
 
   const handleStudentSubscribe = async (plan: string) => {
     if (!user?.$id) {
@@ -91,23 +76,6 @@ export function SubscribeClient() {
   return (
     <ScrollArea className='w-full h-screen overflow-y-auto'>
       <div className='flex flex-col justify-center items-center'>
-        <AlertDialog open={showCancelMessage}>
-          <AlertDialogContent className={`bg-background border-red-400 ${dmSans.className}`}>
-            <div className="flex flex-col items-center text-center gap-2">
-              <CheckCircle className="h-6 w-6 text-red-500" />
-              <AlertDialogTitle className="text-red-500 text-2xl">Payment Canceled</AlertDialogTitle>
-              <AlertDialogDescription className="text-red-500 text-md mt-2">
-                You didn’t finish checking out. That’s okay, come back anytime when you’re ready!
-              </AlertDialogDescription>
-              <AlertDialogFooter>
-                <Button variant="default" className="cursor-pointer" onClick={() => setShowCancelMessage(false)}>
-                  Close
-                </Button>
-              </AlertDialogFooter>
-            </div>
-          </AlertDialogContent>
-        </AlertDialog>
-
         <div className="flex flex-col rounded-lg w-1/2 space-y-5 mt-5 h-auto ">
           <CardHeader>
             <CardTitle className={`text-3xl font-normal ${dmSans.className}`}>Subscribe</CardTitle>
@@ -191,8 +159,8 @@ export function SubscribeClient() {
                                   {p.desc.map((d, i) => (<li key={i}>{d}</li>))}
                                 </ul>
                               </div>
-                              <Button className='w-full cursor-pointer mt-3' onClick={() => handleStudentSubscribe(p.planName)}>
-                                Choose {p.title}
+                              <Button disabled className='w-full cursor-pointer mt-3' onClick={() => handleStudentSubscribe(p.planName)}>
+                                Disabled during beta
                               </Button>
                             </div>
                           ))}

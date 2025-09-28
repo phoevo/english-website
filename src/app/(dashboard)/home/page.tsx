@@ -16,17 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import News from "./News";
 import { DM_Sans } from "next/font/google";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogDescription,
-} from "@/components/ui/alert-dialog";
-import { CheckCircle, Calendar, Sword, Swords } from "lucide-react";
+import { Calendar, Sword, Swords } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
@@ -41,8 +31,6 @@ function getLastActive(value: unknown): string | null {
 
 function Page() {
   const { user, recentConversations, loading, dictionaryWords, friends, isTeacher } = useUserStore();
-  const searchParams = useSearchParams();
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const conversation = recentConversations[0]; // get the first one
   const firstFiveWords = [...dictionaryWords].reverse().slice(0, 5);
@@ -75,19 +63,6 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
     }
   }
 
-  useEffect(() => {
-    const success = searchParams.get('success');
-    const sessionId = searchParams.get('session_id');
-
-    if (success === 'true' && sessionId) {
-      setShowSuccessMessage(true);
-      // Hide the message after 10 seconds
-      const timer = setTimeout(() => setShowSuccessMessage(false), 10000);
-      return () => clearTimeout(timer);
-    }
-  }, [searchParams]);
-
-
   if (loading) {
     return (
       <div className="m-10 space-y-6 w-full">
@@ -102,24 +77,6 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
 
   return (
     <div className="w-full mx-auto px-4 sm:px-6 lg:px-10 mt-6">
-          <AlertDialog open={showSuccessMessage} onOpenChange={setShowSuccessMessage}>
-      <AlertDialogContent className={`bg-background border-green-400 ${dmSans.className}`}>
-        <AlertDialogHeader>
-          <AlertDialogTitle className="text-green-500 text-2xl flex items-center gap-2">
-            <CheckCircle className="h-5 w-5 text-green-500" />
-            Payment Successful!
-          </AlertDialogTitle>
-          <AlertDialogDescription className="text-foreground text-md mt-2 ">
-          Thanks for joining our premium community! Your support helps us continue developing powerful language learning tools. </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <Button variant="default" className="cursor-pointer" onClick={() => setShowSuccessMessage(false)}>
-            Close
-          </Button>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-
       <div className="flex flex-col gap-3">
         <div className="flex flex-col w-full lg:w-2/3 space-y-4 h-full">
             <UserGuidePopover
