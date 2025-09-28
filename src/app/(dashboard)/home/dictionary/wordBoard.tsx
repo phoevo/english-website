@@ -32,6 +32,7 @@ function WordBoard() {
 
   // New state for toggling decks visibility
   const [showMyDecks, setShowMyDecks] = useState(false);
+  type Deck = { words: string[] };
   const [selectedDeck, setSelectedDeck] = useState<Deck | null>(null);
 
 

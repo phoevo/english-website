@@ -72,16 +72,15 @@ export async function subscribeUser2(documentId: string, plan: string): Promise<
       JSON.stringify({ plan, documentId }),
       false,
       "/payments",
-      "POST"
+      "POST" as unknown as import("appwrite").ExecutionMethod
     );
 
     console.log("Full Appwrite response:", response);
     console.log("Response status:", response.status);
     console.log("Response errors:", response.errors);
     console.log("Response logs:", response.logs);
-    console.log("Raw response body:", response.response);
+    console.log("Raw response body:", response.responseBody);
     console.log("Response object keys:", Object.keys(response));
-    console.log("Response data:", response.responseBody || response.body || response.data);
 
     if (response.status !== "completed") {
       console.warn("Appwrite function did not complete successfully.");
@@ -90,7 +89,7 @@ export async function subscribeUser2(documentId: string, plan: string): Promise<
     }
 
     // Try to get response data from multiple possible fields
-    const responseData = response.responseBody || response.response || response.body;
+    const responseData = response.responseBody;
 
     if (!responseData) {
       console.warn("No response data found in function response.");
@@ -135,7 +134,7 @@ export async function fixSubscriptionStatus(userId: string): Promise<void> {
       JSON.stringify({ userId, action: "fix-subscription" }),
       false,
       "/fix-subscription",
-      "POST"
+      "POST" as unknown as import("appwrite").ExecutionMethod
     );
 
     console.log("Fix subscription response:", response);
@@ -216,10 +215,10 @@ export async function getUserPlan(): Promise<"free" | "pro"> {
       undefined,
       false,
       "/get-subscription", // Your function route
-      "GET"
+      "GET" as unknown as import("appwrite").ExecutionMethod
     );
 
-    const result = JSON.parse(response.responseBody || response.response || "{}");
+    const result = JSON.parse(response.responseBody || "{}");
 
     // List your paid plans here
     const paidPlans = ["Student Monthly", "Student Yearly"];
@@ -250,7 +249,7 @@ export async function unsubscribeUser2(userId: string) {
     payload,
     false,
     "/unsubscribe",
-    "POST",
+    "POST" as unknown as import("appwrite").ExecutionMethod,
     { "content-type": "application/json" }
   );
 
@@ -276,7 +275,7 @@ export async function deleteAccountServer(): Promise<void> {
     undefined,
     false,
     "/delete-account",
-    "POST"
+    "POST" as unknown as import("appwrite").ExecutionMethod
   );
 
   if (response.status !== "completed") {
@@ -300,7 +299,7 @@ export async function checkSubscriptionFromStripe(userEmail: string): Promise<bo
       JSON.stringify({ email: userEmail }),
       false,
       "/check-subscription", // Simple endpoint
-      "POST"
+      "POST" as unknown as import("appwrite").ExecutionMethod
     );
 
     if (response.status !== "completed") {
@@ -317,7 +316,7 @@ export async function checkSubscriptionFromStripe(userEmail: string): Promise<bo
 
 export async function syncUserSubscriptionStatusWithStripe(userId: string): Promise<void> {
   try {
-    const hasActiveSubscription = await checkSubscriptionStatusFromStripe(userId);
+    const hasActiveSubscription = await checkSubscriptionFromStripe(userId);
 
     // Update the user's isSubscribed field based on Stripe
     await databases.updateDocument(

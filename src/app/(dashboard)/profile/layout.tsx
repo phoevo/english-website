@@ -128,6 +128,8 @@ export default function ProfileLayout() {
         $id: updatedUser.$id,
         name: updatedUser.name,
         email: updatedUser.email,
+        isSubscribed: user?.isSubscribed ?? false,
+        isTeacher: user?.isTeacher ?? false,
       });
 
     } catch (err: unknown) {

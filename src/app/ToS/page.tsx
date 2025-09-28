@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "Terms of Service for using Synomilo.",
 };
 
-export default function TermsPage(): JSX.Element {
+export default function TermsPage() {
   const effectiveDate: string = "2025-09-10"; // update when needed
   const companyName: string = "Synomilo";
   const contactEmail: string = "synomilo@gmail.com";

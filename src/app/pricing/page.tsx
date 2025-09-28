@@ -30,7 +30,13 @@ import { motion } from "motion/react";
 const geist = Geist({ subsets: ['latin'] })
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
-const tiers = [
+type Tier = {
+  tutorBadge: string;
+  studentBadge: string;
+  features: { icon: React.ReactNode; text: string }[];
+};
+
+const tiers: Tier[] = [
   {
     tutorBadge: "Free",
     studentBadge: "Free",
@@ -70,7 +76,7 @@ const tiers = [
 ];
 
 
-function renderTier(tier, idx) {
+function renderTier(tier: Tier, idx: number) {
   const studentIsPro = tier.studentBadge === "Pro";
   const tutorIsPro = tier.tutorBadge === "Pro";
 
@@ -101,7 +107,7 @@ function renderTier(tier, idx) {
 
       <div className='flex items-center justify-start relative w-full md:w-2/3'>
         <ul className='text-xs md:text-sm space-y-2'>
-          {tier.features.map((f, i) => (
+{tier.features.map((f, i: number) => (
             <li key={i} className='flex flex-row gap-1 items-center'>
               {f.icon}
               <span className="text-center md:text-left">{f.text}</span>

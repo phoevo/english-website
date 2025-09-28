@@ -129,11 +129,11 @@ export default function ConversationPage() {
 
   return (
     <div className="flex flex-col w-full h-full">
-      {user?.isTeacher ? (
+      {conversation && (user?.isTeacher ? (
         <TeacherContentDisplay conversation={conversation} />
       ) : (
         <ContentDisplay conversation={conversation} />
-      )}
+      ))}
     </div>
   );
 }

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 /* eslint react/no-unescaped-entities: 0 */
-export default function PrivacyPage(): JSX.Element {
+export default function PrivacyPage() {
   const effectiveDate: string = "2025-09-10"; // Update to your actual effective date
   const companyName: string = "Synomilo";
   const contactEmail: string = "synomilo@gmail.com";

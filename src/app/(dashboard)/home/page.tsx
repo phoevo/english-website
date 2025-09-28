@@ -43,8 +43,12 @@ function Page() {
   // Teacher-specific data: recently active students
   const studentFriends = friends?.filter(f => !f.isTeacher) || [];
   const recentStudents = studentFriends
-    .filter(student => student.lastActive)
-    .sort((a, b) => new Date(b.lastActive || 0).getTime() - new Date(a.lastActive || 0).getTime())
+.filter((student) => (student as any).lastActive)
+    .sort(
+      (a, b) =>
+        new Date(((b as any).lastActive || 0)).getTime() -
+        new Date(((a as any).lastActive || 0)).getTime()
+    )
     .slice(0, 5);
 
   // Helper function for streak badge styling (same as in assignments page)
@@ -180,7 +184,7 @@ function Page() {
                   ) : (
                     <ul className="space-y-3">
                       {recentStudents.map((student, index) => {
-                        const lastActiveDate = student.lastActive ? new Date(student.lastActive) : null;
+const lastActiveDate = (student as any).lastActive ? new Date((student as any).lastActive) : null;
                         const timeAgo = lastActiveDate ?
                           Math.floor((Date.now() - lastActiveDate.getTime()) / (1000 * 60 * 60 * 24)) : null;
 

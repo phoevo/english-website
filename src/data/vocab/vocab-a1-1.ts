@@ -1,4 +1,4 @@
-export const vocabA1_1: Record<string, { text: string; type: string; definition: string; context: string }> = {
+export const vocabA1_1: Record<string, { text: string; type: string; definition: string; context?: string }> = {
   "hey": { text: "hey", type: "interjection", definition: "informal greeting", context: "Hey, how was your weekend?" },
   "how": { text: "how", type: "adverb", definition: "in what way" },
   "was": { text: "was", type: "verb", definition: "past tense of 'be'" },

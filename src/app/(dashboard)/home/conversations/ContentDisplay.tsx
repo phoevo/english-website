@@ -45,7 +45,7 @@ const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID
 
 interface Word {
   text: string;
-  type: WordTypeKey;
+  type: string;
   definition?: string;
   context?: string,
 }
@@ -207,7 +207,10 @@ React.useEffect(() => {
     const [isOpen, setIsOpen] = React.useState(false);
     const isMobile = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
 
-    const wordType = wordTypes[word.type];
+    const maybeKey = (Object.keys(wordTypes) as WordTypeKey[]).includes(word.type as WordTypeKey)
+      ? (word.type as WordTypeKey)
+      : undefined;
+    const wordType = maybeKey ? wordTypes[maybeKey] : undefined;
     if (!word?.text || !wordType) return null;
 
     const displayText = word.text.replace(/\/.*?\//g, "");

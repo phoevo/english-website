@@ -45,10 +45,16 @@ const baseColors = [
 
 const shades = ["100", "200", "300", "400", "500", "600", "700", "800", "900"]
 
-const defaultColorKeys = [
+type BackgroundColorKey = keyof typeof backgroundColors
+
+const defaultColorKeys: BackgroundColorKey[] = [
   "pink500", "red500", "green500", "blue500", "yellow400",
   "purple500", "orange500", "cyan700", "yellow400", "lime500", "teal500", "purple600"
 ]
+
+function isBgKey(key: string): key is BackgroundColorKey {
+  return key in backgroundColors
+}
 
 export default function CustomColors({ userId }: { userId: string }) {
   const { isSubscribed, customColors, setCustomColors } = useUserStore()
@@ -56,8 +62,8 @@ export default function CustomColors({ userId }: { userId: string }) {
 
   const displayColors =
     customColors?.length === wordTypeKeys.length
-      ? customColors.map(key => backgroundColors[key] || "bg-gray-500")
-      : defaultColorKeys.map(key => backgroundColors[key])
+      ? customColors.map((key) => (isBgKey(key) ? backgroundColors[key] : "bg-gray-500"))
+      : defaultColorKeys.map((key) => backgroundColors[key])
 
   const handleColorChange = (index: number, newColorClass: string) => {
     const match = newColorClass.match(/^bg-([a-z]+)-(\d{3})$/)

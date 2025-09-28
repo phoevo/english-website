@@ -5,69 +5,80 @@ export interface Word {
   text: string;
   type: string;
   definition?: string;
-  context?: string,
+  context?: string;
 }
 
-interface DialogueLine {
+export interface DialogueLine {
   speaker: string;
   words: Word[];
 }
 
+// Shape used by components
 export interface Conversation {
+  $id: string;
   title: string;
+  description?: string;
+  level: string;
+  audioFileId: string;
   content: string | DialogueLine[];
   isPro?: boolean;
 }
 
-
-export const parseDialogue = (rawDialogue: string, vocab: Record<string, { type: string; definition: string; context: string; }>) => {
+export const parseDialogue = (
+  rawDialogue: string,
+  vocab: Record<string, { type: string; definition: string; context: string }>
+): DialogueLine[] => {
   const parsedDialogue = rawDialogue
     .trim()
     .split("\n")
-    .map(line => {
+    .map((line) => {
       const [speaker, ...rest] = line.split(":");
       const text = rest.join(":").trim();
 
       const words = text
         .replace(/\s+/g, " ")
         .split(" ")
-        .map(rawWord => {
+        .map((rawWord) => {
           const cleaned = rawWord
             .toLowerCase()
             .replace(/[’]/g, "'")
-            .replace(/[.,!?—;:()"]/g, "");
+            .replace(/[.,!?—;:()\"]/g, "");
 
           const vocabEntry = vocab[cleaned];
 
           return {
-            text: rawWord.replace(/_/g," "),
+            text: rawWord.replace(/_/g, " "),
             type: vocabEntry?.type ?? "unknown",
             definition: vocabEntry?.definition,
             context: vocabEntry?.context,
-          };
+          } as Word;
         });
 
       return {
         speaker: speaker.trim(),
         words,
-      };
+      } as DialogueLine;
     });
 
   return parsedDialogue;
 };
 
-
-
-export const loadConversation = async (documentId: string) => {
+export const loadConversation = async (documentId: string): Promise<Conversation> => {
   const doc = await getConversationFromDB(documentId);
+  if (!doc) {
+    throw new Error("Conversation not found");
+  }
 
   const vocab = vocabIndex[doc.level] ?? {};
 
-  let parsedContent: unknown = doc.content;
+  let parsedContent: string | DialogueLine[];
 
   try {
-    parsedContent = JSON.parse(doc.content);
+    // Attempt to parse as pre-parsed dialogue structure
+    const parsed = JSON.parse(doc.content);
+    parsedContent = Array.isArray(parsed) ? (parsed as DialogueLine[]) : doc.content;
   } catch {
+    // Fallback to parsing our custom dialogue format
     parsedContent = parseDialogue(doc.content, vocab);
   }
 
@@ -79,7 +90,5 @@ export const loadConversation = async (documentId: string) => {
     level: doc.level,
     audioFileId: doc.audioFileId,
     isPro: doc.isPro,
-
   };
-
 };

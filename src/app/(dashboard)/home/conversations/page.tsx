@@ -50,18 +50,14 @@ function ConversationsPage() {
     return <div className="p-10 text-center text-red-500">{error}</div>;
   }
 
-  const filtered = conversations.filter(conv => {
-  // Filter by level as before
-  const levelMatches = !selectedLevel || selectedLevel === "All" || conv.level === selectedLevel;
-
-  // Check if conversation is premium
-  const isProConversation = conv.isPro;
-
-  // Teachers have access to all conversations, students need subscription for pro content
-  const userCanAccess = isTeacher || !isProConversation || user?.isSubscribed;
-
-  return levelMatches && userCanAccess;
-});
+  type CoverConvo = { $id: string; title: string; description?: string; level: string; audioFileId: string; isPro?: boolean };
+  const list = Array.isArray(conversations) ? (conversations as unknown as CoverConvo[]) : [];
+  const filtered = list.filter((conv) => {
+    const levelMatches = !selectedLevel || selectedLevel === "All" || conv.level === selectedLevel;
+    const isProConversation = !!conv.isPro;
+    const userCanAccess = isTeacher || !isProConversation || !!user?.isSubscribed;
+    return levelMatches && userCanAccess;
+  });
 
 
 

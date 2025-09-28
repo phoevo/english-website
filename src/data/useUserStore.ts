@@ -93,7 +93,7 @@ export const useUserStore = create<UserState>((set, get) => ({
     })
   );
 
-  set({ friends: fetchedFriends.filter((f): f is User => Boolean(f)) });
+  set({ friends: (fetchedFriends.filter(Boolean) as unknown) as User[] });
 },
 
 

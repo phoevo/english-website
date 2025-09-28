@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "About us and what we do",
 };
 
-export default function AboutPage(): JSX.Element {
+export default function AboutPage() {
 
 
   return (
