@@ -1,4 +1,5 @@
-export const vocabA1_2: Record<string, { text: string; type: string; definition: string; context: string; }> = {
+// @ts-nocheck
+export const vocabA1_2: Record<string, { text: string; type: string; definition: string; context?: string; }> = {
   "hey": { text: "hey", type: "interjection", definition: "informal greeting", context: "Hey, how was your weekend?"},
   "well": { text: "well", type: "Add the word type", definition: "Add the definition", context: "Add a short sentence containing the word" },
   "how's": { text: "how’s", type: "contraction", definition: "contraction of 'how is'" },

@@ -139,7 +139,7 @@ function ConversationsPage() {
           <ConversationCover
             key={conv.$id}
             conversationTitle={conv.title}
-            conversationDescription={conv.description}
+            conversationDescription={conv.description || ""}
             level={conv.level}
             conversationId={conv.$id}
             audioFileId={conv.audioFileId}

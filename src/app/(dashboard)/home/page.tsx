@@ -31,6 +31,13 @@ import { Badge } from "@/components/ui/badge";
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
+function getLastActive(value: unknown): string | null {
+  if (value && typeof value === 'object' && 'lastActive' in value) {
+    const v = (value as { lastActive?: unknown }).lastActive;
+    return typeof v === 'string' ? v : null;
+  }
+  return null;
+}
 
 function Page() {
   const { user, recentConversations, loading, dictionaryWords, friends, isTeacher } = useUserStore();
@@ -41,13 +48,13 @@ function Page() {
   const firstFiveWords = [...dictionaryWords].reverse().slice(0, 5);
 
   // Teacher-specific data: recently active students
-  const studentFriends = friends?.filter(f => !f.isTeacher) || [];
+const studentFriends = friends?.filter(f => !f.isTeacher) || [];
   const recentStudents = studentFriends
-.filter((student) => (student as any).lastActive)
+    .filter((student) => Boolean(getLastActive(student)))
     .sort(
       (a, b) =>
-        new Date(((b as any).lastActive || 0)).getTime() -
-        new Date(((a as any).lastActive || 0)).getTime()
+        new Date(getLastActive(b) || 0).getTime() -
+        new Date(getLastActive(a) || 0).getTime()
     )
     .slice(0, 5);
 
@@ -184,7 +191,8 @@ function Page() {
                   ) : (
                     <ul className="space-y-3">
                       {recentStudents.map((student, index) => {
-const lastActiveDate = (student as any).lastActive ? new Date((student as any).lastActive) : null;
+const lastActiveRaw = getLastActive(student);
+                        const lastActiveDate = lastActiveRaw ? new Date(lastActiveRaw) : null;
                         const timeAgo = lastActiveDate ?
                           Math.floor((Date.now() - lastActiveDate.getTime()) / (1000 * 60 * 60 * 24)) : null;
 
