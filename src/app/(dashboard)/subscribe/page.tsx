@@ -18,7 +18,7 @@ import { CheckCircle } from 'lucide-react'
   import { Geist, DM_Sans } from 'next/font/google'
   import Link from 'next/link'
   import { useUserStore } from '@/data/useUserStore'
-import { subscribeUser, subscribeUser2 } from '@/data/getData'
+import { subscribeUser2 } from '@/data/getData'
   import { toast } from 'sonner'
   // import { Card } from "@/components/ui/card"
   import { useRouter } from 'next/navigation';
@@ -51,7 +51,7 @@ import { subscribeUser, subscribeUser2 } from '@/data/getData'
 
   function SubscribePage() {
   // const [isVisible, setIsVisible] = useState(false);
-    const {isSubscribed, setSubscribed, user, isTeacher} = useUserStore();
+    const {isSubscribed, user, isTeacher} = useUserStore();
     const searchParams = useSearchParams();
     const [showCancelMessage, setShowCancelMessage] = useState(false);
 
@@ -100,26 +100,7 @@ import { subscribeUser, subscribeUser2 } from '@/data/getData'
     }
   };
 
-  // const handleTutorSubscribe = async () => {
-    if (!user?.$id) {
-      router.push('/register');
-      return;
-    }
-
-    try {
-      if (isSubscribed) {
-        toast.error("You're already subscribed");
-        return;
-      }
-
-      await subscribeUser(user.$id);
-      setSubscribed(true);
-      toast.success("You are now subscribed!");
-    } catch (err) {
-      console.error("Subscription failed", err);
-      toast.error("Failed to subscribe. Make sure you're logged in or try again later.");
-    }
-  // };
+  // handleTutorSubscribe removed during beta (no tutor purchases yet)
 
 
 
