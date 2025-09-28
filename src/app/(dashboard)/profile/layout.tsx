@@ -76,7 +76,7 @@ export default function ProfileLayout() {
         newPassword: '',
       });
     }
-  }, [user]);
+  }, [user, accountForm]);
 
   useEffect(() => {
     async function loadUser() {
