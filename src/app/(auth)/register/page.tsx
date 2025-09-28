@@ -124,7 +124,7 @@ export default function Register() {
 
   try {
     await fetchUser()  // <== Add this line to update Zustand user store
-  } catch (err) {
+  } catch {
     setError('Something went wrong. Please try logging in again.');
     setIsLoading(false);
     return;

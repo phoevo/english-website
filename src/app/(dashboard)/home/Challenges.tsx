@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useState } from "react";
 import {
-  Card, CardContent, CardDescription, CardHeader, CardTitle,
+  CardContent, CardDescription, CardHeader, CardTitle,
 } from "@/components/ui/card";
 
 import { Geist, DM_Sans } from "next/font/google";

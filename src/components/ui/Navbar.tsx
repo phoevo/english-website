@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { account } from "@/data/appwrite";
 import { Skeleton } from "./skeleton";
 import { useUserStore } from "@/data/useUserStore";
-import { Geist, DM_Sans } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import DailyTasks from "@/app/(dashboard)/home/dailyTasks";
 import Challenges from "@/app/(dashboard)/home/Challenges";
 import { LogOut, Sword, Swords } from "lucide-react";
@@ -17,10 +17,8 @@ import {
   HoverCardTrigger,
   HoverCardContent,
 } from "@/components/ui/hover-card";
-import { Flame } from "lucide-react";
 import { MobileRightSidebar } from "./MobileRightSidebar";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
 function getStreakColor(streak: number) {
@@ -40,7 +38,7 @@ function getStreakColor(streak: number) {
 
 
 const Navbar = () => {
-  const { user, loading, isSubscribed, setSubscribed, challengeCount, taskCount, streak, setStreak, friendsList } = useUserStore();
+  const { user, loading, isSubscribed, setSubscribed, challengeCount, taskCount, streak } = useUserStore();
   const router = useRouter();
 
 

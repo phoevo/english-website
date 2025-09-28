@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/card";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { CornerRightUp } from 'lucide-react';
 import { Geist } from "next/font/google";
 
 const geist = Geist({ subsets: ['latin'] });

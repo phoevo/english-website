@@ -13,25 +13,22 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
-import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { CreditCardIcon, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { Toaster } from '@/components/ui/sonner'
 import { Label } from '@/components/ui/label'
 import CustomColors from './CustomColors'
 import { AlertDialogHeader, AlertDialogFooter, AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogDescription, AlertDialogTitle, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { unsubscribeUser2, deleteAccountServer } from '@/data/getData'
 import { Geist } from 'next/font/google'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Client, Databases, Query } from 'appwrite'
+import { Query } from 'appwrite'
 
 const geist = Geist({ subsets: ['latin'] });
 
@@ -365,11 +362,11 @@ const handleUnsubscribe = async () => {
                   <AlertDialogHeader>
                     <AlertDialogTitle>Confirm account deletion</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This action is permanent. It will delete your account and associated data (including subscription status and progress). To confirm, type "delete" below.
+                      This action is permanent. It will delete your account and associated data (including subscription status and progress). To confirm, type &quot;delete&quot; below.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <div className="space-y-2">
-                    <Label htmlFor="confirm-delete" className="text-sm">Type "delete" to confirm</Label>
+                    <Label htmlFor="confirm-delete" className="text-sm">Type &quot;delete&quot; to confirm</Label>
                     <Input
                       id="confirm-delete"
                       placeholder="delete"
@@ -430,7 +427,7 @@ const handleUnsubscribe = async () => {
 
                   {isSubscribed && user ?(
                   <>
-                  <p className='text-sm text-muted-foreground'>Select a word type and select it&apos;s color. Save when you're done. <span className='text-red-500 font-normal m-0 text-sm'>
+                  <p className='text-sm text-muted-foreground'>Select a word type and select it&apos;s color. Save when you&apos;re done. <span className='text-red-500 font-normal m-0 text-sm'>
                     Certain background and text color combinations could make reading harder.</span>
                     </p>
 

@@ -24,7 +24,7 @@ export const updateRecentConversations = async ({
     });
 
 
-  } catch (err) {
-
+  } catch {
+    // no-op
   }
 };

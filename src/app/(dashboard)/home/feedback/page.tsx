@@ -4,8 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { BadgePlus, Bug, Lightbulb, MessageCircle, X, CheckCircle, Check, IterationCcw } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { BadgePlus, Bug, Lightbulb, MessageCircle, Check } from "lucide-react";
 import { useUserStore } from "@/data/useUserStore";
 import { databaseId, databases, feedbackCollectionId } from "@/data/appwrite";
 import UserGuidePopover from "../../userGuide";
@@ -27,8 +26,7 @@ const dmSans = DM_Sans({ subsets: ['latin'] });
 
 
 function FeedbackPage() {
-  const { user, loading, recentConversations, setRecentConversations, completeConversations } = useUserStore();
-  const [, setDeletingId] = useState<string | null>(null);
+  const { user, loading } = useUserStore();
 
   // Feedback form state
   const [selectedTag, setSelectedTag] = useState<
@@ -54,7 +52,7 @@ function FeedbackPage() {
     }
     setSubmitting(true);
     try {
-      const doc = await databases.createDocument(
+      await databases.createDocument(
         databaseId,
         feedbackCollectionId,
         ID.unique(),
@@ -71,7 +69,7 @@ function FeedbackPage() {
       setEmail("");
       setSelectedTag(null);
       setSubmitted(true);
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Failed to submit feedback:", e);
       setError("Failed to submit feedback. Please try again.");
     } finally {

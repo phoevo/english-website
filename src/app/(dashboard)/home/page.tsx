@@ -2,7 +2,7 @@
 
 import { useUserStore } from "@/data/useUserStore";
 import Link from "next/link";
-import DailyTasks from "./dailyTasks";
+// import DailyTasks from "./dailyTasks";
 import UserGuidePopover from "../userGuide";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -20,14 +20,13 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   AlertDialog,
-  AlertDialogTrigger,
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogFooter,
   AlertDialogTitle,
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog";
-import { CheckCircle, Users, Calendar, Sword, Swords } from "lucide-react";
+import { CheckCircle, Calendar, Sword, Swords } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const dmSans = DM_Sans({ subsets: ['latin'] });

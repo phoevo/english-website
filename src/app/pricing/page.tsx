@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react'
+// import { useState } from 'react'
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import React from 'react'
 import { Badge } from '@/components/ui/badge'
@@ -15,17 +15,16 @@ import {
 import { Geist, DM_Sans } from 'next/font/google'
 import Link from 'next/link'
 import { useUserStore } from '@/data/useUserStore'
-import { subscribeUser } from '@/data/getData'
-import { toast } from 'sonner'
+// import { subscribeUser } from '@/data/getData'
+// import { toast } from 'sonner'
 import {
   Card,
-  CardFooter,
 
 } from "@/components/ui/card"
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { ArrowDown, Book, Briefcase, CircleArrowDown, CircleArrowUp, GraduationCap, Notebook, User } from 'lucide-react'
-import { motion, AnimatePresence } from "motion/react";
+import { ArrowDown, Briefcase, CircleArrowDown, CircleArrowUp, Notebook, User } from 'lucide-react'
+import { motion } from "motion/react";
 
 
 const geist = Geist({ subsets: ['latin'] })
@@ -121,14 +120,7 @@ function renderTier(tier, idx) {
 
 
 function SubscribePage() {
-  const [isVisible, setIsVisible] = useState(false);
-  const {isSubscribed, setSubscribed, user, isTeacher} = useUserStore();
-
-  const router = useRouter();
-
-  function handleOptions(){
-    setIsVisible(!isVisible);
-  }
+  const {isSubscribed, user} = useUserStore();
 
 
 
@@ -157,31 +149,7 @@ function SubscribePage() {
     },
     ]
 
-  const earlyPaidOptions = [
-  {
-    title: "Supporter Monthly",
-    price: "3.99",
-    stripePriceId: "price_early_monthly_399",
-    info: "Lower pricing during rollout",
-    desc: [
-      "Locked-in rate as long as you're subscribed.",
-      "Full access to all Pro features.",
-      "Thank you for being part of the early community.",
-    ],
-  },
-  {
-    title: "Supporter Lifetime",
-    price: "79.99",
-    stripePriceId: "price_early_lifetime_7999",
-    info: "One payment, lifetime access",
-    desc: [
-      "Locked-in rate as long as you're subscribed.",
-      "Full access to all Pro features. Forever.",
-      "No subscriptions, no renewals.",
-      "Supports continued development.",
-    ],
-  },
-];
+// earlyPaidOptions removed (unused)
 
   const tutorPlans = [
   {

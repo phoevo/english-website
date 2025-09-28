@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     "We only collect a username and email. We do not use cookies or analytics. Local storage is used only for UI preferences.",
 };
 
+/* eslint react/no-unescaped-entities: 0 */
 export default function PrivacyPage(): JSX.Element {
   const effectiveDate: string = "2025-09-10"; // Update to your actual effective date
   const companyName: string = "Synomilo";

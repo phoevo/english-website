@@ -1,4 +1,4 @@
-import { BookOpen, BookMarked, ArrowUpRight, GraduationCap, IterationCcw, Users, ClipboardCheck, MessageCirclePlus } from "lucide-react"
+import { BookOpen, BookMarked, IterationCcw, ClipboardCheck, MessageCirclePlus } from "lucide-react"
 
 import {
   Sidebar,

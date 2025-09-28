@@ -4,7 +4,7 @@
   import React from 'react'
   import { useSearchParams } from 'next/navigation'
   import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogTitle } from '@/components/ui/alert-dialog'
-  import { CheckCircle, XCircle } from 'lucide-react'
+import { CheckCircle } from 'lucide-react'
   import { Badge } from '@/components/ui/badge'
   import { Button } from '@/components/ui/button'
   import {
@@ -18,98 +18,31 @@
   import { Geist, DM_Sans } from 'next/font/google'
   import Link from 'next/link'
   import { useUserStore } from '@/data/useUserStore'
-  import { subscribeUser, getSubscription, subscribeUser2 } from '@/data/getData'
+import { subscribeUser, subscribeUser2 } from '@/data/getData'
   import { toast } from 'sonner'
-  import {
-    Card,
-    CardFooter,
-
-  } from "@/components/ui/card"
+  // import { Card } from "@/components/ui/card"
   import { useRouter } from 'next/navigation';
   import { ScrollArea } from '@/components/ui/scroll-area'
-  import { ArrowDown, Book, Briefcase, CircleArrowDown, CircleArrowUp, GraduationCap, Notebook, User } from 'lucide-react'
+// import { Briefcase, CircleArrowDown, CircleArrowUp, Notebook, User } from 'lucide-react'
 
 
   const geist = Geist({ subsets: ['latin'] })
   const dmSans = DM_Sans({ subsets: ['latin'] });
 
-  const tiers = [
-    {
-      tutorBadge: "Free",
-      studentBadge: "Free",
-      features: [
-        { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor can assign a total of 12 Conversations to Student" },
-        { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student cannot review and practice any Conversation in their own time" },
-        { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor only has 2 active Student slots" },
-      ],
-    },
-    {
-      tutorBadge: "Free",
-      studentBadge: "Pro",
-      features: [
-        { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any Conversation to Student" },
-        { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Student can review and practice any Conversation in their own time" },
-        { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor only has 2 active Student slots" },
-      ],
-    },
-    {
-      tutorBadge: "Pro",
-      studentBadge: "Free",
-      features: [
-        { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any Conversation to Student" },
-        { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student cannot review and practice any Conversation in their own time" },
-        { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor has 5/15/30 active Student slots" },
-      ],
-    },
-    {
-      tutorBadge: "Pro",
-      studentBadge: "Pro",
-      features: [
-        { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any Conversation to Student" },
-        { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Student can review and practice any Conversation in their own time" },
-        { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor has 5/15/30 active Student slots" },
-      ],
-    },
-  ];
+  // tiers removed (unused)
 
-  function renderTier(tier, idx) {
+  /*
+  function renderTier(tier: { tutorBadge: string; studentBadge: string; features: { icon: JSX.Element; text: string }[] }, idx: number) {
     const studentIsPro = tier.studentBadge === "Pro";
     const tutorIsPro = tier.tutorBadge === "Pro";
 
     return (
       <CardContent key={idx} className='flex flex-row items-center justify-center'>
-
-        <div className='w-auto flex flex-col items-center'>
-          <div className='flex items-center justify-center relative p-5'>
-            <User strokeWidth={1} size={90} />
-            <Notebook className="absolute bottom-5 ml-10 bg-card z-10" size={30} />
-          </div>
-          <Badge className={studentIsPro ? "bg-pink-500" : ""}>{tier.studentBadge}</Badge>
-        </div>
-
-        <div className='w-auto flex flex-col items-center'>
-          <div className='flex items-center justify-center relative p-5'>
-            <User strokeWidth={1} size={90} />
-            <Briefcase className="absolute bottom-2 ml-10 bg-card z-10" size={40} />
-          </div>
-          <Badge className={tutorIsPro ? "bg-pink-500" : ""}>{tier.tutorBadge}</Badge>
-        </div>
-
-
-        <div className='flex items-center justify-start relative w-2/3'>
-          <ul className='text-sm space-y-2'>
-            {tier.features.map((f, i) => (
-              <li key={i} className='flex flex-row gap-1 items-center'>
-                {f.icon}
-                {f.text}
-              </li>
-            ))}
-          </ul>
-        </div>
-
+        ...
       </CardContent>
     );
   }
+  */
 
 
 
@@ -117,7 +50,7 @@
 
 
   function SubscribePage() {
-    const [isVisible, setIsVisible] = useState(false);
+  // const [isVisible, setIsVisible] = useState(false);
     const {isSubscribed, setSubscribed, user, isTeacher} = useUserStore();
     const searchParams = useSearchParams();
     const [showCancelMessage, setShowCancelMessage] = useState(false);
@@ -135,9 +68,9 @@
       }
     }, [searchParams]);
 
-    function handleOptions(){
-      setIsVisible(!isVisible);
-    }
+    // function handleOptions(){
+    //   setIsVisible(!isVisible);
+    // }
 
     const handleStudentSubscribe = async (plan: string) => {
     if (!user?.$id) {
@@ -167,7 +100,7 @@
     }
   };
 
-  const handleTutorSubscribe = async () => {
+  // const handleTutorSubscribe = async () => {
     if (!user?.$id) {
       router.push('/register');
       return;
@@ -186,7 +119,7 @@
       console.error("Subscription failed", err);
       toast.error("Failed to subscribe. Make sure you're logged in or try again later.");
     }
-  };
+  // };
 
 
 
@@ -216,65 +149,9 @@
       }
       ]
 
-    const earlyPaidOptions = [
-    {
-      title: "Supporter Monthly",
-      price: "3.99",
-      stripePriceId: "price_early_monthly_399",
-      info: "Lower pricing during rollout",
-      desc: [
-        "Locked-in rate as long as you're subscribed.",
-        "Full access to all Pro features.",
-        "Thank you for being part of the early community.",
-      ],
-    },
-    {
-      title: "Supporter Lifetime",
-      price: "79.99",
-      stripePriceId: "price_early_lifetime_7999",
-      info: "One payment, lifetime access",
-      desc: [
-        "Locked-in rate as long as you're subscribed.",
-        "Full access to all Pro features. Forever.",
-        "No subscriptions, no renewals.",
-        "Supports continued development.",
-      ],
-    },
-  ];
+    // earlyPaidOptions removed (unused)
 
-    const tutorPlans = [
-    {
-      title: "Tutor 5",
-      info: "For up to 5 students",
-      desc: [
-        "Ideal for Tutors starting out",
-        "$2 per Student"
-      ],
-      price: "9.99",
-      priceId: "price_tutor5_monthly"
-    },
-    {
-      title: "Tutor 15",
-      info: "For up to 15 students",
-      desc: [
-        "Best for active Tutors",
-        "$1.3 per Student"
-      ],
-      price: "19.99",
-      priceId: "price_tutor15_monthly"
-    },
-
-    {
-      title: "Tutor 30",
-      info: "For up to 30 students",
-      desc: [
-        "Designed for full-time Tutors",
-        "$1 per Student"
-      ],
-      price: "29.99",
-      priceId: "price_tutor30_monthly"
-    },
-  ];
+    // tutorPlans removed (unused)
 
 
 

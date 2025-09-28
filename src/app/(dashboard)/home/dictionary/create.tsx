@@ -84,14 +84,6 @@ export function Create({ children }: { children: ReactNode }) {
 
 if (!user) return null;
 
-    const newDeck = {
-      title: deckName.trim(),
-      type: deckType,
-      words: selectedWords,
-      userID: user.$id,
-    }
-
-
   return (
     <div className={geist.className}>
       <Popover open={isOpen} onOpenChange={setIsOpen}>

@@ -3,14 +3,13 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 
-import { databases, databaseId, usersCollectionId, account } from '@/data/appwrite'
+import { databases, databaseId, usersCollectionId } from '@/data/appwrite'
 import { useUserStore } from '@/data/useUserStore'
-import { Notebook } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 
 export default function Onboarding() {

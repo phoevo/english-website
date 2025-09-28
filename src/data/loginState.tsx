@@ -35,7 +35,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         const res = await account.get();
         setUser(res);
-      } catch (error) {
+      } catch {
         setUser(null);
       } finally {
         setLoading(false);

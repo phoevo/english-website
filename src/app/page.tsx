@@ -1,3 +1,4 @@
+/* eslint react/no-unescaped-entities: 0 */
 "use client";
 import ModeToggle from "@/components/ui/ModeToggle";
 import { Button } from "@/components/ui/button";
@@ -9,23 +10,16 @@ import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/c
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TestConversation } from "./(dashboard)/TestConversation";
 import TestDictionary from "./(dashboard)/TestDictionary";
-import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BookOpenCheck, Check, ChevronDown, EyeOff, GalleryHorizontalEnd, Info, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
+import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BookOpenCheck, Check, EyeOff, GalleryHorizontalEnd, Info, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
 import TestWordBoard from "./(dashboard)/TestWordBoard";
-import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { getUserCount, getConversationCount } from "@/data/getData";
 import { useEffect, useState } from "react";
 import {Card} from "@/components/ui/card"
 import TestConversationCover from "./(dashboard)/TestConversationCover";
 import TestFriends from "./(dashboard)/TestFriends";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import CountUp from 'react-countup';
 import TestTeacherPage from "./(dashboard)/TestTeacherPage";
-import ConversationCover from "./(dashboard)/home/conversations/ConversationCover";
 
 
 

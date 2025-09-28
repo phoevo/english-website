@@ -5,13 +5,12 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/data/useUserStore";
 import { Geist } from "next/font/google";
 import { databases, databaseId, assignmentsId } from "@/data/appwrite";
 import { ID, Query } from "appwrite";
 import { toast } from "sonner";
-import { Check, Plus, Send } from "lucide-react";
+import { Check, Send } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface AssignProps {

@@ -1,23 +1,23 @@
-import { Dot, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 type WordTypeKey = "noun" | "verb" | "adjective" | "pronoun" | "adverb" | "idiom" | "preposition" | "article" | "conjunction" | "interjection" | "determiner" | "contraction";
 type WordTypeData = { color: string; enabled: boolean; };
 
-const textColorMap: Record<WordTypeKey, string> = {
-  noun: "text-red-500",
-  verb: "text-green-500",
-  adjective: "text-blue-500",
-  pronoun: "text-yellow-500",
-  adverb: "text-pink-500",
-  idiom: "text-purple-500",
-  preposition: "text-indigo-500",
-  article: "text-cyan-500",
-  conjunction: "text-orange-500",
-  interjection: "text-lime-500",
-  determiner: "text-teal-500",
-  contraction: "text-rose-500",
-};
+// const textColorMap: Record<WordTypeKey, string> = {
+//   noun: "text-red-500",
+//   verb: "text-green-500",
+//   adjective: "text-blue-500",
+//   pronoun: "text-yellow-500",
+//   adverb: "text-pink-500",
+//   idiom: "text-purple-500",
+//   preposition: "text-indigo-500",
+//   article: "text-cyan-500",
+//   conjunction: "text-orange-500",
+//   interjection: "text-lime-500",
+//   determiner: "text-teal-500",
+//   contraction: "text-rose-500",
+// };
 
 
 interface Props {

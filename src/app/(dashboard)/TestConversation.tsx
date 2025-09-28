@@ -15,7 +15,6 @@ import {
 } from "@radix-ui/react-accordion";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { toast } from "sonner";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });

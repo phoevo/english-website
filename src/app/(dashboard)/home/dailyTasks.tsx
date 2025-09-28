@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useEffect, useState } from "react";
 import {
-  Card, CardContent, CardDescription, CardHeader, CardTitle,
+  CardContent, CardDescription, CardHeader, CardTitle,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
@@ -48,7 +48,7 @@ const DailyTasks = ({ children }: { children: ReactNode }) => {
   const [completed, setCompleted] = useState<{ [key: string]: boolean }>({});
   const [showWarnings, setShowWarnings] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const {taskCount,incrementTaskCount,setTaskCount} = useUserStore();
+  const {incrementTaskCount} = useUserStore();
 
   useEffect(() => {
     const stored = localStorage.getItem("daily-challenges");
@@ -148,8 +148,8 @@ const DailyTasks = ({ children }: { children: ReactNode }) => {
                         <AlertDialogTitle>Mark task as complete?</AlertDialogTitle>
                         <AlertDialogDescription>
                         Are you sure you&apos;ve completed this task? There&apos;s nothing checking your progress
-                        automatically, so it’s up to you to be honest and track it accurately. Only mark it complete if
-                        you’ve truly done it. <i className="text-red-500 not-italic">The counter can't be re-adjusted incase of error. </i>
+                        automatically, so it&rsquo;s up to you to be honest and track it accurately. Only mark it complete if
+                        you&rsquo;ve truly done it. <i className="text-red-500 not-italic">The counter can&apos;t be re-adjusted incase of error. </i>
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>

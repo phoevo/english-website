@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
 import { updateRecentConversations } from "@/data/updateRecentConversations";
-import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -12,7 +11,6 @@ import {
 } from "@/components/ui/card"
 import { useUserStore } from "@/data/useUserStore";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Send, LoaderCircle } from "lucide-react";
 import Assign from "./Assign";
 import { useRouter } from "next/navigation";
