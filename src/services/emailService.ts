@@ -49,7 +49,7 @@ export const sendWelcomeEmail = async (data: WelcomeEmailData) => {
       }),
       false,
       '/send-email',
-      'POST',
+      'POST' as unknown as import('appwrite').ExecutionMethod,
       { 'content-type': 'application/json' }
     );
 
@@ -57,7 +57,7 @@ export const sendWelcomeEmail = async (data: WelcomeEmailData) => {
       throw new Error('Function execution did not complete successfully');
     }
 
-    const result = JSON.parse(res.responseBody || res.response || '{}');
+    const result = JSON.parse(res.responseBody || '{}');
     if (result?.error) throw new Error(result.error);
 
     console.log('✅ Welcome email sent:', result);
@@ -90,7 +90,7 @@ export const sendPasswordResetEmail = async (data: WelcomeEmailData) => {
       }),
       false,
       '/send-email',
-      'POST',
+      'POST' as unknown as import('appwrite').ExecutionMethod,
       { 'content-type': 'application/json' }
     );
 
@@ -98,7 +98,7 @@ export const sendPasswordResetEmail = async (data: WelcomeEmailData) => {
       throw new Error('Function execution did not complete successfully');
     }
 
-    const result = JSON.parse(res.responseBody || res.response || '{}');
+    const result = JSON.parse(res.responseBody || '{}');
     if (result?.error) throw new Error(result.error);
 
     console.log('✅ Password reset email sent:', result);

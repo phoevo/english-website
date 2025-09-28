@@ -26,7 +26,7 @@ const ChallengeWatcher = () => {
         });
       }
     });
-  }, [completeConversations, dictionaryWords, challengeCount]);
+  }, [completeConversations, dictionaryWords, challengeCount, incrementChallengeCount]);
 
   return null;
 };
