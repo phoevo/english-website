@@ -28,7 +28,7 @@ const geist = Geist({ subsets: ['latin'] })
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
 export function SubscribeClient() {
-  const {isSubscribed, user, isTeacher} = useUserStore();
+  const {isSubscribed, user} = useUserStore();
   const searchParams = useSearchParams();
   const [showCancelMessage, setShowCancelMessage] = useState(false);
   const router = useRouter();
