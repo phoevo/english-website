@@ -170,8 +170,12 @@ React.useEffect(() => {
   setWordTypes(prev => {
     const updated = { ...prev };
     keys.forEach((key, index) => {
-      if (customColors[index]) {
-        updated[key].colorKey = customColors[index];
+      const val = customColors[index];
+      if (val) {
+        // Ensure the color key exists on backgroundColors before assigning
+        if (val in backgroundColors) {
+          updated[key].colorKey = val as BackgroundColorKey;
+        }
       }
     });
     return updated;
