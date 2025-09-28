@@ -2,7 +2,7 @@ import { Check } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 type WordTypeKey = "noun" | "verb" | "adjective" | "pronoun" | "adverb" | "idiom" | "preposition" | "article" | "conjunction" | "interjection" | "determiner" | "contraction";
-type WordTypeData = { color: string; enabled: boolean; };
+type WordTypeData = { enabled: boolean; };
 
 // const textColorMap: Record<WordTypeKey, string> = {
 //   noun: "text-red-500",
