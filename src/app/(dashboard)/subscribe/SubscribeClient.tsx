@@ -54,7 +54,7 @@ export function SubscribeClient() {
       price: "4.99",
       info: "Standard Pricing",
       desc: [
-        "Ideal for trying out Synomilo.",
+        "Ideal for trying out Synomilo, or commiting to a short language learning journey.",
         "Pro access, billed monthly.",
         "Flexible; cancel anytime.",
       ],
@@ -75,7 +75,7 @@ export function SubscribeClient() {
   return (
     <ScrollArea className='w-full h-screen overflow-y-auto'>
       <div className='flex flex-col justify-center items-center'>
-        <div className="flex flex-col rounded-lg w-1/2 space-y-5 mt-5 h-auto ">
+        <div className="flex flex-col rounded-lg w-full lg:w-1/2 space-y-5 mt-5 h-auto ">
           <CardHeader>
             <CardTitle className={`text-3xl font-normal ${dmSans.className}`}>Subscribe</CardTitle>
             <CardDescription className='text-md'>
@@ -85,12 +85,12 @@ export function SubscribeClient() {
         </div>
 
         <div className='flex flex-row justify-center w-full mt-5 gap-15'>
-          <div className="flex flex-col border-2 p-10 rounded-lg space-y-5 w-1/2 h-auto">
+          <div className="flex flex-col border-2 p-0 lg:p-10 rounded-lg space-y-5 w-full lg:w-1/2 h-auto">
             <CardHeader />
             <CardContent>
               <div className='flex flex-col gap-5 w-full'>
                 <div className='flex flex-col md:flex-col lg:flex-row gap-5'>
-                  <div className='flex flex-col justify-between p-2 border-2 rounded-lg h-65 w-full text-muted-foreground'>
+                  <div className='flex flex-col justify-between p-2 border-2 rounded-lg h-60 lg:h-80 w-full text-muted-foreground'>
                     <div className='flex flex-col items-center flex-grow'>
                       <Badge className='mb-4'>Free</Badge>
                       <div className='flex justify-center'>
@@ -117,11 +117,11 @@ export function SubscribeClient() {
                     )}
                   </div>
 
-                  <div className='flex flex-col justify-between p-2 border-1 rounded-lg h-65 w-full shadow-[0_0_1px_1px] shadow-pink-500'>
+                  <div className='flex flex-col justify-center p-0 lg:p-2 border-1 rounded-lg h-60 lg:h-80 w-full shadow-[0_0_1px_1px] shadow-pink-500'>
                     <div className='flex flex-col items-center flex-grow'>
                       <Badge className='mb-4 bg-pink-500 text-white'>Pro</Badge>
                       <div className='flex justify-center items-center'>
-                        <ul className='text-sm text-muted-foreground  list-disc marker:text-pink-500 space-y-1 w-full'>
+                        <ul className='text-sm text-muted-foreground list-disc marker:text-pink-500 space-y-1 w-full'>
                           <li>Everything in Free</li>
                           <li>All Conversations</li>
                           <li>Audio for conversations</li>
@@ -136,7 +136,7 @@ export function SubscribeClient() {
                           {isSubscribed ? "Already subscribed. Change plan?" : "See Student Plans"}
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className={`min-w-2/3 h-auto p-10 ml-2 ${geist.className}`}>
+                      <DialogContent className={`w-full lg:min-w-2/3 h-auto p-10 ml-2 ${geist.className}`}>
                         <DialogHeader>
                           <DialogHeader>
                             <DialogTitle className='text-2xl'>See Student Plans</DialogTitle>
@@ -148,17 +148,17 @@ export function SubscribeClient() {
                             </DialogDescription>
                           </DialogHeader>
                         </DialogHeader>
-                        <div className='flex flex-row w-full gap-5'>
+                        <div className='flex flex-col lg:flex-row h-auto lg:w-auto gap-5'>
                           {paidOptions.map((p) => (
-                            <div key={p.planName} className='flex flex-col justify-between p-2 border-2 rounded-lg h-65 w-full'>
+                            <div key={p.planName} className='flex flex-col justify-between p-2 border-2 rounded-lg h-auto lg:h-80 lg:w-1/2'>
                               <div className='flex flex-col items-center flex-grow'>
-                                <Badge className='mb-4'>{p.title}</Badge>
-                                <div className='text-3xl font-bold'>${p.price}</div>
-                                <ul className='text-sm text-muted-foreground list-disc marker:text-popover-foreground space-y-1 mt-3'>
+                                <Badge className='mb-4 bg-pink-500'>{p.title} - ${p.price}</Badge>
+                                <div className='text-sm m-0 lg:mb-3 text-foreground'>{p.info}</div>
+                                <ul className='text-sm text-muted-foreground list-disc marker:text-pink-500 space-y-1 mt-3 px-10'>
                                   {p.desc.map((d, i) => (<li key={i}>{d}</li>))}
                                 </ul>
                               </div>
-                              <Button disabled className='w-full cursor-pointer mt-3' onClick={() => handleStudentSubscribe(p.planName)}>
+                              <Button disabled variant={'outline'} className='w-full cursor-pointer mt-3' onClick={() => handleStudentSubscribe(p.planName)}>
                                 Disabled during beta
                               </Button>
                             </div>

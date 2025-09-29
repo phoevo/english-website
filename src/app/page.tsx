@@ -316,7 +316,8 @@ useEffect(() => {
           viewport={{ once: true, margin: "-50px" }}
           transition={transition2}
         >
-          <div className="flex flex-col m-2 lg:flex-row justify-end lg:mr-12 lg:gap-10">
+          <div className="flex flex-col m-2 lg:flex-row justify-center lg:pl-40 lg:gap-10">
+
 
           <TestConversation />
 

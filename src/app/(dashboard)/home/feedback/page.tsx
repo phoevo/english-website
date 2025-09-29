@@ -218,8 +218,9 @@ function FeedbackPage() {
             <div className="pt-2">
              <Button
                 type="submit"
-                disabled={submitting}
+                disabled={submitted || submitted}
                 className="cursor-pointer transition-all duration-500 inline-flex items-center justify-center"
+
               >
                 {submitting ? (
                   "Submitting..."

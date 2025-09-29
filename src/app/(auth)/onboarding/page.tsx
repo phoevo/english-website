@@ -62,13 +62,13 @@ export default function Onboarding() {
           <p>During the beta, you will be able to freely switch between the free and pro tiers in the navigation menu.</p>
           <div className='flex flex-row gap-2 items-center'>
           <p>As so</p>
-          <div className="flex flex-row w-20 rounded-full border-1 m-1">
+          <div className="flex flex-row w-20 rounded-full border-1 m-1 shadow-md">
                   <Badge
                     onClick={() => setIsPro(false)}
                     className={`flex-1 text-center rounded-full cursor-pointer transition ${
                       !isPro
-                        ? "bg-foreground text-background"
-                        : "bg-background text-muted-foreground"
+                      ? "bg-foreground text-background"
+                      : "bg-background text-muted-foreground"
                     }`}
                   >
                     Free
@@ -78,13 +78,14 @@ export default function Onboarding() {
                   onClick={() => setIsPro(true)}
                     className={`flex-1 text-center rounded-full cursor-pointer transition ${
                       isPro
-                        ? "bg-pink-500 text-foreground"
-                        : "bg-background text-gray-500"
+                      ? "bg-pink-500 text-foreground"
+                      : "bg-background text-gray-500"
                     }`}
                   >
                     Pro
                   </Badge>
                 </div>
+
                 </div>
           <p>For now, continue with a student account.</p>
         </CardContent>
@@ -99,11 +100,11 @@ export default function Onboarding() {
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="student" id="student" className='cursor-pointer' />
-            <Label className="text-md" htmlFor="student">Student </Label>
+            <Label className="text-md cursor-pointer" htmlFor="student">Student </Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem disabled value="tutor" id="tutor" className='cursor-pointer' />
-            <Label className="text-md text-muted-foreground" htmlFor="tutor">Tutor (coming soon)</Label>
+            <Label className="text-md text-muted-foreground cursor-not-allowed" htmlFor="tutor">Tutor (coming soon)</Label>
           </div>
         </RadioGroup>
 
