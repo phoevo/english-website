@@ -296,7 +296,7 @@ useEffect(() => {
 
 
       <motion.div
-      className="hidden lg:block z-20 sticky top-30 lg:top-42 self-start m-2 lg:m-4 lg:mb-33 text-md lg:text-3xl font-semibold"
+      className="hidden lg:block z-20 sticky top-30 lg:top-42 self-start m-2 lg:m-4 lg:mb-33 text-md lg:text-2xl font-semibold"
       initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-200px"}}
@@ -377,7 +377,7 @@ useEffect(() => {
 
         </motion.div>
 
-        <div className="hidden lg:block z-20 sticky top-30 left-43 text lg:left-0 lg:top-52 self-start m-4 mb-23 lg:text-3xl font-semibold">
+        <div className="hidden lg:block z-20 sticky top-30 left-43 text lg:left-0 lg:top-52 self-start m-4 mb-23 lg:text-2xl font-semibold">
         <span className="px-1 text-pink-500 text">
           2.
         </span>
@@ -399,7 +399,7 @@ useEffect(() => {
         </motion.div>
 
 
-        <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-62 lg:mb-14 self-start m-4 lg:text-3xl font-semibold">
+        <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-62 lg:mb-14 self-start m-4 lg:text-2xl font-semibold">
         <span className="px-1 text-pink-500">
           3.
         </span>
@@ -538,7 +538,7 @@ useEffect(() => {
 
 
 
- <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-72 self-start m-4 lg:text-3xl font-semibold">
+ <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-72 self-start m-4 lg:text-2xl font-semibold">
     <span className="px-1 text-pink-500">
       4.
     </span>

@@ -43,6 +43,8 @@ module.exports = async function handleSendEmail({ req, res, client, adminClient 
                   <p>Thank you for signing up to Synomilo. We're excited to have you on board as part of our early access.</p>
 
                   <h3>Here's what you can do next:</h3>
+
+                  <p>Follow the link back to Synomilo: https://synomilo.com/home</p>
                   <ul>
                     <li>Read the guides on each page</li>
                     <li>Browse our learning materials</li>
