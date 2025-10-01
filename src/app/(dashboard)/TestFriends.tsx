@@ -63,8 +63,8 @@ function TestFriends() {
     <motion.div
       whileHover={{ scale: 1.0080 }}
       transition={{ duration: 0.1 }}
-     className="bg-muted w-100 lg:w-full p-5 rounded-lg">
-    <Card className={`p-5 w-full h-auto bg-card shadow-md ${geist.className}`}>
+     className=" w-100 lg:w-full rounded-lg">
+    <Card className={`p-5 w-full border dark:border-2 h-auto bg-card shadow-lg ${geist.className}`}>
       <Tabs defaultValue="friends" className="w-full">
         <TabsList className="w-full mb-4">
           <TabsTrigger className="cursor-pointer" value="friends">Connections</TabsTrigger>

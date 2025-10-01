@@ -82,9 +82,7 @@ export default function Register() {
       data.password,
       data.username
     );
-    console.log('✅ Account created:', user);
   } catch (err) {
-    console.error('❌ Failed to create account:', err);
     setError('Failed to create account. Email may already be in use.');
     setIsLoading(false);
     return;
@@ -92,30 +90,25 @@ export default function Register() {
 
   try {
     await account.createEmailPasswordSession(data.email, data.password);
-    console.log('✅ Session created');
   } catch (err) {
-    console.error('❌ Failed to create session:', err);
     setError('Account created, but failed to sign in. Try logging in manually.');
     setIsLoading(false);
     return;
   }
 
-  // Create and store a JWT so we can call our function that requires user auth
+
   try {
     const jwt = await account.createJWT();
     localStorage.setItem('jwt', jwt.jwt);
   } catch (err) {
-    console.error('⚠️ Failed to create JWT (welcome email will be skipped):', err);
   }
 
   try {
     await ensureUserDocument();
-    console.log('✅ User document ensured');
   } catch (err) {
-    console.error('⚠️ Failed to create user document:', err);
   }
 
-  // Fire-and-forget welcome email; don't block the UX if it fails
+
   try {
     await sendWelcomeEmail({ userEmail: data.email, userName: data.username });
   } catch (err) {
@@ -123,7 +116,7 @@ export default function Register() {
   }
 
   try {
-    await fetchUser()  // <== Add this line to update Zustand user store
+    await fetchUser()
   } catch {
     setError('Something went wrong. Please try logging in again.');
     setIsLoading(false);
@@ -149,7 +142,7 @@ export default function Register() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid gap-4">
-              {/* Username Field */}
+
               <FormField
                 control={form.control}
                 name="username"
@@ -164,7 +157,6 @@ export default function Register() {
                 )}
               />
 
-              {/* Email Field */}
               <FormField
                 control={form.control}
                 name="email"
@@ -185,7 +177,6 @@ export default function Register() {
                 )}
               />
 
-              {/* Password Field */}
               <FormField
                 control={form.control}
                 name="password"
@@ -205,7 +196,7 @@ export default function Register() {
                 )}
               />
 
-              {/* Confirm Password Field */}
+
               <FormField
                 control={form.control}
                 name="confirmPassword"
@@ -227,13 +218,13 @@ export default function Register() {
                 )}
               />
 
-              {/* Terms and Privacy Policy Agreement */}
+
               <FormField
                 control={form.control}
                 name="acceptedTerms"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="flex flex-row items-start space-x-3">
+                    <div className="flex flex-row items-center justify-center my-5 space-x-3">
                       <FormControl>
                         <Checkbox
                           checked={field.value}

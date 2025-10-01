@@ -184,12 +184,12 @@ export function TestConversation() {
   };
 
   return (
-    <div className="flex p-1 flex-col lg:flex-row bg-muted rounded-lg lg:m-0">
+    <div className="flex flex-col lg:flex-row rounded-lg mx-5 lg:m-0">
       {/* Conversation section */}
-      <div className="m-5 p-4 mt-5 border rounded-xl bg-card shadow-sm flex-1">
-        <h2 className="font-semibold mb-8 ">Conversation Title</h2>
+      <div className=" border dark:border-2 rounded-xl bg-card shadow-lg flex-1">
+        <h2 className="font-base border-b flex-1 mb-10 p-4 text-lg">Conversation Title</h2>
         {sampleConversation.map((line, i) => (
-          <div key={i} className="flex mb-6 flex-wrap lg:flex-nowrap">
+          <div key={i} className="flex mb-6 px-4 flex-wrap lg:flex-nowrap">
             <div className="font-semibold text-sm lg:text-base pr-10 lg:pr-4 mr-4 lg:border-r min-w-[100px] text-right">
               {line.speaker}
             </div>
@@ -199,8 +199,8 @@ export function TestConversation() {
       </div>
 
       {/* Sidebar controls */}
-      <div className="p-5 border-t lg:border-t-0 lg:border-l w-full lg:w-60">
-        <div className="flex flex-col items-center gap-4 bg-card p-4 rounded-lg shadow-md">
+      <div className="p-5 w-full lg:w-60">
+        <div className="flex flex-col border dark:border-2 items-center gap-4 bg-card p-4 rounded-lg shadow-lg">
           <span className="flex gap-2 items-center">
             <div className="rounded px-2 font-semibold ">Hover</div>
             <Switch checked={hoverEnabled} onCheckedChange={setHoverEnabled} />

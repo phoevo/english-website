@@ -1,6 +1,6 @@
   import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
   import { Button } from '@/components/ui/button';
-  import { ScrollArea } from '@radix-ui/react-scroll-area';
+  import { ScrollArea } from '@/components/ui/scroll-area';
   import { X } from 'lucide-react';
   import { AnimatePresence, motion } from 'motion/react';
   import React from 'react';
@@ -30,13 +30,13 @@
 
   export function TestDictionary() {
     return (
-      <div className="flex flex-col bg-muted p-4 rounded-lg w-full lg:w-120">
+      <div className="flex flex-col rounded-lg w-full lg:w-120">
 
         <div className="flex flex-row p-3">
-        <div className="p-2 w-full border rounded-xl bg-card shadow-md">
+        <div className="p-2 w-full border dark:border-2 rounded-xl bg-card shadow-lg">
           <h2 className="text-xl font-semibold mb-4 p-3">Saved Words</h2>
         {dictionaryWords.length > 0 ? (
-          <ScrollArea className="h-100 overflow-y-scroll">
+          <ScrollArea className="h-100  border-x p-0 dark:border-x rounded-md">
             <div className="grid gap-3">
               <AnimatePresence>
                 {[...dictionaryWords].map((entry, index) => {

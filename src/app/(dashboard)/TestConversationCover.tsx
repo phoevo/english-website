@@ -30,9 +30,9 @@ function TestConversationCover() {
     <motion.div
       whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.1 }}
-      className="w-80 bg-muted p-5 rounded-lg"
+      className="w-80 rounded-lg"
     >
-      <Card className="bg-card w-auto h-80">
+      <Card className="bg-card w-auto h-80 border dark:border-2 shadow-lg">
         <CardHeader>
           <CardTitle className={`lex justify-between items-start gap-2 ${geist.className}`}>
             <p className='w-auto'>Conversation Title</p>
@@ -40,7 +40,7 @@ function TestConversationCover() {
             <div className="flex flex-col gap-1 items-end">
               <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                 <PopoverTrigger asChild>
-                  <Badge className="cursor-pointer"><Send size={14} /> Assign</Badge>
+                  <Badge className="cursor-pointer shadow-md"><Send size={14} /> Assign</Badge>
                 </PopoverTrigger>
                 <PopoverContent className={`w-auto space-y-2 ${geist.className}`}>
                   {dummyStudents.map((student) => (

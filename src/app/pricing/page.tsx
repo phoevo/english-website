@@ -41,36 +41,36 @@ const tiers: Tier[] = [
     tutorBadge: "Free",
     studentBadge: "Free",
     features: [
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor can only assign up to 12 conversations (Student in Free)" },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can review only 12 conversations in their own time." },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor limited to 2 active student slots" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can view assigned or free conversations. Limited features." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor limited to 2 active student slots." },
     ],
   },
   {
     tutorBadge: "Free",
     studentBadge: "Pro",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation" },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Student can review and practice anytime" },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor still limited to 2 active student slots" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Student can view every conversation with pro features." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor still limited to 2 active student slots." },
     ],
   },
   {
     tutorBadge: "Pro",
     studentBadge: "Free",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation" },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can’t review or practice in their own" },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can manage unlimited active students" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can only view assigned conversations or free conversations. Limited features." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can manage unlimited active students." },
     ],
   },
   {
     tutorBadge: "Pro",
     studentBadge: "Pro",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation" },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Student can review and practice anytime" },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can manage unlimited active students" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Student can view every conversation with pro features." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can manage unlimited active students." },
     ],
   },
 ];
@@ -202,7 +202,7 @@ function SubscribePage() {
 
     <div className="flex flex-col md:flex-col gap-2 items-center justify-center mt-10 rounded-lg w-full h-auto ">
       <h1 className='text-3xl md:text-6xl font-normal text-center'>Choose the plan that best suits your needs</h1>
-      <p className='text-lg md:text-2xl text-muted-foreground text-center'>Early access pricing — lower rates while we grow.</p>
+      <p className='text-lg md:text-2xl text-muted-foreground text-center'>Early access pricing, lower rates while we grow.</p>
       <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -234,7 +234,7 @@ function SubscribePage() {
       <Badge className='mb-4'>Free</Badge>
       <div className='flex justify-center'>
       <ul className='text-sm list-disc marker:text-popover-foreground space-y-1 justify-start'>
-        <li>Access to 12 Conversations</li>
+        <li>8 conversations, 2 per level, A1-B2</li>
         <li>Hover</li>
         <li>Dictionary and Word Board</li>
         <li>Streaks</li>

@@ -254,8 +254,8 @@ React.useEffect(() => {
         <HoverCard
           open={isMobile ? isOpen : undefined}
           onOpenChange={isMobile ? setIsOpen : undefined}
-          openDelay={100}
-          closeDelay={0}
+          openDelay={200}
+          closeDelay={10}
         >
           <HoverCardTrigger asChild>
             <span

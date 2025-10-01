@@ -87,7 +87,6 @@ export const useUserStore = create<UserState>((set, get) => ({
         const userDoc = await getUserById(id);
         return userDoc;
       } catch (err) {
-        console.error("Error fetching friend:", id, err);
         return null;
       }
     })

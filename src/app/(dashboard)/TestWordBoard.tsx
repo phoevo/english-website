@@ -31,7 +31,7 @@ function FakeCreate({ children }: { children: React.ReactNode }) {
       </div>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-80 p-5 rounded-3xl shadow-lg border bg-background z-50">
+        <div className="absolute top-full left-0 mt-2 w-80 p-5 rounded-3xl border dark:border-2 shadow-lg bg-card z-50">
           <h3 className="text-base font-semibold mb-1">Create</h3>
           <p className="text-sm text-muted-foreground mb-3">
             Create your own custom flashcard deck
@@ -76,8 +76,8 @@ function FakeCreate({ children }: { children: React.ReactNode }) {
 }
 function TestWordBoard() {
   return (
-    <div className='h-auto bg-muted p-6 rounded-md '>
-      <Card className='w-full h-full bg-card border border-muted rounded-md flex flex-col'>
+    <div className='h-auto shadow-lg rounded-md '>
+      <Card className='w-full h-full bg-card border dark:border-2 rounded-md flex flex-col'>
         <CardHeader className='flex flex-col'>
           <CardTitle className='text-2xl'>Word Board</CardTitle>
           <CardDescription>A more in-depth look at your Dictionary</CardDescription>

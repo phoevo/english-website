@@ -358,7 +358,9 @@ const handleUnsubscribe = async () => {
             <CardContent>
               <AlertDialog open={deleteDialogOpen} onOpenChange={(open) => { setDeleteDialogOpen(open); if (!open) setConfirmText(""); }}>
                 <AlertDialogTrigger asChild>
-                  <Button variant={'destructive'} className="cursor-pointer">Delete account</Button>
+                  <Button variant={'destructive'} className="cursor-pointer" disabled={isDeleting}>
+                    {isDeleting ? 'Deleting…' : 'Delete account'}
+                  </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent className={geist.className}>
                   <AlertDialogHeader>
@@ -385,7 +387,8 @@ const handleUnsubscribe = async () => {
                       variant="destructive"
                       className="cursor-pointer"
                       disabled={!canConfirmDelete || isDeleting}
-                      onClick={async () => {
+                      onClick={async (e) => {
+                        e.preventDefault();
                         if (!canConfirmDelete || isDeleting) return;
                         await handleDeleteAccount();
                       }}

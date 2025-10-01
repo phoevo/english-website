@@ -95,7 +95,7 @@ export function SubscribeClient() {
                       <Badge className='mb-4'>Free</Badge>
                       <div className='flex justify-center'>
                         <ul className='text-sm list-disc marker:text-popover-foreground space-y-1 justify-start'>
-                          <li>Access to 12 Conversations</li>
+                          <li>8 conversations, 2 per level, A1–B2</li>
                           <li>Hover</li>
                           <li>Dictionary and Word Board</li>
                           <li>Streaks</li>
@@ -136,7 +136,7 @@ export function SubscribeClient() {
                           {isSubscribed ? "Already subscribed. Change plan?" : "See Student Plans"}
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className={`w-full lg:min-w-2/3 h-auto p-10 ml-2 ${geist.className}`}>
+                      <DialogContent className={`w-full lg:min-w-1/2 h-auto p-10 ml-2 ${geist.className}`}>
                         <DialogHeader>
                           <DialogHeader>
                             <DialogTitle className='text-2xl'>See Student Plans</DialogTitle>
