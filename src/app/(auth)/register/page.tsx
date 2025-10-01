@@ -76,13 +76,13 @@ export default function Register() {
   setError(null);
 
   try {
-    const user = await account.create(
+    await account.create(
       ID.unique(),
       data.email,
       data.password,
       data.username
     );
-  } catch (err) {
+  } catch {
     setError('Failed to create account. Email may already be in use.');
     setIsLoading(false);
     return;
@@ -90,7 +90,7 @@ export default function Register() {
 
   try {
     await account.createEmailPasswordSession(data.email, data.password);
-  } catch (err) {
+  } catch {
     setError('Account created, but failed to sign in. Try logging in manually.');
     setIsLoading(false);
     return;
@@ -100,12 +100,12 @@ export default function Register() {
   try {
     const jwt = await account.createJWT();
     localStorage.setItem('jwt', jwt.jwt);
-  } catch (err) {
+  } catch {
   }
 
   try {
     await ensureUserDocument();
-  } catch (err) {
+  } catch {
   }
 
 

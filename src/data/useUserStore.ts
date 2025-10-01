@@ -86,7 +86,7 @@ export const useUserStore = create<UserState>((set, get) => ({
       try {
         const userDoc = await getUserById(id);
         return userDoc;
-      } catch (err) {
+      } catch {
         return null;
       }
     })
