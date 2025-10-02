@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -8,15 +8,65 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 
-import { databases, databaseId, usersCollectionId } from '@/data/appwrite'
+import { account, databases, databaseId, usersCollectionId } from '@/data/appwrite'
+import { ensureUserDocument } from '@/data/getData'
 import { useUserStore } from '@/data/useUserStore'
 import { Badge } from '@/components/ui/badge'
 
 export default function Onboarding() {
   const [role, setRole] = useState<'student' | 'tutor' | null>(null)
   const router = useRouter()
-  const { user, setIsTeacher } = useUserStore()
+  const { user, setIsTeacher, fetchUser } = useUserStore()
   const [isPro, setIsPro] = useState(false)
+  const [isBootstrapping, setIsBootstrapping] = useState(true)
+
+
+  useEffect(() => {
+    (async () => {
+      try {
+
+        try {
+          const jwt = await account.createJWT();
+          localStorage.setItem('jwt', jwt.jwt);
+        } catch (e) {
+          console.warn('Failed to create JWT (non-blocking):', e);
+        }
+
+        try {
+          const authUser = await account.get();
+          const currentName = (authUser?.name || '').trim();
+          if (!currentName) {
+            const email = authUser?.email || '';
+            const localPart = email.split('@')[0] || 'user';
+            const sanitized = localPart.replace(/[^a-zA-Z0-9_]/g, '_').slice(0, 24);
+            const fallbackName = sanitized.length >= 2 ? sanitized : 'user';
+            try {
+              await account.updateName(fallbackName);
+            } catch (e) {
+              console.warn('Failed to set fallback username:', e);
+            }
+          }
+        } catch (e) {
+          console.warn('Failed to inspect/update auth user name (non-blocking):', e);
+        }
+
+        try {
+          await ensureUserDocument();
+        } catch (e) {
+        }
+
+        try {
+          await fetchUser();
+        } catch (e) {
+          console.warn('fetchUser failed (non-blocking):', e);
+        }
+      } catch (e) {
+        console.error('Post-OAuth onboarding setup failed:', e);
+      } finally {
+        setIsBootstrapping(false);
+      }
+    })();
+  }, [fetchUser]);
 
   const handleFinish = async () => {
   if (!role) {
@@ -109,11 +159,11 @@ export default function Onboarding() {
         </RadioGroup>
 
         <Button
-          disabled={!role}
+          disabled={!role || isBootstrapping || !user}
           onClick={handleFinish}
           className="w-auto cursor-pointer"
         >
-          Continue
+          {isBootstrapping || !user ? 'Loading…' : 'Continue'}
         </Button>
       </CardContent>
     </div>

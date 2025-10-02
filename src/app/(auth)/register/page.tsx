@@ -25,6 +25,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 
 import { account } from '@/data/appwrite'
 import { ID } from 'appwrite'
+import type { OAuthProvider } from 'appwrite'
 import { useState } from 'react'
 import { ensureUserDocument } from '@/data/getData'
 import { useRouter } from 'next/navigation'
@@ -44,9 +45,6 @@ const formSchema = z
       .min(6, { message: 'Password must be at least 6 characters long' })
       .regex(/[a-zA-Z0-9]/, { message: 'Password must be alphanumeric' }),
     confirmPassword: z.string(),
-    acceptedTerms: z.boolean().refine((val) => val === true, {
-      message: 'You must accept the Terms of Service and Privacy Policy',
-    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
@@ -70,6 +68,19 @@ export default function Register() {
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleGoogleSignup = async () => {
+    try {
+      await account.createOAuth2Session(
+        'google' as OAuthProvider,
+        `${window.location.origin}/onboarding`,
+        `${window.location.origin}/register`
+      );
+    } catch (e: unknown) {
+      console.error('Google signup error:', e);
+      setError('Failed to authenticate with Google.');
+    }
+  };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
   setIsLoading(true);
@@ -220,23 +231,16 @@ export default function Register() {
 
 
               <FormField
-                control={form.control}
                 name="acceptedTerms"
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex flex-row items-center justify-center my-5 space-x-3">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          aria-invalid={!!form.formState.errors.acceptedTerms}
-                        />
-                      </FormControl>
+
                       <FormLabel className="flex text-sm font-normal">
-                        I agree to the{' '}
-                        <Link href="/ToS" className="underline">Terms of Service</Link>{' '}
-                        and{' '}
-                        <Link href="/privacy" className="underline">Privacy Policy</Link>.
+                        By signing up, you agree to the
+                        <Link href="/ToS" className="underline">Terms of Service</Link>
+                        and
+                        <Link href="/privacy" className="underline">Privacy Policy</Link>
                       </FormLabel>
                     </div>
                     <FormMessage />
@@ -244,9 +248,17 @@ export default function Register() {
                 )}
               />
 
-                <Button type="submit" className="w-full cursor-pointer" disabled={isLoading || !form.watch('acceptedTerms')}>
+              <div className='flex flex-col gap-2 items-center justify-center'>
+              <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
                 {isLoading ? 'Signing Up...' : 'Sign Up'}
               </Button>
+
+                <p>or</p>
+
+              <Button onClick={handleGoogleSignup} variant="outline" type="button" className="w-full cursor-pointer" disabled={isLoading}>
+                Sign up with Google
+              </Button>
+              </div>
             </div>
           </form>
         </Form>
