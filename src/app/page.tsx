@@ -13,12 +13,9 @@ import TestDictionary from "./(dashboard)/TestDictionary";
 import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BookOpenCheck, Check, EyeOff, GalleryHorizontalEnd, Info, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
 import TestWordBoard from "./(dashboard)/TestWordBoard";
 import { Badge } from "@/components/ui/badge";
-import { getUserCount, getConversationCount } from "@/data/getData";
-import { useEffect, useState } from "react";
-import {Card} from "@/components/ui/card"
+import { useState } from "react";
 import TestConversationCover from "./(dashboard)/TestConversationCover";
 import TestFriends from "./(dashboard)/TestFriends";
-import CountUp from 'react-countup';
 import TestTeacherPage from "./(dashboard)/TestTeacherPage";
 
 
@@ -57,17 +54,8 @@ const transitionImage = {
 
 
 export default function LandingPage() {
-  const [userCount, setUserCount] = useState(0);
-  const [convoCount, setConvoCount] = useState(0);
   const [showAbout, setShowAbout] = useState(true);
 
-  useEffect(() => {
-  getUserCount().then(setUserCount);
-}, []);
-
-useEffect(() => {
-  getConversationCount().then(setConvoCount);
-}, []);
 
   const handleScroll = () => {
     const viewport = document.querySelector('#landing-scroll [data-slot="scroll-area-viewport"]') as HTMLElement | null;
