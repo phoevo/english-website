@@ -52,8 +52,7 @@ export default function Onboarding() {
 
         try {
           await ensureUserDocument();
-        } catch (e) {
-        }
+        } catch {}
 
         try {
           await fetchUser();

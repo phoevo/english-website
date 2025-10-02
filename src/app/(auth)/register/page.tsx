@@ -21,7 +21,6 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/PasswordInput'
-import { Checkbox } from '@/components/ui/checkbox'
 
 import { account } from '@/data/appwrite'
 import { ID } from 'appwrite'
@@ -61,7 +60,6 @@ export default function Register() {
       email: '',
       password: '',
       confirmPassword: '',
-      acceptedTerms: false,
     },
   })
 
@@ -230,23 +228,15 @@ export default function Register() {
               />
 
 
-              <FormField
-                name="acceptedTerms"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex flex-row items-center justify-center my-5 space-x-3">
-
-                      <FormLabel className="flex text-sm font-normal">
-                        By signing up, you agree to the
-                        <Link href="/ToS" className="underline">Terms of Service</Link>
-                        and
-                        <Link href="/privacy" className="underline">Privacy Policy</Link>
-                      </FormLabel>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {/* Terms notice without form binding */}
+              <div className="flex flex-row items-center justify-center my-5 space-x-3">
+                <FormLabel className="flex text-sm font-normal">
+                  By signing up, you agree to the
+                  <Link href="/ToS" className="underline">Terms of Service</Link>
+                  and
+                  <Link href="/privacy" className="underline">Privacy Policy</Link>
+                </FormLabel>
+              </div>
 
               <div className='flex flex-col gap-2 items-center justify-center'>
               <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
