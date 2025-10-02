@@ -55,6 +55,7 @@ const transitionImage = {
 
 
 
+
 export default function LandingPage() {
   const [userCount, setUserCount] = useState(0);
   const [convoCount, setConvoCount] = useState(0);
@@ -67,6 +68,14 @@ export default function LandingPage() {
 useEffect(() => {
   getConversationCount().then(setConvoCount);
 }, []);
+
+  const handleScroll = () => {
+    const viewport = document.querySelector('#landing-scroll [data-slot="scroll-area-viewport"]') as HTMLElement | null;
+    viewport?.scrollBy({
+      top: 900,
+      behavior: "smooth",
+    });
+  };
 
   const questions = [
           {
@@ -122,8 +131,8 @@ useEffect(() => {
         ]
 
 
-  return (
-    <ScrollArea className={`flex bg-landing-bg flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
+return (
+    <ScrollArea id="landing-scroll" className={`flex bg-landing-bg flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
        <nav className="sticky top-0 w-screen z-50">
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-12 lg:h-18">
@@ -182,14 +191,30 @@ useEffect(() => {
             whileInView={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, height: 0 }}
             transition={{duration: 0.3, ease: "easeInOut" }}
+            className="flex flex-col lg:gap-10 items-center justify-center"
             >
 
-        <p className="text-2xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg mt-10">Focused on Real Conversation</p>
-        <p className="flex justify-center text-sm lg:text-xl m-2 text-muted-foreground">This isn't theory. It's rehearsal for when you're face to face.</p>
+        <p className="text-2xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg lg:mt-10">Focused on Real Conversation</p>
+        <div className="flex gap-2 mt-10">
+          <Link href={"/register"}>
+          <Button size={"lg"} className="w-auto cursor-pointer rounded-full">Get Started</Button>
+          </Link>
+
+          <Button
+          className="w-auto cursor-pointer rounded-full"
+          size={"lg"}
+          variant={"outline"}
+          onClick={handleScroll}>
+          See more <ArrowDown/>
+          </Button>
+
+        </div>
+
+        {/* <p className="flex justify-center text-sm lg:text-xl m-2 text-muted-foreground">This isn't theory. It's rehearsal for when you're face to face.</p> */}
         </motion.div>
 
 
-       <motion.div
+       {/* <motion.div
             layout
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -211,10 +236,10 @@ useEffect(() => {
             <p className="text-md font-semibold text-muted-foreground text-center">Conversations</p>
           </div>
         </Card>
-      </motion.div>
+      </motion.div> */}
 
 
-        <div className="flex flex-row gap-5">
+        <div className="flex flex-row mt-10 lg:mt-15">
           <motion.div
             layout
             initial={{ opacity: 0 }}
@@ -246,7 +271,7 @@ useEffect(() => {
         <motion.div
 
           transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
-          className="flex flex-col max-w-4xl h-auto bg-card rounded-4xl justify-start items-center p-5 lg:p-5 space-y-4 "
+          className="flex flex-col max-w-4xl h-auto bg-card rounded-4xl justify-start items-center p-5 space-y-4 "
         >
 
      <AnimatePresence>
@@ -406,10 +431,10 @@ useEffect(() => {
         Tools & Features
         </div>
 
-       <div className="grid grid-cols-2 m-2 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-2 rounded-lg">
+       <div className="grid grid-cols-3 gap-2 m-2 lg:grid-cols-3 lg:gap-5 lg:p-2 rounded-lg">
 
     <motion.div
-    className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+    className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
     initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
@@ -423,13 +448,13 @@ useEffect(() => {
   </motion.div>
 
  <motion.div
- className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+ className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
  initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
     transition={{ delay: 0.1, duration: 0.2 }}
     >
-  <span className="relative flex justify-center items-center h-20 w-20">
+  <span className="relative flex justify-center items-center lg:h-20 lg:w-20">
     <MousePointer2 size={35} strokeWidth={1} fill="bg-foreground" className="absolute bottom-0 right-0" />
     <RectangleHorizontal size={80} strokeWidth={1} className="text-pink-500" />
   </span>
@@ -438,52 +463,55 @@ useEffect(() => {
 
 
    <motion.div
-   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
    initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
     transition={{ delay: 0.1, duration: 0.2 }}>
-    <span className="flex justify-center items-center h-20">
+    <span className="flex justify-center items-center lg:h-20">
       <IterationCcw size={50} className="" />
     </span>
     <div className="flex items-center justify-center text-center">Recents</div>
   </motion.div>
 
   <motion.div
-  className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+  className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
   initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
     transition={{ delay: 0.2, duration: 0.2 }}
     >
-    <span className="flex justify-center items-center h-20">
+    <span className="flex justify-center items-center lg:h-20">
       <GalleryHorizontalEnd size={50} className="fill-current" />
     </span>
     <div className="flex items-center justify-center text-center">Custom flashcard builder</div>
   </motion.div>
 
   <motion.div
-  className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+  className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
   initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
     transition={{ delay: 0.2, duration: 0.2 }}>
-    <span className="flex justify-center items-center h-20">
+    <span className="flex justify-center items-center lg:h-20">
       <BookOpenCheck strokeWidth={2} size={50} />
     </span>
-    <div className="flex items-center justify-center text-center">
-      Beginner <ArrowRight className="text-pink-500 mx-1" size={15} /> Advanced Levels
+    <div className="flex flex-col lg:flex-row items-center justify-center text-center">
+      Beginner
+      <ArrowRight className="text-pink-500 mx-1 lg:block hidden" size={15} />
+      <ArrowDown className="text-pink-500 mx-1 block lg:hidden" size={15} />
+      Advanced Levels
     </div>
   </motion.div>
 
    <motion.div
-   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
    initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
     transition={{ delay: 0.2, duration: 0.2 }}
     >
-  <span className="relative flex justify-center items-center h-20 w-20">
+  <span className="relative flex justify-center items-center lg:h-20 lg:w-20">
     <Check size={35} strokeWidth={2} className="absolute bottom-0 right-2 text-green-500" />
     <AlignLeft size={60} strokeWidth={2} className="" />
   </span>
@@ -491,39 +519,39 @@ useEffect(() => {
 </motion.div>
 
  <motion.div
-   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
    initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
     transition={{ delay: 0.2, duration: 0.2 }}
     >
-  <span className="relative flex justify-center items-center h-20 w-20">
+  <span className="relative flex justify-center items-center lg:h-20 lg:w-20">
     <Sword size={50} className="rotate-45"/>
   </span>
   <div className="flex items-center justify-center text-center">Tasks</div>
 </motion.div>
 
 <motion.div
-   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
    initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
     transition={{ delay: 0.2, duration: 0.2 }}
     >
-  <div className="relative flex justify-center items-center h-20 w-20">
+  <div className="relative flex justify-center items-center lg:h-20 lg:w-20">
     <Swords className="fill-current" size={50}/>
   </div>
   <div className="flex items-center justify-center text-center">Challenges</div>
 </motion.div>
 
 <motion.div
-  className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md"
+  className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
   initial={{ opacity: 0, y: 100 }}
   whileInView={{ opacity: 1, y: 0 }}
   viewport={{ once: true, margin: "-100px" }}
   transition={{ delay: 0.2, duration: 0.2 }}
 >
-  <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-3 gap-1 p-4">
+  <div className="grid grid-cols-2 p-1 lg:grid-cols-3 gap-2 lg:p-4">
    <div className="flex justify-center"><Badge className="bg-foreground text-background">1</Badge></div>
   <div className="flex justify-center"><Badge className="bg-green-500 text-white">3</Badge></div>
   <div className="flex justify-center"><Badge className="bg-gradient-to-r from-emerald-400 to-blue-600 text-white bg-clip-padding">10</Badge></div>
@@ -615,10 +643,10 @@ useEffect(() => {
         <div
         className={`flex flex-col lg:flex-row items-center gap-4 p-5 h-auto ${geist.className}`}>
         <Link href="/register">
-          <Button className="cursor-pointer px-6 py-4">Get Started</Button>
+          <Button className="cursor-pointer px-6 rounded-full">Get Started</Button>
         </Link>
         <Link href="/pricing">
-          <Button variant="outline" className="hover:shadow-[0_0_3px_0.5px_rgba] hover:shadow-pink-500 cursor-pointer px-6 py-4">Pricing</Button>
+          <Button variant="outline" className="rounded-full hover:shadow-[0_0_3px_0.5px_rgba] hover:shadow-pink-500 cursor-pointer px-6">Pricing</Button>
         </Link>
       </div>
       </motion.div>

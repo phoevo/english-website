@@ -110,7 +110,7 @@ const sampleConversation = [
 export function TestConversation() {
   const [hoverEnabled, setHoverEnabled] = React.useState(true);
   const [wordTypes, setWordTypes] = React.useState<Record<WordTypeKey, WordTypeData>>({
-    noun: { color: "pink-500", enabled: false },
+    noun: { color: "pink-500", enabled: true },
     verb: { color: "red-500", enabled: false },
     adjective: { color: "green-500", enabled: false },
     pronoun: { color: "blue-500", enabled: false },
