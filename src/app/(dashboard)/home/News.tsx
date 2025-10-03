@@ -19,8 +19,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { listNewsDocuments, type NewsDocument } from '@/data/appwrite'
 
-// Tag-to-UI mapping based on your tags stored in the DB
-// Explicitly handling at least: news (blue + Newspaper) and updates (green + ArrowUp)
+
 const TAGS: Record<string, { label: string; colorClass: string; icon: React.ReactNode }> = {
   news: { label: 'News', colorClass: 'bg-blue-500',   icon: <Newspaper /> },
   updates: { label: 'Updates', colorClass: 'bg-green-500', icon: <CircleArrowUp /> },
