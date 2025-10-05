@@ -96,7 +96,7 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
              vocabulary, as well as News and Updates.</p>
 
                 <div className="space-y-2">
-                  <p>On the top right or in the sidebar if you're on mobile, you can see your tasks and challenges, click on each one for more info.</p>
+                  <p>On the top right or in the sidebar if you&apos;re on mobile, you can see your tasks and challenges, click on each one for more info.</p>
                 <div className="flex flex-row gap-2">
                   <Button variant="secondary" className="items-center lg:w-auto shadow-sm cursor-pointer">
                     <Sword className="rotate-45" />8

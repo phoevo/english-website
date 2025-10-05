@@ -74,7 +74,7 @@ function ConversationsPage() {
         title="The Conversations Page"
         content={
           <div className="space-y-2">
-            <p>Here you'll find a library of carefully crafted dialogues to help you with your reading
+            <p>Here you&apos;ll find a library of carefully crafted dialogues to help you with your reading
         comprehension, vocabulary, real-life communication and listening skills.
         </p>
           <p>Select your level from the dropdown or take a short unofficial test for an approximate level.</p>
