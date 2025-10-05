@@ -3,8 +3,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
-import { PanelLeftIcon } from "lucide-react"
-
+import { PanelLeftClose, PanelLeftIcon, PanelLeftOpen, XIcon } from "lucide-react"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -24,6 +23,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { DM_Sans } from "next/font/google"
+
+const dmSans = DM_Sans({ subsets: ['latin'] });
+
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -68,6 +71,7 @@ function SidebarProvider({
 }) {
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
+
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
@@ -154,7 +158,7 @@ function SidebarProvider({
 function Sidebar({
   side = "left",
   variant = "sidebar",
-  collapsible = "offcanvas",
+  collapsible = "icon",
   className,
   children,
   ...props
@@ -257,7 +261,9 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useSidebar()
+  const { toggleSidebar, isMobile, open, openMobile } = useSidebar()
+
+  const isOpen = isMobile ? openMobile : open
 
   return (
     <Button
@@ -265,14 +271,30 @@ function SidebarTrigger({
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn("h-7 w-7", className)}
+      className={cn(
+        "absolute cursor-pointer top-1 z-60 md:w-5 md:z-30 md:relative md:bg-background md:text-foreground",
+        className
+      )}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
       }}
       {...props}
     >
-      <PanelLeftIcon />
+      {/* MOBILE ICONS */}
+      <span className="block md:hidden z-60">
+        {isOpen ? <XIcon /> : <PanelLeftIcon />}
+      </span>
+
+      {/* DESKTOP ICONS */}
+      <span className="hidden md:block">
+        {isOpen ?
+
+          <PanelLeftClose />
+        :
+        <PanelLeftOpen />}
+      </span>
+
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )
@@ -537,7 +559,8 @@ function SidebarMenuButton({
       <TooltipContent
         side="right"
         align="center"
-        hidden={state !== "collapsed" || isMobile}
+        className={`${dmSans.className}`}
+        hidden
         {...tooltip}
       />
     </Tooltip>

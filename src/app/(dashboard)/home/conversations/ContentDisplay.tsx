@@ -386,11 +386,11 @@ React.useEffect(() => {
 
         <div className="flex flex-row items-center gap-2">
           <h1 className="text-sm">Font Size</h1>
-          <div className="flex flex-row border-1 rounded-sm">
+          <div className="flex flex-row border-1 rounded-lg">
             <Button
               size={"sm"}
               variant={"ghost"}
-              className="rounded-none cursor-pointer text-lg"
+              className=" cursor-pointer text-lg "
               onClick={() => setFontSize((s) => Math.min(s + 2, 24))}
             >
               +
@@ -398,7 +398,7 @@ React.useEffect(() => {
             <Button
               size={"sm"}
               variant={"ghost"}
-              className="border-l-1 bg-muted rounded-none cursor-pointer text-lg"
+              className="border-l-1 bg-muted rounded-none rounded-r-md cursor-pointer text-lg"
               onClick={() => setFontSize((s) => Math.max(s - 2, 14))}
             >
               -
@@ -408,7 +408,7 @@ React.useEffect(() => {
 
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
-            <AccordionTrigger className="p-0 font-normal text-sm">Word Classes</AccordionTrigger>
+            <AccordionTrigger className="p-0 font-normal text-sm cursor-pointer">Word Classes</AccordionTrigger>
             <AccordionContent>
               <div className="p-2 flex flex-col gap-2">
                 <WordTypeSettings wordTypes={wordTypes} toggleWordType={toggleWordType} />

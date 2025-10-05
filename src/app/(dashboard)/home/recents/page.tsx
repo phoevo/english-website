@@ -78,7 +78,26 @@ function RecentsPage() {
         <UserGuidePopover
           id="recents-page"
           title="The Recents Page"
-          description="Conversations you interact with will be placed here for ease of access later."
+          content={
+            <div>
+              <p>
+                Conversations you interact with will be placed here for ease of access later.
+              </p>
+              <div>
+                You can remove any of them from list using the
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  className="cursor-pointer h-5 w-5 self-center mx-2"
+                >
+                  <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
+                    <X className="h-4 w-4" />
+                  </motion.div>
+                </Button>
+                button.
+              </div>
+            </div>
+          }
           side="top"
           align="start"
           >

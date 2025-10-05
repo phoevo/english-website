@@ -104,8 +104,12 @@ function DictionaryPage() {
         <UserGuidePopover
           id="dictionary-page"
           title="The Dictionary Page"
-          description="Your personal dictionary. Save words you're unfamiliar with or want to revise.
-          Pick and choose to create flashcards with existing words."
+          content={
+            <div className="space-y-6">
+              <p>Your personal dictionary. Save words you're unfamiliar with or want to revise.</p>
+              <p>One part of the screen shows a scrollable list of all your saved words. The other part shows a flashcard builder.</p>
+            </div>
+          }
           side="top"
           align="start"
         >

@@ -9,14 +9,14 @@ const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID
 const CONVERSATIONS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_CONVERSATIONS_COLLECTION_ID!;
 
 
-export async function ensureUserDocument() {
+export async function ensureUserDocument(): Promise<{ created: boolean }> {
   const user = await account.get();
   const userId = user.$id;
-
 
   try {
     // Try to get the user document by ID
     await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, userId);
+    return { created: false };
   } catch (err: unknown) {
     const code = (typeof err === 'object' && err && 'code' in err && typeof (err as { code?: unknown }).code === 'number')
       ? (err as { code: number }).code
@@ -29,6 +29,7 @@ export async function ensureUserDocument() {
         name: user.name ?? "",
         recentConversations: [],
       });
+      return { created: true };
     } else {
       throw err; // throw other unexpected errors
     }

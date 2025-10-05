@@ -72,9 +72,15 @@ function ConversationsPage() {
         <UserGuidePopover
         id="conversation-page"
         title="The Conversations Page"
-        description="Here you'll find a library of carefully crafted dialogues to help you with your reading
-        comprehension, vocabulary, real-life communication and listening skills."
-        side="top"
+        content={
+          <div className="space-y-2">
+            <p>Here you'll find a library of carefully crafted dialogues to help you with your reading
+        comprehension, vocabulary, real-life communication and listening skills.
+        </p>
+          <p>Select your level from the dropdown or take a short unofficial test for an approximate level.</p>
+          <p></p>
+          </div>
+        }
         align="start"
         >
           <h1 className={`text-2xl lg:text-3xl font-normal ${dmSans.className}`}>Conversations</h1>

@@ -24,7 +24,7 @@ import { PasswordInput } from '@/components/ui/PasswordInput'
 
 import { account } from '@/data/appwrite'
 import { ID } from 'appwrite'
-import type { OAuthProvider } from 'appwrite'
+import { OAuthProvider } from 'appwrite'
 import { useState } from 'react'
 import { ensureUserDocument } from '@/data/getData'
 import { useRouter } from 'next/navigation'
@@ -70,7 +70,7 @@ export default function Register() {
   const handleGoogleSignup = async () => {
     try {
       await account.createOAuth2Session(
-        'google' as OAuthProvider,
+        OAuthProvider.Google,
         `${window.location.origin}/onboarding`,
         `${window.location.origin}/register`
       );
@@ -228,7 +228,6 @@ export default function Register() {
               />
 
 
-              {/* Terms notice without form binding */}
               <div className="flex flex-row items-center justify-center my-5 space-x-3">
                 <FormLabel className="flex text-sm font-normal">
                   By signing up, you agree to the

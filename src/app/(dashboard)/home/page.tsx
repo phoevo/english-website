@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import News from "./News";
 import { DM_Sans } from "next/font/google";
-import { Calendar, Sword, Swords } from "lucide-react";
+import { ArrowLeft, Calendar, Sword, Swords } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
@@ -46,7 +46,6 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
     )
     .slice(0, 5);
 
-  // Helper function for streak badge styling (same as in assignments page)
   function getStreakBadgeClass(streak: number): string {
     if (streak >= 100) {
       return "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-300 text-black rounded-full animate-gradient uneven-glow bg-clip-padding";
@@ -65,13 +64,22 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
 
   if (loading) {
     return (
-      <div className="m-10 space-y-6 w-full">
-        <Skeleton className="w-[300px] h-[32px]" />
-        <Skeleton className="w-[400px] h-[15px]" />
-        <Skeleton className="w-2/3 h-1/3 opacity-50 mt-5" />
-        <Skeleton className="w-2/3 h-1/3 opacity-25" />
-        <Skeleton className="w-[392px] h-[82px] opacity-15" />
-      </div>
+      <div className="mt-6 lg:px-10 space-y-6 w-full">
+  <Skeleton className="w-[300px] h-[32px]" />
+  <Skeleton className="w-[200px] h-[15px]" />
+
+  <div className="flex flex-row w-full items-stretch space-x-6 min-h-[200px]">
+    <div className="flex flex-col w-2/3 space-y-6">
+      <Skeleton className="w-full h-[200px] opacity-50" />
+      <Skeleton className="w-full h-[250px] opacity-50" />
+    </div>
+
+    <div className="w-1/3 flex">
+      <Skeleton className="w-full h-auto min-h-[300px] opacity-50" />
+    </div>
+  </div>
+</div>
+
     );
   }
 
@@ -82,8 +90,40 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
             <UserGuidePopover
              id="home-page-main"
              title="The Home Page"
-             description="This is the main page where you can find a recap of your previous conversation and
-             vocabulary, as well as News and Updates. "
+             content=
+             {<div className="space-y-4">
+                <p>This is the main page where you can find your most recent conversation and
+             vocabulary, as well as News and Updates.</p>
+
+                <div className="space-y-2">
+                  <p>On the top right or in the sidebar if you're on mobile, you can see your tasks and challenges, click on each one for more info.</p>
+                <div className="flex flex-row gap-2">
+                  <Button variant="secondary" className="items-center lg:w-auto shadow-sm cursor-pointer">
+                    <Sword className="rotate-45" />8
+                  </Button>
+                  <Button className="flex items-center lg:w-auto cursor-pointer">
+                  <Swords/>3
+                </Button>
+                </div>
+                </div>
+
+                <div>
+                  <p>During the beta, you will be able to switch from Free to Pro for testing purposes.</p>
+                  <div className="flex flex-row rounded-full border-1 m-1 w-20">
+                  <Badge className="flex-1 text-center rounded-full cursor-pointer transition bg-background text-muted-foreground">
+                    Free
+                  </Badge>
+
+                  <Badge className="flex-1 text-center rounded-full cursor-pointer transition bg-pink-500 text-foreground">
+                    Pro
+                  </Badge>
+                </div>
+                </div>
+                  <p>Use the sidebar on the left side of the screen to explore the content.</p>
+                  <ArrowLeft className="text-foreground"/>
+             </div>
+
+             }
              side="top"
              align="start"
             >

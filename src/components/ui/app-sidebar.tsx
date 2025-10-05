@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { DM_Sans } from "next/font/google";
@@ -41,15 +42,16 @@ const items = [
 
 export function AppSidebar() {
   return (
-    <Sidebar className="h-auto mb-2 rounded-lg absolute md:[--sidebar-width:10rem] lg:[--sidebar-width:16rem]">
+    <Sidebar collapsible="icon" className="h-auto mb-2 rounded-lg absolute md:[--sidebar-width:10rem] lg:[--sidebar-width:16rem]">
       <SidebarContent className={`${dmSans.className}`}>
         <SidebarGroup>
           <SidebarGroupLabel>App</SidebarGroupLabel>
           <SidebarGroupContent className={`${dmSans.className}`}>
             <SidebarMenu>
+
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild tooltip={item.title}>
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -67,9 +69,9 @@ export function AppSidebar() {
 
               <SidebarMenuItem key="Classroom">
                   <SidebarMenuButton asChild disabled>
-                    <Link href="">
+                    <Link href="" className="text-muted-foreground cursor-default">
                       <ClipboardCheck />
-                      <span className="text-muted-foreground">Coming soon</span>
+                      <span>Coming soon</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

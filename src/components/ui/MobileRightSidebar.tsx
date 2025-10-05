@@ -30,11 +30,11 @@ export function MobileRightSidebar({
 
 
   return (
-    <div className={`lg:hidden md:hidden absolute right-2 mt-20 bg-foreground text-background rounded-full ${dmSans.className}`}>
+    <div className={`lg:hidden md:hidden absolute right-2 top-1 text-foreground rounded-full ${dmSans.className}`}>
       <Sheet>
         <SheetTrigger asChild>
-          <Button size="icon" variant="ghost" aria-label="Open menu" className="cursor-pointer">
-            <Menu className="h-5 w-5" />
+          <Button size="icon" variant="ghost" aria-label="Open menu" className="">
+            <Menu className="h-7 w-7" />
           </Button>
         </SheetTrigger>
 

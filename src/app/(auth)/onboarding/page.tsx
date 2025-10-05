@@ -12,6 +12,7 @@ import { account, databases, databaseId, usersCollectionId } from '@/data/appwri
 import { ensureUserDocument } from '@/data/getData'
 import { useUserStore } from '@/data/useUserStore'
 import { Badge } from '@/components/ui/badge'
+import { sendWelcomeEmail } from '@/services/emailService'
 
 export default function Onboarding() {
   const [role, setRole] = useState<'student' | 'tutor' | null>(null)
@@ -35,6 +36,25 @@ export default function Onboarding() {
         try {
           const authUser = await account.get();
           const currentName = (authUser?.name || '').trim();
+
+          try {
+            const session = await account.getSession('current');
+            const provider = (session as unknown as { provider?: string })?.provider;
+            if (provider === 'google') {
+              const fullName = currentName;
+              const firstName = (fullName || '').split(/\s+/)[0] || '';
+              if (firstName && firstName !== fullName && firstName.length >= 2) {
+                try {
+                  await account.updateName(firstName);
+                } catch (e) {
+                  console.warn('Failed to set first-name username after Google OAuth:', e);
+                }
+              }
+            }
+          } catch (e) {
+            console.warn('Failed to inspect current session provider (non-blocking):', e);
+          }
+
           if (!currentName) {
             const email = authUser?.email || '';
             const localPart = email.split('@')[0] || 'user';
@@ -51,7 +71,17 @@ export default function Onboarding() {
         }
 
         try {
-          await ensureUserDocument();
+          const { created } = await ensureUserDocument();
+
+          // Send welcome email exactly once on first user creation (covers Google signups)
+          if (created) {
+            try {
+              const u = await account.get();
+              await sendWelcomeEmail({ userEmail: u.email, userName: (u.name || '').trim() });
+            } catch (e) {
+              console.warn('Welcome email failed (non-blocking):', e);
+            }
+          }
         } catch {}
 
         try {

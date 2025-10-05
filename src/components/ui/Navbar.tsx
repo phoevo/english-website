@@ -59,7 +59,7 @@ const Navbar = () => {
       <div className="px-4">
         <div className="grid grid-cols-5 items-center h-10 md:h-18 lg:h-18 gap-x-3">
           {/* Left*/}
-          <div className="justify-center col-start-1 col-end-2">
+          <div className="justify-center hidden md:block col-start-1 col-end-2">
             <Link href={"/"} className={`lg:text-3xl md:text-xl font-normal ${dmSans.className}`}>Synomilo</Link>
           </div>
 

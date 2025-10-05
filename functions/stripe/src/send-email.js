@@ -118,7 +118,6 @@ module.exports = async function handleSendEmail({ req, res, client, adminClient 
         }, 400);
     }
 
-    // Attempt to resolve email to an Appwrite user ID and send to that user
     let userId = null;
     try {
       const users = new sdk.Users(adminClient);

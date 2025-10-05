@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Popover,
   PopoverTrigger,
@@ -14,19 +15,25 @@ const geist = Geist({ subsets: ["latin"] });
 type UserGuidePopoverProps = {
   id: string;
   title?: string;
-  description: React.ReactNode;
+  media?: React.ReactNode;
+  content?: React.ReactNode;
+  footer?: React.ReactNode;
   children: React.ReactNode;
   side?: "top" | "right" | "bottom" | "left";
   align?: "start" | "center" | "end";
+  onNext?: () => void;
 };
 
 export default function UserGuidePopover({
   id,
   title,
-  description,
+  media,
+  content,
+  footer,
   children,
   side = "bottom",
   align = "center",
+  onNext,
 }: UserGuidePopoverProps) {
   const [open, setOpen] = useState(false);
 
@@ -40,28 +47,73 @@ export default function UserGuidePopover({
     setOpen(false);
   };
 
+  const handleNext = () => {
+    handleAcknowledge();
+    onNext?.();
+  };
+
   return (
     <>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>{children}</PopoverTrigger>
-        <PopoverContent
-          side={side}
-          align={align}
-          className={`w-200 h-auto z-50 border shadow-lg bg-background backdrop-blur-[1px] ${geist.className}`}
-          style={{ backdropFilter: "blur(10px)" }}
-        >
-          <h3 className="text-md font-semibold mb-1">{title}</h3>
-          <p className="text-md mb-3">{description}</p>
-          <Button size="sm" onClick={handleAcknowledge}>
-            Got it
-          </Button>
-        </PopoverContent>
+
+        <AnimatePresence>
+          {open && (
+            <PopoverContent
+              side={side}
+              align={align}
+              className={`lg:w-full w-sm z-50 border shadow-xl
+                          bg-background/90 backdrop-blur-lg rounded-2xl p-5
+                          ${geist.className}`}
+            >
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+              >
+                {title && (
+                  <h3 className="text-lg font-semibold mb-2 text-foreground">
+                    {title}
+                  </h3>
+                )}
+
+                {media && (
+                  <div className="mb-3 rounded-lg overflow-hidden">
+                    {media}
+                  </div>
+                )}
+
+                {content && (
+                  <div className="text-md text-muted-foreground mb-4 leading-relaxed">
+                    {content}
+                  </div>
+                )}
+
+                {footer ? (
+                  <div className="mt-4">{footer}</div>
+                ) : (
+                  <div className="flex justify-end gap-2">
+                    {onNext && (
+                      <Button size="sm" variant="outline" onClick={handleNext}>
+                        Next
+                      </Button>
+                    )}
+                    <Button size="sm" onClick={handleAcknowledge}>
+                      Got it
+                    </Button>
+                  </div>
+                )}
+              </motion.div>
+            </PopoverContent>
+          )}
+        </AnimatePresence>
       </Popover>
 
-      {/* Blur overlay */}
+      {/* Optional background blur overlay */}
       {open && (
         <div
-          className="fixed inset-0 bg-transparent backdrop-blur-xs z-4 pointer-events-none"
+          className="fixed inset-0 bg-transparent backdrop-blur-xs z-40 pointer-events-none"
           aria-hidden="true"
         />
       )}

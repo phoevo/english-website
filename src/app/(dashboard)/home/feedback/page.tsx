@@ -112,7 +112,11 @@ function FeedbackPage() {
         <UserGuidePopover
           id="feedback-page"
           title="Feedback Page"
-          description="As we recently launched, we are practically begging for feedback. Please take the time to write about the things you liked, disliked or are missing."
+          content={
+          <div>
+              <p>As we recently launched, we are practically begging for feedback. Please take the time to write about the things you liked, disliked or are missing.</p>
+          </div>
+          }
           side="top"
           align="start"
           >
