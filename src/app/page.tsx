@@ -314,6 +314,7 @@ return (
               src="/conversationDemo.mp4"
               autoPlay
               muted
+              loop
               playsInline
             />
 
