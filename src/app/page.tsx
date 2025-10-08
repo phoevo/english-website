@@ -227,60 +227,29 @@ return (
       </motion.div> */}
 
 
-        <div className="flex flex-row mt-10 lg:mt-15">
-          <motion.div
-            layout
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1}}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{duration: 0.2, ease: "easeInOut" }}>
-          <Button variant="ghost"
-           onClick={() => setShowAbout(!showAbout)}
-            className="flex items-center gap-2 text-muted-foreground cursor-pointer">
-            {showAbout ? (
-              <>
-                <EyeOff className="w-4 h-4" />
-                Hide
-              </>
-            ) : (
-              <>
-                <Info className="w-4 h-4" />
-                About
-              </>
-            )}
-          </Button>
-
-          </motion.div>
-
-
-
-        </div>
-
         <motion.div
 
           transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
           className="flex flex-col max-w-4xl h-auto bg-card rounded-4xl justify-start items-center p-5 space-y-4 "
         >
 
-     <AnimatePresence>
-        {showAbout && (
+
           <motion.div
             layout
             initial={{ opacity: 0, height: "auto" }}
             animate={{ opacity: 1, height: "auto"}}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="flex flex-col max-w-4xl bg-card rounded-4xl justify-start items-center space-y-4 overflow-hidden"
+            className="flex flex-col max-w-4xl bg-card rounded-4xl justify-start items-center space-y-4 overflow-hidden mt-10"
           >
-            <p className={`text-md lg:text-lg leading-relaxed bg-card text-center ${dmSans.className}`}>
+            <p className={`text-md p-2 lg:text-lg leading-relaxed bg-card text-center ${dmSans.className}`}>
               Synomilo helps English learners move beyond studying by giving them a place to actively practice.
               With realistic conversations and tools built for real-world speaking, students can practice solo or with a tutor.
               Tutors can already join sessions and guide students through screen sharing. Dedicated tutor tools for assigning, tracking, and giving feedback are coming soon.
             </p>
 
           </motion.div>
-        )}
-      </AnimatePresence>
+
       </motion.div>
 
 
@@ -341,7 +310,15 @@ return (
           </div>
         </motion.div>
 
-        {/* Why this works */}
+
+            <video
+              className="w-full p-2 md:p-0 md:w-3xl h-full rounded-lg object-cover dark:opacity-75"
+              src="/conversationDemo.mp4"
+              autoPlay
+              muted
+              playsInline
+            />
+
         <motion.div
           className="flex flex-col w-full lg:w-1/2 space-y-6 lg:border-1 p-10 rounded-md lg:shadow-md"
           initial={{ opacity: 0, y: 40 }}
@@ -349,7 +326,6 @@ return (
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.25 }}
         >
-
             <h3 className="text-2xl lg:text-4xl font-normal">Why this works</h3>
             <p className="text-md lg:text-lg text-muted-foreground">
               Reading and listening to real conversations builds pattern recognition. You see how words, grammar,
@@ -388,6 +364,7 @@ return (
              for audio, but as we grow, we plan to record and use audio from native speakers.
             </p>
 
+
         </motion.div>
 
         <div className="hidden lg:block z-20 sticky top-30 left-43 text lg:left-0 lg:top-52 self-start m-4 mb-23 lg:text-2xl font-semibold">
@@ -410,6 +387,15 @@ return (
             <TestWordBoard/>
           </div>
         </motion.div>
+
+        <video
+          className="w-full p-2 md:p-0 md:w-3xl h-full rounded-lg object-cover dark:opacity-75"
+          src="/dictionaryDemo.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
 
 
         <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-62 lg:mb-14 self-start m-4 lg:text-2xl font-semibold">
