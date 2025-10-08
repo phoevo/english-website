@@ -5,15 +5,14 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Geist } from "next/font/google";
 import { DM_Sans } from "next/font/google";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/components/ui/accordion"
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TestConversation } from "./(dashboard)/TestConversation";
 import TestDictionary from "./(dashboard)/TestDictionary";
-import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BookOpenCheck, Check, EyeOff, GalleryHorizontalEnd, Info, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
+import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BookOpenCheck, Check, GalleryHorizontalEnd, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
 import TestWordBoard from "./(dashboard)/TestWordBoard";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
 import TestConversationCover from "./(dashboard)/TestConversationCover";
 import TestFriends from "./(dashboard)/TestFriends";
 import TestTeacherPage from "./(dashboard)/TestTeacherPage";
@@ -54,7 +53,6 @@ const transitionImage = {
 
 
 export default function LandingPage() {
-  const [showAbout, setShowAbout] = useState(true);
 
 
   const handleScroll = () => {
