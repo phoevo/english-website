@@ -41,36 +41,36 @@ const tiers: Tier[] = [
     tutorBadge: "Free",
     studentBadge: "Free",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation." },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can view assigned or free conversations. Limited features." },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor limited to 2 active student slots." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can assign any conversation." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Students can view pro conversations, but only when assigned by a tutor. Limited features (no audio)" },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors limited to 2 active student slots." },
     ],
   },
   {
     tutorBadge: "Free",
     studentBadge: "Pro",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation." },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Student can view every conversation with pro features." },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutor still limited to 2 active student slots." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can assign any conversation." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Students can view every conversation with pro features." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors still limited to 2 active student slots." },
     ],
   },
   {
     tutorBadge: "Pro",
     studentBadge: "Free",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation." },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Student can only view assigned conversations or free conversations. Limited features." },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can manage unlimited active students." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can assign any conversation." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Students can view pro conversations, but only when assigned by a tutor. Limited features (no audio)" },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can manage unlimited active students." },
     ],
   },
   {
     tutorBadge: "Pro",
     studentBadge: "Pro",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can assign any conversation." },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Student can view every conversation with pro features." },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutor can manage unlimited active students." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can assign any conversation." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Students can view every conversation with pro features." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can manage unlimited active students." },
     ],
   },
 ];

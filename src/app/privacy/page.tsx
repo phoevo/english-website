@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   const effectiveDate: string = "2025-09-10"; // Update to your actual effective date
   const companyName: string = "Synomilo";
-  const contactEmail: string = "synomilocontact@gmail.com";
+  const contactEmail: string = "synomiloteam@gmail.com";
   const dpoContact: string | null = null; // e.g., "privacy@example.com" if applicable
 
   return (
@@ -37,17 +37,17 @@ export default function PrivacyPage() {
 
         <section className="mb-6">
           <h2 className="text-2xl font-semibold mb-2">Who we are</h2>
-          <p>
-            Controller: {companyName}. Contact: {contactEmail}
-            {dpoContact && <>. Privacy/DPO: {dpoContact}</>}.
-          </p>
+          <p>Controller: {companyName}.</p>
+          <p>Contact: {contactEmail}</p>
+
+
         </section>
 
         <section className="mb-6">
           <h2 className="text-2xl font-semibold mb-2">Information we collect</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li>
-              <strong>Account information:</strong> username and email address.
+              <strong>Account information:</strong> Username and email address.
             </li>
             <li>
               <strong>Local storage (on your device):</strong> UI preferences

@@ -141,11 +141,11 @@ return (
           <div className="flex flex-col items-center lg:flex-row lg:items-end">
              <motion.div
             layout
-            initial={{ opacity: 1, y: 20 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, height: "auto"}}
             whileInView={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0, ease: "easeInOut" }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
             className="flex flex-col items-center lg:flex-row lg:pl-20 text-6xl lg:text-8xl bg-landing-bg font-normal">Synomilo
             <span className="text-muted-foreground lg:w-auto text-sm lg:text-lg font-capital uppercase bg-muted px-3 py-1 lg:px-3 rounded-full">Beta</span>
 
@@ -173,10 +173,10 @@ return (
 
          <motion.div
             layout
-            initial={{ opacity: 1 }}
+            initial={{ opacity: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{duration: 0, ease: "easeInOut" }}
+            transition={{duration: 0.3, ease: "easeInOut" }}
             className="flex flex-col lg:gap-10 items-center justify-center"
             >
 
@@ -234,10 +234,10 @@ return (
 
           <motion.div
             layout
-            initial={{ opacity: 1, height: "auto" }}
+            initial={{ opacity: 0, height: "auto" }}
             animate={{ opacity: 1, height: "auto"}}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0, ease: "easeInOut" }}
+            transition={{ duration: 0.4 , ease: "easeInOut" }}
             className="flex flex-col max-w-4xl bg-card rounded-4xl justify-start items-center space-y-4 overflow-hidden mt-10"
           >
             <p className={`text-md p-2 lg:text-lg leading-relaxed bg-card text-center ${dmSans.className}`}>
