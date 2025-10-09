@@ -25,7 +25,7 @@ export default function PrivacyPage() {
         </h1>
         <p className="mb-2">Effective date: {effectiveDate}</p>
         <p className="mb-6">
-          This policy describes how {companyName} ("we", "us", or "our") handles
+          This policy describes how {companyName} (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) handles
           your information. Our service is intentionally minimal: we only ask
           for a username and an email address to operate your account. We do not
           use cookies, and we do not track clicks or page navigations. We use
@@ -94,7 +94,7 @@ export default function PrivacyPage() {
             personal data only according to our instructions for the purposes of providing the Service.
           </p>
           <p className="mt-2">
-            Data location: Your data is stored in Appwrite's Frankfurt region (EU). Where cross-border transfers are
+            Data location: Your data is stored in Appwrite&#39;s Frankfurt region (EU). Where cross-border transfers are
             necessary, they will occur in accordance with applicable data protection laws and appropriate safeguards.
           </p>
         </section>
