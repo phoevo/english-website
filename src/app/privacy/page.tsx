@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   const effectiveDate: string = "2025-09-10"; // Update to your actual effective date
   const companyName: string = "Synomilo";
-  const contactEmail: string = "synomilo@gmail.com";
+  const contactEmail: string = "synomilocontact@gmail.com";
   const dpoContact: string | null = null; // e.g., "privacy@example.com" if applicable
 
   return (
