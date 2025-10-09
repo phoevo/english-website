@@ -12,12 +12,10 @@ export const metadata: Metadata = {
     "We only collect a username and email. We do not use cookies or analytics. Local storage is used only for UI preferences.",
 };
 
-/* eslint react/no-unescaped-entities: 0 */
 export default function PrivacyPage() {
-  const effectiveDate: string = "2025-09-10"; // Update to your actual effective date
+  const effectiveDate: string = "2025-09-10";
   const companyName: string = "Synomilo";
   const contactEmail: string = "synomiloteam@gmail.com";
-  const dpoContact: string | null = null; // e.g., "privacy@example.com" if applicable
 
   return (
     <main className={`pt-10 max-w-4xl mx-auto prose prose-neutral ${geist.className}`}>
