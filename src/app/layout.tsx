@@ -1,4 +1,3 @@
-// app/layout.tsx (RootLayout - remains a Server Component)
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
@@ -11,8 +10,8 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Synomilo",
-  description: "Real English conversation practice. No circling or filling in the blanks.",
+  title: "Synomilo — Practice Real English Conversations",
+  description: "Sound more native with realistic dialogues and tutor tools. Synomilo helps English learners speak naturally.",
   icons: [
     { rel: "icon", url: "/favicon-light.svg", media: "(prefers-color-scheme: light)" },
     { rel: "icon", url: "/favicon-dark.svg", media: "(prefers-color-scheme: dark)" },
