@@ -13,9 +13,11 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: "Synomilo",
   description: "Real English conversation practice. No circling or filling in the blanks.",
-  icons: {
-    icon: "/favicon.svg",
-  },
+  icons: [
+    { rel: "icon", url: "/favicon-light.svg", media: "(prefers-color-scheme: light)" },
+    { rel: "icon", url: "/favicon-dark.svg", media: "(prefers-color-scheme: dark)" },
+    { rel: "icon", url: "/favicon.png" },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
