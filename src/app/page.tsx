@@ -118,17 +118,16 @@ export default function LandingPage() {
 
 
 return (
-    <ScrollArea id="landing-scroll" className={`flex bg-landing-bg flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
-       <nav className="sticky top-0 w-screen z-50">
+    <ScrollArea id="landing-scroll" className={`flex scroll-auto bg-landing-bg flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
+       <nav className="sticky backdrop-blur-xs top-0 w-screen z-30">
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-12 lg:h-18">
             <h1 className="hidden lg:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
             <div className={`flex absolute right-5 md:right-5 lg:right-10 md:gap-0 lg:gap-1 ${geist.className}`}>
               <Link href={"/register"}> <Button className="hidden md:block lg:block cursor-pointer" variant={"ghost"}>Sign up</Button> </Link>
               <Link href={"/login"}> <Button className="hidden md:block lg:block cursor-pointer" variant="ghost">Log in</Button> </Link>
-              <Link href="/pricing">
-              <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Pricing</Button>
-              </Link>
+              <Link href="/pricing"> <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Pricing</Button></Link>
+              <Link href="/blog"> <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Blog</Button></Link>
               <ModeToggle />
             </div>
         </div>
@@ -265,7 +264,7 @@ return (
           className="text-xl lg:text-2xl font-semibold"
 
         >
-          <div className="flex flex-row gap-2 items-center">
+          <div className="flex flex-row gap-2 z-20 items-center">
 
           Here&apos;s what&apos;s offered <span><ArrowDown className= "text-pink-500" size={30}/></span>
           </div>
@@ -603,7 +602,7 @@ return (
 
 
         <motion.div
-        className="flex flex-col justify-start items-center text-center bg-landing-bg w-full lg:p-20 m-0 z-30"
+        className="flex flex-col justify-start items-center text-center bg-landing-bg w-full lg:p-20 m-0 z-26"
         initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
