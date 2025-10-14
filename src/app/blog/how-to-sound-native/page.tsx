@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Check, X } from "lucide-react";
-import Link from "next/link";
 
 /* eslint react/no-unescaped-entities: 0 */
 export const metadata = {
@@ -150,9 +149,9 @@ export default function PostPage() {
         </p>
         <div className="flex flex-row items-center gap-2 bg-accent p-5 rounded-md border-1 border-pink-500">
           <p>To see phrasal verbs with surrounding context and audio</p>
-          <Link href={"/"}>
+          <a href={"/"}>
           <Button size={"sm"} variant={"default"} className="cursor-pointer border-1 text-background bg-pink-500 hover:bg-pink-500/85">Try Synomilo for free</Button>
-          </Link>
+          </a>
         </div>
       </section>
 
