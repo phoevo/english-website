@@ -188,7 +188,7 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
                   ) : (
                     <ul className="space-y-3">
                       {recentStudents.map((student, index) => {
-const lastActiveRaw = getLastActive(student);
+                        const lastActiveRaw = getLastActive(student);
                         const lastActiveDate = lastActiveRaw ? new Date(lastActiveRaw) : null;
                         const timeAgo = lastActiveDate ?
                           Math.floor((Date.now() - lastActiveDate.getTime()) / (1000 * 60 * 60 * 24)) : null;

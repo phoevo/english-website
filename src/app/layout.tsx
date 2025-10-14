@@ -12,7 +12,7 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: "Synomilo — Practice Real English Conversations",
   description: "Sound more native with realistic dialogues and tutor tools. Synomilo helps English learners speak naturally.",
-  icons: [
+    icons: [
     { rel: "icon", url: "/favicon-light.svg", media: "(prefers-color-scheme: light)" },
     { rel: "icon", url: "/favicon-dark.svg", media: "(prefers-color-scheme: dark)" },
     { rel: "icon", url: "/favicon.png" },

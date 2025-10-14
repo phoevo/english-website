@@ -16,7 +16,7 @@ module.exports = async function handlePayments({
 }) {
   console.log("Payment handler started, method:", req.method);
   console.log("Request body:", req.bodyJson);
-  
+
   if (req.method !== "POST") {
     return res.json({ error: "Method not allowed" }, 405);
   }
@@ -82,7 +82,7 @@ module.exports = async function handlePayments({
 
     console.log("Creating Stripe checkout session for customer:", stripeCustomerId);
     console.log("Price ID for plan:", priceMap[plan]);
-    
+
     const checkoutSession = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
       mode: "subscription",
@@ -98,7 +98,7 @@ module.exports = async function handlePayments({
 
     console.log("Checkout session created successfully:", checkoutSession.id);
     console.log("Checkout URL:", checkoutSession.url);
-    
+
     return res.json({
       checkout_url: checkoutSession.url,
     });

@@ -123,6 +123,7 @@ return (
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-12 lg:h-18">
             <h1 className="hidden lg:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
+
             <div className={`flex absolute right-5 md:right-5 lg:right-10 md:gap-0 lg:gap-1 ${geist.className}`}>
               <Link href={"/register"}> <Button className="hidden md:block lg:block cursor-pointer" variant={"ghost"}>Sign up</Button> </Link>
               <Link href={"/login"}> <Button className="hidden md:block lg:block cursor-pointer" variant="ghost">Log in</Button> </Link>
@@ -240,9 +241,9 @@ return (
             className="flex flex-col max-w-4xl bg-card rounded-4xl justify-start items-center space-y-4 overflow-hidden mt-10"
           >
             <p className={`text-md p-2 lg:text-lg leading-relaxed bg-card text-center ${dmSans.className}`}>
-              Synomilo helps English learners move beyond studying by giving them a place to actively practice.
+              I built Synomilo to help English learners move beyond studying by giving them a place to actively practice.
               With realistic conversations and tools built for real-world speaking, students can practice solo or with a tutor.
-              Tutors can already join sessions and guide students through screen sharing. Dedicated tutor tools for assigning, tracking, and giving feedback are coming soon.
+              Tutors can already join sessions and guide students through screen sharing. I'm currently building dedicated tutor tools for assigning, tracking, and giving feedback are coming soon.
             </p>
 
           </motion.div>
@@ -554,7 +555,7 @@ return (
   >
     <div className="flex flex-row text-2xl lg:text-4xl font-normal justify-start">Coming Soon</div>
     <p className="text-md lg:text-lg text-muted-foreground">
-      As we enter early access, we’re creating dedicated tutor tools to make helping students
+      As full release approaches, I'm creating dedicated tutor tools to make helping students
       faster, easier, and more effective. Until then, students can use Synomilo solo or screen-share with their tutor.
     </p>
 
