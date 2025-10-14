@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Geist } from "next/font/google";
 
 const geist = Geist({ subsets: ["latin"] });

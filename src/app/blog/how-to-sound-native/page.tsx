@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Check, X } from "lucide-react";
 import Link from "next/link";
 
+/* eslint react/no-unescaped-entities: 0 */
 export const metadata = {
   title: "How to Sound More Native in English | Synomilo",
   description:
