@@ -73,6 +73,7 @@ type WordTypeKey =
   | "pronoun"
   | "adverb"
   | "idiom"
+  | "phrase"
   | "preposition"
   | "article"
   | "conjunction"
@@ -148,6 +149,7 @@ const [wordTypes, setWordTypes] = React.useState<Record<WordTypeKey, WordTypeDat
   pronoun: { colorKey: "blue500", enabled: false },
   adverb: { colorKey: "yellow500", enabled: false },
   idiom: { colorKey: "purple500", enabled: false },
+  phrase: { colorKey: "purple400", enabled: false },
   preposition: { colorKey: "orange500", enabled: false },
   article: { colorKey: "cyan700", enabled: false },
   conjunction: { colorKey: "yellow500", enabled: false },
@@ -163,7 +165,7 @@ React.useEffect(() => {
 
   const keys: WordTypeKey[] = [
     "noun", "verb", "adjective", "pronoun", "adverb",
-    "idiom", "preposition", "article", "conjunction",
+    "idiom", "phrase", "preposition", "article", "conjunction",
     "interjection", "determiner", "contraction"
   ];
 
@@ -254,7 +256,7 @@ React.useEffect(() => {
         <HoverCard
           open={isMobile ? isOpen : undefined}
           onOpenChange={isMobile ? setIsOpen : undefined}
-          openDelay={200}
+          openDelay={100}
           closeDelay={10}
         >
           <HoverCardTrigger asChild>

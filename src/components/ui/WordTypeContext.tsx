@@ -9,6 +9,7 @@ export type WordTypeKey =
   | "pronoun"
   | "adverb"
   | "idiom"
+  | "phrase"
   | "preposition"
   | "article"
   | "conjunction"
@@ -28,6 +29,7 @@ const defaultWordTypes: Record<WordTypeKey, WordTypeData> = {
   pronoun: { color: "blue-500", enabled: false },
   adverb: { color: "yellow-500", enabled: false },
   idiom: { color: "purple-500", enabled: false },
+  phrase: { color: "-500", enabled: false },
   preposition: { color: "orange-500", enabled: false },
   article: { color: "gray-500", enabled: false },
   conjunction: { color: "yellow-500", enabled: false },

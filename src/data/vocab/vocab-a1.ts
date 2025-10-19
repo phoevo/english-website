@@ -359,7 +359,7 @@ export const vocabA1: Record<string, { text: string; type: string; definition: s
   "course": { text: "course", type: "noun", definition: "a series of lessons or a planned path of study", context: "I am taking an English course this summer." },
   "care": { text: "care", type: "noun", definition: "attention or protection given to someone or something", context: "My mother takes good care of our dog." },
   "later": { text: "later", type: "adverb", definition: "at a time after now or after the time being discussed", context: "I will call you later today." },
-  "see_you_later": { text: "see you later", type: "idiom", definition: "casual phrase; used as goodbye; to meet or see a person at a later time.", context: "Alright, I'll see you later, take care." },
+  "see_you_later": { text: "see you later", type: "phrase", definition: "used as goodbye; to meet or see a person at a later time.", context: "I have to go now, I'll see you later!" },
   "could": { text: "could", type: "verb", definition: "a polite way to ask for help or permission", context: "Could you open the door?" },
   "help": { text: "help", type: "verb", definition: "to make something easier for someone", context: "Can you help me with my homework?" },
   "please": { text: "please", type: "adverb", definition: "a word used to ask politely", context: "Please sit down." },

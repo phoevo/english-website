@@ -28,12 +28,12 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "sw
 
 type WordTypeKey =
   | "noun" | "verb" | "adjective" | "pronoun" | "adverb"
-  | "idiom" | "preposition" | "article" | "conjunction"
+  | "idiom" | "phrase" | "preposition" | "article" | "conjunction"
   | "interjection" | "determiner"|"contraction"
 
 const wordTypeKeys: WordTypeKey[] = [
   "noun", "verb", "adjective", "pronoun", "adverb",
-  "idiom", "preposition", "article", "conjunction",
+  "idiom", "phrase", "preposition", "article", "conjunction",
   "interjection", "determiner","contraction"
 ]
 
@@ -49,7 +49,7 @@ type BackgroundColorKey = keyof typeof backgroundColors
 
 const defaultColorKeys: BackgroundColorKey[] = [
   "pink500", "red500", "green500", "blue500", "yellow400",
-  "purple500", "orange500", "cyan700", "yellow400", "lime500", "teal500", "purple600"
+  "purple500", "purple400", "orange500", "cyan700", "yellow400", "lime500", "teal500", "purple600"
 ]
 
 function isBgKey(key: string): key is BackgroundColorKey {
@@ -60,10 +60,14 @@ export default function CustomColors({ userId }: { userId: string }) {
   const { isSubscribed, customColors, setCustomColors } = useUserStore()
   const [openPickerIndex, setOpenPickerIndex] = useState<number | null>(null)
 
-  const displayColors =
-    customColors?.length === wordTypeKeys.length
-      ? customColors.map((key) => (isBgKey(key) ? backgroundColors[key] : "bg-gray-500"))
-      : defaultColorKeys.map((key) => backgroundColors[key])
+  const effectiveColorKeys: BackgroundColorKey[] =
+    (customColors && customColors.length === wordTypeKeys.length
+      ? customColors
+      : defaultColorKeys) as BackgroundColorKey[]
+
+  const displayColors = effectiveColorKeys.map((key) =>
+    isBgKey(key) ? backgroundColors[key] : "bg-gray-500"
+  )
 
   const handleColorChange = (index: number, newColorClass: string) => {
     const match = newColorClass.match(/^bg-([a-z]+)-(\d{3})$/)
@@ -71,9 +75,11 @@ export default function CustomColors({ userId }: { userId: string }) {
     const [, base, shade] = match
     const key = `${base}${shade}`
 
-    const updated = [...customColors]
-    updated[index] = key
-    setCustomColors(updated)
+    if (!isBgKey(key)) return
+
+    const baseKeys = [...effectiveColorKeys]
+    baseKeys[index] = key
+    setCustomColors(baseKeys)
     setOpenPickerIndex(null)
   }
 
@@ -83,8 +89,12 @@ export default function CustomColors({ userId }: { userId: string }) {
 
   const savePreferences = async () => {
     try {
+      const toSave = (customColors && customColors.length === wordTypeKeys.length
+        ? customColors
+        : effectiveColorKeys)
+
       await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
-        customColors,
+        customColors: toSave,
       })
 
       toast.success("Preferences saved!")

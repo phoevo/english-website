@@ -1,7 +1,7 @@
 import { Check } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
-type WordTypeKey = "noun" | "verb" | "adjective" | "pronoun" | "adverb" | "idiom" | "preposition" | "article" | "conjunction" | "interjection" | "determiner" | "contraction";
+type WordTypeKey = "noun" | "verb" | "adjective" | "pronoun" | "adverb" | "idiom" | "phrase" | "preposition" | "article" | "conjunction" | "interjection" | "determiner" | "contraction";
 type WordTypeData = { enabled: boolean; };
 
 // const textColorMap: Record<WordTypeKey, string> = {
