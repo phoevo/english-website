@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Check, CircleAlert, X } from "lucide-react";
+import Link from "next/link";
 
 /* eslint react/no-unescaped-entities: 0 */
 export const metadata = {
   title: "Common English Conversation Mistakes | Synomilo",
   description:
-    "Learn the most common mistakes ESL learners make in English conversations and how to fix them. Improve your fluency, confidence, and natural flow.",
+    "Learn the most common mistakes ESL learners make in English conversations and how to fix them.",
 };
 
 export default function PostPage() {
@@ -171,7 +172,7 @@ export default function PostPage() {
             Synomilo lets you go beyond studying. Practice real scenarios with native-written
             conversations and audio.
           </p>
-          <a href="/">
+          <Link href="/">
             <Button
               size="sm"
               variant="default"
@@ -179,7 +180,7 @@ export default function PostPage() {
             >
               Try Synomilo for free
             </Button>
-          </a>
+          </Link>
         </div>
       </section>
 
