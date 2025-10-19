@@ -30,7 +30,7 @@ export default function PostPage() {
     more natural. These don't require extra study, just awareness and small adjustments when you speak.
   </p>
 
-  <ul className="list ml-6 mt-2 space-y-6">
+  <ul className="list lg:ml-6 mt-2 space-y-6">
     <li className="bg-accent p-5 rounded-md">
       <strong className="text-lg">Use small pauses and fillers</strong>
       <br />
