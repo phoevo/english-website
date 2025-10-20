@@ -5,7 +5,6 @@ import { updateRecentConversations } from "@/data/updateRecentConversations";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
