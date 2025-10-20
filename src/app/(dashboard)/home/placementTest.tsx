@@ -201,7 +201,7 @@ export default function PlacementTest() {
   }
 
   return (
-    <div className="space-y-4 p-6 border rounded-md">
+    <div className="space-y-4 p-6 lg:m-0 border rounded-md">
       <h2 className="text-xl font-semibold">Question {current + 1} of {questions.length}</h2>
       <p className="min-h-[80px] max-h-[120px] overflow-y-auto text-lg">{questions[current].question}</p>
       <div className="space-y-2">

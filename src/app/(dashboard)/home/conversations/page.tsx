@@ -35,6 +35,7 @@ const dmSans = DM_Sans({ subsets: ['latin'] });
 function ConversationsPage() {
   const { conversations, loading: conversationsLoading, error } = useConversations();
   const [selectedLevel, setSelectedLevel] = useState<string | undefined>();
+  const [category, setCategory] = useState<string | undefined>();
   const [test, setTest] = useState(false);
 
   const {
@@ -50,13 +51,14 @@ function ConversationsPage() {
     return <div className="p-10 text-center text-red-500">{error}</div>;
   }
 
-  type CoverConvo = { $id: string; title: string; description?: string; level: string; audioFileId: string; isPro?: boolean };
+  type CoverConvo = { $id: string; title: string; description?: string; level: string; audioFileId: string; isPro?: boolean; category: string; };
   const list = Array.isArray(conversations) ? (conversations as unknown as CoverConvo[]) : [];
   const filtered = list.filter((conv) => {
     const levelMatches = !selectedLevel || selectedLevel === "All" || conv.level === selectedLevel;
+    const categoryMatches = !category || category === "All" || conv.category === category;
     const isProConversation = !!conv.isPro;
     const userCanAccess = isTeacher || !isProConversation || !!user?.isSubscribed;
-    return levelMatches && userCanAccess;
+    return levelMatches && categoryMatches && userCanAccess;
   });
 
 
@@ -77,7 +79,7 @@ function ConversationsPage() {
             <p>Here you&apos;ll find a library of carefully crafted dialogues to help you with your reading
         comprehension, vocabulary, real-life communication and listening skills.
         </p>
-          <p>Select your level from the dropdown or take a short unofficial test for an approximate level.</p>
+          <p>Select your level and category from the dropdown menus or take a short unofficial test for an approximate level.</p>
           <p></p>
           </div>
         }
@@ -90,32 +92,33 @@ function ConversationsPage() {
 
 
       <p className="text-sm lg:text-base text-muted-foreground">Conversation material from all levels</p>
-      <div className="flex flex-row">
+      <div className="mt-5 flex flex-row items-center justify-between lg:justify-start gap-5 lg:gap-20">
 
-        <div className="flex flex-col space-y-1 mt-5">
-            <Label htmlFor="Select" className="text-base font-semibold">Level</Label>
+        <div className="flex flex-col">
 
-        <div className="flex flex-row items-center gap-1">
+          <Label htmlFor="Select" className="text-sm lg:text-base font-semibold">Level</Label>
+
+        <div className="flex w-full flex-row items-start lg:items-center gap-1">
         <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="All" />
-          </SelectTrigger>
-          <SelectContent className={geist.className}>
-            <SelectItem value="All">All</SelectItem>
-            <SelectItem value="A1">A1 - Beginner</SelectItem>
-            <SelectItem value="A2">A2 - Basic</SelectItem>
-            <SelectItem value="B1">B1 - Intermediate</SelectItem>
-            <SelectItem value="B2">B2 - Independent</SelectItem>
-            <SelectItem value="C1">C1 - Advanced</SelectItem>
-            <SelectItem value="C2">C2 - Mastery</SelectItem>
-          </SelectContent>
+            <SelectTrigger className=" w-[110px] lg:w-[165px]">
+              <SelectValue placeholder="All" />
+            </SelectTrigger>
+            <SelectContent className={geist.className}>
+              <SelectItem value="All">All</SelectItem>
+              <SelectItem value="A1">A1 - Beginner</SelectItem>
+              <SelectItem value="A2">A2 - Basic</SelectItem>
+              <SelectItem value="B1">B1 - Intermediate</SelectItem>
+              <SelectItem value="B2">B2 - Independent</SelectItem>
+              <SelectItem value="C1">C1 - Advanced</SelectItem>
+              <SelectItem value="C2">C2 - Mastery</SelectItem>
+            </SelectContent>
         </Select>
 
         <AlertDialog open={test} onOpenChange={setTest}>
               <AlertDialogTrigger asChild>
-                <div onClick={showTest} className="text-sm font-medium underline cursor-pointer ml-1">Not sure?</div>
+                <div onClick={showTest} className="text-xs md:text-sm font-light md:font-medium underline cursor-pointer ml-1">Not sure?</div>
               </AlertDialogTrigger>
-              <AlertDialogContent className={`max-w-xl bg-background ${geist.className}`}>
+              <AlertDialogContent className={`lg:max-w-xl bg-background ${geist.className}`}>
                 <AlertDialogHeader>
                   <AlertDialogTitle className="text-2xl">Quick Placement Test</AlertDialogTitle>
                   <AlertDialogDescription>
@@ -137,10 +140,38 @@ function ConversationsPage() {
         </div>
 
         </div>
+
+          <div>
+
+           <Label htmlFor="Select" className="text-sm lg:text-base font-semibold">Categories</Label>
+
+        <Select value={category} onValueChange={setCategory}>
+          <SelectTrigger className="w-[110px] lg:w-[180px]">
+            <SelectValue placeholder="All" />
+          </SelectTrigger>
+          <SelectContent className={geist.className}>
+            <SelectItem value="All">All</SelectItem>
+            <SelectItem value="Everyday">Everyday/Casual</SelectItem>
+            <SelectItem value="Directions">Directions/Travel</SelectItem>
+            <SelectItem value="Business">Business/Work</SelectItem>
+            <SelectItem value="School">School/Study</SelectItem>
+            <SelectItem value="Shopping">Shopping/Services</SelectItem>
+            <SelectItem value="Health">Health/Emergencies</SelectItem>
+            <SelectItem value="Lifestyle">Lifestyle/Daily Life</SelectItem>
+            <SelectItem value="Society">Society/Culture</SelectItem>
+            <SelectItem value="Emotional">Emotional/Personal Topics</SelectItem>
+            <SelectItem value="Advanced">Advanced/Abstract Topics</SelectItem>
+
+          </SelectContent>
+        </Select>
+
+        </div>
+
+
       </div>
 
     <ScrollArea className="h-3/4">
-      <div className="grid p-1 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid p-1 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filtered.map(conv => (
           <ConversationCover
             key={conv.$id}
@@ -149,6 +180,7 @@ function ConversationsPage() {
             level={conv.level}
             conversationId={conv.$id}
             audioFileId={conv.audioFileId}
+            category={conv.category}
           />
         ))}
       </div>

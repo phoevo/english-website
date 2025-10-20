@@ -58,13 +58,13 @@ const Navbar = () => {
     <nav className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
       <div className="px-4">
         <div className="grid grid-cols-5 items-center h-10 md:h-18 lg:h-18 gap-x-3">
-          {/* Left*/}
+
           <div className="justify-center hidden md:block col-start-1 col-end-2">
             <Link href={"/"} className={`lg:text-3xl md:text-xl font-normal ${dmSans.className}`}>Synomilo</Link>
           </div>
 
           {/* Center */}
-          <div className="justify-self-center hidden lg:col-start-3 lg:col-end-3 md:col-start-2 md:col-end-4 md:flex md:justify-self- lg:flex lg:justify-self-center lg:gap-12 items-center gap-8">
+          <div className="justify-self-center hidden xl:col-start-3 xl:col-end-3 md:col-start-2 md:col-end-4 md:flex md:justify-self- lg:flex lg:justify-self-center lg:gap-12 items-center gap-8">
             <Link href="/home" className="md:text-lg lg:text-xl font-semibold text-primary font-mono hover:underline underline-offset-10 decoration-zinc-600 transition-all duration-300">
               Home
             </Link>
@@ -75,26 +75,35 @@ const Navbar = () => {
 
           {/* Right */}
           <div className="justify-self-end col-start-5 col-end-6 hidden md:flex lg:flex items-center md:gap-2 lg:gap-2">
-            <div className="flex flex-row items-center gap-2 pr-0">
+           <div className="flex flex-col lg:flex-row items-center sm:items-start gap-2 md:gap-2 text-sm md:text-sm">
               {loading ? (
-                <Skeleton className="w-[56px] h-[36px]"/>
-              ): (
-              <DailyTasks>
-                <Button variant="secondary" className="items-center lg:w-auto shadow-sm cursor-pointer">
-                  <Sword className="rotate-45" /> {taskCount}
-                </Button>
-              </DailyTasks>)}
+                <Skeleton className="w-[56px] h-[18px] lg:h-[36px]" />
+              ) : (
+                <DailyTasks>
+                  <Button
+                    variant="secondary"
+                    className="flex items-center justify-center cursor-pointer w-full shadow-sm md:rounded-full md:h-6 md:p-2 lg:rounded-sm lg:p-2 lg:h-auto lg:w-auto"
+                  >
+                    <Sword className="rotate-45" /> {taskCount}
+                  </Button>
+                </DailyTasks>
+              )}
 
               {loading ? (
-                <Skeleton className="w-[56px] h-[36px]"/>
-              ): (
-              isSubscribed &&
-              <Challenges>
-                <Button className="flex items-center lg:w-auto cursor-pointer">
-                  <Swords/> {challengeCount.length}
-                </Button>
-              </Challenges>)}
+                <Skeleton className="w-[56px] h-[18px] lg:h-[36px]" />
+              ) : (
+                isSubscribed && (
+                  <Challenges>
+                    <Button
+                    className="flex items-center justify-center cursor-pointer w-full md:rounded-full md:h-6 md:py-1 lg:rounded-sm lg:p-2 lg:h-auto lg:w-auto"
+                    >
+                      <Swords /> {challengeCount.length}
+                    </Button>
+                  </Challenges>
+                )
+              )}
             </div>
+
 
             {loading ? (
               <Skeleton className="w-[180px] h-[36px] rounded-full" />
@@ -147,7 +156,7 @@ const Navbar = () => {
             )}
 
             {loading ? (
-              <Skeleton className="w-20 h-10 rounded-md" />
+              <Skeleton className="w-10 lg:w-20 h-10 rounded-md" />
             ) : user ? (
             <Button onClick={handleLogout} variant="outline" className="cursor-pointer flex items-center gap-2">
               <LogOut className="h-4 w-4" />

@@ -22,6 +22,7 @@ export interface Conversation {
   audioFileId: string;
   content: string | DialogueLine[];
   isPro?: boolean;
+  category: string;
 }
 
 export const parseDialogue = (
@@ -90,5 +91,6 @@ export const loadConversation = async (documentId: string): Promise<Conversation
     level: doc.level,
     audioFileId: doc.audioFileId,
     isPro: doc.isPro,
+    category: doc.category,
   };
 };

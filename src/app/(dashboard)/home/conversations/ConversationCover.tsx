@@ -24,9 +24,10 @@ interface ConversationCoverProps {
   conversationId: string;
   level: string;
   audioFileId: string;
+  category: string;
 }
 
-function ConversationCover({ conversationTitle, conversationDescription, conversationId, level}: ConversationCoverProps) {
+function ConversationCover({ conversationTitle, conversationDescription, conversationId, level, category}: ConversationCoverProps) {
 
   const completeConversations = useUserStore((state) => state.completeConversations);
   const isComplete = completeConversations.includes(conversationId);
@@ -82,17 +83,15 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
       transition={{ duration: 0.1 }}
        onClick={() => {handleClick();}}
     >
-        <Card className="w-full lg:w-full lg:h-70 bg-background cursor-pointer">
-    <CardHeader>
-      <CardTitle className="flex flex-row justify-between items-center">
-        <div className="flex flex-row items-center gap-1">
-          {conversationTitle}
-          {isLoading && <LoaderCircle className="animate-spin" size={15}/>}
-        </div>
-
+    <Card className="w-full lg:w-full lg:h-70 bg-background cursor-pointer">
+      <CardHeader>
+        <CardTitle className="flex flex-row justify-between items-center border-b py-1">
+          <div className="flex flex-row items-center gap-1">
+            {conversationTitle}
+            {isLoading && <LoaderCircle className="animate-spin" size={15}/>}
+          </div>
 
         <div className="flex flex-col gap-1">
-
           {isTeacher && <Assign
                 conversationId={conversationId}
                 trigger={
@@ -110,10 +109,15 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
         {isComplete && <Badge variant="outline" className="bg-green-500 max-h-6">Complete</Badge>}
         </div>
         </CardTitle>
-      <CardDescription className="border-b">{level}</CardDescription>
+        <div className="flex flex-row items-center justify-start gap-2 ">
+          <p className="text-sm">{level}</p>
+          <p className="text-sm text-muted-foreground">{category}</p>
+        </div>
+
+
     </CardHeader>
-    <CardContent>
-      <p className="text-sm">{conversationDescription}</p>
+    <CardContent className="">
+      <p className="text-sm rounded-lg">{conversationDescription}</p>
     </CardContent>
   </Card>
     </motion.div>
