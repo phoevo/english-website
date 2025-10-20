@@ -26,6 +26,7 @@ type WordTypeKey =
   | "pronoun"
   | "adverb"
   | "idiom"
+  | "phrase"
   | "conjunction"
   | "interjection"
   | "preposition"
@@ -116,6 +117,7 @@ export function TestConversation() {
     pronoun: { color: "blue-500", enabled: false },
     adverb: { color: "yellow-500", enabled: false },
     idiom: { color: "purple-500", enabled: false },
+    phrase: { color: "cyan-700", enabled: false },
     preposition: { color: "orange-500", enabled: false },
     article: { color: "gray-500", enabled: false },
     conjunction: { color: "yellow-500", enabled: false },
