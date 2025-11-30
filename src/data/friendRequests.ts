@@ -63,6 +63,30 @@ export const addFriend = async (userId: string, fromUserId: string) => {
   }
 };
 
+export const removeFriend = async (userId: string, friendId: string) => {
+  if (!userId || !friendId) {
+    console.error("Missing userId or friendId:", { userId, friendId });
+    throw new Error("Invalid parameters to removeFriend");
+  }
+  try {
+    const userDoc = await databases.getDocument(databaseId, usersCollectionId, userId);
+    const updatedUserFriends = (userDoc.friendsList || []).filter((id: string) => id !== friendId);
+    await databases.updateDocument(databaseId, usersCollectionId, userId, {
+      friendsList: updatedUserFriends,
+    });
+
+    const friendDoc = await databases.getDocument(databaseId, usersCollectionId, friendId);
+    const updatedFriendFriends = (friendDoc.friendsList || []).filter((id: string) => id !== userId);
+    await databases.updateDocument(databaseId, usersCollectionId, friendId, {
+      friendsList: updatedFriendFriends,
+    });
+  } catch (err) {
+    console.error("Error removing friend:", err);
+    toast.error("Failed to remove connection. Please try again.");
+    throw err;
+  }
+};
+
 export async function deleteFriendRequest(requestId: string) {
   return await databases.deleteDocument(databaseId, friendRequestsId, requestId);
 }

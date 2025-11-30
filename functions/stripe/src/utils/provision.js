@@ -12,8 +12,8 @@ module.exports = async function provision({ plan, userId, adminClient }) {
   // This is now our single source of truth (along with Stripe)
   try {
     await databases.updateDocument(
-      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
-      process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID,
+      process.env.APPWRITE_DATABASE_ID || process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
+      process.env.APPWRITE_USERS_COLLECTION_ID || process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID,
       userId,
       { isSubscribed }
     );

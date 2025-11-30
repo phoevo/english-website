@@ -158,8 +158,8 @@ export function SubscribeClient() {
                                   {p.desc.map((d, i) => (<li key={i}>{d}</li>))}
                                 </ul>
                               </div>
-                              <Button disabled variant={'outline'} className='w-full cursor-pointer mt-3' onClick={() => handleStudentSubscribe(p.planName)}>
-                                Disabled during beta
+                              <Button variant={'outline'} className='w-full cursor-pointer mt-3' onClick={() => handleStudentSubscribe(p.planName)}>
+                                Get {p.title}
                               </Button>
                             </div>
                           ))}

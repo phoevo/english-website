@@ -67,10 +67,10 @@ export function AppSidebar() {
             <SidebarMenu>
 
               <SidebarMenuItem key="Classroom">
-                  <SidebarMenuButton asChild disabled>
-                    <Link href="" className="text-muted-foreground cursor-default">
+                  <SidebarMenuButton asChild>
+                    <Link href="/home/assignments" className="cursor-pointer">
                       <ClipboardCheck />
-                      <span>Coming soon</span>
+                      <span>Assignments</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -79,7 +79,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Beta</SidebarGroupLabel>
+          <SidebarGroupLabel>Early Access</SidebarGroupLabel>
           <SidebarGroupContent className={`${dmSans.className}`}>
             <SidebarMenu>
               <SidebarMenuItem key="Classroom">

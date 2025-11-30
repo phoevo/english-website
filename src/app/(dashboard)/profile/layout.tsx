@@ -19,7 +19,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Loader2 } from 'lucide-react'
+import { Loader2, LoaderCircle } from 'lucide-react'
 import { Toaster } from '@/components/ui/sonner'
 import { Label } from '@/components/ui/label'
 import CustomColors from './CustomColors'
@@ -52,6 +52,7 @@ export default function ProfileLayout() {
   const [isCheckingUser, setIsCheckingUser] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [loading, setIsLoading] = useState(false);
 
   // Deletion dialog state
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -156,6 +157,7 @@ const handleUnsubscribe = async () => {
   }
 
   console.log('Attempting to unsubscribe user with ID:', user.$id);
+  setIsLoading(true)
 
   try {
     const unsubscribeResponse = await unsubscribeUser2(user.$id);
@@ -167,6 +169,7 @@ const handleUnsubscribe = async () => {
     toast.success('You have successfully unsubscribed!', {
       description: 'You will no longer have access to premium content.',
     });
+    setIsLoading(false)
 
   } catch (error) {
     console.error('Unsubscription failed:', error);
@@ -529,7 +532,16 @@ const handleUnsubscribe = async () => {
       {isSubscribed ? (
         <AlertDialogTrigger asChild>
           <div className="flex items-center gap-2">
-            <Button variant="destructive" className='cursor-pointer'>Unsubscribe</Button>
+           <Button variant="destructive" className="cursor-pointer" disabled={loading}>
+              {loading ? (
+                <>
+                  <LoaderCircle className="h-4 w-4 animate-spin" /> Unsubscribing
+                </>
+              ) : (
+                <>Unsubscribe</>
+              )}
+            </Button>
+
           </div>
         </AlertDialogTrigger>
       ) : (
@@ -537,6 +549,7 @@ const handleUnsubscribe = async () => {
           <Button variant="destructive" disabled className="cursor-pointer">
             Unsubscribe
           </Button>
+
           <Link className="underline cursor-pointer text-sm" href="/subscribe">
             Subscribe?
           </Link>
@@ -553,14 +566,23 @@ const handleUnsubscribe = async () => {
         <AlertDialogFooter>
           <AlertDialogCancel className='cursor-pointer'>Go back</AlertDialogCancel>
 
-            <AlertDialogAction
+            <AlertDialogAction className='p-0'>
+            <Button
+              variant="destructive"
+              disabled={loading}
               className="cursor-pointer"
-              onClick={async () => {
-                await handleUnsubscribe();
-                 // Only navigate AFTER unsubscribing
-              }}
+              onClick={handleUnsubscribe}
             >
-              Unsubscribe
+              {loading ? (
+                <>
+                  <LoaderCircle className="h-4 w-4 animate-spin" /> Unsubscribing
+                </>
+              ) : (
+                "Unsubscribe"
+              )}
+            </Button>
+
+
             </AlertDialogAction>
 
         </AlertDialogFooter>

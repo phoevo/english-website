@@ -14,8 +14,8 @@ module.exports = async function handleCheckPayment({
   }
 
   const databases = new Databases(adminClient);
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST, {
+    apiVersion: "2023-08-16",
   });
 
   try {
@@ -28,8 +28,8 @@ module.exports = async function handleCheckPayment({
     });
 
     const subscriberDoc = await databases.listDocuments(
-      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
-      process.env.NEXT_PUBLIC_APPWRITE_STRIPE_CUSTOMERS_ID,
+      process.env.APPWRITE_DATABASE_ID || process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
+      process.env.APPWRITE_STRIPE_CUSTOMERS_ID || process.env.NEXT_PUBLIC_APPWRITE_STRIPE_CUSTOMERS_ID,
       [Query.equal("stripe_customer_id", checkoutSession.customer)]
     );
 

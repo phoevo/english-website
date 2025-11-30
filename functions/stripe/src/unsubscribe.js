@@ -1,7 +1,7 @@
-const { Databases, Query } = require("node-appwrite");
+const { Databases, Query, Account } = require("node-appwrite");
 const Stripe = require("stripe");
 
-async function handleUnsubscribe({ req, res, adminClient, log, error }) {
+async function handleUnsubscribe({ req, res, client, adminClient, log, error }) {
   log("Request body:", req.bodyJson);
   try {
     // Use the already parsed body from main.js
@@ -16,17 +16,19 @@ async function handleUnsubscribe({ req, res, adminClient, log, error }) {
 
     log("Initializing Stripe and Appwrite clients...");
 
-    // Debug environment variables
-    log("Environment variables check:");
-    log("NEXT_PUBLIC_STRIPE_SECRET_KEY:", process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY ? "✓ Present" : "✗ Missing");
-    log("STRIPE_SECRET_KEY:", process.env.STRIPE_SECRET_KEY ? "✓ Present" : "✗ Missing");
+    // Environment check (minimal)
+    log("Using STRIPE_SECRET_KEY:", Boolean(process.env.STRIPE_SECRET_KEY_TEST));
 
-    // Use the same key pattern as other working functions
-    const stripeKey = process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY;
+    // Always use the server-side secret to avoid test/live mismatches
+    const stripeKey = process.env.STRIPE_SECRET_KEY_TEST;
 
     if (!stripeKey) {
-      error("ERROR: No Stripe secret key found in environment variables");
+      error("ERROR: STRIPE_SECRET_KEY is missing");
       return res.json({ error: "Missing Stripe API key" }, 500);
+    }
+
+    if (process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY_TEST) {
+      log("Warning: NEXT_PUBLIC_STRIPE_SECRET_KEY is set; ignoring in server function");
     }
 
     const stripe = new Stripe(stripeKey, {
@@ -34,11 +36,19 @@ async function handleUnsubscribe({ req, res, adminClient, log, error }) {
     });
 
     log("Stripe initialized successfully with key");
+    // Diagnostics: show which Stripe account/mode this function is using
+    try {
+      const acct = await stripe.accounts.retrieve();
+      log("Stripe account", { id: acct.id, livemode: acct.livemode });
+    } catch (acctErr) {
+      error("Failed to retrieve Stripe account", { message: acctErr?.message });
+    }
+
     const databases = new Databases(adminClient);
 
-    const dbId = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
-    const stripeCustomersCollectionId = '687a74fb003d6808b5fd';
-    const usersCollectionId = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID;
+    const dbId = process.env.APPWRITE_DATABASE_ID || process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
+    const stripeCustomersCollectionId = process.env.APPWRITE_STRIPE_CUSTOMERS_ID || process.env.NEXT_PUBLIC_APPWRITE_STRIPE_CUSTOMERS_ID || '687a74fb003d6808b5fd';
+    const usersCollectionId = process.env.APPWRITE_USERS_COLLECTION_ID || process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID;
 
     log("Environment variables:", {
       dbId: !!dbId,
@@ -57,30 +67,84 @@ async function handleUnsubscribe({ req, res, adminClient, log, error }) {
     ]);
     log("Customer docs found:", customerDocs.total);
 
+    let stripe_customer_id;
     if (customerDocs.total === 0) {
-      error("ERROR: No Stripe customer found for user");
-      return res.json({ error: "No Stripe customer found for this user." }, 404);
+      log("No Stripe customer mapping; attempting email-based lookup...");
+      const account = new Account(client);
+      let email = undefined;
+      try {
+        const me = await account.get();
+        email = me?.email;
+      } catch {}
+      if (email) {
+        const found = await stripe.customers.list({ email, limit: 1 });
+        if (found.data.length > 0) {
+          stripe_customer_id = found.data[0].id;
+          // Upsert mapping for future operations
+          try {
+            await databases.createDocument(
+              dbId,
+              stripeCustomersCollectionId,
+              user_id,
+              { user_id, stripe_customer_id }
+            );
+          } catch {
+            // If doc exists, update
+            try {
+              const existing = await databases.listDocuments(dbId, stripeCustomersCollectionId, [Query.equal("user_id", user_id)]);
+              if (existing.total > 0) {
+                await databases.updateDocument(dbId, stripeCustomersCollectionId, existing.documents[0].$id, { stripe_customer_id });
+              }
+            } catch {}
+          }
+        }
+      }
+      if (!stripe_customer_id) {
+        log("No Stripe customer found by email; treating as already unsubscribed.");
+        await databases.updateDocument(dbId, usersCollectionId, user_id, { isSubscribed: false });
+        return res.json({ success: true });
+      }
+    } else {
+      const customer = customerDocs.documents[0];
+      stripe_customer_id = customer.stripe_customer_id;
+      log("Found Stripe customer ID:", !!stripe_customer_id);
+      if (!stripe_customer_id) {
+        log("No stripe_customer_id present in mapping; treating as already unsubscribed.");
+        await databases.updateDocument(dbId, usersCollectionId, user_id, { isSubscribed: false });
+        return res.json({ success: true });
+      }
     }
 
-    const customer = customerDocs.documents[0];
-    const stripe_customer_id = customer.stripe_customer_id;
-    log("Found Stripe customer ID:", !!stripe_customer_id);
-
-    if (!stripe_customer_id) {
-      error("ERROR: No stripe_customer_id found in customer document");
-      return res.json({ error: "No stripe_customer_id found for user." }, 400);
+    // ✅ Step 2: Verify the Stripe customer exists; if not, treat as already unsubscribed
+    log("Step 2: Verifying Stripe customer exists...");
+    let customerExists = true;
+    try {
+      await stripe.customers.retrieve(stripe_customer_id);
+    } catch (custErr) {
+      const msg = custErr && custErr.message ? String(custErr.message) : "";
+      const code = custErr && custErr.code ? String(custErr.code) : "";
+      if (msg.includes("No such customer") || code === "resource_missing") {
+        customerExists = false;
+        log("Customer not found in Stripe; proceeding to mark user unsubscribed without Stripe cancellation.");
+      } else {
+        throw custErr;
+      }
     }
 
-    // ✅ Step 2: Get active subscriptions from Stripe and cancel them
-    log("Step 2: Fetching active subscriptions from Stripe...");
-    const subscriptions = await stripe.subscriptions.list({
-      customer: stripe_customer_id,
-      status: 'active'
-    });
-    log("Active subscriptions found:", subscriptions.data.length);
+    let subscriptions = { data: [] };
+    if (customerExists) {
+      log("Fetching active subscriptions from Stripe...");
+      subscriptions = await stripe.subscriptions.list({
+        customer: stripe_customer_id,
+        status: 'active'
+      });
+      log("Active subscriptions found:", subscriptions.data.length);
+    } else {
+      log("Skipping subscription list because customer does not exist.");
+    }
 
     if (subscriptions.data.length === 0) {
-      log("No active subscriptions found for customer");
+      log("No active subscriptions found for customer or customer missing");
       // Still continue to update user profile
     } else {
       // Cancel all active subscriptions
@@ -109,6 +173,21 @@ async function handleUnsubscribe({ req, res, adminClient, log, error }) {
     } catch (updateError) {
       error("Error updating user profile:", updateError);
       // Still return success since Stripe subscriptions were handled
+    }
+
+    // Optional cleanup: remove stale mapping if customer didn't exist
+    if (typeof customerExists !== 'undefined' && !customerExists) {
+      try {
+        const toDelete = await databases.listDocuments(dbId, stripeCustomersCollectionId, [
+          Query.equal("user_id", user_id),
+        ]);
+        for (const doc of toDelete.documents) {
+          await databases.deleteDocument(dbId, stripeCustomersCollectionId, doc.$id);
+        }
+        log("Removed stale stripe_customers mapping");
+      } catch (cleanupErr) {
+        error("Failed to remove stale stripe_customers mapping", { message: cleanupErr?.message });
+      }
     }
 
     log("Unsubscribe process completed successfully");
