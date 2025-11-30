@@ -243,7 +243,7 @@ return (
             <p className={`text-md p-2 lg:text-lg leading-relaxed bg-card text-center ${dmSans.className}`}>
               I built Synomilo to help English learners move beyond studying by giving them a place to actively practice.
               With realistic conversations and tools built for real-world speaking, students can practice solo or with a tutor.
-              Tutors can already join sessions and guide students through screen sharing. I'm currently building dedicated tutor tools for assigning, tracking, and giving feedback are coming soon.
+              Tutors can already join sessions and guide students through screen sharing. I'm currently building dedicated tutor tools for assigning and tracking progress.
             </p>
 
           </motion.div>
