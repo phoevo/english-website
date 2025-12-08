@@ -16,7 +16,7 @@ const geist = Geist({ subsets: ['latin'] });
 type MockAssignmentWithConversation = {
   $id: string;
   conversationId: string;
-  status: "Pending" | "Completed";
+  status: "Pending" | "Complete";
   title: string;
   level: string;
 };
@@ -35,7 +35,7 @@ function TestTeacherPage() {
       {
         $id: 'assignment1',
         conversationId: 'conv1',
-        status: 'Completed',
+        status: 'Complete',
         title: 'Restaurant Ordering Conversation',
         level: 'B1'
       },
@@ -49,7 +49,7 @@ function TestTeacherPage() {
       {
         $id: 'assignment3',
         conversationId: 'conv3',
-        status: 'Completed',
+        status: 'Complete',
         title: 'Travel Planning Discussion',
         level: 'B1'
       }
@@ -65,7 +65,7 @@ function TestTeacherPage() {
       {
         $id: 'assignment5',
         conversationId: 'conv5',
-        status: 'Completed',
+        status: 'Complete',
         title: 'Weather and Seasons',
         level: 'A2'
       }
@@ -123,8 +123,8 @@ function TestTeacherPage() {
                     <h4 className="font-semibold text-sm">{assignment.title}</h4>
                     <p className="text-xs text-muted-foreground mb-1">Level: {assignment.level}</p>
                     <Badge
-                      variant={assignment.status === "Completed" ? "default" : "outline"}
-                      className={`text-xs ${assignment.status === "Completed" ? "bg-green-500 text-white" : ""}`}
+                      variant={assignment.status === "Complete" ? "default" : "outline"}
+                      className={`text-xs ${assignment.status === "Complete" ? "bg-green-500 text-white" : ""}`}
                     >
                       {assignment.status}
                     </Badge>

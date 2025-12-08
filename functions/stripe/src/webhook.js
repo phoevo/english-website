@@ -2,31 +2,28 @@ const { Databases, Client, Query } = require("node-appwrite");
 const Stripe = require("stripe");
 const provision = require("./utils/provision.js");
 
-module.exports = async function handleWebhook({
-  req,
-  res,
-  adminClient,
-}) {
+module.exports = async function handleWebhook({ req, res, adminClient }) {
   console.log("Webhook received. Event type:", req.method);
   console.log("Headers:", JSON.stringify(req.headers, null, 2));
 
-  // Use API secret for Stripe client (test or live depending on your environment)
+  // Use TEST or LIVE depending on environment
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST, {
     apiVersion: "2023-08-16",
   });
-  // Webhook signing secret is ONLY for signature verification
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET_TEST;
 
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET_TEST;
   const signature = req.headers["stripe-signature"];
+
+  // Ensure raw buffer
+  const rawBodyString = req.bodyRaw || req.bodyText || req.body;
+  const rawBody = Buffer.isBuffer(rawBodyString)
+    ? rawBodyString
+    : Buffer.from(rawBodyString || "", "utf8");
 
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(
-      req.bodyText,
-      signature,
-      webhookSecret
-    );
+    event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
   } catch (err) {
     console.error("Invalid webhook signature:", err);
     return res.json({ error: "Invalid signature" }, 400);
@@ -64,15 +61,15 @@ module.exports = async function handleWebhook({
   let customerId;
   let priceId;
 
+  /** ---- LOGIC BELOW UNCHANGED ---- */
+
   // Handle different event types
   if (event.type === "checkout.session.completed") {
     customerId = event.data.object.customer;
-    // Get the price ID from line items
     const lineItems = event.data.object.display_items || event.data.object.line_items;
     if (lineItems && lineItems.length > 0) {
       priceId = lineItems[0].price?.id;
     }
-    // If not found in line items, fetch from subscription
     if (!priceId && event.data.object.subscription) {
       const subscription = await stripe.subscriptions.retrieve(event.data.object.subscription);
       priceId = subscription.items.data[0].price.id;
@@ -82,9 +79,8 @@ module.exports = async function handleWebhook({
     if (event.data.object.items) {
       priceId = event.data.object.items.data[0].price.id;
     }
-    // Fallback for invoice.* events where price is present on lines[]
     if (!priceId && event.type.startsWith("invoice.")) {
-      const lines = (event.data.object?.lines?.data) || [];
+      const lines = event.data.object?.lines?.data || [];
       const first = lines[0];
       if (first?.pricing?.price_details?.price) {
         priceId = first.pricing.price_details.price;
@@ -102,7 +98,6 @@ module.exports = async function handleWebhook({
 
   const databases = new Databases(adminClient);
 
-  // Prefer server-only env names, fallback to NEXT_PUBLIC_* if you have them set
   const dbId = process.env.APPWRITE_DATABASE_ID || process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
   const stripeCustomersCollectionId = process.env.APPWRITE_STRIPE_CUSTOMERS_ID || process.env.NEXT_PUBLIC_APPWRITE_STRIPE_CUSTOMERS_ID;
   const usersCollectionId = process.env.APPWRITE_USERS_COLLECTION_ID || process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID;
@@ -115,8 +110,6 @@ module.exports = async function handleWebhook({
 
   let userId;
   if (subscriptionDoc.documents.length === 0) {
-    console.error("No matching customer document found for:", customerId);
-    // Try to auto-link by email
     let email = event.data.object?.customer_email;
     if (!email) {
       try {
@@ -126,24 +119,31 @@ module.exports = async function handleWebhook({
     }
 
     if (email) {
-      const users = await databases.listDocuments(dbId, usersCollectionId, [Query.equal("email", email)]);
+      const users = await databases.listDocuments(dbId, usersCollectionId, [
+        Query.equal("email", email),
+      ]);
       if (users.total > 0) {
         userId = users.documents[0].$id;
-        // Upsert mapping
+
         const existingForUser = await databases.listDocuments(dbId, stripeCustomersCollectionId, [
           Query.equal("user_id", userId),
         ]);
+
         if (existingForUser.total > 0) {
-          await databases.updateDocument(dbId, stripeCustomersCollectionId, existingForUser.documents[0].$id, {
-            stripe_customer_id: customerId,
-          });
+          await databases.updateDocument(
+            dbId,
+            stripeCustomersCollectionId,
+            existingForUser.documents[0].$id,
+            { stripe_customer_id: customerId }
+          );
         } else {
-          await databases.createDocument(dbId, stripeCustomersCollectionId, "unique()", {
-            user_id: userId,
-            stripe_customer_id: customerId,
-          });
+          await databases.createDocument(
+            dbId,
+            stripeCustomersCollectionId,
+            "unique()",
+            { user_id: userId, stripe_customer_id: customerId }
+          );
         }
-        console.log("Auto-linked Stripe customer to user:", { userId, customerId });
       } else {
         return res.json({ error: "No user found for customer email" }, 404);
       }
@@ -157,8 +157,6 @@ module.exports = async function handleWebhook({
   console.log("Found user ID:", userId);
 
   let plan = "free";
-
-  // Determine plan based on price ID
   if (priceId) {
     switch (priceId) {
       case "price_1RjNY6PoApFikZNYFIHlqq3t":
@@ -168,17 +166,14 @@ module.exports = async function handleWebhook({
         plan = "Student Yearly";
         break;
       default:
-        console.log("Unknown price ID:", priceId, "defaulting to free");
         plan = "free";
     }
   } else {
-    // Fallback: check active subscriptions
     const subscriptions = await stripe.subscriptions.list({
       customer: customerId,
       limit: 1,
       status: "active",
     });
-
     if (subscriptions.data.length > 0) {
       const activePriceId = subscriptions.data[0].items.data[0].price.id;
       switch (activePriceId) {
@@ -196,11 +191,6 @@ module.exports = async function handleWebhook({
 
   console.log("Determined plan:", plan);
 
-  await provision({
-    plan,
-    userId,
-    adminClient,
-  });
-
+  await provision({ plan, userId, adminClient });
   return res.json({ message: "ok" });
-}
+};

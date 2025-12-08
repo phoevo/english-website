@@ -122,7 +122,7 @@ export default function LandingPage() {
 
 return (
     <ScrollArea id="landing-scroll" className={`flex scroll-auto bg-landing-bg flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
-       <nav className="sticky rounded-full backdrop-blur-2xl top-0 w-full z-30">
+       <nav className="sticky backdrop-blur-2xl top-0 w-full z-30">
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-12 lg:h-18">
             <h1 className="hidden lg:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>

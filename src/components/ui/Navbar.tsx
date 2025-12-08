@@ -111,8 +111,11 @@ const Navbar = () => {
               <div className={`flex flex-row items-center justify-start border-1 rounded-full shadow-xs`}>
 
 
-                  <div className="flex flex-row rounded-full border-1 m-1">
-                  <Badge
+                  <div className="flex flex-row">
+                     <Badge className={`m-1 ${isSubscribed ? "bg-pink-500 text-foreground" : ""}`}>
+                    {isSubscribed ? "Pro" : "Free"}
+                  </Badge>
+                  {/* <Badge
                     onClick={() => setSubscribed(false)}
                     className={`flex-1 text-center rounded-full cursor-pointer transition ${
                       !isSubscribed
@@ -132,7 +135,7 @@ const Navbar = () => {
                     }`}
                   >
                     Pro
-                  </Badge>
+                  </Badge> */}
                 </div>
 
 
