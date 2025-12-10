@@ -24,7 +24,7 @@ import { fetchPendingRequests, hasPendingRequest, sendFriendRequest, updateReque
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-
+import { addActiveStudent } from "@/data/friendRequests";
 
 
 const geist = Geist({ subsets: ['latin'] });
@@ -47,7 +47,7 @@ function getStreakBadgeClass(streak: number): string {
 }
 
 function AssignmentsPage() {
-  const { user, loading, friendsList, friends, isTeacher } = useUserStore();
+  const { user, loading, friendsList, friends, isTeacher, activeStudents, setActiveStudents} = useUserStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -364,6 +364,7 @@ return (
       <Tabs defaultValue="connections" className="w-full">
   <TabsList className="w-full">
     <TabsTrigger value="connections">Connections</TabsTrigger>
+    {isTeacher && <TabsTrigger value="active">Active Students</TabsTrigger>}
     <TabsTrigger value="requests">Requests</TabsTrigger>
   </TabsList>
 
@@ -419,6 +420,22 @@ return (
           </div>
 
 
+            <div className="flex flex-row">
+              {isTeacher && !f.isTeacher && (
+                <Button
+                  className="cursor-pointer flex h-4 items-center justify-center rounded-md border px-2 py-2.5 text-xs w-fit"
+                  size={"icon"}
+                  onClick={async () => {
+                    if (!user) return;
+                    await addActiveStudent(user.$id, f.$id);
+                    await setActiveStudents();
+                  }}
+                  disabled={activeStudents?.includes(f.$id)}
+                  variant={activeStudents?.includes(f.$id) ? "active" : "outline"}
+                >
+                  {activeStudents?.includes(f.$id) ? "Active" : "Set as Active"}
+                </Button>
+              )}
           <AlertDialog>
         <AlertDialogTrigger asChild>
           <div className="flex items-center gap-2">
@@ -458,6 +475,7 @@ return (
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+    </div>
 
         </div>
       ))}
@@ -526,6 +544,57 @@ return (
     )}
   </Card>
 </TabsContent>
+
+{isTeacher && (
+  <TabsContent value="active">
+    <Card className="bg-background flex flex-col p-2 border-none shadow-none">
+      {!activeStudents || activeStudents.length === 0 ? (
+        <p className="text-sm text-muted-foreground">No active students yet.</p>
+      ) : (
+        <div className="rounded-md space-y-4">
+          {friends
+            .filter((f) => activeStudents?.includes(f.$id) && !f.isTeacher)
+            .map((f) => (
+              <div
+                key={f.$id}
+                className="flex bg-background items-center justify-between p-2 rounded-lg border-1 shadow-xs"
+              >
+                <div className="flex flex-col gap-1">
+                  <div>
+                    <Badge variant="secondary">Student</Badge>
+                    <span className="text-sm text-muted-foreground px-2">{f.email}</span>
+                  </div>
+                  <div className="flex gap-2 items-center mt-2">
+                    <div className="flex flex-row border-1 rounded-full p-1 h-8 shadow-xs">
+
+              {f.isSubscribed ? (
+                <Badge className="text-foreground bg-pink-500 border-none">Pro</Badge>
+              ) : (
+                <Badge className="text-background bg-foreground border-none">Free</Badge>
+              )}
+
+              <span className="font-normal px-2">{f.name || "Unknown"}</span>
+
+                      {f.streak !== undefined && (
+                <div className="flex justify-center">
+                  <Badge className={getStreakBadgeClass(f.streak ?? 0)}>
+                    {f.streak ?? 0}
+                  </Badge>
+                </div>
+              )}
+
+                    </div>
+                    <Badge className="p-2" variant="secondary"> <Sword className="rotate-45"/> {f.taskCount || 0}</Badge>
+                    <Badge className="p-2"> <Swords/> {f.challengeCount?.length || 0}</Badge>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
+      )}
+    </Card>
+  </TabsContent>
+)}
 
 </Tabs>
   </div>

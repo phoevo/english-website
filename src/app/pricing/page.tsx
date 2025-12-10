@@ -15,14 +15,11 @@ import {
 import { Geist, DM_Sans } from 'next/font/google'
 import Link from 'next/link'
 import { useUserStore } from '@/data/useUserStore'
-// import { subscribeUser } from '@/data/getData'
-// import { toast } from 'sonner'
 import {
   Card,
   CardFooter,
 } from "@/components/ui/card"
 
-// import { useRouter } from 'next/navigation';
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { ArrowDown, Briefcase, CircleArrowDown, CircleArrowUp, Notebook, User } from 'lucide-react'
 import { motion } from "motion/react";
@@ -35,9 +32,12 @@ import {
 import Student from './Student'
 import Tutor from './Tutor'
 import Enterprise from './Enterprise'
+import ModeToggle from '@/components/ui/ModeToggle'
 
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
+const geist = Geist({ subsets: ['latin'] });
+
 
 type Tier = {
   tutorBadge: string;
@@ -95,11 +95,13 @@ function renderTier(tier: Tier, idx: number) {
     <div className='flex flex-row'>
 
       <div className='w-auto flex flex-col items-center'>
+
         <div className='flex items-center justify-center relative p-3 md:p-5'>
           <User strokeWidth={1} size={60} className="md:w-[90px] md:h-[90px]" />
           <Notebook className="absolute bottom-3 md:bottom-5 ml-6 md:ml-10 bg-background z-10" size={20} />
         </div>
         <Badge className={studentIsPro ? "bg-pink-500" : ""}>{tier.studentBadge}</Badge>
+
       </div>
 
       <div className='w-auto flex flex-col items-center'>
@@ -116,7 +118,7 @@ function renderTier(tier: Tier, idx: number) {
 
       <div className='flex items-center justify-start relative w-full md:w-2/3'>
         <ul className='text-xs md:text-sm space-y-2'>
-{tier.features.map((f, i: number) => (
+          {tier.features.map((f, i: number) => (
             <li key={i} className='flex flex-row gap-1 items-center'>
               {f.icon}
               <span className="text-left">{f.text}</span>
@@ -124,12 +126,9 @@ function renderTier(tier: Tier, idx: number) {
           ))}
         </ul>
       </div>
-
     </CardContent>
   );
 }
-
-
 
 
 
@@ -138,27 +137,33 @@ function SubscribePage() {
   const {isSubscribed, user} = useUserStore();
 
 
-
-// earlyPaidOptions removed (unused)
-
-
-
-
-
-
   return (
 
     <ScrollArea className={`w-full h-screen overflow-y-auto ${dmSans.className}`}>
-    <div className='flex flex-col justify-center items-center gap-2 mb-15 lg:mb-0 p-4 md:p-10'>
+      <nav className="sticky backdrop-blur-2xl top-0 w-full z-30">
+        {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
+        <div className="flex items-center h-12 lg:h-18">
+            <h1 className="hidden lg:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
 
+            <div className={`flex absolute right-5 md:right-5 lg:right-10 md:gap-0 lg:gap-1 ${geist.className}`}>
+              <Link href={"/register"}> <Button className="hidden md:block lg:block cursor-pointer" variant={"ghost"}>Sign up</Button> </Link>
+              <Link href={"/login"}> <Button className="hidden md:block lg:block cursor-pointer" variant="ghost">Log in</Button> </Link>
+              <Link href="/pricing"> <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Pricing</Button></Link>
+              <Link href="/blog"> <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Blog</Button></Link>
+              <ModeToggle />
+            </div>
+        </div>
+    </nav>
+
+    <div className='flex flex-col justify-center items-center gap-2 lg:mb-0 p-4 md:p-0'>
 
     <div className="flex flex-col md:flex-col gap-2 items-center justify-center rounded-lg w-full h-auto ">
-      <h1 className='text-3xl md:text-6xl font-normal text-center'>Choose your plan, first <span className='text-pink-500'>5</span> days are free</h1>
+      <h1 className='text-3xl md:text-6xl font-medium text-center'>First <span className='text-pink-500'>5</span> days are free</h1>
       <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0, delay: 0 }}
-      className='text-sm md:text-lg text-muted-foreground p-2 text-center mx-4'>During early access, rates will be lower while the platform is being polished</motion.div>
+      className='text-sm md:text-base text-muted-foreground p-2 text-center mx-4'>During early access, rates will be lower while the platform is being polished</motion.div>
     </div>
 
 
@@ -166,27 +171,23 @@ function SubscribePage() {
 
   <div className="flex xl:w-1/2 lg:w-full flex-col gap-6">
       <Tabs className="" defaultValue="Students">
+
         <TabsList className='self-center'>
           <TabsTrigger value="Students">Students</TabsTrigger>
           <TabsTrigger value="Tutors">Tutors</TabsTrigger>
           <TabsTrigger value="Enterprise">Enterprise</TabsTrigger>
-
         </TabsList>
+
         <TabsContent value="Students">
-
           <Student/>
-
         </TabsContent>
+
         <TabsContent value="Tutors">
-
           <Tutor/>
-
         </TabsContent >
 
         <TabsContent value='Enterprise'>
           <Enterprise />
-
-
         </TabsContent>
       </Tabs>
     </div>

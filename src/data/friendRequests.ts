@@ -90,3 +90,45 @@ export const removeFriend = async (userId: string, friendId: string) => {
 export async function deleteFriendRequest(requestId: string) {
   return await databases.deleteDocument(databaseId, friendRequestsId, requestId);
 }
+
+export async function addActiveStudent(teacherId: string, studentId: string) {
+  if (!teacherId || !studentId) {
+    console.error("Missing teacherId or studentId:", { teacherId, studentId });
+    throw new Error("Invalid parameters to addActiveStudent");
+  }
+
+  try {
+    // Fetch the teacher's document
+    const teacherDoc = await databases.getDocument(
+      databaseId,
+      usersCollectionId,
+      teacherId
+    );
+
+    // Get current list (fallback to empty)
+    const currentStudents = teacherDoc.activeStudents || [];
+
+    // Prevent duplicates
+    if (currentStudents.includes(studentId)) {
+      toast.info("This student is already in your active list.");
+      return;
+    }
+
+    const updatedStudents = [...currentStudents, studentId];
+
+    // Update teacher document in Appwrite
+    await databases.updateDocument(
+      databaseId,
+      usersCollectionId,
+      teacherId,
+      { activeStudents: updatedStudents }
+    );
+
+    toast.success("Student added to your active list!");
+
+  } catch (err) {
+    console.error("Error adding active student:", err);
+    toast.error("Failed to add student. Please try again.");
+    throw err;
+  }
+}

@@ -19,6 +19,7 @@ interface User {
   streak?: number;
   challengeCount?: string[];
   taskCount?: number;
+  activeStudents?: string[];
 }
 
 interface Conversation {
@@ -42,6 +43,7 @@ interface UserState {
   isTeacher: boolean;
   friendsList: string[];
   friends: User[];
+  activeStudents: string[];
 
   fetchUser: () => Promise<void>;
   fetchFriends: () => Promise<void>;
@@ -59,6 +61,7 @@ interface UserState {
   getIsTeacher: () => boolean;
   setUser: (user: User) => void;
   setIsTeacher: (val: boolean) => void;
+  setActiveStudents: () => Promise<void>
 }
 
 export const useUserStore = create<UserState>((set, get) => ({
@@ -76,6 +79,7 @@ export const useUserStore = create<UserState>((set, get) => ({
   isTeacher: false,
   friendsList: [],
   friends: [],
+  activeStudents: [],
 
   fetchFriends: async () => {
   const { user } = get();
@@ -139,6 +143,8 @@ fetchUser: async () => {
     const streak = typeof userDoc?.streak === "number" ? userDoc.streak : 0;
     const isTeacher = !!userDoc?.isTeacher;
     const friendsList: string[] = userDoc?.friendsList || [];
+    const activeStudents: string[] = userDoc?.activeStudents || [];
+
 
     // Fetch conversations in parallel for better performance
     const conversations: Conversation[] = [];
@@ -183,6 +189,7 @@ fetchUser: async () => {
         streak,
         challengeCount,
         taskCount,
+        activeStudents,
       },
       isTeacher,
       isSubscribed,
@@ -195,6 +202,7 @@ fetchUser: async () => {
       taskCount,
       lastActive,
       streak,
+      activeStudents,
     });
 
     // Fetch friends in background to avoid blocking initial load
@@ -325,6 +333,29 @@ fetchUser: async () => {
     isTeacher: val,
     user: state.user ? { ...state.user, isTeacher: val } : null,
   })),
+
+  setActiveStudents: async () => {
+  const { user } = get();
+  if (!user) return;
+
+  try {
+    const userDoc = await databases.getDocument(
+      databaseId,
+      usersCollectionId,
+      user.$id
+    );
+
+    const activeStudents = userDoc?.activeStudents || [];
+
+    set({
+      activeStudents,
+      user: { ...user, activeStudents }
+    });
+  } catch (err) {
+    console.error("Failed to fetch active students:", err);
+  }
+},
+
 
   getIsTeacher: () => get().isTeacher,
 }));

@@ -222,7 +222,7 @@ export async function getUserPlan(): Promise<"free" | "pro"> {
     const result = JSON.parse(response.responseBody || "{}");
 
     // List your paid plans here
-    const paidPlans = ["Student Monthly", "Student Yearly"];
+    const paidPlans = ["Student Monthly", "Student Yearly", "Tutor Monthly"];
 
     // Return 'pro' if user has one of these paid plans, otherwise 'free'
     return paidPlans.includes(result.plan) ? "pro" : "free";
@@ -242,7 +242,6 @@ export async function unsubscribeUser2(userId: string) {
 
   const functions = new Functions(client);
 
-  // Send only user_id in the payload
   const payload = JSON.stringify({ user_id: userId });
 
   const response = await functions.createExecution(
@@ -253,11 +252,9 @@ export async function unsubscribeUser2(userId: string) {
     "POST" as unknown as import("appwrite").ExecutionMethod,
     { "content-type": "application/json" }
   );
-
   if (response.status !== "completed") {
     throw new Error("Failed to unsubscribe user");
   }
-
   return JSON.parse(response.responseBody);
 }
 

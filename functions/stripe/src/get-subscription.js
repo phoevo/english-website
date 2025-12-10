@@ -56,6 +56,8 @@ module.exports = async function handleGetSubscription({
       let planName = "free";
       if (priceId === process.env.STRIPE_MONTHLY_PRICE_ID) planName = "Student Monthly";
       else if (priceId === process.env.STRIPE_YEARLY_PRICE_ID) planName = "Student Yearly";
+      else if (priceId === process.env.STRIPE_TUTOR_MONTHLY) planName = "Tutor Monthly";
+      else if (priceId === process.env.STRIPE_TUTOR_PERSEAT) planName = "Tutor per seat";
       return res.json({ plan: planName, hasActiveSubscription: true, subscriptionId: activeSubscription.id, status: activeSubscription.status });
     }
 
@@ -92,6 +94,10 @@ module.exports = async function handleGetSubscription({
       planName = "Student Monthly";
     } else if (priceId === process.env.STRIPE_YEARLY_PRICE_ID) {
       planName = "Student Yearly";
+    } else if (priceId === process.env.STRIPE_SYNOMILO_TUTOR) {
+      planName = "Tutor Monthly";
+    } else if (priceId === process.env.STRIPE_SYNOMILO_TUTOR) {
+      planName = "Tutor per seat";
     }
 
     return res.json({

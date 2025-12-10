@@ -58,10 +58,18 @@ module.exports = async function handleCheckPayment({
       case "price_1RmIPcPoApFikZNYDnmuR2hA":
         plan = "Student Yearly";
         break;
+      case "price_1ScV06PoApFikZNYoWPINm74":
+        plan = "Tutor Monthly";
+        break;
+      case "price_1Sc8a5PoApFikZNYt4gagZ1g":
+        plan = "Tutor per seat";
+        break;
       default:
         plan = "free";
         break;
     }
+
+
 
     await provision({
       plan,

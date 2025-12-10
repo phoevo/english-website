@@ -369,7 +369,7 @@ const handleUnsubscribe = async () => {
                   <AlertDialogHeader>
                     <AlertDialogTitle>Confirm account deletion</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This action is permanent. It will delete your account and associated data (including subscription status and progress). To confirm, type &quot;delete&quot; below.
+                      This action is permanent. It will delete your account and associated data (including subscription status and progress).
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <div className="space-y-2">
@@ -436,7 +436,7 @@ const handleUnsubscribe = async () => {
                   {isSubscribed && user ?(
                   <>
                   <p className='text-sm text-muted-foreground'>Select a word type and select it&apos;s color. Save when you&apos;re done. <span className='text-red-500 font-normal m-0 text-sm'>
-                    Certain background and text color combinations could make reading harder.</span>
+                    Certain background and text color combinations could affect visibility.</span>
                     </p>
 
                   <CustomColors userId={user.$id} />
@@ -566,8 +566,7 @@ const handleUnsubscribe = async () => {
         <AlertDialogFooter>
           <AlertDialogCancel className='cursor-pointer'>Go back</AlertDialogCancel>
 
-            <AlertDialogAction className='p-0'>
-            <Button
+            <AlertDialogAction
               variant="destructive"
               disabled={loading}
               className="cursor-pointer"
@@ -580,9 +579,6 @@ const handleUnsubscribe = async () => {
               ) : (
                 "Unsubscribe"
               )}
-            </Button>
-
-
             </AlertDialogAction>
 
         </AlertDialogFooter>

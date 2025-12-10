@@ -14,7 +14,7 @@ const dmSans = DM_Sans({ subsets: ['latin'] });
 
 
 function Student() {
-  const {user, isSubscribed} = useUserStore();
+  const {user, isSubscribed, isTeacher} = useUserStore();
 
     const paidOptions = [
     {
@@ -45,7 +45,7 @@ function Student() {
 
       <Card className='border-none bg-background shadow-none'>
             <CardHeader>
-              <CardTitle className='flex justify-center text-lg'>Billed monthly or yearly</CardTitle>
+              <CardTitle className='flex justify-center text-2xl'>Billed monthly or yearly</CardTitle>
             </CardHeader>
             <CardContent className="w-full">
 
@@ -54,14 +54,14 @@ function Student() {
       <div className='flex flex-col md:flex-col gap-5 w-full'>
 
      <div className='flex flex-col md:flex-row gap-5'>
-  <div className='flex flex-col justify-between p-2 bg-muted rounded-xl h-100 w-full text-muted-foreground'>
+  <div className='flex flex-col justify-between p-2 bg-muted rounded-xl h-100 shadow-md w-full text-muted-foreground'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10'>Free</Badge>
       <motion.div className='flex justify-center'
       initial={{ opacity: 0, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0 }}>
-      <ul className='text-base list-disc marker:text-popover-foreground space-y-1 justify-start'>
+      <ul className='text-base list-disc marker:text-popover-foreground space-y-1 px-2 justify-start'>
         <li>8 conversations, 2 per level, A1-B2</li>
         <li>Hover</li>
         <li>Dictionary and Word Board</li>
@@ -73,7 +73,7 @@ function Student() {
 
     </div>
 
-    {isSubscribed ? (
+    {!isTeacher && isSubscribed ? (
     <Button
     variant="outline"
     className="w-full cursor-not-allowed opacity-50"
@@ -94,7 +94,7 @@ function Student() {
 
 
 
-<div className='flex flex-col justify-between p-2 border-1 rounded-xl h-100 w-full'>
+<div className='flex flex-col justify-between p-2 border-1 rounded-xl shadow-xs h-100 w-full'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10 bg-pink-500 text-white'>Pro</Badge>
       <div className='flex justify-center items-center'>
@@ -112,7 +112,7 @@ function Student() {
     <Dialog>
   <DialogTrigger asChild>
     <Button variant="outline" className="cursor-pointer" >
-      {isSubscribed ? "Already subscribed. Change plan?" : "See Plans"}
+      {!isTeacher && isSubscribed ? "Already subscribed. Change plan?" : "See Plans"}
     </Button>
   </DialogTrigger>
 
@@ -149,18 +149,25 @@ function Student() {
         </div>
 
      {!user ? (
-
-  <Link href="/register" className="w-full">
-    <Button variant="outline" className="w-full cursor-pointer">
-      Get Started
-    </Button>
-  </Link>
+    <Link href="/register" className="w-full">
+      <Button variant="outline" className="w-full cursor-pointer">
+        Get Started
+      </Button>
+    </Link>
 ) : !isSubscribed ? (
   <Link href="/subscribe" className="w-full">
     <Button variant="outline" className="w-full cursor-pointer">
       Get Started
     </Button>
   </Link>
+) : isTeacher ? (
+  <Button
+    variant="outline"
+    className="w-full cursor-not-allowed opacity-50"
+    disabled
+  >
+    Requires Student account
+  </Button>
 ) : (
   <Button
     variant="outline"

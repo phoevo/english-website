@@ -1,11 +1,13 @@
 const { Databases, Account, Client, Query } = require("node-appwrite");
 const Stripe = require("stripe");
 
-const serverPlans = ["Student Monthly", "Student Yearly"];
+const serverPlans = ["Student Monthly", "Student Yearly", "Tutor Monthly", "Tutor per seat"];
 
 const priceMap = {
   "Student Monthly": "price_1RjNY6PoApFikZNYFIHlqq3t",
   "Student Yearly": "price_1RmIPcPoApFikZNYDnmuR2hA",
+  "Tutor Monthly": "price_1ScV06PoApFikZNYoWPINm74",
+  "Tutor per seat": "price_1Sc8a5PoApFikZNYt4gagZ1g",
 };
 
 module.exports = async function handlePayments({

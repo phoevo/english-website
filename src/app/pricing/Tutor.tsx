@@ -13,7 +13,7 @@ const geist = Geist({ subsets: ['latin'] })
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
 function Tutor() {
-  const {user, isSubscribed} = useUserStore();
+  const {user, isSubscribed, isTeacher} = useUserStore();
 
   const tutorPlans = [
   {
@@ -54,7 +54,7 @@ function Tutor() {
 
       <Card className='border-none bg-background shadow-none'>
             <CardHeader>
-              <CardTitle className='flex justify-center text-lg'>Billed on how many students you manage</CardTitle>
+              <CardTitle className='flex justify-center text-2xl'>Billed on how many students you manage</CardTitle>
             </CardHeader>
             <CardContent className="w-full">
 
@@ -66,7 +66,7 @@ function Tutor() {
      <div className='lex flex-col md:flex-col gap-5 w-full'>
 
     <div className='flex flex-col md:flex-row gap-5'>
-  <div className='flex flex-col justify-between p-2 bg-muted rounded-xl h-100 w-full text-muted-foreground'>
+  <div className='flex flex-col justify-between p-2 bg-muted rounded-xl shadow-md h-100 w-full text-muted-foreground'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10'>Free</Badge>
       <motion.div className='flex justify-center'
@@ -104,7 +104,7 @@ function Tutor() {
   </div>
 
 
-<div className='flex flex-col justify-between bg-background p-2 rounded-xl h-100 w-full border-1'>
+<div className='flex flex-col justify-between bg-background p-2 rounded-xl shadow-xs h-100 w-full border-1'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10 bg-pink-500 text-white'>Pro</Badge>
       <div className='flex justify-center items-center'>
@@ -119,8 +119,7 @@ function Tutor() {
     <Dialog>
   <DialogTrigger asChild>
     <Button variant="outline" className="cursor-pointer" disabled >
-      Coming Soon
-      {/* {isSubscribed ? "Already subscribed. Change plan?" : "See Tutor Plans"} */}
+      {isTeacher && isSubscribed ? "Subscribed" : "See Tutor Plans"}
     </Button>
   </DialogTrigger>
 
