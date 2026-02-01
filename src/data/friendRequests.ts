@@ -132,3 +132,45 @@ export async function addActiveStudent(teacherId: string, studentId: string) {
     throw err;
   }
 }
+
+export async function removeActiveStudent(teacherId: string, studentId: string) {
+  if (!teacherId || !studentId) {
+    console.error("Missing teacherId or studentId:", { teacherId, studentId });
+    throw new Error("Invalid parameters to removeActiveStudent");
+  }
+
+  try {
+    // Fetch the teacher's document
+    const teacherDoc = await databases.getDocument(
+      databaseId,
+      usersCollectionId,
+      teacherId
+    );
+
+    // Get current list (fallback to empty)
+    const currentStudents = teacherDoc.activeStudents || [];
+
+    // If not present, nothing to remove
+    if (!currentStudents.includes(studentId)) {
+      toast.info("This student is not in your active list.");
+      return;
+    }
+
+    const updatedStudents = currentStudents.filter((id: string) => id !== studentId);
+
+    // Update teacher document in Appwrite
+    await databases.updateDocument(
+      databaseId,
+      usersCollectionId,
+      teacherId,
+      { activeStudents: updatedStudents }
+    );
+
+    toast.success("Student removed from your active list.");
+
+  } catch (err) {
+    console.error("Error removing active student:", err);
+    toast.error("Failed to remove student. Please try again.");
+    throw err;
+  }
+}

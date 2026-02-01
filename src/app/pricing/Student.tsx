@@ -53,8 +53,8 @@ function Student() {
       <CardContent>
       <div className='flex flex-col md:flex-col gap-5 w-full'>
 
-     <div className='flex flex-col md:flex-row gap-5'>
-  <div className='flex flex-col justify-between p-2 bg-muted rounded-xl h-100 shadow-md w-full text-muted-foreground'>
+     <div className='flex flex-col items-center lg:flex-row gap-5'>
+  <div className='flex flex-col items-center justify-between p-2 bg-muted rounded-xl h-100 shadow-md w-xs md:w-md text-muted-foreground'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10'>Free</Badge>
       <motion.div className='flex justify-center'
@@ -94,7 +94,7 @@ function Student() {
 
 
 
-<div className='flex flex-col justify-between p-2 border-1 rounded-xl shadow-xs h-100 w-full'>
+<div className='flex flex-col justify-between p-2 border-1 rounded-xl shadow-xs h-100 w-xs md:w-md'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10 bg-pink-500 text-white'>Pro</Badge>
       <div className='flex justify-center items-center'>

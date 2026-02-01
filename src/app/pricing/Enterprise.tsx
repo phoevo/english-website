@@ -22,12 +22,12 @@ function Enterprise() {
             transition={{ duration: 0.3 }}
             className="flex flex-col items-center"
           >
-            <div className="flex flex-col justify-between p-2 border rounded-xl w-full h-100 shadow-md text-muted-foreground">
+            <div className="flex flex-col justify-between p-2 border rounded-xl w-full h-100 shadow-md w-xs md:w-xl text-muted-foreground">
 
               <div className="flex flex-col items-center flex-grow">
                 <Badge className="mb-8 bg-blue-300 text-background">Enterprise</Badge>
 
-                <ul className="text-base list-disc marker:text-blue-300 space-y-1">
+                <ul className="text-base list-disc marker:text-blue-300 space-y-1 text-wrap px-4">
                   <li>Designed for tens or hundreds of students</li>
                   <li>Bulk seats</li>
                   <li>Admin dashboard</li>

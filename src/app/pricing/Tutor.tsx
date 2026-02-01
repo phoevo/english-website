@@ -54,7 +54,7 @@ function Tutor() {
 
       <Card className='border-none bg-background shadow-none'>
             <CardHeader>
-              <CardTitle className='flex justify-center text-2xl'>Billed on how many students you manage</CardTitle>
+              <CardTitle className='flex justify-center text-2xl'>Billed monthly or yearly</CardTitle>
             </CardHeader>
             <CardContent className="w-full">
 
@@ -63,10 +63,10 @@ function Tutor() {
 
     <CardContent>
 
-     <div className='lex flex-col md:flex-col gap-5 w-full'>
+     <div className='flex flex-col md:flex-col gap-5 w-auto'>
 
-    <div className='flex flex-col md:flex-row gap-5'>
-  <div className='flex flex-col justify-between p-2 bg-muted rounded-xl shadow-md h-100 w-full text-muted-foreground'>
+    <div className='flex flex-col lg:flex-row gap-5'>
+  <div className='flex flex-col justify-between p-2 bg-muted rounded-xl shadow-md h-100 w-xs md:w-md text-muted-foreground'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10'>Free</Badge>
       <motion.div className='flex justify-center'
@@ -74,9 +74,7 @@ function Tutor() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0 }}>
       <ul className='text-base list-disc marker:text-popover-foreground space-y-1 justify-start'>
-        <li>All Conversations, but in read-only</li>
-        <li>Assignments page</li>
-        <li>Manage up to 2 active Students</li>
+        <li>All conversations A1-C2 in read-only</li>
 
       </ul>
       </motion.div>
@@ -104,13 +102,14 @@ function Tutor() {
   </div>
 
 
-<div className='flex flex-col justify-between bg-background p-2 rounded-xl shadow-xs h-100 w-full border-1'>
+<div className='flex flex-col justify-between bg-background p-2 rounded-xl shadow-xs h-100 w-xs md:w-md border-1'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10 bg-pink-500 text-white'>Pro</Badge>
       <div className='flex justify-center items-center'>
       <ul className='text-base text-muted-foreground  list-disc marker:text-pink-500 space-y-1 w-full'>
-        <li>Everything in Free</li>
-        <li>Manage unlimited active Students</li>
+        <li>All conversations A1-C2 in read-only</li>
+        <li>Assignments page</li>
+        <li>Assign, Track and Manage Students</li>
       </ul>
       </div>
 
@@ -140,7 +139,7 @@ function Tutor() {
     {tutorPlans.map((plan, index) => (
   <div
     key={index}
-    className="flex flex-col p-4 border-1 rounded-xl w-full md:w-1/3 h-65 shadow-md"
+    className="flex flex-col p-4 border-1 rounded-xl w-xl md:w-1/3 h-65 shadow-md"
 
   >
     <div className="flex flex-col flex-grow items-start">

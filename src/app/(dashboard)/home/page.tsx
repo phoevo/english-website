@@ -18,6 +18,7 @@ import News from "./News";
 import { DM_Sans } from "next/font/google";
 import { ArrowLeft, Calendar, Sword, Swords } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
@@ -43,8 +44,7 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
       (a, b) =>
         new Date(getLastActive(b) || 0).getTime() -
         new Date(getLastActive(a) || 0).getTime()
-    )
-    .slice(0, 5);
+    );
 
   function getStreakBadgeClass(streak: number): string {
     if (streak >= 100) {
@@ -183,6 +183,7 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
                   <CardDescription>Students who have been active recently</CardDescription>
                 </CardHeader>
                 <CardContent>
+                  <ScrollArea className="h-50">
                   {recentStudents.length === 0 ? (
                     <p className="text-muted-foreground">No recent student activity.</p>
                   ) : (
@@ -242,6 +243,7 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
                       })}
                     </ul>
                   )}
+                  </ScrollArea>
                 </CardContent>
                 <CardFooter>
                   <Link href={"/home/assignments"}>

@@ -50,9 +50,9 @@ const tiers: Tier[] = [
     tutorBadge: "Tutor Free",
     studentBadge: "Student Free",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can assign any conversation." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors are limited to screensharing" },
       { icon: <CircleArrowDown size={18} className="flex text-red-500 shrink-0" />, text: "Students can view pro conversations, but only when assigned by a tutor. Limited features (no audio)" },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors limited to 2 active student slots." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors cannot assign" },
     ],
   },
   {
@@ -140,7 +140,7 @@ function SubscribePage() {
   return (
 
     <ScrollArea className={`w-full h-screen overflow-y-auto ${dmSans.className}`}>
-      <nav className="sticky backdrop-blur-2xl top-0 w-full z-30">
+      <nav className="sticky bg-none top-0 w-full z-30">
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-12 lg:h-18">
             <h1 className="hidden lg:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
@@ -158,7 +158,7 @@ function SubscribePage() {
     <div className='flex flex-col justify-center items-center gap-2 lg:mb-0 p-4 md:p-0'>
 
     <div className="flex flex-col md:flex-col gap-2 items-center justify-center rounded-lg w-full h-auto ">
-      <h1 className='text-3xl md:text-6xl font-medium text-center'>First <span className='text-pink-500'>5</span> days are free</h1>
+      <h1 className='text-3xl md:text-6xl font-medium text-center'>Free trial lasts 5 days</h1>
       <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -167,9 +167,9 @@ function SubscribePage() {
     </div>
 
 
- <div className='flex justify-center flex-col lg:flex-row w-full md:w-full lg:w-full mt-10 gap-5 md:gap-10'>
+ <div className='flex justify-center items-center flex-col lg:flex-row w-full md:w-full lg:w-full mt-10 gap-5 md:gap-10'>
 
-  <div className="flex xl:w-1/2 lg:w-full flex-col gap-6">
+  <div className="flex items-center w-full flex-col gap-6">
       <Tabs className="" defaultValue="Students">
 
         <TabsList className='self-center'>

@@ -23,6 +23,9 @@ const geist = Geist({ subsets: ["latin"] });
 const Assign = ({ conversationId, trigger }: AssignProps) => {
   const [open, setOpen] = useState(false);
   const friends = useUserStore((state) => state.friends);
+  const isSubscribed = useUserStore((state) => state.isSubscribed);
+  const isTeacher = useUserStore((state) => state.isTeacher);
+  const canAssign = isTeacher && isSubscribed;
   const studentFriends = friends.filter((f) => !f.isTeacher);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [assignedStudentIds, setAssignedStudentIds] = useState<string[]>([]);
@@ -51,6 +54,15 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
     const teacherId = useUserStore.getState().user?.$id;
     if (!teacherId) {
       toast.error("You must be logged in as a teacher to assign.");
+      return;
+    }
+    if (!isTeacher) {
+      toast.error("Only tutors can assign.");
+      return;
+    }
+    if (!isSubscribed) {
+      toast.info("Assigning requires a Pro account.");
+      setOpen(false);
       return;
     }
 
@@ -96,53 +108,64 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
         align="start"
         className={`w-auto p-4 ${geist.className}`}
       >
-        <div className="space-y-2 max-h-100 w-auto overflow-y-auto">
-          {studentFriends.length === 0 ? (
+        {!canAssign ? (
+          <div className="space-y-2 max-w-[320px]">
             <p className="text-sm text-muted-foreground">
-              No student friends found.
+              {!isTeacher
+                ? "Only tutors can assign conversations."
+                : "Assigning requires a Pro account."}
             </p>
-          ) : (
-            studentFriends.map((student) => {
-              const isAssigned = assignedStudentIds.includes(student.$id);
-              return (
-                <div
-                  key={student.$id}
-                  className="flex justify-between gap-2 items-center border p-2 rounded-md"
-                >
-                  <div>
-                    <p className="font-sm">{student.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {student.email}
-                    </p>
-                  </div>
-                  <Badge
-                    className="text-xs cursor-pointer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleAssign(student.$id);
-                    }}
+          </div>
+        ) : (
+          <div className="space-y-2 max-h-100 w-auto overflow-y-auto">
+            {studentFriends.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                No student friends found.
+              </p>
+            ) : (
+              studentFriends.map((student) => {
+                const isAssigned = assignedStudentIds.includes(student.$id);
+                return (
+                  <div
+                    key={student.$id}
+                    className="flex justify-between gap-2 items-center border p-2 rounded-md"
                   >
-                    {loadingId === student.$id ? (
-                      <div className="flex flex-row gap-1 items-center">
-                        Assigning...
-                      </div>
-                    ) : isAssigned ? (
-                      <div className="flex flex-row gap-1 items-center">
-                        <Check size={13} className="" />
-                        Assigned
-                      </div>
-                    ) : (
-                      <div className="flex flex-row gap-1 items-center">
-                        <Send size={12} />
-                        Assign
-                      </div>
-                    )}
-                  </Badge>
-                </div>
-              );
-            })
-          )}
-        </div>
+                    <div>
+                      <p className="font-sm">{student.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {student.email}
+                      </p>
+                    </div>
+                    <Badge
+                      className="text-xs cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (!canAssign || loadingId || isAssigned) return;
+                        handleAssign(student.$id);
+                      }}
+                    >
+                      {loadingId === student.$id ? (
+                        <div className="flex flex-row gap-1 items-center">
+                          Assigning...
+                        </div>
+                      ) : isAssigned ? (
+                        <div className="flex flex-row gap-1 items-center">
+                          <Check size={13} className="" />
+                          Assigned
+                        </div>
+                      ) : (
+                        <div className="flex flex-row gap-1 items-center">
+                          <Send size={12} />
+                          Assign
+                        </div>
+                      )}
+                    </Badge>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        )}
       </PopoverContent>
     </Popover>
   );

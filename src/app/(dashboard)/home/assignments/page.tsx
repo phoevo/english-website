@@ -20,11 +20,10 @@ import {
 import { Geist, DM_Sans } from "next/font/google";
 import { motion} from "motion/react";
 import { toast } from "sonner";
-import { fetchPendingRequests, hasPendingRequest, sendFriendRequest, updateRequestStatus, addFriend, deleteFriendRequest, removeFriend } from "@/data/friendRequests";
+import { fetchPendingRequests, hasPendingRequest, sendFriendRequest, updateRequestStatus, addFriend, deleteFriendRequest, removeFriend, addActiveStudent, removeActiveStudent } from "@/data/friendRequests";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { addActiveStudent } from "@/data/friendRequests";
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 
 const geist = Geist({ subsets: ['latin'] });
@@ -47,11 +46,12 @@ function getStreakBadgeClass(streak: number): string {
 }
 
 function AssignmentsPage() {
-  const { user, loading, friendsList, friends, isTeacher, activeStudents, setActiveStudents} = useUserStore();
+  const { user, loading, friendsList, friends, isTeacher, activeStudents, setActiveStudents, isSubscribed } = useUserStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  const studentConnectionsCount = (friends || []).filter((f) => !f.isTeacher).length;
   const [pendingRequests, setPendingRequests] = useState<
   { id: string; fromUserId: string; senderName: string }[]
 >([]);
@@ -168,6 +168,7 @@ useEffect(() => {
       useUserStore.setState((state) => {
         const updatedFriendsList = (state.friendsList || []).filter((id) => id !== friendId);
         const updatedFriends = (state.friends || []).filter((f) => f.$id !== friendId);
+
         return {
           friendsList: updatedFriendsList,
           friends: updatedFriends,
@@ -179,6 +180,17 @@ useEffect(() => {
       // Error toast handled in removeFriend
     }
   };
+
+  const handleRemoveActiveStudent = async (studentId: string) => {
+    if (!user) return;
+    try {
+      await removeActiveStudent(user.$id, studentId);
+      await setActiveStudents();
+    } catch {
+    }
+  };
+
+
 
 
   if (loading) {
@@ -293,9 +305,12 @@ return (
              <Button
               variant="secondary"
               size="icon"
-              disabled={user.friendsList?.includes(u.$id)}
+              disabled={
+                user.friendsList?.includes(u.$id) ||
+                (isTeacher && !isSubscribed && !u.isTeacher && studentConnectionsCount >= 2)
+              }
               className={`cursor-pointer m-1 h-5 w-5 self-center shadow-md ${
-                user.friendsList?.includes(u.$id)
+                user.friendsList?.includes(u.$id) || (isTeacher && !isSubscribed && !u.isTeacher && studentConnectionsCount >= 2)
                   ? "bg-muted text-muted-foreground"
                   : "bg-green-500 hover:bg-green-600"
               }`}
@@ -315,6 +330,11 @@ return (
 
                 if (user.friendsList?.includes(u.$id)) {
                   toast.info("You're already connected");
+                  return;
+                }
+
+                if (isTeacher && !isSubscribed && !u.isTeacher && studentConnectionsCount >= 2) {
+                  toast.info("Free tutors can add up to 2 students. Upgrade to Pro for unlimited students.");
                   return;
                 }
 
@@ -359,12 +379,11 @@ return (
 
 
 
-
   <div className="">
       <Tabs defaultValue="connections" className="w-full">
   <TabsList className="w-full">
     <TabsTrigger value="connections">Connections</TabsTrigger>
-    {isTeacher && <TabsTrigger value="active">Active Students</TabsTrigger>}
+    {/* {isTeacher && <TabsTrigger value="active">Active Students</TabsTrigger>} */}
     <TabsTrigger value="requests">Requests</TabsTrigger>
   </TabsList>
 
@@ -421,7 +440,7 @@ return (
 
 
             <div className="flex flex-row">
-              {isTeacher && !f.isTeacher && (
+              {/* {isTeacher && !f.isTeacher && (
                 <Button
                   className="cursor-pointer flex h-4 items-center justify-center rounded-md border px-2 py-2.5 text-xs w-fit"
                   size={"icon"}
@@ -435,7 +454,7 @@ return (
                 >
                   {activeStudents?.includes(f.$id) ? "Active" : "Set as Active"}
                 </Button>
-              )}
+              )} */}
           <AlertDialog>
         <AlertDialogTrigger asChild>
           <div className="flex items-center gap-2">
@@ -588,6 +607,45 @@ return (
                     <Badge className="p-2"> <Swords/> {f.challengeCount?.length || 0}</Badge>
                   </div>
                 </div>
+                <div className="flex flex-row">
+
+          <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <div className="flex items-center gap-2">
+           <Button
+            variant={"default"}
+            className="ml-4 cursor-pointer flex h-4 items-center justify-center rounded-md border px-2 py-2.5 text-xs w-fit"
+            >
+            Set as Inactive
+           </Button>
+
+          </div>
+        </AlertDialogTrigger>
+
+
+      <AlertDialogContent className={geist.className}>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you sure you want to remove this active student?</AlertDialogTitle>
+          <AlertDialogDescription>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel className='cursor-pointer'>Go back</AlertDialogCancel>
+
+
+
+            <Button
+            variant="destructive"
+            onClick={async () => handleRemoveActiveStudent(f.$id)}
+            className="cursor-pointer self-center"
+            >
+              Yes
+           </Button>
+
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    </div>
               </div>
             ))}
         </div>

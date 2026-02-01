@@ -65,9 +65,6 @@ export default function TeacherContentDisplay({ conversation }: ConversationProp
             <div className="text-base italic text-zinc-500">
               End of {conversation.title} - Level: {conversation.level}
             </div>
-            <div className="mt-2 text-sm text-zinc-400">
-              Teacher view: Clean text display for teaching purposes
-            </div>
           </div>
         </div>
       </ScrollArea>

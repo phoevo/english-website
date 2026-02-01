@@ -38,9 +38,7 @@ function ConversationsPage() {
   const [category, setCategory] = useState<string | undefined>();
   const [test, setTest] = useState(false);
 
-  const {
-    loading: userLoading, user, isTeacher
-  } = useUserStore();
+  const {loading: userLoading, user, isTeacher} = useUserStore();
 
 
   if (conversationsLoading || userLoading) {
@@ -114,7 +112,7 @@ function ConversationsPage() {
             </SelectContent>
         </Select>
 
-        <AlertDialog open={test} onOpenChange={setTest}>
+      {!isTeacher && <AlertDialog open={test} onOpenChange={setTest}>
               <AlertDialogTrigger asChild>
                 <div onClick={showTest} className="text-xs md:text-sm font-light md:font-medium underline cursor-pointer ml-1">Not sure?</div>
               </AlertDialogTrigger>
@@ -136,7 +134,7 @@ function ConversationsPage() {
               <AlertDialogCancel className="cursor-pointer">Back</AlertDialogCancel>
               </AlertDialogFooter>
               </AlertDialogContent>
-            </AlertDialog>
+            </AlertDialog>}
         </div>
 
         </div>
