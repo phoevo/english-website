@@ -41,9 +41,7 @@ const Navbar = () => {
   const { user, loading, isSubscribed, setSubscribed, challengeCount, taskCount, streak } = useUserStore();
   const router = useRouter();
 
-
-   const badgeColor = getStreakColor(streak);
-
+  const badgeColor = getStreakColor(streak);
   const handleLogout = async (): Promise<void> => {
     try {
       await account.deleteSession("current");

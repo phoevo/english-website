@@ -23,7 +23,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className={`${geistSans.className}`}>
       <div className="font-sans">
-        <Navbar />
         <main className="m-2">{children}</main>
         <Toaster />
       </div>

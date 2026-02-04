@@ -9,6 +9,8 @@ import {
 } from "@/data/appwrite";
   import { checkSubscriptionFromStripe } from "@/data/getData"; // Disabled in beta to avoid overriding local tier
 
+  const ENABLE_STRIPE_SYNC = process.env.NEXT_PUBLIC_ENABLE_STRIPE_SYNC === 'true';
+
 interface User {
   isSubscribed: boolean;
   $id: string;
@@ -112,24 +114,26 @@ fetchUser: async () => {
     const isSubscribed = !!userDoc?.isSubscribed;
 
     // Optionally check Stripe in background (don't await)
-    // Disabled in beta: avoid overriding manual tier selection
-    checkSubscriptionFromStripe(res.email)
-       .then(stripeStatus => {
-         if (stripeStatus !== isSubscribed) {
-           console.log(`Background sync: updating subscription ${isSubscribed} -> ${stripeStatus}`);
-           databases.updateDocument(databaseId, usersCollectionId, res.$id, {
-             isSubscribed: stripeStatus
-           }).catch(err => console.warn("Background subscription update failed:", err));
+    // Disabled by default; enable by setting NEXT_PUBLIC_ENABLE_STRIPE_SYNC=true
+    if (ENABLE_STRIPE_SYNC) {
+      checkSubscriptionFromStripe(res.email)
+        .then(stripeStatus => {
+          if (stripeStatus !== isSubscribed) {
+            console.log(`Background sync: updating subscription ${isSubscribed} -> ${stripeStatus}`);
+            databases.updateDocument(databaseId, usersCollectionId, res.$id, {
+              isSubscribed: stripeStatus
+            }).catch(err => console.warn("Background subscription update failed:", err));
 
-           // Update the store immediately
-           set(state => ({
-             ...state,
-             isSubscribed: stripeStatus,
-             user: state.user ? { ...state.user, isSubscribed: stripeStatus } : null
-           }));
-         }
-       })
-       .catch(err => console.warn("Background Stripe check failed:", err));
+            // Update the store immediately
+            set(state => ({
+              ...state,
+              isSubscribed: stripeStatus,
+              user: state.user ? { ...state.user, isSubscribed: stripeStatus } : null
+            }));
+          }
+        })
+        .catch(err => console.warn("Background Stripe check failed:", err));
+    }
 
 
     // Other user data from document
