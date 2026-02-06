@@ -213,10 +213,10 @@ useEffect(() => {
     }
 
 return (
-  <div className="m-10 flex flex-col w-full h-full">
+  <div className="m-5 lg:m-10 flex flex-col w-full h-5/6">
 
     <div className="flex flex-row justify-between items-center gap-10">
-      <div className="flex flex-col space-y-5">
+      <div className="flex flex-col space-y-6">
       <UserGuidePopover
         id="assignments-page"
         title="The Assignments Page"
@@ -237,11 +237,11 @@ return (
 
     </div>
 
-    <div className="grid grid-cols-2 gap-6 mt-10">
+    <div className="flex flex-col lg:flex-row gap-6 mt-10 h-5/6">
 
       {isTeacher ? <TeacherPage/> : <StudentPage />}
 
-      <Card className="bg-background p-5 h-auto">
+      <Card className="bg-background p-5 h-full lg:w-1/2 flex flex-col min-h-0">
 
   <div className="relative flex flex-col space-y-4 w-full">
 
@@ -379,7 +379,7 @@ return (
 
 
 
-  <div className="">
+  <div className="flex-1 min-h-0 flex flex-col">
       <Tabs defaultValue="connections" className="w-full">
   <TabsList className="w-full">
     <TabsTrigger value="connections">Connections</TabsTrigger>
@@ -388,7 +388,7 @@ return (
   </TabsList>
 
   <TabsContent value="connections">
-    <Card className="bg-background flex flex-col p-2 border-none shadow-none">
+    <Card className="bg-background flex flex-col p-2 border-none shadow-none h-full overflow-y-auto">
 
   {friendsList.length === 0 ? (
     <p className="text-sm text-muted-foreground">You have no connections yet.</p>
@@ -507,7 +507,7 @@ return (
 
 
   <TabsContent value="requests">
-  <Card className="shadow-none border-none bg-background">
+  <Card className="shadow-none border-none bg-background h-full overflow-y-auto">
     {pendingRequests.length === 0 ? (
       <p className="text-sm text-muted-foreground">No pending friend requests.</p>
     ) : (
@@ -566,7 +566,7 @@ return (
 
 {isTeacher && (
   <TabsContent value="active">
-    <Card className="bg-background flex flex-col p-2 border-none shadow-none">
+    <Card className="bg-background flex flex-col p-2 border-none shadow-none h-full overflow-y-auto">
       {!activeStudents || activeStudents.length === 0 ? (
         <p className="text-sm text-muted-foreground">No active students yet.</p>
       ) : (

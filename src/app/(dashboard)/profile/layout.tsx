@@ -19,7 +19,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Loader2, LoaderCircle } from 'lucide-react'
+import { ArrowLeft, Loader2, LoaderCircle } from 'lucide-react'
 import { Toaster } from '@/components/ui/sonner'
 import { Label } from '@/components/ui/label'
 import CustomColors from './CustomColors'
@@ -259,7 +259,14 @@ const handleUnsubscribe = async () => {
   };
 
   return (
-    <main className="flex justify-center items-center h-auto pt-5">
+    <main className="flex flex-col justify-center bg-background items-center h-auto pt-5 md:px-20">
+
+      <Link href={"/home"} className='self-start py-2'>
+      <Button className='cursor-pointer h-6 md:h-auto'>
+        <ArrowLeft/> Back
+        </Button>
+      </Link>
+
       <Toaster />
       <Tabs defaultValue="account" className="w-full max-w-md md:max-w-xl">
         <TabsList className="grid w-full grid-cols-3">
@@ -462,65 +469,6 @@ const handleUnsubscribe = async () => {
     <Spinner />
   ) : user ? (
     <div className="flex flex-col gap-2">
-      {/* <Card className="bg-background">
-        <CardHeader>
-          <CardTitle>Credit Card</CardTitle>
-          <CardDescription>Update your payment details</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-4">
-            <CreditCardIcon className="h-8 w-8 text-primary" />
-            <Input
-              id="card-number"
-              type="text"
-              placeholder="1234 5678 9012 3456"
-              maxLength={19}
-              pattern="\d{4} \d{4} \d{4} \d{4}"
-              className="flex-1"
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="expiration">Expiration</Label>
-              <div className="flex gap-2">
-                <Select>
-                  <SelectTrigger id="expiration-month">
-                    <SelectValue placeholder="MM" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-                      <SelectItem key={month} value={month.toString().padStart(2, "0")}>
-                        {month}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Select>
-                  <SelectTrigger id="expiration-year">
-                    <SelectValue placeholder="YY" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array.from({ length: 10 }, (_, i) => i + 2023).map((year) => (
-                      <SelectItem key={year} value={year.toString().slice(2)}>
-                        {year}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="cvc">CVC</Label>
-              <Input id="cvc" type="text" placeholder="123" maxLength={3} />
-            </div>
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button type="submit" className="ml-auto">
-            Update
-          </Button>
-        </CardFooter>
-      </Card> */}
 
      <Card className="bg-background">
   <CardHeader>

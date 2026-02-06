@@ -22,10 +22,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} antialiased`}>
+      <body className={`${geistSans.variable} antialiased bg-accent`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <div className="min-h-screen flex flex-col">
-            <div className="">{children}</div>
+            <div className="bg-background">{children}</div>
             <Toaster richColors position="bottom-right" />
           </div>
         </ThemeProvider>

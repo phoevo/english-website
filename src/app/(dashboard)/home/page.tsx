@@ -16,9 +16,11 @@ import {
 import { Button } from "@/components/ui/button";
 import News from "./News";
 import { DM_Sans } from "next/font/google";
-import { ArrowLeft, Calendar, Sword, Swords } from "lucide-react";
+import { ArrowLeft, Calendar, PartyPopper, Sword, Swords } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
@@ -84,43 +86,50 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
   }
 
   return (
-    <div className="w-full mx-auto px-4 sm:px-6 lg:px-10 mt-6">
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-col w-full lg:w-2/3 space-y-4 h-full">
+    <div className="w-full px-4 sm:px-6 lg:px-10">
+      <div className="flex flex-col gap-3 mt-10">
+        <div className="flex flex-col w-full md:w-1/3 space-y-6 h-full">
             <UserGuidePopover
              id="home-page-main"
              title="The Home Page"
              content=
              {<div className="space-y-4">
-                <p>This is the main page where you can find your most recent conversation and
+
+              {user && (
+                <p className="flex md:flex-row gap-1 text-2xl text-foreground">Welcome to Synomilo, {user.name}!</p>
+              )}
+
+                <p className="text-foreground">This is the main page where you can find your most recent conversation and
              vocabulary, as well as News and Updates.</p>
 
-                <div className="space-y-2">
-                  <p>On the top right or in the sidebar if you&apos;re on mobile, you can see your tasks and challenges, click on each one for more info.</p>
-                <div className="flex flex-row gap-2">
-                  <Button variant="secondary" className="items-center lg:w-auto shadow-sm cursor-pointer">
-                    <Sword className="rotate-45" />8
-                  </Button>
-                  <Button className="flex items-center lg:w-auto cursor-pointer">
-                  <Swords/>3
-                </Button>
-                </div>
+                <div className="rounded-md p-2">
+                  <p>Top left of the screen is where you can access you profile and other settings.</p>
+                  <img
+                src="/HPS1.png"
+                alt="Guide 1"
+                className="relative w-md object-cover rounded-md"
+                />
                 </div>
 
-                <div>
-                  <p>During the beta, you will be able to switch from Free to Pro for testing purposes.</p>
-                  <div className="flex flex-row rounded-full border-1 m-1 w-20">
-                  <Badge className="flex-1 text-center rounded-full cursor-pointer transition bg-background text-muted-foreground">
-                    Free
-                  </Badge>
+                  <Separator/>
 
-                  <Badge className="flex-1 text-center rounded-full cursor-pointer transition bg-pink-500 text-foreground">
-                    Pro
-                  </Badge>
-                </div>
-                </div>
-                  <p>Use the sidebar on the left side of the screen to explore the content.</p>
+                  <span className="flex flex-row">
                   <ArrowLeft className="text-foreground"/>
+                  <p>Use the sidebar on the left side of the screen to for navigation</p>
+                  </span>
+
+                  <Separator/>
+
+                  <div className="rounded-md p-2">
+                  <p>For a start, head to the Conversations page to explore the main content that is offered.</p>
+                  <img
+                src="/HPS2.png"
+                alt="Guide 2"
+                className="relative w-60 rounded-md"
+                />
+                </div>
+
+
              </div>
 
              }
@@ -159,7 +168,7 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
                 >
                   <h2 className="text-lg font-light">Resume: {conversation.title}</h2>
                   {conversation.level && (
-                    <p className="text-sm text-gray-500">Level: {conversation.level}</p>
+                    <p className="text-sm text-muted-foreground">Level: {conversation.level}</p>
                   )}
                 </Link>
               ) : (

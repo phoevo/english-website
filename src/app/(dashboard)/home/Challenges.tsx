@@ -32,7 +32,7 @@ const Challenges = ({ children }: { children: ReactNode }) => {
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>{children}</PopoverTrigger>
         <PopoverContent
-          side="bottom"
+          side="right"
           align="center"
           className={`bg-background w-full lg:w-100 ${dmSans.className}`}
         >

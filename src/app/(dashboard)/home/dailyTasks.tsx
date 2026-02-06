@@ -101,7 +101,7 @@ const DailyTasks = ({ children }: { children: ReactNode }) => {
       <Popover modal open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>{children}</PopoverTrigger>
         <PopoverContent
-          side="bottom"
+          side="right"
           align="center"
           className={`bg-background w-screen lg:m-0 lg:w-full ${dmSans.className}`}
 

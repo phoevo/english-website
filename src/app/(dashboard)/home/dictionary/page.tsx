@@ -100,7 +100,7 @@ function DictionaryPage() {
   <div className="w-full h-auto m-5 lg:m-10">
 
     <div className="flex flex-col h-1/6">
-      <div className="flex flex-col lg:w-2/3 space-y-3 lg:space-y-5 h-full">
+      <div className="flex flex-col lg:w-2/3 space-y-3 lg:space-y-6 h-full">
         <UserGuidePopover
           id="dictionary-page"
           title="The Dictionary Page"

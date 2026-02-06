@@ -108,13 +108,13 @@ function StudentPage() {
 
 
   return (
-    <Card className="bg-background h-5/6">
+    <Card className="bg-background h-full w-full lg:w-1/2 flex flex-col">
       <CardHeader>
         <CardTitle>My Assigned Tasks</CardTitle>
         <CardDescription>Your tasks assigned by your teacher</CardDescription>
       </CardHeader>
-      <ScrollArea className="px-5 overflow-y-auto">
-
+      <CardContent className="flex-1 min-h-0 p-0">
+        <ScrollArea className="h-full px-5">
 
         {loading ? (
           <p>Loading...</p>
@@ -159,8 +159,8 @@ function StudentPage() {
           </div>
         )}
 
-
-      </ScrollArea>
+        </ScrollArea>
+      </CardContent>
     </Card>
   );
 }

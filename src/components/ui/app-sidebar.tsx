@@ -1,5 +1,6 @@
 "use client"
-import { BookOpen, BookMarked, IterationCcw, ClipboardCheck, MessageCirclePlus, HomeIcon, User, Swords, Sword, LogOut, UserRound, LogIn, ChevronDown } from "lucide-react"
+import * as React from "react"
+import { BookOpen, BookMarked, IterationCcw, ClipboardCheck, MessageCirclePlus, HomeIcon, User, Swords, Sword, LogOut, UserRound, LogIn, ChevronDown, Sparkle, LogInIcon, SunIcon, MoonIcon, UserCircle, EllipsisVertical } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -24,6 +25,8 @@ import Challenges from "@/app/(dashboard)/home/Challenges";
 import { Badge } from "./badge";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./hover-card";
 import ModeToggle from "./ModeToggle";
+import { Switch } from "./switch";
+import { useTheme } from "next-themes";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,6 +36,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { Separator } from "./separator"
+
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
@@ -77,6 +83,16 @@ export function AppSidebar() {
   const { user, loading, isSubscribed, setSubscribed, challengeCount, taskCount, streak } = useUserStore();
   const router = useRouter();
 
+  const { theme, systemTheme, setTheme } = useTheme();
+  const resolvedDark = (theme === "system" ? systemTheme === "dark" : theme === "dark") || false;
+  const [themeChecked, setThemeChecked] = React.useState(resolvedDark);
+  React.useEffect(() => setThemeChecked(resolvedDark), [resolvedDark]);
+
+  const onThemeToggle = (val: boolean) => {
+    setThemeChecked(val);
+    setTheme(val ? "dark" : "light");
+  };
+
   const badgeColor = getStreakColor(streak);
 
    const handleLogout = async (): Promise<void> => {
@@ -88,6 +104,12 @@ export function AppSidebar() {
       }
     };
 
+    const handleLogin = (): void => {
+      router.push("/login");
+    };
+
+
+
   return (
     <Sidebar collapsible="icon" className="h-auto mb-2 rounded-lg absolute md:[--sidebar-width:10rem] lg:[--sidebar-width:16rem] bg-accent">
       <SidebarHeader className="p-1">
@@ -96,36 +118,82 @@ export function AppSidebar() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
 
-        <div className="flex flex-col bg-muted rounded-md p-2 cursor-pointer">
+        <div className="flex flex-col hover:bg-sidebar-accent rounded-md p-2 cursor-pointer group-data-[collapsible=icon]:p-5 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:justify-center">
 
-          <div className="flex flex-row items-center gap-1">
+        <div className="hidden group-data-[collapsible=icon]:flex items-end">
+          <UserRound className="h-4 w-" />
+        </div>
+        <div className="flex flex-row items-center gap-1 group-data-[collapsible=icon]:hidden">
           <p className="text-lg">
-          {user ? user.name : "Guest"}
+            {user ? user.name : "Guest"}
           </p>
           <HoverCard>
-          <HoverCardTrigger asChild>
-          <Badge
-          className={`cursor-pointer ${badgeColor}`}
-          aria-label={`Current streak: ${streak}`}>
-            {streak}
-          </Badge>
-          </HoverCardTrigger>
-          <HoverCardContent side="top" align="center" className={`${dmSans.className} w-auto text-xs`}>
-            Your current daily streak
-          </HoverCardContent>
-        </HoverCard>
-          </div>
-          <p className="text-muted-foreground text-sm">{user ? user.email : ""}</p>
+            <HoverCardTrigger asChild>
+              <Badge
+                className={`cursor-pointer ${badgeColor}`}
+                aria-label={`Current streak: ${streak}`}
+              >
+                {streak}
+              </Badge>
+            </HoverCardTrigger>
+            <HoverCardContent side="top" align="center" className={`${dmSans.className} w-auto text-xs`}>
+              Your current daily streak
+            </HoverCardContent>
+          </HoverCard>
+        </div>
+        <p className="text-muted-foreground text-sm group-data-[collapsible=icon]:hidden">{user ? user.email : ""}</p>
+
         </div>
 
+
+
+
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-full bg-muted border-1">
-            <DropdownMenuItem>
-              <User/> Profile
+          <DropdownMenuContent className={` ${dmSans.className} w-50 bg-background border-1`} align="start" side="right">
+
+              <Link href={"/profile"}>
+            <DropdownMenuItem className="border-b rounded-none cursor-pointer">
+              <User className="text-foreground"/> <span>Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <span>Acme Inc</span>
+            </Link>
+
+            <DropdownMenuItem
+              className="group w-full border-b rounded-none cursor-pointer"
+              onClick={() => onThemeToggle(!themeChecked)}
+            >
+              <div className="flex items-center space-x-2">
+                <SunIcon className="h-4 w-4 hidden dark:block text-foreground" />
+                <MoonIcon className="h-4 w-4 dark:hidden text-foreground" />
+                <span>Swap to {theme === "dark" ? "light" : "dark"} mode</span>
+              </div>
             </DropdownMenuItem>
+
+            <Link href={"/pricing"}>
+            <DropdownMenuItem className="border-b rounded-none cursor-pointer">
+              {isSubscribed ? (
+                <span className="flex flex-row space-x-2">
+                  <Sparkle className="text-pink-500"/> <p className="text-pink-500">Pro</p>
+                </span>
+              ) : (
+                <span className="flex flex-row space-x-2">
+                  <Sparkle className="text-foreground"/> <p>Upgrade to Pro</p>
+                  </span>
+              )}
+            </DropdownMenuItem>
+            </Link>
+
+            {user ? (
+              <DropdownMenuItem className="rounded-none cursor-pointer text-foreground" onClick={handleLogout}>
+              <LogOut className="text-foreground"/> Logout
+              </DropdownMenuItem>
+
+            ) : (
+              <DropdownMenuItem className="rounded-none cursor-pointer" onClick={handleLogin}>
+              <LogIn className="text-foreground"/> Login
+              </DropdownMenuItem>
+
+            )}
+
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
@@ -133,6 +201,9 @@ export function AppSidebar() {
 
 
       </SidebarHeader>
+
+      <Separator/>
+
       <SidebarContent className={`${dmSans.className}`}>
         <SidebarGroup>
           <SidebarGroupContent className={`${dmSans.className}`}>
@@ -202,60 +273,58 @@ export function AppSidebar() {
         </SidebarGroup>
 
         <SidebarFooter>
-          <div className={`flex-col hidden md:flex lg:flex items-center md:gap-2 lg:gap-2`}>
+          <SidebarGroupLabel>Other</SidebarGroupLabel>
+
+          <div className={`flex-col hidden md:flex lg:flex items-start md:gap-2 lg:gap-2`}>
            <div className="flex flex-col items-center sm:items-start gap-2 md:gap-2 text-sm md:text-sm">
               {loading ? (
                 <Skeleton className="w-[56px] h-[18px] lg:h-[36px]" />
               ) : (
-                <DailyTasks>
-                  <Button
-                    variant="secondary"
-                    className="flex items-center justify-center cursor-pointer w-full shadow-sm md:rounded-full md:h-6 md:p-2 lg:rounded-sm lg:p-2 lg:h-auto lg:w-auto"
-                  >
-                    <Sword className="rotate-45" /> {taskCount}
-                  </Button>
-                </DailyTasks>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <DailyTasks>
+                      <Button
+                        variant="secondary"
+                        aria-label="Daily Tasks"
+                        className="flex items-center justify-center cursor-pointer w-full shadow-sm md:rounded-full md:h-6 md:p-2 lg:rounded-sm lg:p-2 lg:h-auto lg:w-auto group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:rounded-md"
+                      >
+                        <Sword className="rotate-45" />
+                        <span className="ml-1 group-data-[collapsible=icon]:hidden">Daily Tasks: {taskCount}</span>
+                      </Button>
+                    </DailyTasks>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" align="center" className={`${dmSans.className}`}>
+                    Daily Tasks
+                  </TooltipContent>
+                </Tooltip>
               )}
 
               {loading ? (
                 <Skeleton className="w-[56px] h-[18px] lg:h-[36px]" />
               ) : (
                 isSubscribed && (
-                  <Challenges>
-                    <Button
-                    className="flex items-center justify-center cursor-pointer w-full md:rounded-full md:h-6 md:py-1 lg:rounded-sm lg:p-2 lg:h-auto lg:w-auto"
-                    >
-                      <Swords /> {challengeCount.length}
-                    </Button>
-                  </Challenges>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Challenges>
+                        <Button
+                          aria-label="Challenges"
+                          className="flex items-center justify-center cursor-pointer w-full md:rounded-full md:h-6 md:py-1 lg:rounded-sm lg:p-2 lg:h-auto lg:w-auto group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:rounded-md"
+                        >
+                          <Swords />
+                          <span className="ml-1 group-data-[collapsible=icon]:hidden">Challenges: {challengeCount.length}</span>
+                        </Button>
+                      </Challenges>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" align="center" className={`${dmSans.className}`}>
+                      Challenges
+                    </TooltipContent>
+                  </Tooltip>
                 )
               )}
             </div>
 
 
 
-            {loading ? (
-              <Skeleton className="w-10 lg:w-20 h-10 rounded-md" />
-            ) : user ? (
-            <SidebarMenuButton onClick={handleLogout} variant="outline" className="cursor-pointer flex items-center gap-2">
-              <LogOut className="h-4 w-4" />
-              <span className="hidden lg:inline">Logout</span>
-            </SidebarMenuButton>
-            ) : (
-
-              <Link href={"/login"}>
-              <SidebarMenuButton className="w-full">
-                <LogIn/>
-                <span className="cursor-pointer">Log in</span>
-              </SidebarMenuButton>
-              </Link>
-
-            )}
-
-              <span>
-
-              <ModeToggle />
-              </span>
           </div>
         </SidebarFooter>
       </SidebarContent>

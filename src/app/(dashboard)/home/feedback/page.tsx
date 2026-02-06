@@ -250,20 +250,13 @@ function FeedbackPage() {
     <CardDescription></CardDescription>
   </CardHeader>
   <CardContent>
-    <ul className="list-disc px-4 py-2 space-y-2 rounded-md text-sm">
+    <ul className="px-4 py-2 space-y-2 rounded-md text-md">
       <li>Did the design and layout feel clear and accessible to you?</li>
       <li>Is there any feature you wish existed?</li>
-      <li className="">How do the
-        <Badge className="bg-foreground text-background mx-1">Free</Badge>
-        and
-        <Badge className="bg-pink-500 text-foreground mx-1">Pro</Badge>
-        tiers compare? Did
-        <Badge className="bg-foreground text-background mx-1">Free</Badge>
-        contain enough content? Is
-        <Badge className="bg-pink-500 text-foreground mx-1">Pro</Badge>
-        worth upgrading to?</li>
-        <li>Was there something you liked the most and want to see more of?</li>
-        <li>Do any of the pages feel too empty?</li>
+      <li>Was there something you liked the most and want to see more of?</li>
+      <li>Do any of the pages feel too empty?</li>
+      <li>Is the Pricing page clear? Do you understand what you are paying for?</li>
+      <li>Are the prices fair?</li>
     </ul>
   </CardContent>
 
