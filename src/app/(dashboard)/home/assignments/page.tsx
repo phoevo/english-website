@@ -333,11 +333,6 @@ return (
                   return;
                 }
 
-                if (isTeacher && !isSubscribed && !u.isTeacher && studentConnectionsCount >= 2) {
-                  toast.info("Free tutors can add up to 2 students. Upgrade to Pro for unlimited students.");
-                  return;
-                }
-
                 try {
                   const alreadySent = await hasPendingRequest(user.$id, u.$id);
                   if (alreadySent) {
@@ -413,7 +408,7 @@ return (
               <div className="flex flex-row border-1 rounded-full p-1 h-8 shadow-xs">
 
               {f.isSubscribed ? (
-                <Badge className="text-foreground bg-pink-500 border-none">Pro</Badge>
+                <Badge className="text-foreground bg-pink-500 border-none">Plus</Badge>
               ) : (
                 <Badge className="text-background bg-foreground border-none">Free</Badge>
               )}
@@ -587,7 +582,7 @@ return (
                     <div className="flex flex-row border-1 rounded-full p-1 h-8 shadow-xs">
 
               {f.isSubscribed ? (
-                <Badge className="text-foreground bg-pink-500 border-none">Pro</Badge>
+                <Badge className="text-foreground bg-pink-500 border-none">Plus</Badge>
               ) : (
                 <Badge className="text-background bg-foreground border-none">Free</Badge>
               )}

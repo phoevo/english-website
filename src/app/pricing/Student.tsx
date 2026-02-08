@@ -1,3 +1,5 @@
+'use client'
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +9,9 @@ import { motion } from 'motion/react';
 import { DM_Sans, Geist } from 'next/font/google';
 import Link from 'next/link';
 import React from 'react'
+import { subscribeUser2 } from '@/data/getData'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 const geist = Geist({ subsets: ['latin'] })
 const dmSans = DM_Sans({ subsets: ['latin'] });
@@ -15,30 +20,52 @@ const dmSans = DM_Sans({ subsets: ['latin'] });
 
 function Student() {
   const {user, isSubscribed, isTeacher} = useUserStore();
+  const router = useRouter();
 
-    const paidOptions = [
+  const handleStudentSubscribe = async (plan: string) => {
+    if (!user?.$id) {
+      router.push('/register');
+      return;
+    }
+    try {
+      if (isSubscribed) {
+        toast.error("You're already subscribed");
+        return;
+      }
+      toast.loading("Redirecting to payment...", { id: 'subscription-loading' });
+      await subscribeUser2(user.$id, plan);
+    } catch (err) {
+      console.error("Subscription failed", err);
+      toast.dismiss('subscription-loading');
+      toast.error("Failed to subscribe. Make sure you're logged in or try again later.");
+    }
+  };
+
+  const paidOptions = [
     {
       title: "Monthly",
+      planName: "Student Monthly",
       price: "4.99",
       info: "Standard Pricing",
       desc: [
         "Ideal for trying out Synomilo.",
-        "Pro access, billed monthly.",
+        "Plus access, billed monthly.",
         "Flexible; cancel anytime.",
       ],
 
     },
     {
       title: "Yearly",
+      planName: "Student Yearly",
       price:"49.99",
       info: "Over 15% cheaper than Monthly",
       desc: [
         "Ideal for those who want to commit to a long-term journey.",
-        "Pro access, billed yearly.",
+        "Plus access, billed yearly.",
         "Access to all existing and new content within the year of purchase.",
       ]
     },
-    ]
+  ]
 
   return (
     <div>
@@ -96,7 +123,7 @@ function Student() {
 
 <div className='flex flex-col justify-between p-2 border-1 rounded-xl shadow-xs h-100 w-xs md:w-md'>
     <div className='flex flex-col items-center flex-grow'>
-      <Badge className='mb-10 bg-pink-500 text-white'>Pro</Badge>
+      <Badge className='mb-10 bg-pink-500 text-white'>Plus</Badge>
       <div className='flex justify-center items-center'>
       <ul className='text-base text-muted-foreground  list-disc marker:text-pink-500 space-y-1 w-full'>
         <li>Everything in Free</li>
@@ -116,7 +143,7 @@ function Student() {
     </Button>
   </DialogTrigger>
 
-  <DialogContent className={`min-w-2/3 h-auto p-10 ml-2 ${geist.className}`}>
+  <DialogContent className={`lg:min-w-4xl h-auto p-10 ml-2 ${geist.className}`}>
     <DialogHeader>
       <DialogHeader>
   <DialogTitle className='lg:text-2xl'>Student Plans</DialogTitle>
@@ -133,12 +160,12 @@ function Student() {
     {paidOptions.map((option, index) => (
       <div
         key={index}
-        className="flex flex-col justify-between p-4 border-1 rounded-xl w-full md:w-full lg:w-1/3 h-60 lg:h-90 shadow-md"
+        className="flex flex-col justify-between p-4 border-1 rounded-xl w-full md:w-full lg:w-sm h-60 lg:h-90 shadow-md"
       >
          <div className="flex flex-col items-start">
           <div className='flex flex-row gap-2 items-center my-2'>
             <h1 className='lg:text-xl font-semibold'>{option.title}</h1>
-            <Badge className="bg-pink-500 text-white">${option.price}</Badge>
+            <Badge className="bg-pink-500 text-white">€{option.price}</Badge>
           </div>
           <div className='mb-4 text-sm text-muted-foreground'>{option.info}</div>
           <ul className="list-disc text-xs text-left lg:items-center lg:text-sm marker:text-pink-500 space-y-1 px-4 text-muted-foreground mb-2">
@@ -155,11 +182,13 @@ function Student() {
       </Button>
     </Link>
 ) : !isSubscribed ? (
-  <Link href="/subscribe" className="w-full">
-    <Button variant="outline" className="w-full cursor-pointer">
-      Get Started
+    <Button
+      variant="outline"
+      className="w-full cursor-pointer"
+      onClick={() => handleStudentSubscribe(option.planName)}
+    >
+      Get {option.planName}
     </Button>
-  </Link>
 ) : isTeacher ? (
   <Button
     variant="outline"
@@ -178,10 +207,9 @@ function Student() {
   </Button>
 )}
 
+</div>
 
-
-      </div>
-    ))}
+))}
   </div>
 </DialogHeader>
     </DialogHeader>

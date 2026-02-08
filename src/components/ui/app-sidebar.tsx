@@ -172,7 +172,7 @@ export function AppSidebar() {
             <DropdownMenuItem className="border-b rounded-none cursor-pointer">
               {isSubscribed ? (
                 <span className="flex flex-row space-x-2">
-                  <Sparkle className="text-pink-500"/> <p className="text-pink-500">Pro</p>
+                  <Sparkle className="text-pink-500"/> <p className="text-pink-500">Plus</p>
                 </span>
               ) : (
                 <span className="flex flex-row space-x-2">

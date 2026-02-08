@@ -17,35 +17,25 @@ function Tutor() {
 
   const tutorPlans = [
   {
-    title: "Tutor 5",
+    title: "Tutor Monthly",
     info: "For up to 5 students",
     desc: [
       "Ideal for Tutors starting out",
-      "$2 per Student"
+      ""
     ],
     price: "9.99",
     priceId: "price_tutor5_monthly"
   },
   {
-    title: "Tutor 15",
+    title: "Tutor Yearly",
     info: "For up to 15 students",
     desc: [
       "Best for active Tutors",
-      "$1.3 per Student"
+      "You have many Students",
+      "You have no time to prepare"
     ],
-    price: "19.99",
+    price: "79.99",
     priceId: "price_tutor15_monthly"
-  },
-
-  {
-    title: "Tutor 30",
-    info: "For up to 30 students",
-    desc: [
-      "Designed for full-time Tutors",
-      "$1 per Student"
-    ],
-    price: "29.99",
-    priceId: "price_tutor30_monthly"
   },
 ];
 
@@ -117,12 +107,12 @@ function Tutor() {
 
     <Dialog>
   <DialogTrigger asChild>
-    <Button variant="outline" className="cursor-pointer" disabled >
+    <Button variant="outline" className="cursor-pointer" >
       {isTeacher && isSubscribed ? "Subscribed" : "See Tutor Plans"}
     </Button>
   </DialogTrigger>
 
-  <DialogContent className={`w-full max-w-4xl h-auto p-4 md:p-10 ml-2 ${geist.className}`}>
+  <DialogContent className={`lg:min-w-4xl h-auto p-10 ml-2  ${geist.className}`}>
     <DialogHeader>
       <DialogHeader>
   <DialogTitle className='text-2xl'>See Monthly Tutor Plans</DialogTitle>
@@ -139,7 +129,7 @@ function Tutor() {
     {tutorPlans.map((plan, index) => (
   <div
     key={index}
-    className="flex flex-col p-4 border-1 rounded-xl w-xl md:w-1/3 h-65 shadow-md"
+    className="flex flex-col justify-between p-4 border-1 rounded-xl w-full md:w-full lg:w-sm h-60 lg:h-90 shadow-md"
 
   >
     <div className="flex flex-col flex-grow items-start">

@@ -67,7 +67,7 @@ function SubscribeStudent() {
   ]
 
   return (
-    <div>
+    <div className=''>
       <div className='flex flex-col justify-center items-center'>
         <div className="flex flex-col rounded-lg w-full lg:w-1/2 space-y-5 mt-5 h-auto ">
           <CardHeader>
@@ -79,12 +79,12 @@ function SubscribeStudent() {
         </div>
 
         <div className='flex flex-row justify-center w-full mt-5 gap-15'>
-          <div className="flex flex-col rounded-lg space-y-5 w-full lg:w-2/3 xl:w-1/2 h-auto">
+          <div className="flex flex-col rounded-lg space-y-5 h-auto">
             <CardHeader />
             <CardContent>
               <div className='flex flex-col gap-5 w-full'>
                 <div className='flex flex-col md:flex-col lg:flex-row gap-5'>
-                  <div className='flex flex-col justify-between p-2 bg-muted rounded-xl h-100 w-full text-muted-foreground shadow-md'>
+                  <div className='flex flex-col justify-between p-2 bg-muted rounded-xl h-100 w-xs md:w-md text-muted-foreground shadow-md'>
                     <div className='flex flex-col items-center flex-grow'>
                   <Badge className='mb-10'>Free</Badge>
                   <div className='flex justify-center'>
@@ -112,7 +112,7 @@ function SubscribeStudent() {
                     )}
                   </div>
 
-                  <div className='flex flex-col justify-between p-2 bg-background border rounded-xl h-100 w-full shadow-sm'>
+                  <div className='flex flex-col justify-between p-2 bg-background border rounded-xl h-100 w-xs md:w-md shadow-sm'>
                     <div className='flex flex-col items-center flex-grow'>
                       <Badge className='mb-10 bg-pink-500 text-white'>Pro</Badge>
                       <div className='flex justify-center items-center'>
@@ -172,11 +172,14 @@ function SubscribeStudent() {
     </Button>
   </Link>
 ) : !isSubscribed ? (
-  <Link href="/subscribe" className="w-full">
-    <Button variant="outline" className="w-full cursor-pointer" onClick={() => (handleStudentSubscribe(option.planName))}>
-      Get {option.planName}
-    </Button>
-  </Link>
+  <Button
+  variant="outline"
+  className="w-full"
+  onClick={() => handleStudentSubscribe(option.planName)}
+>
+  Get {option.planName}
+</Button>
+
 ) : (
   <Button
     variant="outline"

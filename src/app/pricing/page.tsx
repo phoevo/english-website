@@ -50,44 +50,45 @@ const tiers: Tier[] = [
     tutorBadge: "Tutor Free",
     studentBadge: "Student Free",
     features: [
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors are limited to screensharing" },
-      { icon: <CircleArrowDown size={18} className="flex text-red-500 shrink-0" />, text: "Students can view pro conversations, but only when assigned by a tutor. Limited features (no audio)" },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors cannot assign" },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors can browse and screenshare conversations only." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Students have limited access (no audio, no independent Plus features)." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "No assignments or Plusgress tracking." },
     ],
   },
   {
     tutorBadge: "Free",
-    studentBadge: "Pro",
+    studentBadge: "Plus",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can assign any conversation." },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Students can view every conversation with pro features." },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors still limited to 2 active student slots." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors cannot assign conversations." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Students have full Plus access independently (audio + full library)." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "No structured assignments or tutor tracking." },
     ],
   },
   {
-    tutorBadge: "Pro",
+    tutorBadge: "Plus",
     studentBadge: "Free",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can assign any conversation." },
-      { icon: <CircleArrowDown size={18} className="text-red-500 shrink-0" />, text: "Students can view pro conversations, but only when assigned by a tutor. Limited features (no audio)" },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can manage unlimited active students." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can assign Plus conversations to students." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Students unlock Plus features (including audio) within assigned conversations." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can track assignment completion and student activity." },
     ],
   },
   {
-    tutorBadge: "Pro",
-    studentBadge: "Pro",
+    tutorBadge: "Plus",
+    studentBadge: "Plus",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can assign any conversation." },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Students can view every conversation with pro features." },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can manage unlimited active students." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can assign and track Plus conversations." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Students have full independent Plus access across the platform." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Full structured learning + independent practice." },
     ],
   },
 ];
 
 
+
 function renderTier(tier: Tier, idx: number) {
-  const studentIsPro = tier.studentBadge === "Pro";
-  const tutorIsPro = tier.tutorBadge === "Pro";
+  const studentIsPlus = tier.studentBadge === "Plus";
+  const tutorIsPlus = tier.tutorBadge === "Plus";
 
   return (
     <CardContent key={idx} className='flex flex-col md:flex-row items-center justify-center gap-4 p-4'>
@@ -100,7 +101,7 @@ function renderTier(tier: Tier, idx: number) {
           <User strokeWidth={1} size={60} className="md:w-[90px] md:h-[90px]" />
           <Notebook className="absolute bottom-3 md:bottom-5 ml-6 md:ml-10 bg-background z-10" size={20} />
         </div>
-        <Badge className={studentIsPro ? "bg-pink-500" : ""}>{tier.studentBadge}</Badge>
+        <Badge className={studentIsPlus ? "bg-pink-500 text-foreground" : ""}>{tier.studentBadge}</Badge>
 
       </div>
 
@@ -109,7 +110,7 @@ function renderTier(tier: Tier, idx: number) {
           <User strokeWidth={1} size={60} className="md:w-[90px] md:h-[90px]" />
           <Briefcase className="absolute bottom-1 md:bottom-4 ml-6 md:ml-10 bg-background z-10" size={25} />
         </div>
-        <Badge className={tutorIsPro ? "bg-pink-500" : ""}>{tier.tutorBadge}</Badge>
+        <Badge className={tutorIsPlus ? "bg-pink-500 text-mutedforeground" : ""}>{tier.tutorBadge}</Badge>
       </div>
 
     </div>
@@ -147,7 +148,11 @@ function SubscribePage() {
 
             <div className={`flex absolute right-5 md:right-5 lg:right-10 md:gap-0 lg:gap-1 ${geist.className}`}>
               <Link href={"/register"}> <Button className="hidden md:block lg:block cursor-pointer" variant={"ghost"}>Sign up</Button> </Link>
-              <Link href={"/login"}> <Button className="hidden md:block lg:block cursor-pointer" variant="ghost">Log in</Button> </Link>
+              {user ? (
+                <Link href={"/home"}> <Button className="hidden md:block lg:block cursor-pointer" variant="ghost">Home</Button> </Link>
+              ) :
+                <Link href={"/login"}> <Button className="hidden md:block lg:block cursor-pointer" variant="ghost">Log in</Button> </Link> }
+
               <Link href="/pricing"> <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Pricing</Button></Link>
               <Link href="/blog"> <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Blog</Button></Link>
               <ModeToggle />

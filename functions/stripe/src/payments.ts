@@ -137,11 +137,12 @@ export default async function handlePayments({
     console.log("Customer email:", user.email);
     console.log("Price ID for plan:", priceMap[plan]);
     
+    const frontend = process.env.FRONTEND_URL || "http://localhost:3000";
     const checkoutSession = await stripe.checkout.sessions.create({
       customer: stripeCustomerId,
       mode: "subscription",
-      success_url: "http://687bd989002c9e597b76.fra.appwrite.run/check?checkout_id={CHECKOUT_SESSION_ID}",
-      cancel_url: "https://localhost:3000",
+      success_url: `${frontend}/subscribe/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${frontend}/subscribe/canceled`,
       line_items: [
         {
           price: priceMap[plan],

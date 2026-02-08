@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { account, conversationsCollectionId, databaseId, databases, usersCollectionId, } from "./appwrite";
 import { Client, Functions } from "appwrite";
 
@@ -222,7 +223,7 @@ export async function getUserPlan(): Promise<"free" | "pro"> {
     const result = JSON.parse(response.responseBody || "{}");
 
     // List your paid plans here
-    const paidPlans = ["Student Monthly", "Student Yearly", "Tutor Monthly"];
+    const paidPlans = ["Student Monthly", "Student Yearly", "Tutor Monthly", "Tutor Yearly"];
 
     // Return 'pro' if user has one of these paid plans, otherwise 'free'
     return paidPlans.includes(result.plan) ? "pro" : "free";

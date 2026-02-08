@@ -185,7 +185,8 @@ fetchUser: async () => {
     set({
       user: {
         $id: res.$id,
-        name: res.name,
+        // Prefer the Users collection display name to keep consistency with other user-facing lists
+        name: (typeof userDoc?.name === "string" && userDoc.name.trim().length > 0) ? userDoc.name : res.name,
         email: res.email,
         isTeacher,
         friendsList,

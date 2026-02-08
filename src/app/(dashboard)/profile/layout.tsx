@@ -109,7 +109,12 @@ export default function ProfileLayout() {
       }
 
       if (values.username !== user?.name) {
+        // Update Appwrite auth account name
         await account.updateName(values.username);
+        // Mirror the change into the Users collection so all pages (e.g., Assignments) see the same name
+        await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
+          name: values.username,
+        });
         toast('Username updated', {
           description: `Your username is now ${values.username}`,
         });
@@ -124,14 +129,8 @@ export default function ProfileLayout() {
         accountForm.resetField('newPassword');
       }
 
-      const updatedUser = await account.get();
-      setUser({
-        $id: updatedUser.$id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        isSubscribed: user?.isSubscribed ?? false,
-        isTeacher: user?.isTeacher ?? false,
-      });
+      // Refresh the store from both sources (Account + Users doc) to ensure consistent name everywhere
+      await fetchUser();
 
     } catch (err: unknown) {
       console.error('Update error:', err);

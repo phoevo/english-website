@@ -75,13 +75,21 @@ export default function LandingPage() {
             question: "What do I get with the paid option?",
             answer: (
               <>
-                You get access to:
-                <ul className="list-disc pl-5">
+
+                <p>Students get access to:</p>
+                <ul className="list-disc pl-5 text-sm">
                   <li>Conversation Audio</li>
                   <li>All existing and future conversations</li>
                   <li>Color customization</li>
                   <li>Challenges</li>
                 </ul>
+
+                <p className="mt-5" >Tutors get access to:</p>
+                <ul className="list-disc pl-5 text-sm">
+                  <li>Assigning</li>
+                  <li>Student progress tracking</li>
+                </ul>
+
                 <p className="flex items-center gap-2 pt-5">
                   Find out more on the{" "}
                   <Link
@@ -246,7 +254,7 @@ return (
             <p className={`text-md p-2 lg:text-lg leading-relaxed bg-card text-center ${dmSans.className}`}>
               I built Synomilo to help English learners move beyond studying by giving them a place to actively practice.
               With realistic conversations and tools built for real-world speaking, students can practice solo or with a tutor.
-              Tutors can already join sessions and guide students through screen sharing. I'm currently building dedicated tutor tools for assigning, tracking, and giving feedback are coming soon.
+              Tutors can already join sessions and guide students through screen sharing, or use newly built tutor tools for assigning and tracking content.
             </p>
 
           </motion.div>
@@ -361,9 +369,9 @@ return (
 
             <h3 className="text-2xl lg:text-4xl font-normal mt-5">AI</h3>
              <p className="text-md lg:text-lg text-muted-foreground">
-             We don’t use AI to create our conversations. Every conversation is written by native English speakers,
-             ensuring they sound as natural as possible and reflect real spoken English. For now, we only use AI
-             for audio, but as we grow, we plan to record and use audio from native speakers.
+             AI is not used to conversations or other content. Every conversation is written by native English speakers,
+             ensuring they sound as natural as possible and reflect real spoken English. For now, AI is only used
+             for audio, but as the platform grows, a switch will be made to record and use audio from native speakers.
             </p>
 
 
@@ -556,44 +564,43 @@ return (
   viewport={{ once: true, margin: "-100px" }}
   transition={{ delay: 0.2, duration: 0.2 }}
   >
-    <div className="flex flex-row text-2xl lg:text-4xl font-normal justify-start">Coming Soon</div>
+    <div className="flex flex-row text-2xl lg:text-4xl font-normal justify-start">Made for Tutors in Mind</div>
     <p className="text-md lg:text-lg text-muted-foreground">
-      As full release approaches, I'm creating dedicated tutor tools to make helping students
-      faster, easier, and more effective. Until then, students can use Synomilo solo or screen-share with their tutor.
+      I'm creating dedicated tutor tools to make helping students
+      faster, easier, and more effective. Tutors can assign work to and track their Student's progression. This helps
+      planning the talking points for the next lesson much simpler.
     </p>
-
-    <div className="flex flex-col items-center py-5 font-normal">
-      <p className="text-2xl lg:text-3xl">Tutors, these are for you</p>
-      <p className="text-muted-foreground">Here's what's coming</p>
-      </div>
 
     <div className="flex flex-col items-center space-y-6">
 
       <div className=" flex flex-col items-center gap-2 lg:p-5 w-full rounded-md">
-        <p className="flex text-lg lg:self-start lg:text-xl">Find all your students in one place</p>
+        <p className="flex text-lg lg:self-start lg:text-xl">Find all your students (or tutors) in one place</p>
+        <p className="text-sm lg:self-start text-muted-foreground italic">On the Assignments page, you can find your current connections or add new ones.</p>
         <TestFriends/>
       </div>
 
 
       <div className=" flex flex-col items-center gap-2 p-5 w-full rounded-md">
         <p className="flex text-xl">Assign them Conversations</p>
+        <p className="text-sm text-muted-foreground italic">On the Conversations page, each tile will have the Assign button </p>
         <TestConversationCover/>
       </div>
 
       <div className=" flex flex-col items-center gap-2 p-5 w-full rounded-md">
         <p className="flex text-xl">View progress on assigned Conversations</p>
+        <p className="text-sm text-muted-foreground italic">This is also located on the Assignments page</p>
         <TestTeacherPage/>
       </div>
     </div>
 
 
       <div className="flex flex-col space-y-3 text-md lg:text-lg text-muted-foreground">
-        <p className="">Soon, tutors will have their own UI to track student's progress,
+        <p className="">Tutors now have their own UI to track student's progress,
       instantly see what they've been working on, and jump into the session prepared.</p>
-        <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">Lesson finished early? No awkward filler</p>
-        <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">No lesson planning</p>
-        <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">No content prep</p>
-        <p className="self-start px-3 py-1 text-foreground bg-muted rounded-full">No scrambling for what to do next</p>
+        <p className="self-start px-3 py-1 text-foreground">Lesson finished early? No awkward filler,</p>
+        <p className="self-start px-3 py-1 text-foreground">No lesson planning,</p>
+        <p className="self-start px-3 py-1 text-foreground">No content prep,</p>
+        <p className="self-start px-3 py-1 text-foreground">No scrambling for what to do next,</p>
 
       <p>Synomilo does the heavy lifting. Meet your student or tutor on your usual platform of choice you're ready to go.</p>
     </div>
