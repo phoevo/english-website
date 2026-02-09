@@ -48,7 +48,7 @@ function Student() {
       price: "4.99",
       info: "Standard Pricing",
       desc: [
-        "Ideal for trying out Synomilo.",
+        "Ideal for trying out Synomilo Plus.",
         "Plus access, billed monthly.",
         "Flexible; cancel anytime.",
       ],
@@ -139,7 +139,7 @@ function Student() {
     <Dialog>
   <DialogTrigger asChild>
     <Button variant="outline" className="cursor-pointer" >
-      {!isTeacher && isSubscribed ? "Already subscribed. Change plan?" : "See Plans"}
+      {!isTeacher && isSubscribed ? "Already subscribed. Change plan?" : "See Student Plans"}
     </Button>
   </DialogTrigger>
 
@@ -148,7 +148,8 @@ function Student() {
       <DialogHeader>
   <DialogTitle className='lg:text-2xl'>Student Plans</DialogTitle>
   <DialogDescription className='lg:text-md'>
-  These plans are part of the early access period and will increase as I continue building and improving Synomilo. Your rate is locked in and won&apos;t change, even after future pricing updates.
+  These plans are part of the early access period and will increase as I continue building and improving Synomilo.
+  <span className='text-green-500'> Your rate is locked in and won’t change, even after future pricing updates.</span>
 </DialogDescription>
 <DialogDescription>
   I&apos;m grateful for your contribution and for being one of the platform&apos;s first supporters.
@@ -192,7 +193,7 @@ function Student() {
 ) : isTeacher ? (
   <Button
     variant="outline"
-    className="w-full cursor-not-allowed opacity-50"
+    className="w-full cursor-not-allowed"
     disabled
   >
     Requires Student account
@@ -200,7 +201,7 @@ function Student() {
 ) : (
   <Button
     variant="outline"
-    className="w-full cursor-not-allowed opacity-50"
+    className="w-full cursor-not-allowed"
     disabled
   >
     Subscribed

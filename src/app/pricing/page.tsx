@@ -33,6 +33,12 @@ import Student from './Student'
 import Tutor from './Tutor'
 import Enterprise from './Enterprise'
 import ModeToggle from '@/components/ui/ModeToggle'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
@@ -50,18 +56,18 @@ const tiers: Tier[] = [
     tutorBadge: "Tutor Free",
     studentBadge: "Student Free",
     features: [
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors can browse and screenshare conversations only." },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Students have limited access (no audio, no independent Plus features)." },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "No assignments or Plusgress tracking." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors can screenshare conversations only." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Students have limited features (Limited conversations, no audio and others.)." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors: No assignments or progress tracking." },
     ],
   },
   {
     tutorBadge: "Free",
     studentBadge: "Plus",
     features: [
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors cannot assign conversations." },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Students have full Plus access independently (audio + full library)." },
-      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "No structured assignments or tutor tracking." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors can screenshare conversations." },
+      { icon: <CircleArrowUp size={18} className="text-green-500 shrink-0" />, text: "Students have full Plus access independently (all conversations, audio and other Plus features)." },
+      { icon: <CircleArrowDown size={18} className="text-red-500" />, text: "Tutors: No assignments or progress tracking." },
     ],
   },
   {
@@ -69,7 +75,7 @@ const tiers: Tier[] = [
     studentBadge: "Free",
     features: [
       { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can assign Plus conversations to students." },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Students unlock Plus features (including audio) within assigned conversations." },
+      { icon: <CircleArrowDown size={18} className="text-red-500 shrink-0" />, text: "Students unlock Plus features within assigned conversations only." },
       { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can track assignment completion and student activity." },
     ],
   },
@@ -77,10 +83,78 @@ const tiers: Tier[] = [
     tutorBadge: "Plus",
     studentBadge: "Plus",
     features: [
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can assign and track Plus conversations." },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Students have full independent Plus access across the platform." },
-      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Full structured learning + independent practice." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can assign Plus conversations to students." },
+      { icon: <CircleArrowUp size={18} className="text-green-500 shrink-0" />, text: "Students have full Plus access independently (all conversations, audio and other Plus features)." },
+      { icon: <CircleArrowUp size={18} className="text-green-500" />, text: "Tutors can track assignment completion and student activity." },
     ],
+  },
+];
+
+type FAQItem = {
+  question: string;
+  answer: React.ReactNode;
+};
+
+const faqs: FAQItem[] = [
+  {
+    question: "What is the difference between Free and Plus?",
+    answer: (
+      <>
+        Plus unlocks the full experience.
+        <br /><br />
+        <strong>Students</strong> get full access to all conversations (A1–C2), conversation audio, color customization and challenges.
+        <br />
+        <strong>Tutors</strong> can assign conversations that include all Plus features, even to Free Students. They also get to track assigned conversations for each student to check on progress.
+      </>
+    ),
+  },
+  {
+    question: "What does Student Free include?",
+    answer: (
+      <>
+        Student Free includes limited conversations and no audio.
+        <br /><br />
+        If your tutor has Tutor Plus, you can access Plus features inside conversations they assign to you.
+      </>
+    ),
+  },
+  {
+    question: "What does Tutor Free include?",
+    answer: (
+      <>
+        Tutor Free has all conversations unlocked, but in "read-only" mode. Essentially just text. You are limited to screensharing during lessons.
+        <br /><br />
+        You cannot assign conversations or track student progress.
+      </>
+    ),
+  },
+  {
+    question: "So if a subscribed Tutor has 30 Students on Free, all 30 get assigned Plus conversations?",
+    answer: (
+      <p>Yup.</p>
+    ),
+  },
+  {
+    question: "What happens if both tutor and student are Free?",
+    answer: (
+      <>
+        Tutors can only screenshare.
+        <br />
+        Students have limited access.
+        <br />
+        No assignments or tracking.
+      </>
+    ),
+  },
+  {
+    question: "What’s the difference between Monthly and Yearly?",
+    answer: (
+      <>
+        Both offer the exact same features.
+        <br /><br />
+        The only difference is billing. Yearly is discounted for long-term commitment
+      </>
+    ),
   },
 ];
 
@@ -217,6 +291,25 @@ function SubscribePage() {
 </Card>
 
 
+</div>
+
+<div className='flex justify-center items-center flex-col lg:flex-row w-full md:w-full lg:w-full mt-10 gap-5 md:gap-10 p-4'>
+  <Card className='h-auto w-full lg:w-2/3 mb-5 bg-background shadow-md'>
+  <CardHeader>
+    <CardTitle className='text-xl md:text-2xl'>FAQ</CardTitle>
+    <CardDescription className='text-sm md:text-base'>Potential questions concerning how Student and Tutor plans work together</CardDescription>
+  </CardHeader>
+
+   <Accordion type="single" collapsible className="self-center w-full md:w-2/3 p-2">
+  {faqs.map((faq, index) => (
+    <AccordionItem key={index} value={`item-${index}`}>
+      <AccordionTrigger className='text-lg'>{faq.question}</AccordionTrigger>
+      <AccordionContent className='text-base mb-5'>{faq.answer}</AccordionContent>
+    </AccordionItem>
+  ))}
+</Accordion>
+
+</Card>
 </div>
 
 

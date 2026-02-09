@@ -40,22 +40,26 @@ function Tutor() {
   const tutorPlans = [
   {
     title: "Tutor Monthly",
+    info: "",
     planName:"Tutor Monthly",
     desc: [
       "Ideal for Tutors starting out",
-      ""
+      "Small commitment",
+      "Get a feel of what Plus offers"
     ],
     price: "9.99",
     priceId: "price_tutor5_monthly"
   },
   {
     title: "Tutor Yearly",
+    info: "Over 20% cheaper than Monthly, about €7.50/month",
     planName: "Tutor Yearly",
     desc: [
       "Best for active Tutors",
       "Lots of Students, little time to prepare",
+      "Invest in your lesson quality"
     ],
-    price: "79.99",
+    price: "89.99",
     priceId: "price_tutor15_monthly"
   },
 ];
@@ -94,8 +98,8 @@ function Tutor() {
 
     {isSubscribed ? (
     <Button
-    variant="outline"
-    className="w-full cursor-not-allowed opacity-50"
+    variant="default"
+    className="w-full cursor-not-allowed"
     disabled
   >
     Subscribed
@@ -117,12 +121,15 @@ function Tutor() {
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10 bg-pink-500 text-white'>Plus</Badge>
       <div className='flex justify-center items-center'>
-      <ul className='text-base text-muted-foreground  list-disc marker:text-pink-500 space-y-1 w-full'>
+      <ul className='text-base text-muted-foreground list-disc marker:text-pink-500 px-10 space-y-1 w-full'>
         <li>All conversations A1-C2 in read-only</li>
-        <li>Assignments page</li>
-        <li>Assign, Track and Manage Students</li>
+        <li>Assignments page: Track and manage your students</li>
+        <li>Assign feature: Assign conversations to your students. Students view assigned conversations with Plus features, even they have a free accounts</li>
       </ul>
+
+
       </div>
+
 
     </div>
 
@@ -136,34 +143,36 @@ function Tutor() {
   <DialogContent className={`lg:min-w-4xl h-auto p-10 ml-2  ${geist.className}`}>
     <DialogHeader>
       <DialogHeader>
-  <DialogTitle className='text-2xl'>See Monthly Tutor Plans</DialogTitle>
+  <DialogTitle className='text-2xl'>Tutor Plans</DialogTitle>
   <DialogDescription>
-  These plans are part of the early access period and will increase as I continue building and improving Synomilo. Your rate is locked in and won’t change, even after future pricing updates.
+  These plans are part of the early access period and will increase as I continue building and improving Synomilo.
+  <span className='text-green-500'> Your rate is locked in and won’t change, even after future pricing updates.</span>
 </DialogDescription>
 <DialogDescription>
-  Thank you for supporting our work and being part of the early supporters.
+  I&apos;m grateful for your contribution and for being one of the platform&apos;s first supporters.
 </DialogDescription>
 
 
 
-  <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-4">
+  <div className="flex flex-col lg:flex-row justify-center items-center gap-4 mt-4">
     {tutorPlans.map((plan, index) => (
   <div
     key={index}
-    className="flex flex-col justify-between p-4 border-1 rounded-xl w-full md:w-full lg:w-sm h-60 lg:h-90 shadow-md"
+    className="flex flex-col justify-between p-4 border-1 rounded-xl w-full lg:w-sm h-60 lg:h-90 shadow-md"
 
   >
-    <div className="flex flex-col flex-grow items-start">
-      <div className="flex flex-row gap-2 items-center my-2">
-        <h1 className="text-xl font-semibold">{plan.title}</h1>
-        <Badge className="bg-pink-500 text-white px-1">€{plan.price}</Badge>
-      </div>
-      <ul className="list-disc text-sm marker:text-pink-500 space-y-1 px-4 text-muted-foreground mb-2">
-        {plan.desc.map((item, i) => (
-          <li key={i}>{item}</li>
-        ))}
-      </ul>
-    </div>
+    <div className="flex flex-col items-start">
+              <div className='flex flex-row gap-2 items-center my-2'>
+                <h1 className='lg:text-xl font-semibold'>{plan.title}</h1>
+                <Badge className="bg-pink-500 text-white ">€{plan.price}</Badge>
+              </div>
+              <div className='mb-4 text-sm text-muted-foreground'>{plan.info}</div>
+              <ul className="list-disc text-xs text-left lg:items-center lg:text-sm marker:text-pink-500 space-y-1 px-4 text-muted-foreground mb-2">
+              {plan.desc.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+              </ul>
+            </div>
 
     {!user ? (
     <Link href="/register" className="w-full">
@@ -179,18 +188,18 @@ function Tutor() {
     >
       Get {plan.planName}
     </Button>
-) : isTeacher ? (
+) : !isTeacher ? (
   <Button
     variant="outline"
-    className="w-full cursor-not-allowed opacity-50"
+    className="w-full cursor-not-allowed"
     disabled
   >
-    Requires Student account
+    Requires Tutor account
   </Button>
 ) : (
   <Button
     variant="outline"
-    className="w-full cursor-not-allowed opacity-50"
+    className="w-full cursor-not-allowed"
     disabled
   >
     Subscribed
