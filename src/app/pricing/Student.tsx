@@ -23,7 +23,7 @@ function Student() {
   const router = useRouter();
 
   const handleStudentSubscribe = async (plan: string) => {
-    if (!user?.$id) {
+    if (!user?.$id && !isTeacher) {
       router.push('/register');
       return;
     }

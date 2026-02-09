@@ -61,8 +61,8 @@ module.exports = async function handleCheckPayment({
       case "price_1ScV06PoApFikZNYoWPINm74":
         plan = "Tutor Monthly";
         break;
-      case "price_1Sc8a5PoApFikZNYt4gagZ1g":
-        plan = "Tutor per seat";
+      case "price_1SyYn4PoApFikZNYC69TOcVL":
+        plan = "Tutor Yearly";
         break;
       default:
         plan = "free";

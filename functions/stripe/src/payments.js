@@ -7,7 +7,7 @@ const priceMap = {
   "Student Monthly": "price_1RjNY6PoApFikZNYFIHlqq3t",
   "Student Yearly": "price_1RmIPcPoApFikZNYDnmuR2hA",
   "Tutor Monthly": "price_1ScV06PoApFikZNYoWPINm74",
-  "Tutor per seat": "price_1Sc8a5PoApFikZNYt4gagZ1g",
+  "Tutor Yearly": "price_1SyYn4PoApFikZNYC69TOcVL",
 };
 
 module.exports = async function handlePayments({

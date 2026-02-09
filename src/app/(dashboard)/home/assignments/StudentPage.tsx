@@ -43,7 +43,10 @@ function StudentPage() {
         const assignmentRes = await databases.listDocuments(
           databaseId,
           assignmentsId,
-          [Query.equal("studentId", user.$id)]
+          [
+            Query.equal("studentId", user.$id),
+            Query.equal("status", "Pending"),
+          ]
         );
 
         const assignments = assignmentRes.documents;
@@ -96,11 +99,8 @@ function StudentPage() {
       { status: "Completed" }
     );
 
-    setAssignments((prev) =>
-      prev.map((a) =>
-        a.$id === assignmentId ? { ...a, status: "Completed" } : a
-      )
-    );
+    // Remove from the local list immediately (we only show Pending here)
+    setAssignments((prev) => prev.filter((a) => a.$id !== assignmentId));
   } catch (err) {
     console.error("Failed to update status:", err);
   }

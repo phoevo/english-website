@@ -7,6 +7,7 @@ import { loadConversation } from "@/data/conversation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Conversation } from "@/data/conversation";
 import { useUserStore } from "@/data/useUserStore";
+import { isConversationAssignedToStudent } from "@/data/appwrite";
 
 export default function ConversationPage() {
   const params = useParams();
@@ -30,11 +31,15 @@ export default function ConversationPage() {
             const isPro = fetchedConversation.isPro;
             const isSubscribed = user.isSubscribed;
 
-            // Teachers have access to all conversations, students need subscription for pro content
+            // Teachers have access to all conversations.
+            // Students need subscription for pro content, unless the convo was assigned to them by a subscribed tutor.
             if (isPro && !isSubscribed && !isTeacher) {
-              setError("This is a Pro conversation. Upgrade to access.");
-              setLoading(false);
-              return;
+              const assigned = await isConversationAssignedToStudent(user.$id, conversationId);
+              if (!assigned) {
+                setError("This is a Pro conversation. It must be assigned by your tutor or you need a subscription to access.");
+                setLoading(false);
+                return;
+              }
             }
             setConversation(fetchedConversation);
           } else {

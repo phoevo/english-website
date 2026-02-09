@@ -14,7 +14,7 @@ import { Send, LoaderCircle } from "lucide-react";
 import Assign from "./Assign";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { getConversationFromDB } from "@/data/appwrite";
+import { getConversationFromDB, isConversationAssignedToStudent } from "@/data/appwrite";
 
 
 
@@ -55,10 +55,14 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
     const isPro = conversation.isPro;
     const isSubscribed = user.isSubscribed;
 
-    // Teachers have access to all conversations, students need subscription for pro content
+    // Teachers have access to all conversations.
+    // Students need subscription for pro content unless it was assigned to them by a subscribed tutor.
     if (isPro && !isSubscribed && !isTeacher) {
-      toast("This is a Pro conversation. Upgrade to access.");
-      return; // Stop navigation
+      const assigned = await isConversationAssignedToStudent(user.$id, conversationId);
+      if (!assigned) {
+        toast("This is a Pro conversation. It must be assigned by your tutor or you need a subscription.");
+        return; // Stop navigation
+      }
     }
 
     // 3. Allow access

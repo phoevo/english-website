@@ -39,14 +39,20 @@ module.exports = async function main({ req, res, log, error }) {
   }
 
   // Authenticated user client: using JWT
+  const incomingJwt =
+    req.headers["x-appwrite-user-jwt"] ||
+    req.headers["x-appwrite-jwt"] ||
+    bodyJson.jwt ||
+    "";
+
   const client = new Client()
     .setEndpoint(APPWRITE_ENDPOINT)
     .setProject(PROJECT_ID)
-    .setJWT(req.headers["x-appwrite-user-jwt"] || "");
+    .setJWT(incomingJwt);
 
   // Allow unauthenticated for specific public routes
   const isPublicRoute = ["/webhook", "/send-reset-notice"].includes(req.path);
-  if (!isPublicRoute && !req.headers["x-appwrite-user-jwt"]) {
+  if (!isPublicRoute && !incomingJwt) {
     error("No JWT token provided");
     return res.json({ error: "Authentication required" }, 401);
   }

@@ -7,6 +7,9 @@ import { useUserStore } from '@/data/useUserStore'
 import { motion } from 'motion/react';
 import { DM_Sans, Geist } from 'next/font/google';
 import Link from 'next/link';
+import router from 'next/router';
+import { toast } from 'sonner';
+import { subscribeUser2 } from '@/data/getData';
 
 
 const geist = Geist({ subsets: ['latin'] })
@@ -15,10 +18,29 @@ const dmSans = DM_Sans({ subsets: ['latin'] });
 function Tutor() {
   const {user, isSubscribed, isTeacher} = useUserStore();
 
+   const handleTutorSubscribe = async (plan: string) => {
+    if (!user?.$id && isTeacher) {
+      router.push('/register');
+      return;
+    }
+    try {
+      if (isSubscribed) {
+        toast.error("You're already subscribed");
+        return;
+      }
+      toast.loading("Redirecting to payment...", { id: 'subscription-loading' });
+      await subscribeUser2(user.$id, plan);
+    } catch (err) {
+      console.error("Subscription failed", err);
+      toast.dismiss('subscription-loading');
+      toast.error("Failed to subscribe. Make sure you're logged in or try again later.");
+    }
+  };
+
   const tutorPlans = [
   {
     title: "Tutor Monthly",
-    info: "For up to 5 students",
+    planName:"Tutor Monthly",
     desc: [
       "Ideal for Tutors starting out",
       ""
@@ -28,11 +50,10 @@ function Tutor() {
   },
   {
     title: "Tutor Yearly",
-    info: "For up to 15 students",
+    planName: "Tutor Yearly",
     desc: [
       "Best for active Tutors",
-      "You have many Students",
-      "You have no time to prepare"
+      "Lots of Students, little time to prepare",
     ],
     price: "79.99",
     priceId: "price_tutor15_monthly"
@@ -94,7 +115,7 @@ function Tutor() {
 
 <div className='flex flex-col justify-between bg-background p-2 rounded-xl shadow-xs h-100 w-xs md:w-md border-1'>
     <div className='flex flex-col items-center flex-grow'>
-      <Badge className='mb-10 bg-pink-500 text-white'>Pro</Badge>
+      <Badge className='mb-10 bg-pink-500 text-white'>Plus</Badge>
       <div className='flex justify-center items-center'>
       <ul className='text-base text-muted-foreground  list-disc marker:text-pink-500 space-y-1 w-full'>
         <li>All conversations A1-C2 in read-only</li>
@@ -135,9 +156,8 @@ function Tutor() {
     <div className="flex flex-col flex-grow items-start">
       <div className="flex flex-row gap-2 items-center my-2">
         <h1 className="text-xl font-semibold">{plan.title}</h1>
-        <Badge className="bg-pink-500 text-white px-1">${plan.price}</Badge>
+        <Badge className="bg-pink-500 text-white px-1">€{plan.price}</Badge>
       </div>
-      <div className="mb-5 text-sm text-muted-foreground">{plan.info}</div>
       <ul className="list-disc text-sm marker:text-pink-500 space-y-1 px-4 text-muted-foreground mb-2">
         {plan.desc.map((item, i) => (
           <li key={i}>{item}</li>
@@ -146,21 +166,36 @@ function Tutor() {
     </div>
 
     {!user ? (
+    <Link href="/register" className="w-full">
+      <Button variant="outline" className="w-full cursor-pointer">
+        Get Started
+      </Button>
+    </Link>
+) : !isSubscribed ? (
     <Button
-      variant="default"
-      className="cursor-pointer w-full mt-auto"
-
-    >
-      Get started
-    </Button>) :
-    (<Button
       variant="outline"
-      className="cursor-pointer w-full mt-auto"
-
+      className="w-full cursor-pointer"
+      onClick={() => handleTutorSubscribe(plan.planName)}
     >
-      Get {plan.title}
-    </Button>)
-    }
+      Get {plan.planName}
+    </Button>
+) : isTeacher ? (
+  <Button
+    variant="outline"
+    className="w-full cursor-not-allowed opacity-50"
+    disabled
+  >
+    Requires Student account
+  </Button>
+) : (
+  <Button
+    variant="outline"
+    className="w-full cursor-not-allowed opacity-50"
+    disabled
+  >
+    Subscribed
+  </Button>
+)}
 
   </div>
 ))}

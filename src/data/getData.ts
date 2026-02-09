@@ -8,6 +8,7 @@ const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
 const CONVERSATIONS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_CONVERSATIONS_COLLECTION_ID!;
+const STRIPE_FUNCTION = process.env.NEXT_PUBLIC_APPWRITE_STRIPE_FUNCTION!;
 
 
 export async function ensureUserDocument(): Promise<{ created: boolean }> {
@@ -53,16 +54,15 @@ export async function subscribeUser(documentId: string) {
 }
 
 export async function subscribeUser2(documentId: string, plan: string): Promise<void> {
+  // Refresh the JWT token to ensure it's valid
+  const user = await account.get();
+  console.log("Logged in user:", user);
+  const jwt = await account.createJWT();
+  localStorage.setItem('jwt', jwt.jwt);
+
+  // First try direct call (best when CORS is correctly configured)
   try {
-    // Refresh the JWT token to ensure it's valid
-    const jwt = await account.createJWT();
-    localStorage.setItem('jwt', jwt.jwt);
-
-    const client = new Client()
-      .setEndpoint(APPWRITE_ENDPOINT)
-      .setProject(PROJECT_ID)
-      .setJWT(jwt.jwt);
-
+    const client = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(PROJECT_ID).setJWT(jwt.jwt);
     const functions = new Functions(client);
 
     console.log("Calling Appwrite function with:", { plan, documentId });
@@ -70,49 +70,46 @@ export async function subscribeUser2(documentId: string, plan: string): Promise<
     console.log("Project ID:", PROJECT_ID);
 
     const response = await functions.createExecution(
-      "68794e830018a53dcad6", // Function ID
+      (STRIPE_FUNCTION),
       JSON.stringify({ plan, documentId }),
       false,
       "/payments",
       "POST" as unknown as import("appwrite").ExecutionMethod
     );
 
-    console.log("Full Appwrite response:", response);
-    console.log("Response status:", response.status);
-    console.log("Response errors:", response.errors);
-    console.log("Response logs:", response.logs);
-    console.log("Raw response body:", response.responseBody);
-    console.log("Response object keys:", Object.keys(response));
-
-    if (response.status !== "completed") {
-      console.warn("Appwrite function did not complete successfully.");
-      console.log("Function may have failed with errors:", response.errors);
-      return;
-    }
-
-    // Try to get response data from multiple possible fields
-    const responseData = response.responseBody;
-
-    if (!responseData) {
-      console.warn("No response data found in function response.");
-      return;
-    }
-
-    try {
-      const data = JSON.parse(responseData);
-      console.log("Function response data:", data);
+    if (response.status === "completed") {
+      const data = JSON.parse(response.responseBody || "{}");
       if (data?.checkout_url) {
-        console.log("Redirecting to checkout URL:", data.checkout_url);
         window.location.href = data.checkout_url;
-      } else {
-        console.warn("No checkout URL returned from server.", data);
+        return;
       }
-    } catch (parseErr) {
-      console.error("Invalid JSON response from Appwrite function:", responseData);
-      console.error("Parse error:", parseErr);
     }
-  } catch (error) {
-    console.error("Subscription failed:", error);
+    // If it didn't complete or no URL, fall through to proxy
+  } catch (err) {
+    console.warn("Direct Appwrite call failed (likely CORS). Falling back to proxy.", err);
+  }
+
+  // Fallback: call same-origin Next.js proxy to bypass CORS
+  const resp = await fetch('/api/checkout', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      authorization: `Bearer ${jwt.jwt}`,
+    },
+    body: JSON.stringify({ plan, documentId }),
+  });
+
+  const data = await resp.json();
+  if (!resp.ok) {
+    toast.dismiss('subscription-loading');
+    toast.error(data?.error || 'Checkout failed');
+    return;
+  }
+  if (data?.checkout_url) {
+    window.location.href = data.checkout_url;
+  } else {
+    toast.dismiss('subscription-loading');
+    toast.error('No checkout URL returned.');
   }
 }
 
@@ -236,27 +233,49 @@ export async function getUserPlan(): Promise<"free" | "pro"> {
 
 export async function unsubscribeUser2(userId: string) {
   const jwt = await account.createJWT();
-  const client = new Client()
-    .setEndpoint(APPWRITE_ENDPOINT)
-    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
-    .setJWT(jwt.jwt);
 
-  const functions = new Functions(client);
+  // Try direct call first (will fail with CORS in browser if not configured)
+  try {
+    const client = new Client()
+      .setEndpoint(APPWRITE_ENDPOINT)
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
+      .setJWT(jwt.jwt);
 
-  const payload = JSON.stringify({ user_id: userId });
+    const functions = new Functions(client);
 
-  const response = await functions.createExecution(
-    "68794e830018a53dcad6",
-    payload,
-    false,
-    "/unsubscribe",
-    "POST" as unknown as import("appwrite").ExecutionMethod,
-    { "content-type": "application/json" }
-  );
-  if (response.status !== "completed") {
-    throw new Error("Failed to unsubscribe user");
+    const payload = JSON.stringify({ user_id: userId, jwt: jwt.jwt });
+
+    const response = await functions.createExecution(
+      "68794e830018a53dcad6",
+      payload,
+      false,
+      "/unsubscribe",
+      "POST" as unknown as import("appwrite").ExecutionMethod
+    );
+
+    if (response.status === "completed") {
+      return JSON.parse(response.responseBody || '{}');
+    }
+    // fall through to proxy on non-completed
+  } catch (err) {
+    // fall back to proxy
   }
-  return JSON.parse(response.responseBody);
+
+  // Fallback proxy to bypass CORS
+  const resp = await fetch('/api/unsubscribe', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      authorization: `Bearer ${jwt.jwt}`,
+    },
+    body: JSON.stringify({ userId }),
+  });
+
+  const data = await resp.json();
+  if (!resp.ok) {
+    throw new Error(data?.error || 'Failed to unsubscribe user');
+  }
+  return data;
 }
 
 export async function deleteAccountServer(): Promise<void> {
@@ -295,9 +314,9 @@ export async function checkSubscriptionFromStripe(userEmail: string): Promise<bo
 
     const response = await functions.createExecution(
       "68794e830018a53dcad6",
-      JSON.stringify({ email: userEmail }),
+      JSON.stringify({ plan, documentId, jwt: jwt.jwt }),
       false,
-      "/check-subscription", // Simple endpoint
+      "/payments",
       "POST" as unknown as import("appwrite").ExecutionMethod
     );
 

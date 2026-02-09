@@ -54,10 +54,10 @@ module.exports = async function handleGetSubscription({
       const activeSubscription = subscriptions.data[0];
       const priceId = activeSubscription.items.data[0].price.id;
       let planName = "free";
-      if (priceId === process.env.STRIPE_MONTHLY_PRICE_ID) planName = "Student Monthly";
-      else if (priceId === process.env.STRIPE_YEARLY_PRICE_ID) planName = "Student Yearly";
+      if (priceId === process.env.STRIPE_STUDENT_MONTHLY) planName = "Student Monthly";
+      else if (priceId === process.env.STRIPE_STUDENT_YEARLY) planName = "Student Yearly";
       else if (priceId === process.env.STRIPE_TUTOR_MONTHLY) planName = "Tutor Monthly";
-      else if (priceId === process.env.STRIPE_TUTOR_PERSEAT) planName = "Tutor per seat";
+      else if (priceId === process.env.STRIPE_TUTOR_YEARLY) planName = "Tutor Yearly";
       return res.json({ plan: planName, hasActiveSubscription: true, subscriptionId: activeSubscription.id, status: activeSubscription.status });
     }
 
@@ -90,14 +90,14 @@ module.exports = async function handleGetSubscription({
 
     // Map price IDs to plan names (you'll need to adjust these based on your Stripe setup)
     let planName = "free";
-    if (priceId === process.env.STRIPE_MONTHLY_PRICE_ID) {
+    if (priceId === process.env.STRIPE_STUDENT_MONTHLY) {
       planName = "Student Monthly";
-    } else if (priceId === process.env.STRIPE_YEARLY_PRICE_ID) {
+    } else if (priceId === process.env.STRIPE_STUDENT_YEARLY) {
       planName = "Student Yearly";
-    } else if (priceId === process.env.STRIPE_SYNOMILO_TUTOR) {
+    } else if (priceId === process.env.STRIPE_TUTOR_MONTHLY) {
       planName = "Tutor Monthly";
-    } else if (priceId === process.env.STRIPE_SYNOMILO_TUTOR) {
-      planName = "Tutor per seat";
+    } else if (priceId === process.env.STRIPE_TUTOR_YEARLY) {
+      planName = "Tutor Yearly";
     }
 
     return res.json({

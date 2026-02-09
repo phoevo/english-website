@@ -157,13 +157,26 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
   console.log("Found user ID:", userId);
 
   let plan = "free";
+
+  // Resolve price IDs from env with fallbacks for dev/test
+  const PRICE_STUDENT_MONTHLY = process.env.STRIPE_MONTHLY_PRICE_ID || "price_1RjNY6PoApFikZNYFIHlqq3t";
+  const PRICE_STUDENT_YEARLY = process.env.STRIPE_YEARLY_PRICE_ID || "price_1RmIPcPoApFikZNYDnmuR2hA";
+  const PRICE_TUTOR_MONTHLY  = process.env.STRIPE_TUTOR_MONTHLY || "price_1ScV06PoApFikZNYoWPINm74";
+  const PRICE_TUTOR_PERSEAT  = process.env.STRIPE_TUTOR_YEARLY || "price_1SyYn4PoApFikZNYC69TOcVL";
+
   if (priceId) {
     switch (priceId) {
-      case "price_1RjNY6PoApFikZNYFIHlqq3t":
+      case PRICE_STUDENT_MONTHLY:
         plan = "Student Monthly";
         break;
-      case "price_1RmIPcPoApFikZNYDnmuR2hA":
+      case PRICE_STUDENT_YEARLY:
         plan = "Student Yearly";
+        break;
+      case PRICE_TUTOR_MONTHLY:
+        plan = "Tutor Monthly";
+        break;
+      case PRICE_TUTOR_YEARLY:
+        plan = "Tutor Yearly";
         break;
       default:
         plan = "free";
@@ -177,11 +190,17 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
     if (subscriptions.data.length > 0) {
       const activePriceId = subscriptions.data[0].items.data[0].price.id;
       switch (activePriceId) {
-        case "price_1RjNY6PoApFikZNYFIHlqq3t":
+        case PRICE_STUDENT_MONTHLY:
           plan = "Student Monthly";
           break;
-        case "price_1RmIPcPoApFikZNYDnmuR2hA":
+        case PRICE_STUDENT_YEARLY:
           plan = "Student Yearly";
+          break;
+        case PRICE_TUTOR_MONTHLY:
+          plan = "Tutor Monthly";
+          break;
+        case PRICE_TUTOR_PERSEAT:
+          plan = "Tutor per seat";
           break;
         default:
           plan = "free";

@@ -84,6 +84,20 @@ export async function getUserById(userId: string) {
   }
 }
 
+// Check if a conversation is assigned to a student
+export async function isConversationAssignedToStudent(studentId: string, conversationId: string): Promise<boolean> {
+  try {
+    const res = await databases.listDocuments(databaseId, assignmentsId, [
+      Query.equal('studentId', studentId),
+      Query.equal('conversationId', conversationId),
+    ]);
+    return res.total > 0;
+  } catch (error) {
+    console.error('Failed to check assignment for conversation:', error);
+    return false;
+  }
+}
+
 // News helpers
 export type NewsDocument = {
   $id: string;

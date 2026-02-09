@@ -16,7 +16,7 @@ import {
 import { Check, Plus } from "lucide-react";
 import { WordTypeSettings } from "@/components/ui/WordTypeSettings";
 import { Button } from "@/components/ui/button";
-import { databases, storage } from "@/data/appwrite";
+import { databases, storage, isConversationAssignedToStudent } from "@/data/appwrite";
 import { useUserStore } from "@/data/useUserStore";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -56,6 +56,7 @@ interface ConversationProps {
     title: string;
     level: string;
     audioFileId: string;
+    isPro: boolean;
     content:
       | string
       | {
@@ -118,6 +119,8 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   const isComplete = completeConversations.includes(conversation.$id);
   const [audioUrl, setAudioUrl] = React.useState<string | null>(null);
   const [audioLoading, setAudioLoading] = React.useState(true);
+  const [assignedForThisConvo, setAssignedForThisConvo] = React.useState<boolean>(false);
+  const [assignmentChecking, setAssignmentChecking] = React.useState<boolean>(false);
   const [fontSize, setFontSize] = React.useState(16)
 
     React.useEffect(() => {
@@ -140,6 +143,26 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
 
   fetchAudioUrl();
 }, [conversation]);
+
+// Check assignment only when needed: student, not subscribed, Pro conversation
+React.useEffect(() => {
+  const run = async () => {
+    if (!user || isSubscribed || user.isTeacher || !conversation?.$id || !conversation?.isPro) {
+      setAssignedForThisConvo(false);
+      return;
+    }
+    setAssignmentChecking(true);
+    try {
+      const ok = await isConversationAssignedToStudent(user.$id, conversation.$id);
+      setAssignedForThisConvo(ok);
+    } catch (e) {
+      setAssignedForThisConvo(false);
+    } finally {
+      setAssignmentChecking(false);
+    }
+  };
+  run();
+}, [user, isSubscribed, conversation?.$id, conversation?.isPro]);
 
 
 const [wordTypes, setWordTypes] = React.useState<Record<WordTypeKey, WordTypeData>>({
@@ -452,23 +475,27 @@ React.useEffect(() => {
   {audioLoading ? (
     <Skeleton className="" />
   ) : audioUrl ? (
-    isSubscribed ? (
+    // Allow audio if:
+    // - Teacher, or
+    // - Subscribed, or
+    // - This is a Pro conversation assigned to this student
+    (user?.isTeacher || isSubscribed || (conversation?.isPro && assignedForThisConvo)) ? (
         <AudioPlayer src={audioUrl} />
+    ) : assignmentChecking ? (
+        <Skeleton className="w-40 h-5" />
     ) : (
-        <span className="text-zinc-500">Subscription required</span>
+        <span className="text-zinc-500">Subscription or assignment required</span>
     )
   ) : (
       <span className="text-zinc-500">No audio found</span>
-
   )}
+
 </div>
 
+</div>
 
+)}
 
-
-  </div>
-  );
-}
 
 
 
