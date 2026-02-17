@@ -44,7 +44,7 @@ function Tutor() {
     planName:"Tutor Monthly",
     desc: [
       "Ideal for Tutors starting out",
-      "Small commitment",
+      "No long term commitment",
       "Get a feel of what Plus offers"
     ],
     price: "9.99",
@@ -57,7 +57,7 @@ function Tutor() {
     desc: [
       "Best for active Tutors",
       "Lots of Students, little time to prepare",
-      "Invest in your lesson quality"
+      "Pay once, full year of access with future updates."
     ],
     price: "89.99",
     priceId: "price_tutor15_monthly"

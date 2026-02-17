@@ -141,7 +141,7 @@ export function AppSidebar() {
             </HoverCardContent>
           </HoverCard>
         </div>
-        <p className="text-muted-foreground text-sm group-data-[collapsible=icon]:hidden">{user ? user.email : ""}</p>
+        {/* <p className="text-muted-foreground text-sm group-data-[collapsible=icon]:hidden">{user ? user.email : ""}</p> */}
 
         </div>
 
@@ -176,7 +176,7 @@ export function AppSidebar() {
                 </span>
               ) : (
                 <span className="flex flex-row space-x-2">
-                  <Sparkle className="text-foreground"/> <p>Upgrade to Pro</p>
+                  <Sparkle className="text-foreground"/> <p>Upgrade to Plus</p>
                   </span>
               )}
             </DropdownMenuItem>

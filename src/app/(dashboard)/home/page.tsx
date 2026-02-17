@@ -21,6 +21,13 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
@@ -31,6 +38,26 @@ function getLastActive(value: unknown): string | null {
   }
   return null;
 }
+
+type Tips = { title: string; desc: string; img: string };
+
+const onboarding: Tips[] = [
+  {
+    title: "The Home Page",
+    desc: "This is where you can find your most recent conversation and vocabulary, plus News and Updates.",
+    img: "/HPS1.png",
+  },
+  {
+    title: "The Sidebar",
+    desc: "Use the sidebar to navigate between Conversations, Assignments, Dictionary, and more.",
+    img: "/HPS2.png",
+  },
+   {
+    title: "Profile and other settings",
+    desc: "Your profile and other settings can be location by clicking on your account at the top left.",
+    img: "/HPS2.png",
+  }
+];
 
 function Page() {
   const { user, recentConversations, loading, dictionaryWords, friends, isTeacher } = useUserStore();
@@ -96,38 +123,31 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
              {<div className="space-y-4">
 
               {user && (
-                <p className="flex md:flex-row gap-1 text-2xl text-foreground">Welcome to Synomilo, {user.name}!</p>
+                <p className="flex md:flex-row gap-1 text-2xl text-foreground">Hey {user.name}, thanks for signing up!</p>
               )}
 
-                <p className="text-foreground">This is the main page where you can find your most recent conversation and
-             vocabulary, as well as News and Updates.</p>
-
-                <div className="rounded-md p-2">
-                  <p>Top left of the screen is where you can access you profile and other settings.</p>
-                  <img
-                src="/HPS1.png"
-                alt="Guide 1"
-                className="relative w-md object-cover rounded-md"
+    <Carousel className="w-3xl h-2/3">
+      <CarouselContent>
+        {onboarding.map((tip, index) => (
+          <CarouselItem key={index}>
+            <div className="p-1">
+              <Card className="bg-background border-none shadow-none">
+                <CardHeader>
+                  <CardTitle className="text-base">{tip.title}</CardTitle>
+                  <CardDescription className="text-md">{tip.desc}</CardDescription>
+                   <img
+                    src={tip.img}
+                    className="relative w-full rounded-md"
                 />
-                </div>
-
-                  <Separator/>
-
-                  <span className="flex flex-row">
-                  <ArrowLeft className="text-foreground"/>
-                  <p>Use the sidebar on the left side of the screen to for navigation</p>
-                  </span>
-
-                  <Separator/>
-
-                  <div className="rounded-md p-2">
-                  <p>For a start, head to the Conversations page to explore the main content that is offered.</p>
-                  <img
-                src="/HPS2.png"
-                alt="Guide 2"
-                className="relative w-60 rounded-md"
-                />
-                </div>
+                </CardHeader>
+              </Card>
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
 
 
              </div>

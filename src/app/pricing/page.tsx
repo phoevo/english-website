@@ -129,7 +129,7 @@ const faqs: FAQItem[] = [
     ),
   },
   {
-    question: "So if a subscribed Tutor has 30 Students on Free, all 30 get assigned Plus conversations?",
+    question: "So if a subscribed Tutor has 30 Free Students, all 30 get assigned Plus conversations?",
     answer: (
       <p>Yup.</p>
     ),
@@ -254,7 +254,6 @@ function SubscribePage() {
         <TabsList className='self-center'>
           <TabsTrigger value="Students">Students</TabsTrigger>
           <TabsTrigger value="Tutors">Tutors</TabsTrigger>
-          <TabsTrigger value="Enterprise">Enterprise</TabsTrigger>
         </TabsList>
 
         <TabsContent value="Students">

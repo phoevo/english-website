@@ -72,11 +72,6 @@ export default function UserGuidePopover({
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
               >
-                {title && (
-                  <h3 className="text-lg font-semibold mb-2 text-foreground">
-                    {title}
-                  </h3>
-                )}
 
                 {media && (
                   <div className="mb-3 rounded-lg overflow-hidden">
