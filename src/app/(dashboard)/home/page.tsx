@@ -39,23 +39,26 @@ function getLastActive(value: unknown): string | null {
   return null;
 }
 
-type Tips = { title: string; desc: string; img: string };
+type Tips = { title: string; desc: string; imgdark: string; imglight: string; };
 
 const onboarding: Tips[] = [
   {
     title: "The Home Page",
     desc: "This is where you can find your most recent conversation and vocabulary, plus News and Updates.",
-    img: "/HPS1.png",
+    imgdark: "/HPSD1.png",
+    imglight: "/HPSL1.png"
   },
   {
     title: "The Sidebar",
     desc: "Use the sidebar to navigate between Conversations, Assignments, Dictionary, and more.",
-    img: "/HPS2.png",
+    imgdark: "/HPSD2.png",
+    imglight: "/HPSL2.png"
   },
    {
     title: "Profile and other settings",
-    desc: "Your profile and other settings can be location by clicking on your account at the top left.",
-    img: "/HPS2.png",
+    desc: "Your profile and other settings can be accessed by clicking on your account on the top left.",
+    imgdark: "/HPSD3.png",
+    imglight: "/HPSL3.png"
   }
 ];
 
@@ -126,7 +129,7 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
                 <p className="flex md:flex-row gap-1 text-2xl text-foreground">Hey {user.name}, thanks for signing up!</p>
               )}
 
-    <Carousel className="w-3xl h-2/3">
+    <Carousel className="w-3xl max-h-1/2">
       <CarouselContent>
         {onboarding.map((tip, index) => (
           <CarouselItem key={index}>
@@ -135,10 +138,15 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
                 <CardHeader>
                   <CardTitle className="text-base">{tip.title}</CardTitle>
                   <CardDescription className="text-md">{tip.desc}</CardDescription>
-                   <img
-                    src={tip.img}
-                    className="relative w-full rounded-md"
-                />
+                  <img
+  src={tip.imgdark}
+  className="mx-auto w-full max-h-[50vh] zoom-1.1 object-contain rounded-md hidden dark:block"
+/>
+<img
+  src={tip.imglight}
+  className="mx-auto w-full max-h-[50vh] object-contain rounded-md block dark:hidden"
+/>
+
                 </CardHeader>
               </Card>
             </div>

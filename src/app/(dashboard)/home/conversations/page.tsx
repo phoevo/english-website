@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { useUserStore } from "@/data/useUserStore";
 import UserGuidePopover from "../../userGuide";
-import { CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import PlacementTest from "../placementTest";
 import {
   AlertDialog,
@@ -26,10 +26,34 @@ import {
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 const dmSans = DM_Sans({ subsets: ['latin'] });
+
+type Tips = { title: string; desc: string; imgdark: string; imglight: string; };
+
+const onboarding: Tips[] = [
+  {
+    title: "The Conversations Page",
+    desc: "This is where you can access a plethera of hand crafted conversations that mimic real life scenarios. Start by clicking on one that looks interesting.",
+    imgdark: "/CPSD1.png",
+    imglight: "/CPSL1.png"
+  },
+  {
+    title: "Conversation UI",
+    desc: "Every word in every conversation has interactable elements.",
+    imgdark: "/CPSD2.png",
+    imglight: "/CPSL2.png"
+  },
+   {
+    title: "Word Types and Other Options",
+    desc: "Word Types, font sizes and audio(Plus required) are available on the right and bottom part of the screen.",
+    imgdark: "/CPSD3.png",
+    imglight: "/CPSL3.png"
+  }
+];
 
 
 function ConversationsPage() {
@@ -72,15 +96,40 @@ function ConversationsPage() {
         <UserGuidePopover
         id="conversation-page"
         title="The Conversations Page"
-        content={
-          <div className="space-y-2">
-            <p>Here you&apos;ll find a library of carefully crafted dialogues to help you with your reading
-        comprehension, vocabulary, real-life communication and listening skills.
-        </p>
-          <p>Select your level and category from the dropdown menus or take a short unofficial test for an approximate level.</p>
-          <p></p>
-          </div>
-        }
+        content={<div className="space-y-4">
+
+    <Carousel className="w-3xl max-h-1/2">
+      <CarouselContent>
+        {onboarding.map((tip, index) => (
+          <CarouselItem key={index}>
+            <div className="p-1">
+              <Card className="bg-background border-none shadow-none">
+                <CardHeader>
+                  <CardTitle className="text-base">{tip.title}</CardTitle>
+                  <CardDescription className="text-md">{tip.desc}</CardDescription>
+                  <img
+  src={tip.imgdark}
+  className="mx-auto w-full max-h-[50vh] zoom-1.1 object-contain rounded-md hidden dark:block"
+/>
+<img
+  src={tip.imglight}
+  className="mx-auto w-full max-h-[50vh] object-contain rounded-md block dark:hidden"
+/>
+
+                </CardHeader>
+              </Card>
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
+
+
+             </div>
+
+             }
         align="start"
         >
           <h1 className={`text-2xl lg:text-3xl font-normal ${dmSans.className}`}>Conversations</h1>
