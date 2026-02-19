@@ -258,7 +258,7 @@ const handleUnsubscribe = async () => {
   };
 
   return (
-    <main className="flex flex-col justify-center bg-background items-center h-auto pt-5 md:px-20">
+    <main className="flex flex-col justify-start items-center bg-background h-screen pt-5 md:px-20">
 
       <Link href={"/home"} className='self-start py-2'>
       <Button className='cursor-pointer h-6 md:h-auto'>

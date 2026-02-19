@@ -43,7 +43,7 @@ const onboarding: Tips[] = [
   },
   {
     title: "Conversation UI",
-    desc: "Every word in every conversation has interactable elements.",
+    desc: "Every word in every conversation is interactive",
     imgdark: "/CPSD2.png",
     imglight: "/CPSL2.png"
   },
@@ -109,11 +109,11 @@ function ConversationsPage() {
                   <CardDescription className="text-md">{tip.desc}</CardDescription>
                   <img
   src={tip.imgdark}
-  className="mx-auto w-full max-h-[50vh] zoom-1.1 object-contain rounded-md hidden dark:block"
+  className="mx-auto w-full max-h-[50vh] zoom-1.1 object-contain rounded-md hidden dark:block border-2"
 />
 <img
   src={tip.imglight}
-  className="mx-auto w-full max-h-[50vh] object-contain rounded-md block dark:hidden"
+  className="mx-auto w-full max-h-[50vh] object-contain rounded-md block dark:hidden border-2"
 />
 
                 </CardHeader>
