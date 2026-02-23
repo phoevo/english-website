@@ -71,6 +71,10 @@ export const loadConversation = async (documentId: string): Promise<Conversation
   }
 
   const vocab = vocabIndex[doc.level] ?? {};
+  if (!vocab){
+    throw new Error("Level not found");
+  }
+  console.log(doc.level)
 
   let parsedContent: string | DialogueLine[];
 

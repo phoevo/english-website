@@ -597,13 +597,8 @@ return (
       <div className="flex flex-col space-y-3 text-md lg:text-lg text-muted-foreground">
         <p className="">Tutors now have their own UI to track student's progress,
       instantly see what they've been working on, and jump into the session prepared.</p>
-        <p className="self-start px-3 py-1 text-foreground">Lesson finished early? No awkward filler,</p>
-        <p className="self-start px-3 py-1 text-foreground">No lesson planning,</p>
-        <p className="self-start px-3 py-1 text-foreground">No content prep,</p>
-        <p className="self-start px-3 py-1 text-foreground">No scrambling for what to do next,</p>
+      </div>
 
-      <p>Synomilo does the heavy lifting. Meet your student or tutor on your usual platform of choice you're ready to go.</p>
-    </div>
   </motion.div>
 
 

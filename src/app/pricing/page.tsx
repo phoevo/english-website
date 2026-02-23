@@ -237,7 +237,7 @@ function SubscribePage() {
     <div className='flex flex-col justify-center items-center gap-2 lg:mb-0 p-4 md:p-0'>
 
     <div className="flex flex-col md:flex-col gap-2 items-center justify-center rounded-lg w-full h-auto ">
-      <h1 className='text-3xl md:text-6xl font-medium text-center'>5 Day Free Trial</h1>
+      <h1 className='text-3xl md:text-6xl font-medium text-center'>Unlock Full Access</h1>
       <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

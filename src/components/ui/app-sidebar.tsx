@@ -141,11 +141,9 @@ export function AppSidebar() {
             </HoverCardContent>
           </HoverCard>
         </div>
-        {/* <p className="text-muted-foreground text-sm group-data-[collapsible=icon]:hidden">{user ? user.email : ""}</p> */}
+        <p className="text-muted-foreground text-sm group-data-[collapsible=icon]:hidden">{user ? user.email : ""}</p>
 
         </div>
-
-
 
 
           </DropdownMenuTrigger>

@@ -90,15 +90,17 @@ function ConversationsPage() {
   }
 
   return (
-    <div className="m-5 lg:m-10 space-y-3 lg:space-y-5">
-      <div>
+    <div className="flex flex-col m-5 lg:m-10 h-svh space-y-3 lg:space-y-5">
 
+      <div>
         <UserGuidePopover
         id="conversation-page"
         title="The Conversations Page"
-        content={<div className="space-y-4">
+        align="start"
+        content={<div className="space-y-4 md:m-0">
 
-    <Carousel className="w-3xl max-h-1/2">
+
+    <Carousel className="w-full h-full lg:w-3xl md:max-h-1/2">
       <CarouselContent>
         {onboarding.map((tip, index) => (
           <CarouselItem key={index}>
@@ -109,11 +111,11 @@ function ConversationsPage() {
                   <CardDescription className="text-md">{tip.desc}</CardDescription>
                   <img
   src={tip.imgdark}
-  className="mx-auto w-full max-h-[50vh] zoom-1.1 object-contain rounded-md hidden dark:block border-2"
+  className="mx-auto w-smlg:w-full max-h-[50vh] object-contain rounded-md hidden dark:block border-2"
 />
 <img
   src={tip.imglight}
-  className="mx-auto w-full max-h-[50vh] object-contain rounded-md block dark:hidden border-2"
+  className="w-sm lg:w-full max-h-[50vh] object-contain rounded-md block dark:hidden border-2"
 />
 
                 </CardHeader>
@@ -125,23 +127,20 @@ function ConversationsPage() {
       <CarouselPrevious />
       <CarouselNext />
     </Carousel>
+</div>}>
 
 
-             </div>
 
-             }
-        align="start"
-        >
-          <h1 className={`text-2xl lg:text-3xl font-normal ${dmSans.className}`}>Conversations</h1>
+      <h1 className={`text-2xl lg:text-3xl font-normal ${dmSans.className}`}>Conversations</h1>
         </UserGuidePopover>
         </div>
 
 
 
       <p className="text-sm lg:text-base text-muted-foreground">Conversation material from all levels</p>
-      <div className="mt-5 flex flex-row items-center justify-between lg:justify-start gap-5 lg:gap-20">
+      <div className="mt-2 flex flex-row items-center justify-between lg:justify-start gap-5 lg:gap-20">
 
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-1">
 
           <Label htmlFor="Select" className="text-sm lg:text-base font-semibold">Level</Label>
 
@@ -188,7 +187,7 @@ function ConversationsPage() {
 
         </div>
 
-          <div>
+          <div className="flex flex-col gap-1">
 
            <Label htmlFor="Select" className="text-sm lg:text-base font-semibold">Categories</Label>
 
@@ -217,7 +216,7 @@ function ConversationsPage() {
 
       </div>
 
-    <ScrollArea className="h-3/4">
+    <ScrollArea className="h-2/3">
       <div className="grid p-1 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filtered.map(conv => (
           <ConversationCover
