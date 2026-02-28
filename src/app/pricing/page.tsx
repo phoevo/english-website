@@ -156,6 +156,16 @@ const faqs: FAQItem[] = [
       </>
     ),
   },
+  {
+    question: "How do I unsubscribe?",
+    answer: (
+      <>
+       Esnure you're signed in and head to the Billing Payments tab on the
+       <Link href={"/profile"} className='underline px-1'>Profile page</Link>
+
+      </>
+    ),
+  },
 ];
 
 

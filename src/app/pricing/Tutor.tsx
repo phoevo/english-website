@@ -96,7 +96,7 @@ function Tutor() {
 
     </div>
 
-    {isSubscribed ? (
+    {isSubscribed && isTeacher ? (
     <Button
     variant="default"
     className="w-full cursor-not-allowed"

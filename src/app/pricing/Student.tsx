@@ -139,7 +139,7 @@ function Student() {
     <Dialog>
   <DialogTrigger asChild>
     <Button variant="outline" className="cursor-pointer" >
-      {!isTeacher && isSubscribed ? "Already subscribed. Change plan?" : "See Student Plans"}
+      {!isTeacher && isSubscribed ? "Already Subscribed. View Plans?" : "See Student Plans"}
     </Button>
   </DialogTrigger>
 
