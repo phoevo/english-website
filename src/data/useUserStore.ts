@@ -107,7 +107,19 @@ fetchUser: async () => {
 
   try {
     const res = await account.get();
-    const userDoc = await databases.getDocument(databaseId, usersCollectionId, res.$id);
+
+    // Fetch the Users document; if it's been deleted (404), continue with null doc
+    let userDoc: any = null;
+    try {
+      userDoc = await databases.getDocument(databaseId, usersCollectionId, res.$id);
+    } catch (err: any) {
+      if (typeof err?.code === 'number' && err.code === 404) {
+        // Expected when the profile doc was deleted (e.g., during account deletion)
+        userDoc = null;
+      } else {
+        throw err; // bubble up unexpected errors
+      }
+    }
 
     // Use stored subscription status for fast loading
     // Only check Stripe periodically or whefn explicitly needed

@@ -21,8 +21,9 @@ export async function POST(req: Request) {
     const client = new Client().setEndpoint(endpoint).setProject(project).setJWT(token)
     const functions = new Functions(client)
 
+    const fnId = process.env.NEXT_PUBLIC_APPWRITE_STRIPE_FUNCTION!;
     const exec = await functions.createExecution(
-      '68794e830018a53dcad6',
+      fnId,
       JSON.stringify({ plan, documentId, jwt: token }),
       false,
       '/payments',

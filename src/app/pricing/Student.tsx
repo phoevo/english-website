@@ -182,7 +182,7 @@ function Student() {
         Get Started
       </Button>
     </Link>
-) : !isSubscribed ? (
+) : !isSubscribed && !isTeacher ? (
     <Button
       variant="outline"
       className="w-full cursor-pointer"

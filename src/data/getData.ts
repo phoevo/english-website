@@ -129,7 +129,7 @@ export async function fixSubscriptionStatus(userId: string): Promise<void> {
     const functions = new Functions(client);
 
     const response = await functions.createExecution(
-      "68794e830018a53dcad6",
+      STRIPE_FUNCTION,
       JSON.stringify({ userId, action: "fix-subscription" }),
       false,
       "/fix-subscription",
@@ -210,7 +210,7 @@ export async function getUserPlan(): Promise<"free" | "pro"> {
     const functions = new Functions(client);
 
     const response = await functions.createExecution(
-      "68794e830018a53dcad6", // Function ID of get-subscription
+      STRIPE_FUNCTION, // Function ID of get-subscription
       undefined,
       false,
       "/get-subscription", // Your function route
@@ -246,7 +246,7 @@ export async function unsubscribeUser2(userId: string) {
     const payload = JSON.stringify({ user_id: userId, jwt: jwt.jwt });
 
     const response = await functions.createExecution(
-      "68794e830018a53dcad6",
+      STRIPE_FUNCTION,
       payload,
       false,
       "/unsubscribe",
@@ -288,16 +288,50 @@ export async function deleteAccountServer(): Promise<void> {
 
   const functions = new Functions(client);
 
-  const response = await functions.createExecution(
-    "68794e830018a53dcad6",
-    undefined,
-    false,
-    "/delete-account",
-    "POST" as unknown as import("appwrite").ExecutionMethod
-  );
+  // Prefer configured function ID to avoid hardcoding mismatches across envs
+  const fnId = STRIPE_FUNCTION;
 
-  if (response.status !== "completed") {
-    throw new Error("Failed to delete account");
+  try {
+    const response = await functions.createExecution(
+      fnId,
+      JSON.stringify({ jwt: jwt.jwt }),
+      false,
+      "/delete-account",
+      "POST" as unknown as import("appwrite").ExecutionMethod
+    );
+
+    // Surface detailed errors to help debugging
+    if (response.status !== "completed") {
+      const body = (() => { try { return JSON.parse(response.responseBody || '{}'); } catch { return {}; } })();
+      const message = body?.error || body?.message || `Delete account function did not complete (status=${response.status})`;
+      throw new Error(message);
+    }
+
+    // If completed, still check the function payload for reported errors
+    try {
+      const body = JSON.parse(response.responseBody || '{}');
+      if (body?.error) {
+        throw new Error(body.error);
+      }
+    } catch {
+      // ignore non-JSON bodies
+    }
+    return; // success
+  } catch (err) {
+    // Fallback: call same-origin Next.js proxy to bypass CORS/network issues
+    const resp = await fetch('/api/delete-account', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: `Bearer ${jwt.jwt}`,
+      },
+      body: JSON.stringify({}),
+    });
+
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) {
+      throw new Error(data?.error || data?.message || 'Failed to delete account');
+    }
   }
 }
 

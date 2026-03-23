@@ -107,10 +107,11 @@ useEffect(() => {
       const withNames = await Promise.all(
         requests.map(async (req) => {
           const sender = await getUserById(req.fromUserId);
+          const senderName = sender ? (sender.name || sender.email || "Unknown") : "Unknown";
           return {
             id: req.$id,
             fromUserId: req.fromUserId,
-            senderName: sender.name || sender.email || "Unknown",
+            senderName,
           };
         })
       );

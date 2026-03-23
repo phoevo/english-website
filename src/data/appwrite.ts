@@ -78,8 +78,12 @@ export async function getUserById(userId: string) {
   try {
     const res = await databases.getDocument(databaseId, usersCollectionId, userId);
     return res;
-  } catch (error) {
-    console.error("Failed to fetch user by ID:", error);
+  } catch (error: any) {
+    // If the user document was deleted (e.g., the user deleted their account), return null quietly
+    if (typeof error?.code === 'number' && error.code === 404) {
+      return null;
+    }
+    console.warn("Failed to fetch user by ID (non-404):", error);
     throw error;
   }
 }

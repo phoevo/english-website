@@ -18,6 +18,7 @@ const dmSans = DM_Sans({ subsets: ['latin'] });
 function Tutor() {
   const {user, isSubscribed, isTeacher} = useUserStore();
 
+
    const handleTutorSubscribe = async (plan: string) => {
     if (!user?.$id && isTeacher) {
       router.push('/register');
@@ -180,7 +181,7 @@ function Tutor() {
         Get Started
       </Button>
     </Link>
-) : !isSubscribed ? (
+) : !isSubscribed && isTeacher ? (
     <Button
       variant="outline"
       className="w-full cursor-pointer"
