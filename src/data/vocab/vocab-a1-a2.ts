@@ -623,4 +623,5 @@ export const vocabA1toB2: Record<string, { text: string; type: string; definitio
   "card": { text: "card", type: "noun", definition: "a small rectangular piece of paper or plastic with information on it", context: "I sent her a birthday card last week." },
   "all_set": { text: "all set", type: "idiom", definition: "completely ready", context: "You’re all set for your trip." },
   "wow": { text: "wow", type: "interjection", definition: "an expression of surprise or admiration", context: "Wow! That's an amazing painting!" },
+
 };

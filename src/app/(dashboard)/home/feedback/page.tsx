@@ -251,11 +251,10 @@ function FeedbackPage() {
   </CardHeader>
   <CardContent>
     <ul className="px-4 py-2 space-y-2 rounded-md text-md">
-      <li>Did the design and layout feel clear and accessible to you?</li>
+      <li>Did the design and layout feel clear and accessible?</li>
       <li>Is there any feature you wish existed?</li>
       <li>Was there something you liked the most and want to see more of?</li>
       <li>Do any of the pages feel too empty?</li>
-      <li>Is the Pricing page clear? Do you understand what you are paying for?</li>
       <li>Are the prices fair?</li>
     </ul>
   </CardContent>
