@@ -14,97 +14,65 @@ function getUserJWT(): string | null {
   }
 }
 
-const FUNCTION_ID = "68794e830018a53dcad6"; // Appwrite function ID
-
-function getEndpoint(): string {
-  return (
-    process.env.NEXT_PUBLIC_APPWRITE_FUNCTION_API_ENDPOINT ||
-    process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT ||
-    'https://cloud.appwrite.io/v1'
-  );
-}
-
-function getProjectId(): string {
-  return process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
-}
+const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1';
+const APPWRITE_PROJECT = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
+const FUNCTION_ID = process.env.NEXT_PUBLIC_APPWRITE_STRIPE_FUNCTION || '68794e830018a53dcad6';
 
 export const sendWelcomeEmail = async (data: WelcomeEmailData) => {
-  try {
-    const jwt = getUserJWT();
-    if (!jwt) throw new Error('Missing user JWT for sending welcome email');
+  const client = new Client()
+    .setEndpoint('https://fra.cloud.appwrite.io/v1')
+    .setProject(APPWRITE_PROJECT)
 
-    const client = new Client()
-      .setEndpoint(getEndpoint())
-      .setProject(getProjectId())
-      .setJWT(jwt);
+  const functions = new Functions(client);
 
-    const functions = new Functions(client);
+  const res = await functions.createExecution(
+    FUNCTION_ID,
+    JSON.stringify({ type: 'welcome', userEmail: data.userEmail, userName: data.userName}),
+    false,
+    '/send-email',
+    'POST' as unknown as import('appwrite').ExecutionMethod,
+    { 'content-type': 'application/json' }
+  );
 
-    const res = await functions.createExecution(
-      FUNCTION_ID,
-      JSON.stringify({
-        type: 'welcome',
-        userEmail: data.userEmail,
-        userName: data.userName,
-      }),
-      false,
-      '/send-email',
-      'POST' as unknown as import('appwrite').ExecutionMethod,
-      { 'content-type': 'application/json' }
-    );
-
-    if (res.status !== 'completed') {
-      throw new Error('Function execution did not complete successfully');
-    }
-
-    const result = JSON.parse(res.responseBody || '{}');
-    if (result?.error) throw new Error(result.error);
-
-    console.log('✅ Welcome email sent:', result);
-    return result;
-  } catch (error) {
-    console.error('❌ Failed to send welcome email:', error);
-    throw error;
+  if (res.status !== 'completed') {
+    throw new Error('Function execution did not complete successfully');
   }
+
+  const result = JSON.parse(res.responseBody || '{}');
+  if (result?.error) throw new Error(result.error);
+
+  console.log('✅ Welcome email sent:', result);
+  return result;
 };
 
-// Optional helper if you ever want a custom email via your function
+// Send password reset email
 export const sendPasswordResetEmail = async (data: WelcomeEmailData) => {
-  try {
-    const jwt = getUserJWT();
-    if (!jwt) throw new Error('Missing user JWT for sending password reset email');
+  const jwt = getUserJWT();
+  if (!jwt) throw new Error('Missing user JWT for sending password reset email');
 
-    const client = new Client()
-      .setEndpoint(getEndpoint())
-      .setProject(getProjectId())
-      .setJWT(jwt);
+  const client = new Client()
+    .setEndpoint(APPWRITE_ENDPOINT)
+    .setProject(APPWRITE_PROJECT)
+    .setJWT(jwt);
 
-    const functions = new Functions(client);
+  const functions = new Functions(client);
 
-    const res = await functions.createExecution(
-      FUNCTION_ID,
-      JSON.stringify({
-        type: 'password-reset',
-        userEmail: data.userEmail,
-        userName: data.userName,
-      }),
-      false,
-      '/send-email',
-      'POST' as unknown as import('appwrite').ExecutionMethod,
-      { 'content-type': 'application/json' }
-    );
+  const res = await functions.createExecution(
+    FUNCTION_ID,
+    JSON.stringify({ type: 'password-reset', userEmail: data.userEmail, userName: data.userName, jwt }),
+    false,
+    '/send-email',
+    'POST' as unknown as import('appwrite').ExecutionMethod,
+    { 'content-type': 'application/json' }
+  );
 
-    if (res.status !== 'completed') {
-      throw new Error('Function execution did not complete successfully');
-    }
-
-    const result = JSON.parse(res.responseBody || '{}');
-    if (result?.error) throw new Error(result.error);
-
-    console.log('✅ Password reset email sent:', result);
-    return result;
-  } catch (error) {
-    console.error('❌ Failed to send password reset email:', error);
-    throw error;
+  if (res.status !== 'completed') {
+    throw new Error('Function execution did not complete successfully');
   }
+
+  const result = JSON.parse(res.responseBody || '{}');
+  if (result?.error) throw new Error(result.error);
+
+  console.log('✅ Password reset email sent:', result);
+  return result;
 };

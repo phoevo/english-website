@@ -1,4 +1,4 @@
-import { Client, Databases, Account, Storage, Query, ID } from 'appwrite'
+import { Client, Databases, Account, Storage, Query, ID, Functions } from 'appwrite'
 
 const ENDPOINT_ID = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!;
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
@@ -24,6 +24,7 @@ const client = new Client()
 export const databases = new Databases(client)
 export const account = new Account(client)
 export const storage = new Storage(client);
+export const functions = new Functions(client);
 
 
 export const databaseId = DATABASE_ID
@@ -33,7 +34,6 @@ export const decksCollectionId = DECKS_COLLECTION_ID
 export const audioBucketId = AUDIO_BUCKET_ID
 export const friendRequestsId = FRIEND_REQUESTS_ID
 export const assignmentsId = ASSIGNMENTS_ID
-// subscriptionsId removed - no longer using subscriptions collection
 export const stripeCustomersId = STRIPE_CUSTOMERS_ID
 export const stripeSecretKey = STRIPE_SECRET_KEY
 export const stripeWebhookSecret = STRIPE_WEBHOOK_SECRET

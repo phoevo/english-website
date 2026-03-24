@@ -118,52 +118,55 @@ module.exports = async function handleSendEmail({ req, res, client, adminClient 
         }, 400);
     }
 
+    // Resolve userId primarily from the authenticated user's JWT (Account.get),
+    // falling back to admin Users.list by email only if needed.
     let userId = null;
     try {
-      const users = new sdk.Users(adminClient);
-      const result = await users.list([sdk.Query.equal('email', userEmail)]);
-      console.log(`[send-email] lookup total=${result.total}`);
-      if (result.total > 0) {
-        userId = result.users?.[0]?.$id || result.documents?.[0]?.$id || result.users?.[0]?.$id;
-        console.log(`[send-email] found userId=${userId}`);
-      } else {
-        console.log(`[send-email] no user found for email=${userEmail}`);
-      }
+      const account = new sdk.Account(client);
+      const me = await account.get();
+      userId = me?.$id || null;
+      console.log(`[send-email] userId from JWT account.get=${userId}`);
     } catch (e) {
-      console.log(`[send-email] lookup error (ignored):`, e?.message || e);
+      console.log(`[send-email] account.get failed (will fall back to admin lookup):`, e?.message || e);
     }
 
-    if (userId) {
-      console.log(`[send-email] sending via Messaging to userId=${userId}`);
-      const message = await messaging.createEmail(
-        sdk.ID.unique(),
-        subject,
-        content,
-        [], // topics
-        [userId], // users (Appwrite user IDs)
-        [], // targets
-        [], // cc
-        [], // bcc
-        [], // attachments
-        false, // draft
-        true   // html
-      );
-
-      console.log(`[send-email] queued message id=${message.$id}`);
-      return res.json({ success: true, messageId: message.$id, message: `${type} email sent successfully to ${userEmail}` }, 200);
-    } else {
-      // If user not found, don't error to avoid leaking info.
-      console.log(`[send-email] skipping send (no user for email=${userEmail})`);
-      return res.json({ success: true }, 200);
+    if (!userId) {
+      try {
+        const users = new sdk.Users(adminClient);
+        const result = await users.list([sdk.Query.equal('email', userEmail)]);
+        console.log(`[send-email] admin lookup total=${result.total}`);
+        if (result.total > 0) {
+          userId = result.users?.[0]?.$id || result.documents?.[0]?.$id || result.users?.[0]?.$id;
+          console.log(`[send-email] found userId via admin lookup=${userId}`);
+        } else {
+          console.log(`[send-email] no user found for email=${userEmail}`);
+        }
+      } catch (e) {
+        console.log(`[send-email] admin lookup error:`, e?.message || e);
+      }
     }
 
-    console.log('✅ Email sent successfully:', message);
+    if (!userId) {
+      return res.json({ error: "Authenticated user not found", details: "No userId from JWT and no admin match by email" }, 404);
+    }
 
-    return res.json({
-      success: true,
-      messageId: message.$id,
-      message: `${type} email sent successfully to ${userEmail}`
-    }, 200);
+    console.log(`[send-email] sending via Messaging to userId=${userId}`);
+    const message = await messaging.createEmail(
+      sdk.ID.unique(),
+      subject,
+      content,
+      [], // topics
+      [userId], // users (Appwrite user IDs)
+      [], // targets
+      [], // cc
+      [], // bcc
+      [], // attachments
+      false, // draft
+      true   // html
+    );
+
+    console.log(`[send-email] queued message id=${message.$id}`);
+    return res.json({ success: true, messageId: message.$id, message: `${type} email sent successfully to ${userEmail}` }, 200);
 
   } catch (error) {
     console.error('❌ Failed to send email:', error);
