@@ -129,13 +129,21 @@ const faqs: FAQItem[] = [
     ),
   },
   {
+    question: "What is read-only?",
+    answer: (
+      <>
+        "Read-only" only allows the tutors to view the conversations text, like a PDF document would. No access to features like hover or audio.
+      </>
+    ),
+  },
+  {
     question: "So if a subscribed Tutor has 30 Free Students, all 30 get assigned Plus conversations?",
     answer: (
       <p>Yup.</p>
     ),
   },
   {
-    question: "What happens if both tutor and student are Free?",
+    question: "What happens if both Tutor and Student are Free?",
     answer: (
       <>
         Tutors can only screenshare.
@@ -147,7 +155,7 @@ const faqs: FAQItem[] = [
     ),
   },
   {
-    question: "What’s the difference between Monthly and Yearly?",
+    question: "What's the difference between Monthly and Yearly?",
     answer: (
       <>
         Both offer the exact same features.
