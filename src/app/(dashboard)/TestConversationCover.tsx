@@ -32,7 +32,7 @@ function TestConversationCover() {
       transition={{ duration: 0.1 }}
       className="w-80 rounded-lg"
     >
-      <Card className="bg-card w-auto h-80 border dark:border-2 shadow-lg">
+      <Card className="bg-card w-auto h-80 border dark:border-2 shadow-lg hover:shadow-xl">
         <CardHeader>
           <CardTitle className={`lex justify-between items-start gap-2 ${geist.className}`}>
             <p className='w-auto'>Conversation Title</p>

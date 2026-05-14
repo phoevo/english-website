@@ -272,7 +272,7 @@ function SidebarTrigger({
       variant="ghost"
       size="icon"
       className={cn(
-        "absolute cursor-pointer top-1 z-60 md:w-5 md:z-30 md:relative md:bg-background md:text-foreground",
+        "absolute cursor-ew-resize top-1 z-60 md:w-5 md:z-30 md:relative md:bg-accent md:text-foreground",
         className
       )}
       onClick={(event) => {

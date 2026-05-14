@@ -48,8 +48,7 @@ function Tutor() {
       "No long term commitment",
       "Get a feel of what Plus offers"
     ],
-    price: "9.99",
-    priceId: "price_tutor5_monthly"
+    price: "9.99"
   },
   {
     title: "Tutor Yearly",
@@ -60,9 +59,8 @@ function Tutor() {
       "Lots of Students, little time to prepare",
       "Pay once, full year of access with future updates."
     ],
-    price: "89.99",
-    priceId: "price_tutor15_monthly"
-  },
+    price: "89.99"
+  }
 ];
 
   return (

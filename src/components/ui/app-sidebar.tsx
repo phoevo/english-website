@@ -1,6 +1,6 @@
 "use client"
 import * as React from "react"
-import { BookOpen, BookMarked, IterationCcw, ClipboardCheck, MessageCirclePlus, HomeIcon, User, Swords, Sword, LogOut, UserRound, LogIn, ChevronDown, Sparkle, LogInIcon, SunIcon, MoonIcon, UserCircle, EllipsisVertical } from "lucide-react"
+import { BookOpen, BookMarked, IterationCcw, ClipboardCheck, MessageCirclePlus, HomeIcon, User, Swords, Sword, LogOut, UserRound, LogIn, Sparkle, SunIcon, MoonIcon } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,

@@ -78,9 +78,9 @@ function TestTeacherPage() {
     <motion.div
       whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.1 }}
-      className="w-full lg:w-2/3 rounded-lg"
+      className="w-sm lg:w-lg rounded-lg"
     >
-      <Card className={`bg-card w-auto h-100 border dark:border-2 shadow-lg ${geist.className}`}>
+      <Card className={`bg-card w-auto h-100 border dark:border-2 shadow-lg hover:shadow-xl ${geist.className}`}>
         <CardHeader className="flex flex-col gap-2">
           <div className="flex justify-between items-start">
             <div className="flex flex-col gap-2">

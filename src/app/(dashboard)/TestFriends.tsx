@@ -63,8 +63,8 @@ function TestFriends() {
     <motion.div
       whileHover={{ scale: 1.0080 }}
       transition={{ duration: 0.1 }}
-     className=" w-100 lg:w-full rounded-lg">
-    <Card className={`p-5 w-full border dark:border-2 h-auto bg-card shadow-lg ${geist.className}`}>
+     className=" w-100 lg:w-xl rounded-lg">
+    <Card className={`p-5 w-full border dark:border-2 h-auto bg-card shadow-lg hover:shadow-xl ${geist.className}`}>
       <Tabs defaultValue="friends" className="w-full">
         <TabsList className="w-full mb-4">
           <TabsTrigger className="cursor-pointer" value="friends">Connections</TabsTrigger>
@@ -91,7 +91,7 @@ function TestFriends() {
 
                       <div className="flex flex-row items-center border rounded-full p-1 gap-1">
                         {f.isSubscribed ? (
-                        <Badge className="bg-pink-500 text-white">Pro</Badge>
+                        <Badge className="bg-pink-500 text-white">Plus</Badge>
                       ) : (
                         <Badge className="bg-foreground text-background">Free</Badge>
                       )}

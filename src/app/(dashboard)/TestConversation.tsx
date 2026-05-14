@@ -13,7 +13,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@radix-ui/react-accordion";
-import { Plus } from "lucide-react";
+import { ArrowDown, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -199,6 +199,13 @@ export function TestConversation() {
           </div>
         ))}
       </div>
+
+       <div className="flex flex-col items-center text-center justify-center lg:hidden mt-10">
+          <p className="text-lg">
+            Try it, highlight word types for easy identification
+            </p>
+          <ArrowDown size={30} className="text-pink-500"/>
+          </div>
 
       {/* Sidebar controls */}
       <div className="p-5 w-full lg:w-60">

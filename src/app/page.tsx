@@ -16,6 +16,15 @@ import { Badge } from "@/components/ui/badge";
 import TestConversationCover from "./(dashboard)/TestConversationCover";
 import TestFriends from "./(dashboard)/TestFriends";
 import TestTeacherPage from "./(dashboard)/TestTeacherPage";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 
 
@@ -156,8 +165,8 @@ return (
             animate={{ opacity: 1, height: "auto"}}
             whileInView={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="flex flex-col items-center lg:flex-row lg:pl-30 text-6xl lg:text-8xl bg-landing-bg font-normal">Synomilo
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="flex flex-col items-center lg:flex-row lg:ml-35 text-6xl lg:text-8xl bg-landing-bg font-normal">Synomilo
             <span className="text-muted-foreground lg:w-auto text-sm lg:text-lg font-capital bg-muted px-3 py-1 lg:px-3 rounded-full">Early Access</span>
 
             </motion.div>
@@ -180,21 +189,39 @@ return (
             </motion.div>
         </div>
 
-        <div className="flex flex-col items-center gap-5">
+        <div className="flex flex-col items-center gap-2">
 
          <motion.div
             layout
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{duration: 0.3, ease: "easeInOut" }}
+            transition={{duration: 0.3, delay:0.1, ease: "easeInOut" }}
             className="flex flex-col lg:gap-10 items-center justify-center"
             >
 
-        <p className="text-2xl p-5 text-center lg:text-5xl lg:p-0 font-normal bg-landing-bg lg:mt-10">Focused on Real Conversation</p>
+        <p className="text-2xl p-5 text-center md:w-2/3 lg:text-5xl lg:p-0 font-medium bg-landing-bg lg:mt-10">
+          Conversation-based ESL tools for tutors and students
+        </p>
+
+        <motion.div
+            layout
+            initial={{ opacity: 0, height: "auto" }}
+            animate={{ opacity: 1, height: "auto"}}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4 , delay:0.2, ease: "easeInOut" }}
+            className="flex flex-col max-w-4xl bg-card rounded-4xl justify-start items-center space-y-4 overflow-hidden mt-10"
+          >
+            <p className={`text-md p-2 lg:text-xl leading-relaxed bg-card text-center ${dmSans.className}`}>
+            Built for ESL tutors, online teachers, and independent learners, Synomilo provides conversation content, interactive tools, assignments, and student progress tracking for real world English practice.
+            </p>
+
+          </motion.div>
+
+
         <div className="flex gap-2 mt-10">
           <Link href={"/register"}>
-          <Button size={"lg"} className="w-auto cursor-pointer rounded-full">Get Started</Button>
+          <Button size={"lg"} className="w-auto cursor-pointer rounded-full shadow-foreground">Get Started</Button>
           </Link>
 
           <Button
@@ -242,23 +269,6 @@ return (
           className="flex flex-col max-w-4xl h-auto bg-card rounded-4xl justify-start items-center p-5 space-y-4 "
         >
 
-
-          <motion.div
-            layout
-            initial={{ opacity: 0, height: "auto" }}
-            animate={{ opacity: 1, height: "auto"}}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.4 , ease: "easeInOut" }}
-            className="flex flex-col max-w-4xl bg-card rounded-4xl justify-start items-center space-y-4 overflow-hidden mt-10"
-          >
-            <p className={`text-md p-2 lg:text-lg leading-relaxed bg-card text-center ${dmSans.className}`}>
-              I built Synomilo to help English learners move beyond studying by giving them a place to actively practice.
-              With realistic conversations and tools built for real-world speaking, students can practice solo or with a tutor.
-              Tutors can already join sessions and guide students through screen sharing, or use newly built tutor tools for assigning and tracking content.
-            </p>
-
-          </motion.div>
-
       </motion.div>
 
 
@@ -290,44 +300,149 @@ return (
       className="hidden lg:block z-20 sticky top-30 lg:top-42 self-start m-2 lg:m-4 lg:mb-33 text-md lg:text-2xl font-semibold"
       initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-200px"}}
+          viewport={{ once: true, margin: "-100px"}}
           transition={transition1}>
         <span className="px-1 text-pink-500">
           1.
         </span>
-        Conversations
+        Tutors
         </motion.div>
 
+         <motion.div className="flex flex-col w-full lg:w-2/3 space-y-6 lg:border-1 p-10 rounded-md shadow-md"
+  initial={{ opacity: 0, y: 100 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, margin: "-100px" }}
+  transition={{ delay: 0.2, duration: 0.2 }}
+  >
+    <div className="flex flex-row text-2xl lg:text-4xl font-normal justify-start">Made with Tutors in Mind</div>
+    <p className="text-md lg:text-lg text-muted-foreground">
+      Built for ESL tutors, Synomilo helps reduce prep time with real-world, ready-made conversations,
+      assignments, and student progress tracking. Stay organized and prepared for every session.
+    </p>
+
+    <div className="flex flex-col items-center space-y-6">
+
+      <div className=" flex flex-col items-center gap-2 lg:p-5 w-full rounded-md">
+        <p className="flex text-lg lg:self-start lg:text-xl">Find all your students in one place</p>
+        <p className="text-sm lg:self-start text-muted-foreground italic">On the Assignments page, you can find your current connections or add new ones.</p>
+        <TestFriends/>
+      </div>
+
+
+      <div className=" flex flex-col items-center gap-2 p-5 w-full rounded-md">
+        <p className="flex text-xl">Assign them Conversations</p>
+        <p className="text-sm text-muted-foreground italic">On the Conversations page, each tile will have the Assign button </p>
+        <TestConversationCover/>
+      </div>
+
+      <div className=" flex flex-col items-center gap-2 p-5 w-full rounded-md">
+        <p className="flex text-xl">View progress on assigned Conversations</p>
+        <p className="text-sm text-muted-foreground italic">This is also located on the Assignments page</p>
+        <TestTeacherPage/>
+      </div>
+    </div>
+
+
+
+    <div className="flex flex-row text-2xl lg:text-4xl font-normal justify-start mt-10">Why use Synomilo?</div>
+    <p className="text-md lg:text-lg text-muted-foreground">
+      Synomilo helps tutors spend less time searching for materials and more time teaching.
+    </p>
+
+    <p className="text-md lg:text-lg text-muted-foreground">Whether you build lessons around it or use it to fill the last 10 minutes of class, it’s there when you need it.</p>
+
+
+
+      <div className="flex flex-col space-y-3 text-md lg:text-lg text-muted-foreground">
+        <Table>
+  <TableHeader className="text-lg">
+    <TableRow>
+      <TableHead className="">What tutors usually do</TableHead>
+      <TableHead>What Synomilo helps with</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody className="text-base">
+    <TableRow>
+      <TableCell>Writing or searching for conversation material</TableCell>
+      <TableCell>Ready-made conversation material</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Tracking student progress in notebooks or Google Docs</TableCell>
+      <TableCell>Built-in student tracking</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Finishing lessons early and improvising conversation topics</TableCell>
+      <TableCell>Jump into a quick speaking activity to close off the lesson</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Trying to remember what students struggled with last lesson</TableCell>
+      <TableCell>Review progress before the session starts</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+      </div>
+
+  </motion.div>
+
+
+
+
+        <div className="hidden lg:block z-20 sticky top-30 left-43 text lg:left-0 lg:top-52 self-start m-4 mb-23 lg:text-2xl font-semibold">
+        <span className="px-1 text-pink-500 text">
+          2.
+        </span>
+        Students
+        </div>
 
         <motion.div
-          className={`w-screen h-auto ${geist.className}`}
+          className={`w-full lg:w-2/3 m-10 space-y-6 lg:border-1 p-10 rounded-md shadow-md`}
           initial={{ opacity: 0, y: 80 }}
           whileInView={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 200 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={transition2}
         >
-          <div className="flex flex-col m-2 lg:flex-row justify-center lg:pl-40 lg:gap-10">
 
+          <div className="flex flex-col space-y-6 justify-start items-start">
+
+          <h1 className="lg:text-4xl font-normal">Ready-made Conversations</h1>
+          <p className="text-md lg:text-lg text-muted-foreground">
+            Students have access to conversations that reflect real life scenarios, better preparing them for something as simple
+            as asking for directions, to more complicated topics like job interviews. Each conversation includes interactive features
+            such as audio, color-coded words that reveal definitions and word types, adjustable text sizes,
+            and the ability to save words to a personal dictionary.
+          </p>
+          </div>
+
+          <div className="flex justify-end">
+          <p className="text-xl font-semibold">Try it, highlight word types for easy identification</p>
+          <ArrowDown size={30} className="text-pink-500"/>
+          </div>
+
+
+          <div className={`flex flex-col m-2 lg:flex-row justify-center lg:gap-10 ${geist.className}`}>
 
           <TestConversation />
 
-          <p className="lg:self-center lg:w-40 text-2xl font-semibold p-10 lg:p-0">
-            <ArrowUp size={40} className="text-pink-500 lg:hidden"/>
-            <ArrowLeft size={40} className="text-pink-500 hidden lg:block"/>
-            Highlight words types for easy reading</p>
+
+
           </div>
-        </motion.div>
 
-
-            <video
-              className="w-full p-2 md:p-0 md:w-3xl h-full rounded-lg object-cover dark:opacity-75"
+        <div className="flex flex-col w-full items-center">
+          <video
+              className="w-full p-2 md:p-0 md:w-3xl h-full rounded-lg mt-10 object-cover dark:opacity-75"
               src="/conversationDemo.mp4"
               autoPlay
               muted
               loop
               playsInline
             />
+            </div>
+
+        </motion.div>
+
+
+
 
         <motion.div
           className="flex flex-col w-full lg:w-1/2 space-y-6 lg:border-1 p-10 rounded-md lg:shadow-md"
@@ -337,52 +452,44 @@ return (
           transition={{ duration: 0.25 }}
         >
             <h3 className="text-2xl lg:text-4xl font-normal">Why this works</h3>
-            <p className="text-md lg:text-lg text-muted-foreground">
-              Reading and listening to real conversations builds pattern recognition. You see how words, grammar,
-              and rhythm actually show up in everyday speech and not as isolated rules. It's best to learn phrases, not individual words.
+
+        <p className="text-md lg:text-lg text-muted-foreground">
+          Reading and listening to natural conversations helps you recognize patterns in real English.
+          Instead of memorizing isolated grammar rules or vocabulary lists, you learn how people actually speak in everyday situations.
+        </p>
+
+        <ul className="pl-5 text-md lg:text-lg space-y-4">
+
+          <li>
+            <p>Train your ear</p>
+            <p className="self-start px-4 py-2 text-muted-foreground rounded-lg lg:rounded-full">
+              Hearing natural phrasing repeatedly makes spoken English feel more familiar and easier to follow.
             </p>
-            <ul className="pl-5 text-md lg:text-lg space-y-4">
+          </li>
 
-              <li>
-                <p>Train your ear</p>
-                <p className="self-start px-4 py-2 text-muted-foreground rounded-lg lg:rounded-full">
-                Hearing natural phrasing trains your ear so speaking feels familiar.</p>
-              </li>
-
-              <li>
-                <p>Context sticks</p>
-                <p className="self-start px-4 py-2 text-muted-foreground rounded-full">
-                Vocabulary learned inside a story is easier to remember and reuse.</p>
-              </li>
-
-               <li>
-                <p>Focused attention</p>
-                <p className="self-start px-4 py-2 text-muted-foreground  rounded-full">
-                Color-coded word types help you notice structure without breaking flow.</p>
-              </li>
-
-            </ul>
-            <p className="text-md lg:text-lg text-muted-foreground">
-              Simulating the experience is rehearsal. You practice before the real conversation, so when
-              you’re face to face, you’re ready.
+          <li>
+            <p>Learn through context</p>
+            <p className="self-start px-4 py-2 text-muted-foreground rounded-full">
+              Words and phrases are easier to remember when you see how they are used in real conversations.
             </p>
+          </li>
+
+        </ul>
+
+        <p className="text-md lg:text-lg text-muted-foreground">
+          Practicing with realistic conversations builds confidence before real interactions happen,
+          whether that’s traveling, working, studying, or everyday communication.
+        </p>
 
             <h3 className="text-2xl lg:text-4xl font-normal mt-5">AI</h3>
              <p className="text-md lg:text-lg text-muted-foreground">
-             AI is not used to conversations or other content. Every conversation is written by native English speakers,
+             AI is not used to write any material. Every conversation is written by native English speakers,
              ensuring they sound as natural as possible and reflect real spoken English. For now, AI is only used
-             for audio, but as the platform grows, a switch will be made to record and use audio from native speakers.
+             for audio. As the platform grows, a switch will be made to record and use audio from native speakers.
             </p>
 
 
         </motion.div>
-
-        <div className="hidden lg:block z-20 sticky top-30 left-43 text lg:left-0 lg:top-52 self-start m-4 mb-23 lg:text-2xl font-semibold">
-        <span className="px-1 text-pink-500 text">
-          2.
-        </span>
-        Dictionary
-        </div>
 
         <motion.div
           className={`flex flex-row gap-10 items-center justify-center w-full h-auto ${geist.className}`}
@@ -547,63 +654,6 @@ return (
   <div className="flex items-center justify-center text-center">Streaks</div>
 </motion.div>
 </div>
-
-
-
- <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-72 self-start m-4 lg:text-2xl font-semibold">
-    <span className="px-1 text-pink-500">
-      4.
-    </span>
-      Tutors
-  </div>
-
-
-  <motion.div className="flex flex-col w-full lg:w-1/2 space-y-6 lg:border-1 p-10 rounded-md shadow-md"
-  initial={{ opacity: 0, y: 100 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  viewport={{ once: true, margin: "-100px" }}
-  transition={{ delay: 0.2, duration: 0.2 }}
-  >
-    <div className="flex flex-row text-2xl lg:text-4xl font-normal justify-start">Made for Tutors in Mind</div>
-    <p className="text-md lg:text-lg text-muted-foreground">
-      I'm creating dedicated tutor tools to make helping students
-      faster, easier, and more effective. Tutors can assign work to and track their Student's progression. This helps
-      planning the talking points for the next lesson much simpler.
-    </p>
-
-    <div className="flex flex-col items-center space-y-6">
-
-      <div className=" flex flex-col items-center gap-2 lg:p-5 w-full rounded-md">
-        <p className="flex text-lg lg:self-start lg:text-xl">Find all your students (or tutors) in one place</p>
-        <p className="text-sm lg:self-start text-muted-foreground italic">On the Assignments page, you can find your current connections or add new ones.</p>
-        <TestFriends/>
-      </div>
-
-
-      <div className=" flex flex-col items-center gap-2 p-5 w-full rounded-md">
-        <p className="flex text-xl">Assign them Conversations</p>
-        <p className="text-sm text-muted-foreground italic">On the Conversations page, each tile will have the Assign button </p>
-        <TestConversationCover/>
-      </div>
-
-      <div className=" flex flex-col items-center gap-2 p-5 w-full rounded-md">
-        <p className="flex text-xl">View progress on assigned Conversations</p>
-        <p className="text-sm text-muted-foreground italic">This is also located on the Assignments page</p>
-        <TestTeacherPage/>
-      </div>
-    </div>
-
-
-      <div className="flex flex-col space-y-3 text-md lg:text-lg text-muted-foreground">
-        <p className="">Tutors now have their own UI to track student's progress,
-      instantly see what they've been working on, and jump into the session prepared.</p>
-      </div>
-
-  </motion.div>
-
-
-
-
 
 
 
