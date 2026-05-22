@@ -142,11 +142,20 @@ export default function Register() {
       <CardHeader>
         <CardTitle className="text-2xl">Sign up</CardTitle>
         <CardDescription>
-          Create a new account by filling out the form below.
+          Sign up with Google or create a new account by filling out the form below.
         </CardDescription>
       </CardHeader>
       <CardContent>
         {error && <p className="text-red-500 text-sm">{error}</p>}
+
+        <Button onClick={handleGoogleSignup} variant="outline" type="button" className="flex w-full cursor-pointer" disabled={isLoading}>
+          <img src='google-logo.svg' className='w-6'/>
+          Sign up with Google
+        </Button>
+
+        <div className='flex justify-center my-5 text-muted-foreground'>
+          <p>or</p>
+        </div>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -228,7 +237,7 @@ export default function Register() {
               />
 
 
-              <div className="flex flex-row items-center justify-center my-5 space-x-3">
+              <div className="flex flex-row items-center justify-center my-2 space-x-3">
                 <FormLabel className="flex text-sm font-normal">
                   By signing up, you agree to the
                   <Link href="/ToS" className="underline">Terms of Service</Link>
@@ -242,17 +251,13 @@ export default function Register() {
                 {isLoading ? 'Signing Up...' : 'Sign Up'}
               </Button>
 
-                <p>or</p>
 
-              <Button onClick={handleGoogleSignup} variant="outline" type="button" className="w-full cursor-pointer" disabled={isLoading}>
-                Sign up with Google
-              </Button>
               </div>
             </div>
           </form>
         </Form>
 
-        <div className="mt-4 text-center text-sm">
+        <div className="mt-5 text-center text-sm">
           Already have an account?{' '}
           <Link href="/login" className="underline">
             Login

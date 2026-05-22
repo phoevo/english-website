@@ -63,8 +63,8 @@ function TestFriends() {
     <motion.div
       whileHover={{ scale: 1.0080 }}
       transition={{ duration: 0.1 }}
-     className=" w-100 lg:w-xl rounded-lg">
-    <Card className={`p-5 w-full border dark:border-2 h-auto bg-card shadow-lg hover:shadow-xl ${geist.className}`}>
+     className="lg:w-xl rounded-lg">
+    <Card className={`p-5 w-auto h-80 border dark:border-2 bg-card shadow-lg hover:shadow-xl ${geist.className}`}>
       <Tabs defaultValue="friends" className="w-full">
         <TabsList className="w-full mb-4">
           <TabsTrigger className="cursor-pointer" value="friends">Connections</TabsTrigger>
@@ -136,12 +136,12 @@ function TestFriends() {
               {mockRequests.map((req) => (
                 <div
                   key={req.id}
-                  className="flex justify-between items-center p-3 rounded-md border bg-card"
+                  className="flex justify-between gap-2 items-center py-1 px-2 lg:p-4 rounded-md border bg-card"
                 >
                   <span className="text-sm">
                     <strong>{req.senderName}</strong> wants to add you.
                   </span>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1">
                     <Badge className="bg-green-500 text-white cursor-pointer">Accept</Badge>
                     <Badge className="bg-red-500 text-white cursor-pointer">Deny</Badge>
                   </div>

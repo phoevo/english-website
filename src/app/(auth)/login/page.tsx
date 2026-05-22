@@ -153,6 +153,7 @@ export default function Login() {
               </Button>
 
               <Button onClick={handleGoogleLogin} variant="outline" type='button' className="w-full cursor-pointer" disabled={isLoading}>
+                <img src='google-logo.svg' className='w-6'/>
                 Login with Google
               </Button>
             </div>

@@ -255,12 +255,12 @@ function SubscribePage() {
     <div className='flex flex-col justify-center items-center gap-2 lg:mb-0 p-4 md:p-0'>
 
     <div className="flex flex-col md:flex-col gap-2 items-center justify-center rounded-lg w-full h-auto ">
-      <h1 className='text-3xl md:text-6xl font-medium text-center'>Monthly or yearly plans</h1>
+      <h1 className='text-3xl md:text-6xl font-medium text-center'>Plans for Tutors & Students</h1>
       <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0, delay: 0 }}
-      className='text-sm md:text-base text-muted-foreground p-2 text-center mx-4'>During early access, rates will be lower while the platform is being polished</motion.div>
+      className='text-sm md:text-lg text-muted-foreground p-2 text-center mx-4'>During early access, rates will be lower while the platform is being polished</motion.div>
     </div>
 
 

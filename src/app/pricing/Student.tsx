@@ -121,7 +121,7 @@ function Student() {
 
 
 
-<div className='flex flex-col justify-between p-2 border-1 rounded-xl shadow-xs h-100 w-xs md:w-md'>
+<div className='flex flex-col justify-between p-2 border-1 border-pink-500 rounded-xl shadow-xs h-100 w-xs md:w-md'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10 bg-pink-500 text-white'>Plus</Badge>
       <div className='flex justify-center items-center'>

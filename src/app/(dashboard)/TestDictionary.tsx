@@ -66,7 +66,7 @@
                           </AccordionItem>
                         </Accordion>
 
-                      <Button
+                          <Button
                             variant="destructive"
                             size="icon"
                             className="ml-4 cursor-pointer h-5 w-5 self-center"

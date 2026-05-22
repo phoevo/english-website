@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import TestConversationCover from "./(dashboard)/TestConversationCover";
 import TestFriends from "./(dashboard)/TestFriends";
 import TestTeacherPage from "./(dashboard)/TestTeacherPage";
+import TestWorkflow from "./(dashboard)/TestWorkflow";
 import {
   Table,
   TableBody,
@@ -155,10 +156,9 @@ return (
     </nav>
 
 
-      <div className="flex flex-col w-screen border-b bg-landing-bg justify-center items-center gap-10">
+      <div className="flex flex-col w-screen border-b bg-landing-bg justify-center items-center gap-20">
         <div className="flex flex-col gap-2 items-center">
 
-          <div className="flex flex-col items-center lg:flex-row lg:items-end">
              <motion.div
             layout
             initial={{ opacity: 0, y: 20 }}
@@ -172,7 +172,6 @@ return (
             </motion.div>
 
 
-          </div>
 
           {/* <div className="flex flex-row bg-landing-bg text-1xl font-normal mt-3 gap-2" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
@@ -197,11 +196,11 @@ return (
             whileInView={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, height: 0 }}
             transition={{duration: 0.3, delay:0.1, ease: "easeInOut" }}
-            className="flex flex-col lg:gap-10 items-center justify-center"
+            className="flex flex-col lg:gap-5 items-center justify-center"
             >
 
-        <p className="text-2xl p-5 text-center md:w-2/3 lg:text-5xl lg:p-0 font-medium bg-landing-bg lg:mt-10">
-          Conversation-based ESL tools for tutors and students
+        <p className="text-2xl p-5 text-center md:w-2/3 lg:text-5xl lg:p-0 font-medium bg-landing-bg">
+          Conversation-based ESL tool for tutors and students
         </p>
 
         <motion.div
@@ -210,16 +209,23 @@ return (
             animate={{ opacity: 1, height: "auto"}}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.4 , delay:0.2, ease: "easeInOut" }}
-            className="flex flex-col max-w-4xl bg-card rounded-4xl justify-start items-center space-y-4 overflow-hidden mt-10"
+            className="flex flex-col max-w-4xl bg-card rounded-4xl justify-start items-center overflow-hidden"
           >
-            <p className={`text-md p-2 lg:text-xl leading-relaxed bg-card text-center ${dmSans.className}`}>
+            <p className={`text-md p-2 lg:text-xl leading-relaxed bg-landing-bg text-center ${dmSans.className}`}>
             Built for ESL tutors, online teachers, and independent learners, Synomilo provides conversation content, interactive tools, assignments, and student progress tracking for real world English practice.
             </p>
 
           </motion.div>
 
+        </motion.div>
 
-        <div className="flex gap-2 mt-10">
+        <motion.div
+          layout
+          initial={{ opacity: 0, height: "auto" }}
+          animate={{ opacity: 1, height: "auto"}}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.4 , delay:0.2, ease: "easeInOut" }}
+          className="flex gap-2 mt-20">
           <Link href={"/register"}>
           <Button size={"lg"} className="w-auto cursor-pointer rounded-full shadow-foreground">Get Started</Button>
           </Link>
@@ -232,10 +238,9 @@ return (
           See more <ArrowDown/>
           </Button>
 
-        </div>
+        </motion.div>
 
         {/* <p className="flex justify-center text-sm lg:text-xl m-2 text-muted-foreground">This isn't theory. It's rehearsal for when you're face to face.</p> */}
-        </motion.div>
 
 
        {/* <motion.div
@@ -263,34 +268,20 @@ return (
       </motion.div> */}
 
 
-        <motion.div
-
-          transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
-          className="flex flex-col max-w-4xl h-auto bg-card rounded-4xl justify-start items-center p-5 space-y-4 "
-        >
-
-      </motion.div>
-
-
 
 
         <div className="w-screen gap-10 flex flex-col justify-center items-center border-b bg-landing-bg">
 
        <motion.div
-       className="sticky top-5 mb-20 z-30 p-3 lg:p-5 bg-card border-1 rounded-full shadow-lg"
-       initial={{ opacity: 0, y: 80 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true}}
-          transition={transition1}>
-        <h1
-          className="text-xl lg:text-2xl font-semibold"
+        className="sticky top-5 z-30 mt-20 p-3 lg:p-5 bg-card border-1 rounded-full shadow-lg"
+        initial={{ opacity: 0, y: 80 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true}}
+        transition={{duration: 0.4, delay:1, ease: "easeInOut"}}>
 
-        >
-          <div className="flex flex-row gap-2 z-20 items-center">
-
+          <div className="flex flex-row text-xl lg:text-2xl font-semibold gap-2 z-20 items-center">
           Here&apos;s what&apos;s offered <span><ArrowDown className= "text-pink-500" size={30}/></span>
           </div>
-        </h1>
       </motion.div>
 
 
@@ -309,36 +300,47 @@ return (
         </motion.div>
 
          <motion.div className="flex flex-col w-full lg:w-2/3 space-y-6 lg:border-1 p-10 rounded-md shadow-md"
-  initial={{ opacity: 0, y: 100 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  viewport={{ once: true, margin: "-100px" }}
-  transition={{ delay: 0.2, duration: 0.2 }}
-  >
+          initial={{ opacity: 0, y: 100 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ delay: 0.2, duration: 0.2 }}
+          >
+
     <div className="flex flex-row text-2xl lg:text-4xl font-normal justify-start">Made with Tutors in Mind</div>
     <p className="text-md lg:text-lg text-muted-foreground">
       Built for ESL tutors, Synomilo helps reduce prep time with real-world, ready-made conversations,
       assignments, and student progress tracking. Stay organized and prepared for every session.
     </p>
 
-    <div className="flex flex-col items-center space-y-6">
+    <div className="flex flex-col items-center space-y-12 lg:space-y-6">
 
-      <div className=" flex flex-col items-center gap-2 lg:p-5 w-full rounded-md">
-        <p className="flex text-lg lg:self-start lg:text-xl">Find all your students in one place</p>
-        <p className="text-sm lg:self-start text-muted-foreground italic">On the Assignments page, you can find your current connections or add new ones.</p>
+      <div className="flex flex-col lg:flex-row items-center gap-2 lg:p-5 w-full rounded-md">
+        <div className="flex flex-col lg:w-1/2 items-start border-b">
+          <p className="flex text-lg lg:text-2xl">Keep track of your students </p>
+          <p className="text-sm lg:self-start text-muted-foreground italic">On the Assignments page, you can find your current connections or add new ones.</p>
+        </div>
         <TestFriends/>
       </div>
 
 
-      <div className=" flex flex-col items-center gap-2 p-5 w-full rounded-md">
-        <p className="flex text-xl">Assign them Conversations</p>
-        <p className="text-sm text-muted-foreground italic">On the Conversations page, each tile will have the Assign button </p>
+      <div className="flex flex-col lg:flex-row-reverse items-center justify-evenly lg:p-5 w-full rounded-md">
+        <div className="flex flex-col lg:w-1/2 items-center border-b">
+          <p className="flex text-lg lg:text-2xl">Assign conversations</p>
+          <p className="text-sm text-muted-foreground italic">On the Conversations page, each tile will have the Assign button </p>
+        </div>
+
         <TestConversationCover/>
+
       </div>
 
-      <div className=" flex flex-col items-center gap-2 p-5 w-full rounded-md">
-        <p className="flex text-xl">View progress on assigned Conversations</p>
-        <p className="text-sm text-muted-foreground italic">This is also located on the Assignments page</p>
+      <div className="flex flex-col lg:flex-row items-center gap-2 lg:p-5 w-full rounded-md">
+        <div className="flex flex-col lg:w-1/2 items-start border-b">
+          <p className="flex text-lg lg:text-2xl">View progress</p>
+          <p className="text-sm text-muted-foreground italic">This is also located on the Assignments page</p>
+        </div>
+
         <TestTeacherPage/>
+
       </div>
     </div>
 
@@ -405,7 +407,7 @@ return (
 
           <div className="flex flex-col space-y-6 justify-start items-start">
 
-          <h1 className="lg:text-4xl font-normal">Ready-made Conversations</h1>
+          <h1 className="text-2xl lg:text-4xl font-normal">Ready-made Conversations</h1>
           <p className="text-md lg:text-lg text-muted-foreground">
             Students have access to conversations that reflect real life scenarios, better preparing them for something as simple
             as asking for directions, to more complicated topics like job interviews. Each conversation includes interactive features
@@ -415,8 +417,8 @@ return (
           </div>
 
           <div className="flex justify-end">
-          <p className="text-xl font-semibold">Try it, highlight word types for easy identification</p>
-          <ArrowDown size={30} className="text-pink-500"/>
+          <p className="hidden lg:text-xl font-semibold">Try it, highlight word types for easy identification</p>
+          <ArrowDown size={30} className="hidden lg:block text-pink-500"/>
           </div>
 
 
@@ -514,8 +516,37 @@ return (
           playsInline
         />
 
+        <div className="hidden lg:block z-20 sticky top-30 left-43 text lg:left-0 lg:top-62 self-start m-4 mb-23 lg:text-2xl font-semibold">
+        <span className="px-1 text-pink-500 text">
+          2.
+        </span>
+        Workflow
+        </div>
 
-        <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-62 lg:mb-14 self-start m-4 lg:text-2xl font-semibold">
+
+        <motion.div
+          className={`w-full lg:w-2/3 m-10 space-y-6 lg:border-1 p-10 rounded-md shadow-md`}
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 200 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={transition2}
+        >
+
+           <div className="flex flex-col space-y-6 justify-start items-start">
+
+          <h1 className="text-2xl lg:text-4xl font-normal">Workflow</h1>
+          <p className="text-md lg:text-lg text-muted-foreground">
+            Here's a glimpse of Synomilo's usual workflow. <span className="text-pink-500">The UI is interactable, give it a try.</span>
+          </p>
+          </div>
+          <TestWorkflow />
+
+
+        </motion.div>
+
+
+        <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-72 lg:mb-14 self-start m-4 lg:text-2xl font-semibold">
         <span className="px-1 text-pink-500">
           3.
         </span>
@@ -525,7 +556,7 @@ return (
        <div className="grid grid-cols-3 gap-2 m-2 lg:grid-cols-3 lg:gap-5 lg:p-2 rounded-lg">
 
     <motion.div
-    className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
+    className="flex flex-col items-center justify-center bg-card border rounded-md p-5 gap-5 shadow-md text-sm"
     initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
@@ -539,7 +570,7 @@ return (
   </motion.div>
 
  <motion.div
- className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
+ className="flex flex-col items-center justify-center bg-card border rounded-md p-5 gap-5 shadow-md text-sm"
  initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
@@ -554,7 +585,7 @@ return (
 
 
    <motion.div
-   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
+   className="flex flex-col items-center justify-center bg-card border rounded-md p-5 gap-5 shadow-md text-sm"
    initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
@@ -566,7 +597,7 @@ return (
   </motion.div>
 
   <motion.div
-  className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
+  className="flex flex-col items-center justify-center bg-card border rounded-md p-5 gap-5 shadow-md text-sm"
   initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
@@ -579,7 +610,7 @@ return (
   </motion.div>
 
   <motion.div
-  className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
+  className="flex flex-col items-center justify-center bg-card border rounded-md p-5 gap-5 shadow-md text-sm"
   initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
@@ -596,7 +627,7 @@ return (
   </motion.div>
 
    <motion.div
-   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
+   className="flex flex-col items-center justify-center bg-card border rounded-md p-5 gap-5 shadow-md text-sm"
    initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
@@ -610,7 +641,7 @@ return (
 </motion.div>
 
  <motion.div
-   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
+   className="flex flex-col items-center justify-center bg-card border rounded-md p-5 gap-5 shadow-md text-sm"
    initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
@@ -623,7 +654,7 @@ return (
 </motion.div>
 
 <motion.div
-   className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
+   className="flex flex-col items-center justify-center bg-card border rounded-md p-5 gap-5 shadow-md text-sm"
    initial={{ opacity: 0, y: 100 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, margin: "-100px", }}
@@ -636,7 +667,7 @@ return (
 </motion.div>
 
 <motion.div
-  className="flex flex-col items-center justify-center border rounded-md p-5 gap-5 shadow-md text-sm"
+  className="flex flex-col items-center justify-center bg-card border rounded-md p-5 gap-5 shadow-md text-sm"
   initial={{ opacity: 0, y: 100 }}
   whileInView={{ opacity: 1, y: 0 }}
   viewport={{ once: true, margin: "-100px" }}
