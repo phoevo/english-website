@@ -144,10 +144,10 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   fetchAudioUrl();
 }, [conversation]);
 
-// Check assignment only when needed: student, not subscribed, Pro conversation
+// Check assignment for any conversation: a Plus tutor's assignment grants Plus features
 React.useEffect(() => {
   const run = async () => {
-    if (!user || isSubscribed || user.isTeacher || !conversation?.$id || !conversation?.isPro) {
+    if (!user || isSubscribed || user.isTeacher || !conversation?.$id) {
       setAssignedForThisConvo(false);
       return;
     }
@@ -162,7 +162,7 @@ React.useEffect(() => {
     }
   };
   run();
-}, [user, isSubscribed, conversation?.$id, conversation?.isPro]);
+}, [user, isSubscribed, conversation?.$id]);
 
 
 const [wordTypes, setWordTypes] = React.useState<Record<WordTypeKey, WordTypeData>>({
@@ -478,8 +478,8 @@ React.useEffect(() => {
     // Allow audio if:
     // - Teacher, or
     // - Subscribed, or
-    // - This is a Pro conversation assigned to this student
-    (user?.isTeacher || isSubscribed || (conversation?.isPro && assignedForThisConvo)) ? (
+    // - Assigned by a Plus tutor (Plus tutor's assignment grants Plus features)
+    (user?.isTeacher || isSubscribed || assignedForThisConvo) ? (
         <AudioPlayer src={audioUrl} />
     ) : assignmentChecking ? (
         <Skeleton className="w-40 h-5" />

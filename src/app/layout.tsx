@@ -10,7 +10,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Synomilo - Conversations for tutor and students",
+  title: "Synomilo - Conversations for tutors and students",
   description: "Conversation-based ESL tools for tutors and students",
     icons: [
     { rel: "icon", url: "/favicon-light.svg", media: "(prefers-color-scheme: light)" },

@@ -448,7 +448,7 @@ const handleUnsubscribe = async () => {
                   <CustomColors userId={user.$id} />
 
                   </>):
-                    <p className='text-muted-foreground text-sm'>Requires subscription</p>
+                    <p className='text-muted-foreground text-sm'>Requires Plus</p>
                   }
                 </div>
             </CardContent>
@@ -497,7 +497,7 @@ const handleUnsubscribe = async () => {
             Unsubscribe
           </Button>
 
-          <Link className="underline cursor-pointer text-sm" href="/subscribe">
+          <Link className="underline cursor-pointer text-sm" href="/pricing">
             Subscribe?
           </Link>
         </div>

@@ -19,7 +19,11 @@ import {
 import { Query } from "appwrite";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
+import { toast } from "sonner";
 import { Geist } from "next/font/google";
+import { motion } from "motion/react";
 
 const geist = Geist({ subsets: ['latin'] });
 
@@ -40,6 +44,17 @@ function TeacherPage() {
   const [assignments, setAssignments] = useState<AssignmentWithConversation[]>([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const handleDeleteAssignment = async (assignmentId: string) => {
+    try {
+      await databases.deleteDocument(databaseId, assignmentsId, assignmentId);
+      setAssignments((prev) => prev.filter((a) => a.$id !== assignmentId));
+      toast.success("Assignment removed.");
+    } catch (err) {
+      console.error("Failed to delete assignment:", err);
+      toast.error("Failed to remove assignment.");
+    }
+  };
 
   useEffect(() => {
     if (!selectedStudentId) return;
@@ -133,16 +148,32 @@ function TeacherPage() {
           <ul className="space-y-3">
             {assignments.map((a) => (
               <li
-                onClick={() => router.push(`conversations/${a.conversationId}`)}
-                className="cursor-pointer border p-4 rounded-md hover:bg-muted transition"
+                className="flex items-center justify-between border p-4 rounded-md hover:bg-muted transition"
                 key={a.$id}
               >
-                <h4 className="font-semibold">{a.title}</h4>
-                <p className="text-sm text-muted-foreground mb-1">Level: {a.level}</p>
-                 <Badge variant={a.status === "Completed" ? "default" : "outline"}
-                        className={a.status === "Completed" ? "bg-green-500 text-white" : ""}>
-                  {a.status}
-                </Badge>
+                <div
+                  onClick={() => router.push(`conversations/${a.conversationId}`)}
+                  className="cursor-pointer flex-1"
+                >
+                  <h4 className="font-semibold">{a.title}</h4>
+                  <p className="text-sm text-muted-foreground mb-1">Level: {a.level}</p>
+                  <Badge variant={a.status === "Completed" ? "default" : "outline"}
+                         className={a.status === "Completed" ? "bg-green-500 text-white" : ""}>
+                    {a.status}
+                  </Badge>
+                </div>
+                {a.status === "Completed" && (
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    className="ml-3 h-5 w-5 cursor-pointer shrink-0"
+                    onClick={() => handleDeleteAssignment(a.$id)}
+                  >
+                    <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
+                      <X className="h-4 w-4" />
+                    </motion.div>
+                  </Button>
+                )}
               </li>
             ))}
           </ul>

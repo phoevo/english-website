@@ -97,7 +97,7 @@ const DailyTasks = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <div className={dmSans.className}>
+    <div className={geist.className}>
       <Popover modal open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>{children}</PopoverTrigger>
         <PopoverContent

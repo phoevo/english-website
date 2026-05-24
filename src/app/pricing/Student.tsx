@@ -43,8 +43,9 @@ function Student() {
 
   const paidOptions = [
     {
-      title: "Monthly",
+      title: "Student Monthly",
       planName: "Student Monthly",
+      time: "month",
       price: "4.99",
       info: "Standard Pricing",
       desc: [
@@ -55,8 +56,9 @@ function Student() {
 
     },
     {
-      title: "Yearly",
+      title: "Student Yearly",
       planName: "Student Yearly",
+      time: "year",
       price:"49.99",
       info: "Over 15% cheaper than Monthly",
       desc: [
@@ -160,13 +162,23 @@ function Student() {
   <div className="flex flex-col md:flex-col lg:flex-row justify-center items-center gap-4 mt-4">
     {paidOptions.map((option, index) => (
       <div
-        key={index}
-        className="flex flex-col justify-between p-4 border-1 rounded-xl w-full md:w-full lg:w-sm h-60 lg:h-90 shadow-md"
-      >
+  key={index}
+className="relative flex flex-col justify-between p-4 border rounded-xl w-full lg:w-sm h-60 lg:h-90 shadow-md transition-all hover:shadow-lg hover:-translate-y-1">
+
+        {option.time === "year" && (
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+              <Badge className="bg-green-500 text-white shadow-md">
+                Best value
+              </Badge>
+            </div>
+          )}
+
          <div className="flex flex-col items-start">
-          <div className='flex flex-row gap-2 items-center my-2'>
-            <h1 className='lg:text-xl font-semibold'>{option.title}</h1>
-            <Badge className="bg-pink-500 text-white">€{option.price}</Badge>
+          <div className='flex flex-col space-y-2 items-start my-2'>
+            <h1 className="text-xl font-semibold border-l-1 border-pink-500 pl-2">{option.title}</h1>
+              <p className='text-2xl font-semibold tracking-tight'>€{option.price}/{option.time}
+              <span className='text-muted-foreground font-normal text-sm'> + applicable taxes</span>
+           </p>
           </div>
           <div className='mb-4 text-sm text-muted-foreground'>{option.info}</div>
           <ul className="list-disc text-xs text-left lg:items-center lg:text-sm marker:text-pink-500 space-y-1 px-4 text-muted-foreground mb-2">

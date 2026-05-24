@@ -73,7 +73,7 @@ function ConversationsPage() {
     return <div className="p-10 text-center text-red-500">{error}</div>;
   }
 
-  type CoverConvo = { $id: string; title: string; description?: string; level: string; audioFileId: string; isPro?: boolean; category: string; };
+  type CoverConvo = { $id: string; title: string; description?: string; level: string; audioFileId: string; isPro: boolean; category: string; };
   const list = Array.isArray(conversations) ? (conversations as unknown as CoverConvo[]) : [];
   const filtered = list.filter((conv) => {
     const levelMatches = !selectedLevel || selectedLevel === "All" || conv.level === selectedLevel;
@@ -131,7 +131,7 @@ function ConversationsPage() {
 
 
 
-      <h1 className={`text-2xl lg:text-3xl font-normal ${dmSans.className}`}>Conversations</h1>
+      <h1 className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Conversations</h1>
         </UserGuidePopover>
         </div>
 
@@ -227,6 +227,7 @@ function ConversationsPage() {
             conversationId={conv.$id}
             audioFileId={conv.audioFileId}
             category={conv.category}
+            isPro={conv.isPro}
           />
         ))}
       </div>

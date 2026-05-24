@@ -112,8 +112,8 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
           <div className="space-y-2 max-w-[320px]">
             <p className="text-sm text-muted-foreground">
               {!isTeacher
-                ? "Only tutors can assign conversations."
-                : "Assigning requires a Pro account."}
+                ? "Only tutors can assign conversations. Wait, how can you see this?"
+                : "Assigning requires a Plus account."}
             </p>
           </div>
         ) : (

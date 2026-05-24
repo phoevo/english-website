@@ -1,6 +1,6 @@
 "use client"
 import * as React from "react"
-import { BookOpen, BookMarked, IterationCcw, ClipboardCheck, MessageCirclePlus, HomeIcon, User, Swords, Sword, LogOut, UserRound, LogIn, Sparkle, SunIcon, MoonIcon } from "lucide-react"
+import { BookOpen, BookMarked, IterationCcw, ClipboardCheck, MessageCirclePlus, HomeIcon, User, Swords, Sword, LogOut, UserRound, LogIn, Sparkle, SunIcon, MoonIcon, Sparkles } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -14,7 +14,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
-import { DM_Sans } from "next/font/google";
+import { Geist } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/data/useUserStore";
 import { account } from "@/data/appwrite";
@@ -40,7 +40,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Separator } from "./separator"
 
 
-const dmSans = DM_Sans({ subsets: ['latin'] });
+const geist = Geist({ subsets: ['latin'] });
 
 function getStreakColor(streak: number) {
   if (streak >= 1 && streak <= 2) return "bg-foreground text-background";
@@ -136,7 +136,7 @@ export function AppSidebar() {
                 {streak}
               </Badge>
             </HoverCardTrigger>
-            <HoverCardContent side="top" align="center" className={`${dmSans.className} w-auto text-xs`}>
+            <HoverCardContent side="top" align="center" className={`${geist.className} w-auto text-xs`}>
               Your current daily streak
             </HoverCardContent>
           </HoverCard>
@@ -147,7 +147,7 @@ export function AppSidebar() {
 
 
           </DropdownMenuTrigger>
-          <DropdownMenuContent className={` ${dmSans.className} w-50 bg-background border-1`} align="start" side="right">
+          <DropdownMenuContent className={`${geist.className} w-50 bg-background border-1`} align="start" side="right">
 
               <Link href={"/profile"}>
             <DropdownMenuItem className="border-b rounded-none cursor-pointer">
@@ -170,7 +170,7 @@ export function AppSidebar() {
             <DropdownMenuItem className="border-b rounded-none cursor-pointer">
               {isSubscribed ? (
                 <span className="flex flex-row space-x-2">
-                  <Sparkle className="text-pink-500"/> <p className="text-pink-500">Plus</p>
+                  <Sparkles className="text-pink-500"/> <p className="text-pink-500">Plus</p>
                 </span>
               ) : (
                 <span className="flex flex-row space-x-2">
@@ -202,9 +202,9 @@ export function AppSidebar() {
 
       <Separator/>
 
-      <SidebarContent className={`${dmSans.className}`}>
+      <SidebarContent className={`${geist.className}`}>
         <SidebarGroup>
-          <SidebarGroupContent className={`${dmSans.className}`}>
+          <SidebarGroupContent className={`${geist.className}`}>
             <SidebarMenu>
 
 
@@ -221,7 +221,7 @@ export function AppSidebar() {
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>App</SidebarGroupLabel>
-          <SidebarGroupContent className={`${dmSans.className}`}>
+          <SidebarGroupContent className={`${geist.className}`}>
             <SidebarMenu>
 
               {items.map((item) => (
@@ -239,7 +239,7 @@ export function AppSidebar() {
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Classroom</SidebarGroupLabel>
-          <SidebarGroupContent className={`${dmSans.className}`}>
+          <SidebarGroupContent className={`${geist.className}`}>
             <SidebarMenu>
 
               <SidebarMenuItem key="Classroom">
@@ -256,7 +256,7 @@ export function AppSidebar() {
         </SidebarGroup>
         <SidebarGroup>
           <SidebarGroupLabel>Early Access</SidebarGroupLabel>
-          <SidebarGroupContent className={`${dmSans.className}`}>
+          <SidebarGroupContent className={`${geist.className}`}>
             <SidebarMenu>
               <SidebarMenuItem key="Classroom">
                   <SidebarMenuButton asChild>
@@ -284,14 +284,14 @@ export function AppSidebar() {
                       <Button
                         variant="secondary"
                         aria-label="Daily Tasks"
-                        className="flex items-center justify-center cursor-pointer w-full shadow-sm md:rounded-full md:h-6 md:p-2 lg:rounded-sm lg:p-2 lg:h-auto lg:w-auto group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:rounded-md"
+                        className="flex items-center justify-center cursor-pointer w-full shadow-sm md:rounded-full md:h-6 md:p-2 lg:rounded-sm lg:p-2 lg:h-auto lg:w-auto group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:rounded-md "
                       >
                         <Sword className="rotate-45" />
-                        <span className="ml-1 group-data-[collapsible=icon]:hidden">Daily Tasks: {taskCount}</span>
+                        <span className="group-data-[collapsible=icon]:hidden">Daily Tasks: {taskCount}</span>
                       </Button>
                     </DailyTasks>
                   </TooltipTrigger>
-                  <TooltipContent side="right" align="center" className={`${dmSans.className}`}>
+                  <TooltipContent side="right" align="center" className={`${geist.className}`}>
                     Daily Tasks
                   </TooltipContent>
                 </Tooltip>
@@ -309,11 +309,11 @@ export function AppSidebar() {
                           className="flex items-center justify-center cursor-pointer w-full md:rounded-full md:h-6 md:py-1 lg:rounded-sm lg:p-2 lg:h-auto lg:w-auto group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:rounded-md"
                         >
                           <Swords />
-                          <span className="ml-1 group-data-[collapsible=icon]:hidden">Challenges: {challengeCount.length}</span>
+                          <span className="group-data-[collapsible=icon]:hidden">Challenges: {challengeCount.length}</span>
                         </Button>
                       </Challenges>
                     </TooltipTrigger>
-                    <TooltipContent side="right" align="center" className={`${dmSans.className}`}>
+                    <TooltipContent side="right" align="center" className={`${geist.className}`}>
                       Challenges
                     </TooltipContent>
                   </Tooltip>

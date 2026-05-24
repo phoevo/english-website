@@ -19,6 +19,25 @@ import { Query } from "appwrite";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import {
+  BookOpen,
+  MoreHorizontal,
+  Sparkles,
+} from "lucide-react";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { motion } from "motion/react";
+import { Geist } from "next/font/google";
+
+const geist = Geist({ subsets: ['latin'] });
+
 
 type AssignmentWithConversation = {
   $id: string;
@@ -26,13 +45,19 @@ type AssignmentWithConversation = {
   status: "Pending" | "Completed";
   title: string;
   level: string;
+  isPro: boolean;
+  category?: string;
+  description?: string;
   [key: string]: any;
 };
 
 function StudentPage() {
   const { user } = useUserStore();
-  const [assignments, setAssignments] = useState<AssignmentWithConversation[]>([]);
+  const [assignments, setAssignments] = useState<
+    AssignmentWithConversation[]
+  >([]);
   const [loading, setLoading] = useState(true);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -50,8 +75,10 @@ function StudentPage() {
         );
 
         const assignments = assignmentRes.documents;
-        const conversationIds = assignments.map((a) => a.conversationId);
 
+        const conversationIds = assignments.map(
+          (a) => a.conversationId
+        );
 
         if (conversationIds.length === 0) {
           setAssignments([]);
@@ -67,17 +94,24 @@ function StudentPage() {
 
         const conversations = conversationRes.documents;
 
-        const enrichedAssignments = assignments.map((assignment) => {
-          const convo = conversations.find(
-            (c) => c.$id === assignment.conversationId
-          );
+        const enrichedAssignments = assignments.map(
+          (assignment) => {
+            const convo = conversations.find(
+              (c) => c.$id === assignment.conversationId
+            );
 
-          return {
-            ...assignment,
-            title: convo?.title || "Untitled",
-            level: convo?.level || "Unknown",
-          };
-        });
+            return {
+              ...assignment,
+              title: convo?.title || "Untitled",
+              level: convo?.level || "Unknown",
+              category: convo?.category || "General",
+              description:
+                convo?.description ||
+                "Continue practicing your conversation skills.",
+              isPro: convo?.isPro ?? false,
+            };
+          }
+        );
 
         setAssignments(enrichedAssignments);
       } catch (err) {
@@ -90,75 +124,146 @@ function StudentPage() {
     fetchAssignmentsWithConversations();
   }, [user]);
 
-  const handleMarkComplete = async (assignmentId: string) => {
-  try {
-    await databases.updateDocument(
-      databaseId,
-      assignmentsId,
-      assignmentId,
-      { status: "Completed" }
-    );
+  const handleMarkComplete = async (
+    assignmentId: string
+  ) => {
+    try {
+      await databases.updateDocument(
+        databaseId,
+        assignmentsId,
+        assignmentId,
+        { status: "Completed" }
+      );
 
-    // Remove from the local list immediately (we only show Pending here)
-    setAssignments((prev) => prev.filter((a) => a.$id !== assignmentId));
-  } catch (err) {
-    console.error("Failed to update status:", err);
-  }
-};
-
+      setAssignments((prev) =>
+        prev.filter((a) => a.$id !== assignmentId)
+      );
+    } catch (err) {
+      console.error("Failed to update status:", err);
+    }
+  };
 
   return (
     <Card className="bg-background h-full w-full lg:w-1/2 flex flex-col">
       <CardHeader>
         <CardTitle>My Assigned Tasks</CardTitle>
-        <CardDescription>Your tasks assigned by your teacher</CardDescription>
+        <CardDescription>
+          Your tasks assigned by your tutor
+        </CardDescription>
       </CardHeader>
+
       <CardContent className="flex-1 min-h-0 p-0">
         <ScrollArea className="h-full px-5">
+          {loading ? (
+            <p>Loading...</p>
+          ) : assignments.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <BookOpen
+                className="text-muted-foreground mb-3"
+                size={32}
+              />
 
-        {loading ? (
-          <p>Loading...</p>
-        ) : assignments.length === 0 ? (
-          <p>No assignments yet.</p>
-        ) : (
-          <div className="space-y-3">
-            {assignments.map((a) => (
-  <div
-    key={a.$id}
-    className="flex justify-between items-center border p-4 rounded-md hover:bg-muted transition"
-  >
+              <p className="font-medium">
+                No assignments yet
+              </p>
 
-    <div
-      onClick={() => router.push(`conversations/${a.conversationId}`)}
-      className="cursor-pointer">
-      <h4 className="font-semibold">{a.title}</h4>
-      <p className="text-sm text-muted-foreground mb-1">Level: {a.level}</p>
+              <p className="text-sm text-muted-foreground">
+                Your tutor assigned conversations will
+                appear here.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4 pb-5">
+              {assignments.map((a) => (
+                <motion.div
+                  key={a.$id}
+                  transition={{ duration: 0.15 }}
+                  className="
+                    group
+                    rounded-xl
+                    border
+                    bg-background
+                    p-4
+                    transition-all
+                  "
+                >
+                  <div className="flex justify-between gap-4">
+                    <div className="flex gap-3 flex-1">
 
-     <Badge
-       variant={a.status === "Completed" ? "default" : "outline"}
-       className={a.status === "Completed" ? "bg-green-500 text-white" : ""}
-     >
-      {a.status}
-    </Badge>
+                      <div className="flex flex-col flex-1">
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-semibold text-base">
+                            {a.title}
+                          </h4>
 
-    </div>
+                          {a.isPro && (
+                            <Sparkles
+                              size={15}
+                              className="text-pink-500"
+                            />
+                          )}
+                        </div>
 
-    {a.status === "Pending" && (
-      <Badge
-        onClick={() => handleMarkComplete(a.$id)}
-        className="cursor-pointer"
-        variant="secondary"
+                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                          {a.description}
+                        </p>
 
-      >
-        Mark as Complete
-      </Badge>
-    )}
-  </div>
-))}
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          <Badge variant="secondary">
+                            {a.level}
+                          </Badge>
 
-          </div>
-        )}
+                          <Badge variant="outline">
+                            {a.category}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
 
+                    <div className="flex flex-col items-end justify-between gap-3">
+                      {/* Dropdown */}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="opacity-70 hover:opacity-100 cursor-pointer"
+                          >
+                            <MoreHorizontal size={18} />
+                          </Button>
+                        </DropdownMenuTrigger>
+
+                        <DropdownMenuContent align="end" className={`${geist.className}`}>
+                          <DropdownMenuItem
+                            className="cursor-pointer"
+                            onClick={() =>
+                              router.push(
+                                `conversations/${a.conversationId}`)}>
+                              Open
+                          </DropdownMenuItem>
+
+                          <DropdownMenuItem
+                            className="cursor-pointer"
+                            onClick={() => handleMarkComplete(a.$id)}>
+                            Mark as Complete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+
+                      <Button
+                        className="cursor-pointer"
+                        onClick={() =>
+                          router.push(
+                            `conversations/${a.conversationId}`)}>
+                        <BookOpen />
+                        Open
+                      </Button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </ScrollArea>
       </CardContent>
     </Card>

@@ -42,6 +42,7 @@ function Tutor() {
   {
     title: "Tutor Monthly",
     info: "",
+    time: "month",
     planName:"Tutor Monthly",
     desc: [
       "Ideal for Tutors starting out",
@@ -52,12 +53,13 @@ function Tutor() {
   },
   {
     title: "Tutor Yearly",
-    info: "Over 20% cheaper than Monthly, about €7.50/month",
+    info: "Over 20% cheaper than Monthly",
+    time: "year",
     planName: "Tutor Yearly",
     desc: [
       "Best for active Tutors",
       "Lots of Students, little time to prepare",
-      "Pay once, full year of access with future updates."
+      "Get a full year of access with all future updates and features."
     ],
     price: "89.99"
   }
@@ -75,7 +77,6 @@ function Tutor() {
             <motion.div className="flex flex-col rounded-lg w-full h-auto">
 
 
-    <CardContent>
 
      <div className='flex flex-col md:flex-col gap-5 w-auto'>
 
@@ -139,7 +140,7 @@ function Tutor() {
     </Button>
   </DialogTrigger>
 
-  <DialogContent className={`lg:min-w-4xl h-auto p-10 ml-2  ${geist.className}`}>
+  <DialogContent className={`lg:min-w-4xl h-auto lg:p-10  ${geist.className}`}>
     <DialogHeader>
       <DialogHeader>
   <DialogTitle className='text-2xl'>Tutor Plans</DialogTitle>
@@ -155,15 +156,24 @@ function Tutor() {
 
   <div className="flex flex-col lg:flex-row justify-center items-center gap-4 mt-4">
     {tutorPlans.map((plan, index) => (
-  <div
-    key={index}
-    className="flex flex-col justify-between p-4 border-1 rounded-xl w-full lg:w-sm h-60 lg:h-90 shadow-md"
+<div
+  key={index}
+  className="relative flex flex-col justify-between p-4 border rounded-xl w-full lg:w-sm h-70 lg:h-90 shadow-md transition-all hover:shadow-lg hover:-translate-y-1">
 
-  >
-    <div className="flex flex-col items-start">
-              <div className='flex flex-row gap-2 items-center my-2'>
-                <h1 className='lg:text-xl font-semibold'>{plan.title}</h1>
-                <Badge className="bg-pink-500 text-white ">€{plan.price}</Badge>
+       {plan.time === "year" && (
+         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+           <Badge className="bg-green-500 text-white shadow-md">
+             Best value
+           </Badge>
+         </div>
+       )}
+
+          <div className="flex flex-col items-start">
+            <div className='flex flex-col space-y-2 items-start my-2'>
+              <h1 className="text-xl font-semibold border-l border-pink-500 pl-2">{plan.title}</h1>
+                  <p className='text-2xl font-semibold tracking-tight'>€{plan.price}/{plan.time}
+                    <span className='text-muted-foreground font-normal text-sm'> + applicable taxes</span>
+                  </p>
               </div>
               <div className='mb-4 text-sm text-muted-foreground'>{plan.info}</div>
               <ul className="list-disc text-xs text-left lg:items-center lg:text-sm marker:text-pink-500 space-y-1 px-4 text-muted-foreground mb-2">
@@ -226,7 +236,6 @@ function Tutor() {
 
 
 
-    </CardContent>
   </motion.div>
 
 

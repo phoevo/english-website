@@ -6,7 +6,7 @@ import { vocabIndex } from "@/data/vocab/vocabIndex";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { BookMarked, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUserStore } from "@/data/useUserStore";
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -18,9 +18,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import WordBoard from "./wordBoard";
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, Geist } from "next/font/google";
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
+const geist = Geist({ subsets: ['latin'] });
+
 
 
 
@@ -113,7 +115,7 @@ function DictionaryPage() {
           side="top"
           align="start"
         >
-          <h1 className={`text-2xl lg:text-3xl font-normal ${dmSans.className}`}>Dictionary</h1>
+          <h1 className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Dictionary</h1>
         </UserGuidePopover>
 
         <div className="text-sm lg:text-base text-muted-foreground">
@@ -192,7 +194,20 @@ function DictionaryPage() {
             </div>
           </ScrollArea>
         ) : (
-          <p className="m-5">No saved words yet</p>
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+              <BookMarked
+                className="text-muted-foreground mb-3"
+                size={32}
+              />
+
+              <p className="font-medium">
+                No words saved yet
+              </p>
+
+              <p className="text-sm text-muted-foreground">
+                Hover over words in a conversation and click the add button to save them in your dictionary.
+              </p>
+            </div>
         )}
       </div>
 

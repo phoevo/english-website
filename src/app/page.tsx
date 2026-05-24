@@ -118,7 +118,7 @@ export default function LandingPage() {
             answer: <>Nope, it runs entirely in your browser.</>
           },
           {
-            question: "What if my tutor/student already has a subsciption?",
+            question: "What if my tutor/student already has a subscription?",
             answer:
             <>
             <p>You get some benefits too, even if you remain on the free tier.</p>

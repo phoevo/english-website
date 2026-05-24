@@ -20,6 +20,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { motion } from "motion/react";
+import { Separator } from "@/components/ui/separator";
 
 const geist = Geist({ subsets: ["latin"] });
 const dmSans = DM_Sans({ subsets: ["latin"] });
@@ -58,8 +59,8 @@ export default function TestWorkflow() {
           <Card className="flex-1 bg-card border dark:border-2 shadow-lg">
             <CardHeader>
               <Badge className="w-fit">Tutor View</Badge>
-              <CardTitle className="text-base">Search Results</CardTitle>
-              <CardDescription className="flex flex-row flex-wrap items-center gap-1 text-xs">
+              <CardTitle className="text-lg">Search Results</CardTitle>
+              <CardDescription className="flex flex-row flex-wrap items-center gap-1">
                 <p>Search for a student to add them using the</p>
                 <Button
                   size="icon"
@@ -75,12 +76,12 @@ export default function TestWorkflow() {
               <div className="flex items-center justify-between border p-3 rounded-md">
                 <div>
                   <div className="flex items-center gap-2">
-                    <p className="font-medium text-sm">{STUDENT_NAME}</p>
-                    <Badge variant="secondary" className="text-xs h-5">
+                    <p className="font-medium text-base">{STUDENT_NAME}</p>
+                    <Badge variant="secondary">
                       Student
                     </Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     {STUDENT_EMAIL}
                   </p>
                 </div>
@@ -115,10 +116,8 @@ export default function TestWorkflow() {
               <Badge variant="secondary" className="w-fit">
                 Student View
               </Badge>
-              <CardTitle className="text-base">Requests</CardTitle>
-              <CardDescription className="text-xs">
-                Incoming connection requests
-              </CardDescription>
+              <CardTitle className="text-lg">Requests</CardTitle>
+              <CardDescription>Incoming connection requests</CardDescription>
             </CardHeader>
             <CardContent>
               {requestSent && !requestAccepted ? (
@@ -173,8 +172,8 @@ export default function TestWorkflow() {
               <Badge className="w-fit">Tutor View</Badge>
               <div className="flex flex-row justify-between">
                 <div>
-                  <CardTitle className="text-base">Conversation Title</CardTitle>
-                  <CardDescription className="border-b pb-2 text-xs">
+                  <CardTitle className="text-lg">Conversation Title</CardTitle>
+                  <CardDescription className="border-b pb-2">
                     B1
                   </CardDescription>
                 </div>
@@ -249,10 +248,8 @@ export default function TestWorkflow() {
               <Badge variant="secondary" className="w-fit">
                 Student View
               </Badge>
-              <CardTitle className="text-base">My Assigned Tasks</CardTitle>
-              <CardDescription className="text-xs">
-                Tasks assigned by your tutor
-              </CardDescription>
+              <CardTitle className="text-lg">My Assigned Tasks</CardTitle>
+              <CardDescription>Tasks assigned by your tutor</CardDescription>
             </CardHeader>
             <CardContent>
               {assigned ? (
@@ -303,21 +300,21 @@ export default function TestWorkflow() {
             </CardHeader>
             <CardContent>
               <div className="border rounded-md bg-background">
-                <div className="border-b p-3 text-sm font-medium">
+                <div className="border-b p-3 text-lg font-medium">
                   Conversation Title
                 </div>
                 <div className="p-4 space-y-4">
                   <div className="flex gap-3">
-                    <span className="font-semibold text-sm min-w-[60px] text-right">
+                    <span className="font-semibold min-w-[60px]">
                       Hannah
                     </span>
-                    <p className="text-sm">Wait, we're not even a proper conversation?</p>
+                    <p>Wait, we're not even a proper conversation?</p>
                   </div>
                   <div className="flex gap-3">
-                    <span className="font-semibold text-sm min-w-[60px] text-right">
+                    <span className="font-semibold min-w-[60px]">
                       Mark
                     </span>
-                    <p className="text-sm">Yeah, it's unfortunate, really.</p>
+                    <p>Yeah, it's unfortunate, really.</p>
                   </div>
                 </div>
               </div>
@@ -333,21 +330,21 @@ export default function TestWorkflow() {
             <CardContent>
               {conversationOpen ? (
                 <div className="border rounded-md bg-background">
-                  <div className="border-b p-3 text-sm font-medium">
+                  <div className="border-b p-3 text-lg font-medium">
                     Conversation Title
                   </div>
                   <div className="p-4 space-y-4">
                     <div className="flex gap-3">
-                      <span className="font-semibold text-sm min-w-[60px] text-right">
+                      <span className="font-semibold min-w-[60px]">
                         Hanna
                       </span>
-                      <p className="text-sm">Wait, we're not a even proper conversation?</p>
+                      <p>Wait, we're not even a proper conversation?</p>
                     </div>
                     <div className="flex gap-3">
-                      <span className="font-semibold text-sm min-w-[60px] text-right">
+                      <span className="font-semibold min-w-[60px]">
                         Mark
                       </span>
-                      <p className="text-sm">Yeah, it's unfortunate, really.</p>
+                      <p>Yeah, it's unfortunate, really.</p>
                     </div>
                   </div>
                   <div className="border-t p-3 flex justify-start">
@@ -397,20 +394,18 @@ export default function TestWorkflow() {
           <Card className="flex-1 bg-card border dark:border-2 shadow-lg">
             <CardHeader>
               <Badge className="w-fit">Tutor View</Badge>
-              <CardTitle className="text-base">
-                Assignment Progress
+              <CardTitle className="text-lg">
+                My Assigned Tasks
               </CardTitle>
-              <CardDescription className="text-xs">
-                {STUDENT_NAME}&apos;s assignments
-              </CardDescription>
+              <CardDescription>Select a student to view their assigned conversations</CardDescription>
             </CardHeader>
             <CardContent>
               {assigned ? (
                 <div className="border p-3 rounded-md">
-                  <h4 className="font-semibold text-sm">
+                  <h4 className="font-semibold text-md">
                     Conversation Title
                   </h4>
-                  <p className="text-xs text-muted-foreground mb-2">
+                  <p className="text-sm text-muted-foreground mb-2">
                     Level: B1
                   </p>
                   <Badge
@@ -435,18 +430,16 @@ export default function TestWorkflow() {
               <Badge variant="secondary" className="w-fit">
                 Student View
               </Badge>
-              <CardTitle className="text-base">My Assigned Tasks</CardTitle>
-              <CardDescription className="text-xs">
-                Your completed and pending tasks
-              </CardDescription>
+              <CardTitle className="text-lg">My Assigned Tasks</CardTitle>
+              <CardDescription>Your completed and pending tasks</CardDescription>
             </CardHeader>
             <CardContent>
               {assigned ? (
                 <div className="border p-3 rounded-md">
-                  <h4 className="font-semibold text-sm">
+                  <h4 className="font-semibold text-md">
                     Conversation Title
                   </h4>
-                  <p className="text-xs text-muted-foreground mb-2">
+                  <p className="text-sm text-muted-foreground mb-2">
                     Level: B1
                   </p>
                   <Badge

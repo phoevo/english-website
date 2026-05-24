@@ -88,12 +88,13 @@ export async function getUserById(userId: string) {
   }
 }
 
-// Check if a conversation is assigned to a student
+// Check if a conversation is actively assigned (Pending) to a student
 export async function isConversationAssignedToStudent(studentId: string, conversationId: string): Promise<boolean> {
   try {
     const res = await databases.listDocuments(databaseId, assignmentsId, [
       Query.equal('studentId', studentId),
       Query.equal('conversationId', conversationId),
+      Query.equal('status', 'Pending'),
     ]);
     return res.total > 0;
   } catch (error) {

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import News from "./News";
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, Geist } from "next/font/google";
 import { ArrowLeft, Calendar, PartyPopper, Sword, Swords } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -30,6 +30,8 @@ import {
 } from "@/components/ui/carousel"
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
+const geist = Geist({ subsets: ['latin'] });
+
 
 function getLastActive(value: unknown): string | null {
   if (value && typeof value === 'object' && 'lastActive' in value) {
@@ -165,8 +167,8 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
              align="start"
             >
               {user ? (
-                 <h1 className={`text-2xl sm:text-3xl ${dmSans.className}`}>Welcome back, {user.name}</h1>
-              ): <h1 className={`text-2xl sm:text-3xl ${dmSans.className}`}>Welcome, New User</h1>}
+                 <h1 className={`text-2xl sm:text-3xl ${geist.className}`}>Welcome back, {user.name}</h1>
+              ): <h1 className={`text-2xl sm:text-3xl ${geist.className}`}>Welcome, New User</h1>}
 
             </UserGuidePopover>
 

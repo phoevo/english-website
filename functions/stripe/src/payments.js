@@ -1,7 +1,7 @@
 const { Databases, Account, Client, Query } = require("node-appwrite");
 const Stripe = require("stripe");
 
-const serverPlans = ["Student Monthly", "Student Yearly", "Tutor Monthly", "Tutor per seat"];
+const serverPlans = ["Student Monthly", "Student Yearly", "Tutor Monthly", "Tutor Yearly"];
 
 const priceMap = {
   "Student Monthly": "price_1RjNY6PoApFikZNYFIHlqq3t",

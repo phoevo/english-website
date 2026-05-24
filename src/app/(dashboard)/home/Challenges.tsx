@@ -28,13 +28,13 @@ const Challenges = ({ children }: { children: ReactNode }) => {
 
 
   return (
-    <div className={dmSans.className}>
+    <div className={geist.className}>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>{children}</PopoverTrigger>
         <PopoverContent
           side="right"
           align="center"
-          className={`bg-background w-full lg:w-100 ${dmSans.className}`}
+          className={`bg-background w-full lg:w-100 ${geist.className}`}
         >
 
 

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import { useUserStore } from "@/data/useUserStore";
 import { Badge } from "@/components/ui/badge";
-import { Send, LoaderCircle } from "lucide-react";
+import { Send, LoaderCircle, Dot } from "lucide-react";
 import Assign from "./Assign";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -25,9 +25,10 @@ interface ConversationCoverProps {
   level: string;
   audioFileId: string;
   category: string;
+  isPro: boolean;
 }
 
-function ConversationCover({ conversationTitle, conversationDescription, conversationId, level, category}: ConversationCoverProps) {
+function ConversationCover({ conversationTitle, conversationDescription, conversationId, level, category, isPro}: ConversationCoverProps) {
 
   const completeConversations = useUserStore((state) => state.completeConversations);
   const isComplete = completeConversations.includes(conversationId);
@@ -42,10 +43,10 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
     return;
   }
 
+  setIsLoading(true);
   try {
     // 1. Fetch the conversation details
     const conversation = await getConversationFromDB(conversationId);
-    setIsLoading(true);
 
     if (!conversation) {
       toast.error("Conversation not found.");
@@ -61,7 +62,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
       const assigned = await isConversationAssignedToStudent(user.$id, conversationId);
       if (!assigned) {
         toast("This is a Pro conversation. It must be assigned by your tutor or you need a subscription.");
-        return; // Stop navigation
+        return;
       }
     }
 
@@ -75,6 +76,8 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
 
   } catch (err) {
     console.error("Error fetching or updating conversation:", err);
+  } finally {
+    setIsLoading(false);
   }
 };
 
@@ -90,8 +93,9 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
     <Card className="w-full lg:w-full lg:h-70 bg-background cursor-pointer">
       <CardHeader>
         <CardTitle className="flex flex-row justify-between items-center border-b py-1">
-          <div className="flex flex-row items-center gap-1">
+          <div className="flex flex-row items-center">
             {conversationTitle}
+            {isPro? (<Dot className="text-pink-500"/>) : (<Dot className="text-foreground"/>)}
             {isLoading && <LoaderCircle className="animate-spin" size={15}/>}
           </div>
 
@@ -100,7 +104,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
                 conversationId={conversationId}
                 trigger={
                   <Badge variant="outline"
-                  className="cursor-pointer"
+                  className="cursor-pointer hover:border-foreground"
                   onClick={(e) => {
                     e.stopPropagation();
                   }}

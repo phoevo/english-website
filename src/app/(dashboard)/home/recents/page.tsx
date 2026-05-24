@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { IterationCcw, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUserStore } from "@/data/useUserStore";
 import { databaseId, databases, usersCollectionId } from "@/data/appwrite";
@@ -15,10 +15,12 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card"
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, Geist } from "next/font/google";
 
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
+const geist = Geist({ subsets: ['latin'] });
+
 
 
 function RecentsPage() {
@@ -101,7 +103,7 @@ function RecentsPage() {
           side="top"
           align="start"
           >
-          <h1 className={`text-2xl lg:text-3xl font-normal ${dmSans.className}`}>Recent Conversations</h1>
+          <h1 className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Recent Conversations</h1>
           </UserGuidePopover>
         </div>
 
@@ -158,7 +160,20 @@ function RecentsPage() {
           </AnimatePresence>
         </div>
       ) : (
-        <p>No recent conversations found.</p>
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+              <IterationCcw
+                className="text-muted-foreground mb-3"
+                size={32}
+              />
+
+              <p className="font-medium">
+                No recent conversations yet
+              </p>
+
+              <p className="text-sm text-muted-foreground">
+                Interact with a conversation to see it here for quick access.
+              </p>
+            </div>
       )}
 
       </div>

@@ -230,7 +230,7 @@ return (
         side="top"
         align="start"
       >
-        <h1 className={`text-3xl font-normal ${dmSans.className}`}>Assignments</h1>
+        <h1 className={`text-3xl font-normal ${geist.className}`}>Assignments</h1>
       </UserGuidePopover>
         <p className="text-muted-foreground">A shared workspace for Students and Tutors.</p>
         </div>
@@ -297,7 +297,7 @@ return (
                   <Badge
                   className="text-xs h-5"
                   variant={u.isTeacher ? "outline" : "secondary"}>
-                    {u.isTeacher ? "Teacher" : "Student"}
+                    {u.isTeacher ? "Tutor" : "Student"}
                   </Badge>
               </div>
               <p className="text-sm text-muted-foreground">{u.email}</p>
@@ -400,7 +400,7 @@ return (
 
                 <div>
                 <Badge variant={f.isTeacher ? "outline" : "secondary"}>
-                  {f.isTeacher ? "Teacher" : "Student"}
+                  {f.isTeacher ? "Tutor" : "Student"}
                 </Badge>
                 <span className="text-sm text-muted-foreground px-2">{f.email}</span>
                 </div>
@@ -409,9 +409,9 @@ return (
               <div className="flex flex-row border-1 rounded-full p-1 h-8 shadow-xs">
 
               {f.isSubscribed ? (
-                <Badge className="text-foreground bg-pink-500 border-none">Plus</Badge>
+                <Badge className="text-white bg-pink-500 border-none">Plus</Badge>
               ) : (
-                <Badge className="text-background bg-foreground border-none">Free</Badge>
+                <Badge className="text-white bg-foreground border-none">Free</Badge>
               )}
 
 
@@ -583,9 +583,9 @@ return (
                     <div className="flex flex-row border-1 rounded-full p-1 h-8 shadow-xs">
 
               {f.isSubscribed ? (
-                <Badge className="text-foreground bg-pink-500 border-none">Plus</Badge>
+                <Badge className="text-white bg-pink-500 border-none">Plus</Badge>
               ) : (
-                <Badge className="text-background bg-foreground border-none">Free</Badge>
+                <Badge className="text-white bg-foreground border-none">Free</Badge>
               )}
 
               <span className="font-normal px-2">{f.name || "Unknown"}</span>

@@ -18,11 +18,13 @@ import {
   CardHeader,
   CardContent,
 } from "@/components/ui/card";
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, Geist } from "next/font/google";
 import { ID } from "appwrite";
 
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
+const geist = Geist({ subsets: ['latin'] });
+
 
 
 function FeedbackPage() {
@@ -120,7 +122,7 @@ function FeedbackPage() {
           side="top"
           align="start"
           >
-          <h1 className={`text-2xl lg:text-3xl font-normal ${dmSans.className}`}>Feedback</h1>
+          <h1 className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Feedback</h1>
           </UserGuidePopover>
         </div>
 
@@ -132,7 +134,7 @@ function FeedbackPage() {
       {/* Feedback form */}
       <Card className="bg-background w-full lg:w-1/2">
         <CardHeader>
-          <CardTitle className="text-2xl">Send feedback</CardTitle>
+          <CardTitle>Send feedback</CardTitle>
           <CardDescription>
             Pick a tag, write your feedback, and optionally leave your name and email.
           </CardDescription>
@@ -246,20 +248,53 @@ function FeedbackPage() {
 
       <Card className="bg-background w-full lg:w-1/2">
   <CardHeader>
-    <CardTitle className="text-2xl">Suggestions/Potential Issues</CardTitle>
-    <CardDescription></CardDescription>
+    <CardTitle>Need ideas?</CardTitle>
+    <CardDescription>
+      Here are a few things you could mention in your feedback.
+    </CardDescription>
   </CardHeader>
+
   <CardContent>
-    <ul className="px-4 py-2 space-y-2 rounded-md text-md">
-      <li>Did the design and layout feel clear and accessible?</li>
-      <li>Is there any feature you wish existed?</li>
-      <li>Was there something you liked the most and want to see more of?</li>
-      <li>Do any of the pages feel too empty?</li>
-      <li>Are the prices fair?</li>
-    </ul>
+    <div className="space-y-3 text-sm text-muted-foreground">
+
+      <div className="rounded-lg border p-3">
+        <p className="font-medium text-foreground">
+          What felt confusing?
+        </p>
+        <p>
+          Were there any pages, buttons, or features that didn’t feel obvious?
+        </p>
+      </div>
+
+      <div className="rounded-lg border p-3">
+        <p className="font-medium text-foreground">
+          What worked well?
+        </p>
+        <p>
+          Which features or parts of the experience did you enjoy the most?
+        </p>
+      </div>
+
+      <div className="rounded-lg border p-3">
+        <p className="font-medium text-foreground">
+          Missing something?
+        </p>
+        <p>
+          Is there a tool, workflow, or feature you expected to find?
+        </p>
+      </div>
+
+      <div className="rounded-lg border p-3">
+        <p className="font-medium text-foreground">
+          Any friction?
+        </p>
+        <p>
+          Did anything feel slow, awkward, repetitive, or difficult to use?
+        </p>
+      </div>
+
+    </div>
   </CardContent>
-
-
 </Card>
 
       </div>
