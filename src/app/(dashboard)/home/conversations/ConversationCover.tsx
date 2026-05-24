@@ -90,7 +90,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
       transition={{ duration: 0.1 }}
        onClick={() => {handleClick();}}
     >
-    <Card className="w-full lg:w-full lg:h-70 bg-background cursor-pointer">
+    <Card className="w-full lg:w-full lg:h-50 bg-background cursor-pointer">
       <CardHeader>
         <CardTitle className="flex flex-row justify-between items-center border-b py-1">
           <div className="flex flex-row items-center">

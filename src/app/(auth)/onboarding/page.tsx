@@ -134,7 +134,7 @@ export default function Onboarding() {
 
         <CardContent className='space-y-5'>
 
-           <div className="p-3 rounded-xl bg-red-200 dark:bg-red-700 border-2 border-red-400 dark:border-red-200 text-sm text-red-500 dark:text-foreground flex flex-row items-center gap-2">
+           <div className="p-3 rounded-xl bg-red-200 dark:bg-red-400 border-2 border-red-400 dark:border-red-200 text-sm text-red-500 dark:text-foreground flex flex-row items-center gap-2">
             <CircleAlert size={50}/>
             <p>
               Synomilo is designed to be used during online lessons. For the best experience, it's recommended to use a laptop or desktop rather than a mobile device.

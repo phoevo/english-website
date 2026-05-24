@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUserStore } from "@/data/useUserStore";
 import Link from "next/link";
-import UserGuidePopover from "../../userGuide";
-import { ArrowRight, CheckCircle, Ellipsis, Loader, Plus, SearchIcon, Sword, Swords, X, } from "lucide-react";
+import GuideTour, { type GuideStep } from "../../GuideTour";
+import { CheckCircle, Loader, Plus, SearchIcon, Sword, Swords, X } from "lucide-react";
 import StudentPage from "./StudentPage";
 import TeacherPage from "./TeacherPage";
 import { Badge } from "@/components/ui/badge";
-import { Card} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
   Popover,
   PopoverTrigger,
@@ -25,9 +25,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
-
 const geist = Geist({ subsets: ['latin'] });
 const dmSans = DM_Sans({ subsets: ['latin'] });
+
+const assignGuideSteps: GuideStep[] = [
+  { target: "assign-title", title: "Assignments", description: "A shared workspace where tutors assign conversations and students complete them." },
+  { target: "assign-tasks", title: "Your Tasks", description: "View and manage assigned conversations here. Students see tasks from their tutor, tutors can track student progress." },
+  { target: "assign-connections", title: "Connections", description: "Search for and manage your student or tutor connections. Use the search bar to find users by name or email." },
+];
 
 function getStreakBadgeClass(streak: number): string {
   if (streak >= 100) {
@@ -218,20 +223,10 @@ return (
 
     <div className="flex flex-row justify-between items-center gap-10">
       <div className="flex flex-col space-y-6">
-      <UserGuidePopover
-        id="assignments-page"
-        title="The Assignments Page"
-        content={
-          <div>
-            The Assignments page is a shared workspace for both students and tutors,
-            where teachers assign work and students can track and complete their work.
-          </div>
-        }
-        side="top"
-        align="start"
-      >
-        <h1 className={`text-3xl font-normal ${geist.className}`}>Assignments</h1>
-      </UserGuidePopover>
+      <GuideTour id="assignments-page" steps={assignGuideSteps} />
+      <h1 data-guide="assign-title" className={`text-2xl sm:text-3xl ${geist.className}`}>Assignments</h1>
+
+
         <p className="text-muted-foreground">A shared workspace for Students and Tutors.</p>
         </div>
 
@@ -240,9 +235,11 @@ return (
 
     <div className="flex flex-col lg:flex-row gap-6 mt-10 h-5/6">
 
-      {isTeacher ? <TeacherPage/> : <StudentPage />}
+      <div data-guide="assign-tasks" className="lg:w-1/2">
+        {isTeacher ? <TeacherPage/> : <StudentPage />}
+      </div>
 
-      <Card className="bg-background p-5 h-full lg:w-1/2 flex flex-col min-h-0">
+      <Card data-guide="assign-connections" className="bg-background p-5 h-full lg:w-1/2 flex flex-col min-h-0">
 
   <div className="relative flex flex-col space-y-4 w-full">
 
@@ -411,7 +408,7 @@ return (
               {f.isSubscribed ? (
                 <Badge className="text-white bg-pink-500 border-none">Plus</Badge>
               ) : (
-                <Badge className="text-white bg-foreground border-none">Free</Badge>
+                <Badge className="text-background bg-foreground border-none">Free</Badge>
               )}
 
 

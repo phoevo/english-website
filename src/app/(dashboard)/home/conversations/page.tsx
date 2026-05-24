@@ -12,8 +12,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUserStore } from "@/data/useUserStore";
-import UserGuidePopover from "../../userGuide";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import GuideTour, { type GuideStep } from "../../GuideTour";
+import { CardContent } from "@/components/ui/card";
 import PlacementTest from "../placementTest";
 import {
   AlertDialog,
@@ -26,33 +26,15 @@ import {
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
-type Tips = { title: string; desc: string; imgdark: string; imglight: string; };
-
-const onboarding: Tips[] = [
-  {
-    title: "The Conversations Page",
-    desc: "This is where you can access a plethera of hand crafted conversations that mimic real life scenarios. Start by clicking on one that looks interesting.",
-    imgdark: "/CPSD1.png",
-    imglight: "/CPSL1.png"
-  },
-  {
-    title: "Conversation UI",
-    desc: "Every word in every conversation is interactive",
-    imgdark: "/CPSD2.png",
-    imglight: "/CPSL2.png"
-  },
-   {
-    title: "Word Types and Other Options",
-    desc: "Word Types, font sizes and audio(Plus required) are available on the right and bottom part of the screen.",
-    imgdark: "/CPSD3.png",
-    imglight: "/CPSL3.png"
-  }
+const convoGuideSteps: GuideStep[] = [
+  { target: "convo-title", title: "Conversations", description: "Browse all available conversations organized by level and category." },
+  { target: "convo-filters", title: "Filters", description: "Use these filters to narrow conversations by difficulty level and topic." },
+  { target: "convo-grid", title: "Conversation Cards", description: "Click a conversation to start reading. Every word is interactive, so you can hover for definitions and save them to your dictionary." },
 ];
 
 
@@ -92,53 +74,15 @@ function ConversationsPage() {
   return (
     <div className="flex flex-col m-5 lg:m-10 h-svh space-y-3 lg:space-y-5">
 
-      <div>
-        <UserGuidePopover
-        id="conversation-page"
-        title="The Conversations Page"
-        align="start"
-        content={<div className="space-y-4 md:m-0">
-
-
-    <Carousel className="w-full h-full lg:w-3xl md:max-h-1/2">
-      <CarouselContent>
-        {onboarding.map((tip, index) => (
-          <CarouselItem key={index}>
-            <div className="p-1">
-              <Card className="bg-background border-none shadow-none">
-                <CardHeader>
-                  <CardTitle className="text-base">{tip.title}</CardTitle>
-                  <CardDescription className="text-md">{tip.desc}</CardDescription>
-                  <img
-  src={tip.imgdark}
-  className="mx-auto w-smlg:w-full max-h-[50vh] object-contain rounded-md hidden dark:block border-2"
-/>
-<img
-  src={tip.imglight}
-  className="w-sm lg:w-full max-h-[50vh] object-contain rounded-md block dark:hidden border-2"
-/>
-
-                </CardHeader>
-              </Card>
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
-</div>}>
-
-
-
-      <h1 className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Conversations</h1>
-        </UserGuidePopover>
-        </div>
+      <GuideTour id="conversations-page" steps={convoGuideSteps} />
+      <div data-guide="convo-title">
+        <h1 className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Conversations</h1>
+      </div>
 
 
 
       <p className="text-sm lg:text-base text-muted-foreground">Conversation material from all levels</p>
-      <div className="mt-2 flex flex-row items-center justify-between lg:justify-start gap-5 lg:gap-20">
+      <div data-guide="convo-filters" className="mt-2 flex flex-row items-center justify-between lg:justify-start gap-5 lg:gap-20">
 
         <div className="flex flex-col gap-1">
 
@@ -217,7 +161,7 @@ function ConversationsPage() {
       </div>
 
     <ScrollArea className="h-2/3">
-      <div className="grid p-1 grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div data-guide="convo-grid" className="grid p-1 grid-cols-1 gap-4 m-0 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filtered.map(conv => (
           <ConversationCover
             key={conv.$id}

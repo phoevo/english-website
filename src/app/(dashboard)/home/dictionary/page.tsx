@@ -10,7 +10,7 @@ import { BookMarked, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUserStore } from "@/data/useUserStore";
 import { ScrollArea } from "@/components/ui/scroll-area"
-import UserGuidePopover from "../../userGuide";
+import GuideTour, { type GuideStep } from "../../GuideTour";
 import {
   Accordion,
   AccordionContent,
@@ -22,6 +22,12 @@ import { DM_Sans, Geist } from "next/font/google";
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 const geist = Geist({ subsets: ['latin'] });
+
+const dictGuideSteps: GuideStep[] = [
+  { target: "dict-title", title: "Your Dictionary", description: "Save unfamiliar words from conversations to review later." },
+  { target: "dict-words", title: "Saved Words", description: "All your saved words appear here. Expand for details or remove with the red delete button." },
+  { target: "dict-flashcards", title: "Flashcard Builder", description: "Build custom flashcard decks from your saved words for focused practice." },
+];
 
 
 
@@ -103,20 +109,8 @@ function DictionaryPage() {
 
     <div className="flex flex-col h-1/6">
       <div className="flex flex-col lg:w-2/3 space-y-3 lg:space-y-6 h-full">
-        <UserGuidePopover
-          id="dictionary-page"
-          title="The Dictionary Page"
-          content={
-            <div className="space-y-6">
-              <p>Your personal dictionary. Save words you&apos;re unfamiliar with or want to revise.</p>
-              <p>One part of the screen shows a scrollable list of all your saved words. The other part shows a flashcard builder.</p>
-            </div>
-          }
-          side="top"
-          align="start"
-        >
-          <h1 className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Dictionary</h1>
-        </UserGuidePopover>
+        <GuideTour id="dictionary-page" steps={dictGuideSteps} />
+        <h1 data-guide="dict-title" className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Dictionary</h1>
 
         <div className="text-sm lg:text-base text-muted-foreground">
           Words you&apos;ve saved will appear here, along with word classes and definitions.
@@ -127,7 +121,7 @@ function DictionaryPage() {
 
     <div className="flex flex-col lg:flex-row gap-4 h-full lg:h-5/6">
       {/* Dictionary Word List */}
-      <div className="flex flex-col lg:w-1/2 h-full space-y-5 border-1 rounded-2xl shadow-sm">
+      <div data-guide="dict-words" className="flex flex-col lg:w-1/2 h-full space-y-5 border-1 rounded-2xl shadow-sm">
         {dictionaryWords.length > 0 ? (
           <ScrollArea className="h-full mx-1">
             <div className="grid gap-4 p-3 pb-4 m-1 rounded-md">
@@ -211,7 +205,7 @@ function DictionaryPage() {
         )}
       </div>
 
-      <div className="lg:w-2/3 lg:h-full">
+      <div data-guide="dict-flashcards" className="lg:w-2/3 lg:h-full">
         <WordBoard />
       </div>
     </div>

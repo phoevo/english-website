@@ -8,7 +8,7 @@ import { IterationCcw, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUserStore } from "@/data/useUserStore";
 import { databaseId, databases, usersCollectionId } from "@/data/appwrite";
-import UserGuidePopover from "../../userGuide";
+import GuideTour, { type GuideStep } from "../../GuideTour";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -20,6 +20,11 @@ import { DM_Sans, Geist } from "next/font/google";
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 const geist = Geist({ subsets: ['latin'] });
+
+const recentsGuideSteps: GuideStep[] = [
+  { target: "recents-title", title: "Recent Conversations", description: "Conversations you interact with are saved here for quick access." },
+  { target: "recents-list", title: "Your Recents", description: "Click a conversation to resume reading, or use the red button to remove it from your list." },
+];
 
 
 
@@ -76,41 +81,15 @@ function RecentsPage() {
 
   return (
     <div className="h-full space-y-3 lg:space-y-5 m-5 lg:m-10">
-      <div>
-        <UserGuidePopover
-          id="recents-page"
-          title="The Recents Page"
-          content={
-            <div>
-              <p>
-                Conversations you interact with will be placed here for ease of access later.
-              </p>
-              <div>
-                You can remove any of them from list using the
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  className="cursor-pointer h-5 w-5 self-center mx-2"
-                >
-                  <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
-                    <X className="h-4 w-4" />
-                  </motion.div>
-                </Button>
-                button.
-              </div>
-            </div>
-          }
-          side="top"
-          align="start"
-          >
+      <GuideTour id="recents-page" steps={recentsGuideSteps} />
+      <div data-guide="recents-title">
           <h1 className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Recent Conversations</h1>
-          </UserGuidePopover>
-        </div>
+      </div>
 
           <p className="text-sm lg:text-base text-muted-foreground">Conversations you&apos;ve interacted with. For quick access.</p>
 
 
-    <div className="mt-9">
+    <div data-guide="recents-list" className="mt-9">
       {recentConversations.length > 0 ? (
         <div className="space-y-3">
           <AnimatePresence>

@@ -3,7 +3,7 @@
 import { useUserStore } from "@/data/useUserStore";
 import Link from "next/link";
 // import DailyTasks from "./dailyTasks";
-import UserGuidePopover from "../userGuide";
+import GuideTour, { type GuideStep } from "../GuideTour";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Card,
@@ -16,22 +16,19 @@ import {
 import { Button } from "@/components/ui/button";
 import News from "./News";
 import { DM_Sans, Geist } from "next/font/google";
-import { ArrowLeft, Calendar, PartyPopper, Sword, Swords } from "lucide-react";
+import { Calendar, Sword, Swords } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 const geist = Geist({ subsets: ['latin'] });
 
+
+const homeGuideSteps: GuideStep[] = [
+  { target: "home-welcome", title: "Welcome", description: "This is your home page. Here you'll find your most recent conversation, saved vocabulary, and news." },
+  { target: "home-recent", title: "Most Recent Conversation", description: "Your most recently viewed conversation appears here for quick access." },
+  { target: "home-news", title: "News & Updates", description: "Stay up to date with the latest news and updates from Synomilo." },
+];
 
 function getLastActive(value: unknown): string | null {
   if (value && typeof value === 'object' && 'lastActive' in value) {
@@ -40,29 +37,6 @@ function getLastActive(value: unknown): string | null {
   }
   return null;
 }
-
-type Tips = { title: string; desc: string; imgdark: string; imglight: string; };
-
-const onboarding: Tips[] = [
-  {
-    title: "The Home Page",
-    desc: "This is where you can find your most recent conversation and vocabulary, plus News and Updates.",
-    imgdark: "/HPSD1.png",
-    imglight: "/HPSL1.png"
-  },
-  {
-    title: "The Sidebar",
-    desc: "Use the sidebar to navigate between Conversations, Assignments, Dictionary, and more.",
-    imgdark: "/HPSD2.png",
-    imglight: "/HPSL2.png"
-  },
-   {
-    title: "Profile and other settings",
-    desc: "Your profile and other settings can be accessed by clicking on your account on the top left.",
-    imgdark: "/HPSD3.png",
-    imglight: "/HPSL3.png"
-  }
-];
 
 function Page() {
   const { user, recentConversations, loading, dictionaryWords, friends, isTeacher } = useUserStore();
@@ -120,57 +94,11 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
   return (
     <div className="w-full px-4 sm:px-6 lg:px-10">
       <div className="flex flex-col gap-3 mt-10">
-        <div className="flex flex-col w-full md:w-1/3 space-y-6 h-full">
-            <UserGuidePopover
-             id="home-page-main"
-             title="The Home Page"
-             content=
-             {<div className="space-y-4">
-
-              {user && (
-                <p className="flex md:flex-row gap-1 text-2xl text-foreground">Hey {user.name}, thanks for signing up!</p>
-              )}
-
-    <Carousel className="w-3xl max-h-1/2">
-      <CarouselContent>
-        {onboarding.map((tip, index) => (
-          <CarouselItem key={index}>
-            <div className="p-1">
-              <Card className="bg-background border-none shadow-none">
-                <CardHeader>
-                  <CardTitle className="text-base">{tip.title}</CardTitle>
-                  <CardDescription className="text-md">{tip.desc}</CardDescription>
-                  <img
-  src={tip.imgdark}
-  className="mx-auto w-full max-h-[50vh] zoom-1.1 object-contain rounded-md hidden dark:block border-2"
-/>
-<img
-  src={tip.imglight}
-  className="mx-auto w-full max-h-[50vh] object-contain rounded-md block dark:hidden border-2"
-/>
-
-                </CardHeader>
-              </Card>
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
-
-
-             </div>
-
-             }
-             side="top"
-             align="start"
-            >
+        <GuideTour id="home-page" steps={homeGuideSteps} />
+        <div data-guide="home-welcome" className="flex flex-col w-full md:w-1/3 space-y-6 h-full">
               {user ? (
                  <h1 className={`text-2xl sm:text-3xl ${geist.className}`}>Welcome back, {user.name}</h1>
               ): <h1 className={`text-2xl sm:text-3xl ${geist.className}`}>Welcome, New User</h1>}
-
-            </UserGuidePopover>
 
             {!user ? (
               <p>
@@ -186,7 +114,7 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
           <div className="flex flex-col w-full lg:w-2/3">
           {user && (
             <div className="flex flex-col space-y-4">
-              <Card className="bg-background">
+              <Card data-guide="home-recent" className="bg-background">
               <CardHeader>
                 <CardTitle>Most recent conversation</CardTitle>
               </CardHeader>
@@ -325,7 +253,7 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
         )}
       </div>
 
-      <div className="w-full lg:w-1/3 mt-6 lg:mt-0">
+      <div data-guide="home-news" className="w-full lg:w-1/3 mt-6 lg:mt-0">
           <News />
       </div>
   </div>

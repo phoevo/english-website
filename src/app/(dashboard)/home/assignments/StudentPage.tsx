@@ -144,7 +144,7 @@ function StudentPage() {
   };
 
   return (
-    <Card className="bg-background h-full w-full lg:w-1/2 flex flex-col">
+    <Card className="bg-background h-full w-full lg:w-full flex flex-col">
       <CardHeader>
         <CardTitle>My Assigned Tasks</CardTitle>
         <CardDescription>

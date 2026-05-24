@@ -109,7 +109,7 @@ function TeacherPage() {
   }, [selectedStudentId]);
 
   return (
-    <Card className="flex flex-col h-full lg:w-1/2 h-full bg-background">
+    <Card className="flex flex-col h-full lg:w-full h-full bg-background">
       <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
 
         <div className="flex flex-col gap-4">

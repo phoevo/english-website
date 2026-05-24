@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { BadgePlus, Bug, Lightbulb, MessageCircle, Check } from "lucide-react";
 import { useUserStore } from "@/data/useUserStore";
 import { databaseId, databases, feedbackCollectionId } from "@/data/appwrite";
-import UserGuidePopover from "../../userGuide";
+import GuideTour, { type GuideStep } from "../../GuideTour";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +24,11 @@ import { ID } from "appwrite";
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 const geist = Geist({ subsets: ['latin'] });
+
+const feedbackGuideSteps: GuideStep[] = [
+  { target: "feedback-title", title: "Feedback", description: "Help us improve Synomilo by sharing what you liked, disliked, or think is missing." },
+  { target: "feedback-form", title: "Send Feedback", description: "Pick a tag, write your feedback, and optionally leave your name and email." },
+];
 
 
 
@@ -111,19 +116,8 @@ function FeedbackPage() {
   return (
     <div className="h-full w-full space-y-3 lg:space-y-5 m-5 lg:m-10">
       <div>
-        <UserGuidePopover
-          id="feedback-page"
-          title="Feedback Page"
-          content={
-          <div>
-              <p>As we recently launched, we are practically begging for feedback. Please take the time to write about the things you liked, disliked or are missing.</p>
-          </div>
-          }
-          side="top"
-          align="start"
-          >
-          <h1 className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Feedback</h1>
-          </UserGuidePopover>
+        <GuideTour id="feedback-page" steps={feedbackGuideSteps} />
+        <h1 data-guide="feedback-title" className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Feedback</h1>
         </div>
 
           <p className="text-sm lg:text-base text-muted-foreground">Feedback from our users is crucial at this stage of launch.
@@ -132,7 +126,7 @@ function FeedbackPage() {
       <div className="flex flex-col lg:flex-row w-full gap-10">
 
       {/* Feedback form */}
-      <Card className="bg-background w-full lg:w-1/2">
+      <Card data-guide="feedback-form" className="bg-background w-full lg:w-1/2">
         <CardHeader>
           <CardTitle>Send feedback</CardTitle>
           <CardDescription>
