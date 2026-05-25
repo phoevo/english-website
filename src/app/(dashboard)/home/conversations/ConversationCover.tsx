@@ -90,9 +90,9 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
       transition={{ duration: 0.1 }}
        onClick={() => {handleClick();}}
     >
-    <Card className="w-full lg:w-full lg:h-50 bg-background cursor-pointer">
+    <Card className="w-full lg:w-full lg:h-60 bg-background cursor-pointer">
       <CardHeader>
-        <CardTitle className="flex flex-row justify-between items-center border-b py-1">
+        <CardTitle className="flex flex-row justify-between items-center border-b">
           <div className="flex flex-row items-center">
             {conversationTitle}
             {isPro? (<Dot className="text-pink-500"/>) : (<Dot className="text-foreground"/>)}
