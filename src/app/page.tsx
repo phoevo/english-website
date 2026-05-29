@@ -273,13 +273,13 @@ return (
         <div className="w-screen gap-10 flex flex-col justify-center items-center border-b bg-landing-bg">
 
        <motion.div
-        className="sticky top-5 z-30 mt-20 p-3 lg:p-5 bg-card border-1 rounded-full shadow-lg"
+        className="sticky top-5 z-30 mt-20 p-3 lg:p-4 bg-card border-1 rounded-full shadow-lg"
         initial={{ opacity: 0, y: 80 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true}}
         transition={{duration: 0.4, delay:1, ease: "easeInOut"}}>
 
-          <div className="flex flex-row text-xl lg:text-2xl font-semibold gap-2 z-20 items-center">
+          <div className="flex flex-row text-xl lg:text-xl font-semibold gap-2 z-20 items-center">
           Here&apos;s what&apos;s offered <span><ArrowDown className= "text-pink-500" size={30}/></span>
           </div>
       </motion.div>
@@ -299,7 +299,7 @@ return (
         Tutors
         </motion.div>
 
-         <motion.div className="flex flex-col w-full lg:w-2/3 space-y-6 lg:border-1 p-10 rounded-md shadow-md"
+         <motion.div className="w-full lg:w-2/3 space-y-8 border-none lg:border lg:border-border/50 p-6 lg:p-10 rounded-2xl lg:shadow-lg bg-landing-bg lg:bg-background/60 backdrop-blur-sm"
           initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -397,7 +397,7 @@ return (
         </div>
 
         <motion.div
-          className={`w-full lg:w-2/3 m-10 space-y-6 lg:border-1 p-10 rounded-md shadow-md`}
+          className={`w-full lg:w-2/3 mx-auto space-y-8 lg:border lg:border-border/50 p-6 lg:p-10 rounded-2xl shadow-lg bg-landing-bg lg:bg-background/60 backdrop-blur-sm`}
           initial={{ opacity: 0, y: 80 }}
           whileInView={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 200 }}
@@ -417,7 +417,7 @@ return (
           </div>
 
           <div className="flex justify-end">
-          <p className="hidden lg:text-xl font-semibold">Try it, highlight word types for easy identification</p>
+          <p className="hidden lg:block lg:text-xl font-semibold">Try it, highlight word types for easy identification</p>
           <ArrowDown size={30} className="hidden lg:block text-pink-500"/>
           </div>
 
@@ -430,16 +430,16 @@ return (
 
           </div>
 
-        <div className="flex flex-col w-full items-center">
-          <video
-              className="w-full p-2 md:p-0 md:w-3xl h-full rounded-lg mt-10 object-cover dark:opacity-75"
-              src="/conversationDemo.mp4"
-              autoPlay
-              muted
-              loop
-              playsInline
-            />
-            </div>
+        <div className="relative overflow-hidden rounded-xl border border-border/50">
+    <video
+      className="relative overflow-hidden rounded-xl border border-border/50"
+      src="/conversationDemo.mp4"
+      autoPlay
+      loop
+      muted
+      playsInline
+    />
+  </div>
 
         </motion.div>
 
@@ -447,7 +447,7 @@ return (
 
 
         <motion.div
-          className="flex flex-col w-full lg:w-1/2 space-y-6 lg:border-1 p-10 rounded-md lg:shadow-md"
+          className="flex flex-col w-full lg:w-1/2 space-y-6 p-10 rounded-md lg:shadow-md"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
@@ -494,27 +494,43 @@ return (
         </motion.div>
 
         <motion.div
-          className={`flex flex-row gap-10 items-center justify-center w-full h-auto ${geist.className}`}
-          initial={{ opacity: 0, y: 200 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 80 }}
-          viewport={{ once: true, margin: "0px" }}
-          transition={transitionImage}
-        >
-          <div className="flex flex-col lg:flex-row items-center justify-center gap-10">
-            <TestDictionary />
-            <TestWordBoard/>
-          </div>
-        </motion.div>
+  className={`w-full lg:w-2/3 space-y-8 lg:border lg:border-border/50 p-6 lg:p-10 rounded-2xl shadow-lg bg-landing-bg lg:bg-background/60 backdrop-blur-sm`}
+  initial={{ opacity: 0, y: 80 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  exit={{ opacity: 0, y: 40 }}
+  viewport={{ once: true }}
+  transition={transitionImage}
+>
+  {/* Header */}
+  <div className="flex flex-col space-y-4 text-left">
+    <h1 className="text-2xl lg:text-4xl font-normal">
+      Dictionary & Flashcard Builder
+    </h1>
 
-        <video
-          className="w-full p-2 md:p-0 md:w-3xl h-full rounded-lg object-cover dark:opacity-75"
-          src="/dictionaryDemo.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
+    <p className="text-muted-foreground text-base lg:text-lg">
+      Words saved from the conversation you were just reading will appear here, along with their definitions, word type and an exampe sentence.
+    </p>
+  </div>
+
+  {/* Interactive Preview */}
+  <div className={`flex flex-col lg:flex-row items-center justify-center gap-8 ${geist.className}`}>
+    <TestDictionary />
+    <TestWordBoard />
+  </div>
+
+  {/* Demo Video */}
+  <div className="relative overflow-hidden rounded-xl border border-border/50">
+    <video
+      className="relative overflow-hidden rounded-xl border border-border/50"
+      src="/dictionaryDemo.mp4"
+      autoPlay
+      loop
+      muted
+      playsInline
+    />
+  </div>
+</motion.div>
+
 
         <div className="hidden lg:block z-20 sticky top-30 left-43 text lg:left-0 lg:top-62 self-start m-4 mb-23 lg:text-2xl font-semibold">
         <span className="px-1 text-pink-500 text">

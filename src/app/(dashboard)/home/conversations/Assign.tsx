@@ -28,7 +28,7 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
   const canAssign = isTeacher && isSubscribed;
   const studentFriends = friends.filter((f) => !f.isTeacher);
   const [loadingId, setLoadingId] = useState<string | null>(null);
-  const [assignedStudentIds, setAssignedStudentIds] = useState<string[]>([]);
+  const [assignmentStatuses, setAssignmentStatuses] = useState<Record<string, "Pending" | "Completed">>({});
 
   // Fetch assigned students when popover opens
   useEffect(() => {
@@ -40,8 +40,11 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
           assignmentsId,
           [Query.equal("conversationId", conversationId)]
         );
-        const ids = res.documents.map((doc) => doc.studentId);
-        setAssignedStudentIds(ids);
+        const statuses: Record<string, "Pending" | "Completed"> = {};
+        for (const doc of res.documents) {
+          statuses[doc.studentId] = doc.status;
+        }
+        setAssignmentStatuses(statuses);
       } catch (err) {
         console.error("Failed to fetch assigned students:", err);
       }
@@ -57,7 +60,7 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
       return;
     }
     if (!isTeacher) {
-      toast.error("Only tutors can assign.");
+      toast.error("Only tutors can assign. Wait, how can you see this?");
       return;
     }
     if (!isSubscribed) {
@@ -75,9 +78,15 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
       ]
     );
 
-    if (response.documents.length > 0) {
+    const existing = response.documents[0];
+    if (existing && existing.status === "Pending") {
       toast.info("This conversation is already assigned to the student.");
       return;
+    }
+
+    // Delete completed assignment before re-assigning
+    if (existing && existing.status === "Completed") {
+      await databases.deleteDocument(databaseId, assignmentsId, existing.$id);
     }
 
     setLoadingId(studentId);
@@ -90,7 +99,7 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
       });
 
       toast.success("Assignment sent!");
-      setAssignedStudentIds((prev) => [...prev, studentId]);
+      setAssignmentStatuses((prev) => ({ ...prev, [studentId]: "Pending" }));
       setLoadingId(null);
       setOpen(false);
     } catch (error) {
@@ -124,7 +133,9 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
               </p>
             ) : (
               studentFriends.map((student) => {
-                const isAssigned = assignedStudentIds.includes(student.$id);
+                const status = assignmentStatuses[student.$id];
+                const isPending = status === "Pending";
+                const isCompleted = status === "Completed";
                 return (
                   <div
                     key={student.$id}
@@ -140,7 +151,7 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
                       className="text-xs cursor-pointer"
                       onClick={(e) => {
                         e.stopPropagation();
-                        if (!canAssign || loadingId || isAssigned) return;
+                        if (!canAssign || loadingId || isPending) return;
                         handleAssign(student.$id);
                       }}
                     >
@@ -148,10 +159,14 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
                         <div className="flex flex-row gap-1 items-center">
                           Assigning...
                         </div>
-                      ) : isAssigned ? (
+                      ) : isPending ? (
                         <div className="flex flex-row gap-1 items-center">
-                          <Check size={13} className="" />
+                          <Check size={13} />
                           Assigned
+                        </div>
+                      ) : isCompleted ? (
+                        <div className="flex flex-row gap-1 items-center">
+                          <span className="text-green-500">Complete.</span> Reassign?
                         </div>
                       ) : (
                         <div className="flex flex-row gap-1 items-center">
@@ -162,8 +177,8 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
                     </Badge>
                   </div>
                 );
-              })
-            )}
+              }))
+            }
           </div>
         )}
       </PopoverContent>

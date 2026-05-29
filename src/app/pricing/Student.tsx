@@ -78,11 +78,10 @@ function Student() {
             </CardHeader>
             <CardContent className="w-full">
 
-      <div className="flex flex-col rounded-lg w-full h-auto">
-      <CardContent>
-      <div className='flex flex-col md:flex-col gap-5 w-full'>
+     <motion.div className="flex flex-col rounded-lg w-full h-auto">
 
-     <div className='flex flex-col items-center lg:flex-row gap-5'>
+<div className='flex flex-col lg:flex-row gap-5'>
+
   <div className='flex flex-col items-center justify-between p-2 bg-muted rounded-xl h-100 shadow-md w-xs md:w-md text-muted-foreground'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10'>Free</Badge>
@@ -126,7 +125,10 @@ function Student() {
 <div className='flex flex-col justify-between p-2 border-1 border-pink-500 rounded-xl shadow-xs h-100 w-xs md:w-md'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10 bg-pink-500 text-white'>Plus</Badge>
-      <div className='flex justify-center items-center'>
+      <motion.div className='flex justify-center items-center'
+      initial={{ opacity: 0, y: 0 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0 }}>
       <ul className='text-base text-muted-foreground  list-disc marker:text-pink-500 space-y-1 w-full'>
         <li>Everything in Free</li>
         <li>All Conversations</li>
@@ -134,7 +136,7 @@ function Student() {
         <li>Color customization</li>
         <li>Challenges</li>
       </ul>
-      </div>
+      </motion.div>
 
     </div>
 
@@ -232,16 +234,15 @@ className="relative flex flex-col justify-between p-4 border rounded-xl w-full l
   </div>
 
 
-      </div>
-      </div>
+          </div>
 
+    </motion.div>
     </CardContent>
-  </div>
 
-            </CardContent>
+
           </Card>
 
-    </div>
+  </div>
   )
 }
 

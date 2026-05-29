@@ -160,9 +160,18 @@ export default function TestWorkflow() {
       <section className="flex flex-col gap-4">
         <div>
           <h3 className="text-2xl lg:text-3xl font-normal">Assigning</h3>
-          <p className="flex flex-row items-center gap-1 text-md text-muted-foreground mt-1">
-            The tutor assigns a conversation to the student using the <Badge className={`${geist.className}`}> <Send/> Assign</Badge> button
-          </p>
+          <p className="text-md text-muted-foreground mt-1">
+          The tutor assigns a conversation to the student using the{" "}
+
+          <Badge
+            className={`inline-flex items-center gap-1 align-middle ${geist.className}`}
+          >
+            <Send size={12} />
+            Assign
+          </Badge>
+
+          {" "}button
+        </p>
         </div>
 
         <div className={`flex flex-col lg:flex-row gap-4 ${geist.className}`}>

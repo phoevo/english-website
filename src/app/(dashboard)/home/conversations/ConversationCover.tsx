@@ -96,7 +96,6 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
           <div className="flex flex-row items-center">
             {conversationTitle}
             {isPro? (<Dot className="text-pink-500"/>) : (<Dot className="text-foreground"/>)}
-            {isLoading && <LoaderCircle className="animate-spin" size={15}/>}
           </div>
 
         <div className="flex flex-col gap-1">
@@ -114,12 +113,13 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
                 }
               />}
 
-        {isComplete && <Badge variant="outline" className="bg-green-500 max-h-6">Complete</Badge>}
+        {isComplete && <Badge variant="default" className="bg-green-500 max-h-6">Complete</Badge>}
         </div>
         </CardTitle>
         <div className="flex flex-row items-center justify-start gap-2 ">
           <p className="text-sm">{level}</p>
           <p className="text-sm text-muted-foreground">{category}</p>
+          {isLoading && <LoaderCircle className="animate-spin" size={15}/>}
         </div>
 
 

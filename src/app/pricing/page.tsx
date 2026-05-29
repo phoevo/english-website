@@ -97,6 +97,28 @@ type FAQItem = {
 
 const faqs: FAQItem[] = [
   {
+    question: "Why shouldn't a Tutor just screenshare if they have access to all the conversations anyway?",
+    answer: (
+      <>
+      They absolutely can, many Tutors may prefer that setup.
+
+      <br /><br />
+
+      Assigning is simply a more structured option. It lets Students interact with conversations on their own time, while Tutors can keep track of progress and completion in one place.
+
+      <br /><br />
+
+      It also means Free Students can access Plus features inside assigned conversations without needing their own subscription.
+    </>
+    ),
+  },
+  {
+    question: "So if a subscribed Tutor has 30 Free Students, all 30 get assigned Plus conversations?",
+    answer: (
+      <p>Yup.</p>
+    ),
+  },
+  {
     question: "What is the difference between Free and Plus?",
     answer: (
       <>
@@ -136,12 +158,7 @@ const faqs: FAQItem[] = [
       </>
     ),
   },
-  {
-    question: "So if a subscribed Tutor has 30 Free Students, all 30 get assigned Plus conversations?",
-    answer: (
-      <p>Yup.</p>
-    ),
-  },
+
   {
     question: "What happens if both Tutor and Student are Free?",
     answer: (

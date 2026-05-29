@@ -120,7 +120,10 @@ function Tutor() {
 <div className='flex flex-col justify-between bg-background p-2 border-pink-500 rounded-xl shadow-xs h-100 w-xs md:w-md border-1'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10 bg-pink-500 text-white'>Plus</Badge>
-      <div className='flex justify-center items-center'>
+      <motion.div className='flex justify-center items-center'
+      initial={{ opacity: 0, y: 0 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0 }}>
       <ul className='text-base text-muted-foreground list-disc marker:text-pink-500 px-10 space-y-1 w-full'>
         <li>All conversations A1-C2 in read-only</li>
         <li>Assignments page: Track and manage your students</li>
@@ -128,7 +131,7 @@ function Tutor() {
       </ul>
 
 
-      </div>
+      </motion.div>
 
 
     </div>

@@ -34,7 +34,7 @@ const dmSans = DM_Sans({ subsets: ['latin'] });
 const convoGuideSteps: GuideStep[] = [
   { target: "convo-title", title: "Conversations", description: "Browse all available conversations organized by level and category." },
   { target: "convo-filters", title: "Filters", description: "Use these filters to narrow conversations by difficulty level and topic." },
-  { target: "convo-grid", title: "Conversation Cards", description: "Click a conversation to start reading. Every word is interactive, so you can hover for definitions and save them to your dictionary." },
+  { target: "convo-grid", title: "Conversation Cards", description: "Click a conversation to start reading. The dot next to the title indicates a free tier or plus tier converesation. Every word is interactive, so you can hover for definitions and save them to your dictionary." },
 ];
 
 

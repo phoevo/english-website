@@ -35,6 +35,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
+import { Separator } from "@/components/ui/separator";
 
 
 
@@ -349,9 +350,36 @@ React.useEffect(() => {
 
     <div className="grid grid-rows-[auto_1fr] h-full w-full bg-background text-foreground rounded-lg">
 
-  <div className="border-b px-10 py-4 font-light text-2xl">
-    {conversation.title}
+  <div className="border-b px-2 lg:px-10 py-4">
+  <div className="flex flex-col xl:flex-row xl:items-center gap-1 lg:gap-3">
+    <div className="flex flex-row items-center gap-1 md:gap-3">
+    <h1 className="text-xl md:text-2xl">
+      {conversation.title}
+    </h1>
+
+    <Badge variant={"secondary"}>{conversation.level}</Badge>
+    <Badge variant={"outline"}>{conversation.category}</Badge>
+    </div>
+
+    <div className="flex flex-row items-center gap-1">
+    {assignedForThisConvo && (
+      <Badge
+      variant="secondary"
+      className="bg-pink-100 text-pink-700 border-pink-200"
+      >
+        Assigned
+      </Badge>
+    )}
+
+  {assignedForThisConvo && (
+    <p className="text-sm text-muted-foreground">
+      Plus features enabled for this conversation
+    </p>
+  )}
   </div>
+
+  </div>
+</div>
 
 
   <div className="grid grid-cols-1 lg:grid-cols-[6fr_1fr] overflow-hidden h-full">
@@ -431,7 +459,7 @@ React.useEffect(() => {
           </div>
         </div>
 
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" collapsible defaultValue="item-1" className="w-full">
           <AccordionItem value="item-1">
             <AccordionTrigger className="p-0 font-normal text-sm cursor-pointer">Word Classes</AccordionTrigger>
             <AccordionContent>
@@ -487,7 +515,7 @@ React.useEffect(() => {
         <span className="text-zinc-500">Subscription or assignment required</span>
     )
   ) : (
-      <span className="text-zinc-500">No audio found</span>
+      <span className="text-zinc-500">No audio found? <Link href="/home/feedback" className="underline">Let us know</Link></span>
   )}
 
 </div>

@@ -95,7 +95,7 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
     <div className="w-full px-4 sm:px-6 lg:px-10">
       <div className="flex flex-col gap-3 mt-10">
         <GuideTour id="home-page" steps={homeGuideSteps} />
-        <div data-guide="home-welcome" className="flex flex-col w-full md:w-1/3 space-y-6 h-full">
+        <div data-guide="home-welcome" className="flex flex-col w-full md:w-full space-y-6 h-full">
               {user ? (
                  <h1 className={`text-2xl sm:text-3xl ${geist.className}`}>Welcome back, {user.name}</h1>
               ): <h1 className={`text-2xl sm:text-3xl ${geist.className}`}>Welcome, New User</h1>}
@@ -162,7 +162,7 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
                           Math.floor((Date.now() - lastActiveDate.getTime()) / (1000 * 60 * 60 * 24)) : null;
 
                         return (
-                          <li key={index} className="flex justify-between items-center p-3 rounded-lg border hover:bg-muted/50 transition-colors">
+                          <li key={index} className="flex justify-between items-center p-2 rounded-lg border hover:bg-muted/50 transition-colors">
                             <div className="flex flex-col gap-1">
                               <div>
                                 <Badge variant={student.isTeacher ? "default" : "secondary"}>
