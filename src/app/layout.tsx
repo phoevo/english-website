@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
+import CookieConsent from "@/components/CookieConsent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="min-h-screen flex flex-col">
             <div className="bg-background">{children}</div>
             <Toaster richColors position="bottom-right" />
+            <CookieConsent />
           </div>
         </ThemeProvider>
       </body>

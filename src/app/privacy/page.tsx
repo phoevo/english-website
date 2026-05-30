@@ -9,7 +9,7 @@ const dmSans = DM_Sans({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "We only collect a username and email. We do not use cookies or analytics. Local storage is used only for UI preferences.",
+    "We only collect a username and email. We do use cookies for analytics. Local storage is used only for UI preferences.",
 };
 
 export default function PrivacyPage() {
@@ -27,8 +27,8 @@ export default function PrivacyPage() {
         <p className="mb-6">
           This policy describes how {companyName} (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) handles
           your information. Our service is intentionally minimal: we only ask
-          for a username and an email address to operate your account. We do not
-          use cookies, and we do not track clicks or page navigations. We use
+          for a username and an email address to operate your account. We
+          use cookies to track visits to the website. We use
           local storage solely to remember non-sensitive UI preferences (like
           whether you closed a popup).
         </p>
@@ -68,7 +68,7 @@ export default function PrivacyPage() {
         <section className="mb-6">
           <h2 className="text-2xl font-semibold mb-2">Cookies and local storage</h2>
           <p className="mb-2">
-            <strong>Cookies:</strong> We do not use cookies.
+            <strong>Cookies:</strong> We use cookies to track user counts, represented by numbers only.
           </p>
           <p>
             <strong>Local storage:</strong> We use local storage only for

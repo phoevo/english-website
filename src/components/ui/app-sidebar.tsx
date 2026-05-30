@@ -247,6 +247,7 @@ export function AppSidebar() {
                     <Link href="/home/assignments" className="cursor-pointer">
                       <ClipboardCheck />
                       <span>Assignments</span>
+                      <Badge variant={"outline"} className="items-right">New</Badge>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
