@@ -27,7 +27,10 @@ interface User {
 interface Conversation {
   $id: string;
   title: string;
+  description: string;
   level?: string;
+  category: string;
+  isPro?: boolean;
 }
 
 interface UserState {
@@ -178,7 +181,10 @@ fetchUser: async () => {
           conversations.push({
             $id: convo.$id,
             title: convo.title,
+            description: convo.description,
             level: convo.level,
+            category: convo.category,
+            isPro: convo.isPro,
           });
           validConversationIds.push(convo.$id);
         } else {

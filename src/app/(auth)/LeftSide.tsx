@@ -152,7 +152,6 @@ export default function LeftSide() {
                 width: `${rect.w}px`,
                 height: `${rect.h}px`,
                 opacity: 0,
-                // initialize CSS variables for motion composition
                 "--wigX": "0px",
                 "--wigY": "0px",
                 "--repelX": "0px",

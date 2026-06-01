@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/PasswordInput'
 import { account } from '@/data/appwrite'
 import { ensureUserDocument } from '@/data/getData'
-import type { OAuthProvider } from 'appwrite'
+import { OAuthProvider } from 'appwrite'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 const formSchema = z.object({
@@ -33,13 +33,12 @@ export default function Login() {
     },
   })
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = () => {
     try {
-      // This opens a new window for Google OAuth
-      await account.createOAuth2Session(
-        'google' as OAuthProvider,
-        `${window.location.origin}/home`, // success redirect
-        `${window.location.origin}/login`         // failure redirect
+      account.createOAuth2Token(
+        OAuthProvider.Google,
+        `${window.location.origin}/oauth-callback?redirect=/home`,
+        `${window.location.origin}/login`
       );
     } catch (error: unknown) {
       console.error('Google login error:', error)

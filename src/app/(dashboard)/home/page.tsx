@@ -124,10 +124,30 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
                   href={`home/conversations/${conversation.$id}`}
                   className="block border p-4 rounded-lg shadow-sm hover:bg-primary-foreground transition"
                 >
-                  <h2 className="text-lg font-light">Resume: {conversation.title}</h2>
-                  {conversation.level && (
-                    <p className="text-sm text-muted-foreground">Level: {conversation.level}</p>
-                  )}
+                  <div className="flex gap-3 flex-1">
+
+                      <div className="flex flex-col flex-1">
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-semibold text-base">
+                            {conversation.title}
+                          </h4>
+                        </div>
+
+                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                          {conversation.description}
+                        </p>
+
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          <Badge variant="secondary">
+                            {conversation.level}
+                          </Badge>
+
+                          <Badge variant="outline">
+                            {conversation.category}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
                 </Link>
               ) : (
                 <p className="text-muted-foreground">No recent conversations to continue.</p>

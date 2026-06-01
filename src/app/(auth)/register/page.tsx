@@ -67,11 +67,11 @@ export default function Register() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleGoogleSignup = async () => {
+  const handleGoogleSignup = () => {
     try {
-      await account.createOAuth2Session(
+      account.createOAuth2Token(
         OAuthProvider.Google,
-        `${window.location.origin}/onboarding`,
+        `${window.location.origin}/oauth-callback?redirect=/onboarding`,
         `${window.location.origin}/register`
       );
     } catch (e: unknown) {
