@@ -15,7 +15,7 @@ import {
   assignmentsId,
   conversationsCollectionId,
 } from "@/data/appwrite";
-import { Query } from "appwrite";
+import { Query, Models } from "appwrite";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -32,12 +32,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { motion } from "motion/react";
 import { Geist } from "next/font/google";
 
 const geist = Geist({ subsets: ['latin'] });
 
+type Assignment = Models.Document & {
+  conversationId: string;
+  status: "Pending" | "Completed";
+};
+
+type Conversation = Models.Document & {
+  title?: string;
+  level?: string;
+  category?: string;
+  description?: string;
+  isPro?: boolean;
+};
 
 type AssignmentWithConversation = {
   $id: string;
@@ -45,23 +56,20 @@ type AssignmentWithConversation = {
   status: "Pending" | "Completed";
   title: string;
   level: string;
+  category: string;
+  description: string;
   isPro: boolean;
-  category?: string;
-  description?: string;
-  [key: string]: unknown;
 };
 
 function StudentPage() {
   const { user } = useUserStore();
-  const [assignments, setAssignments] = useState<
-    AssignmentWithConversation[]
-  >([]);
-  const [loading, setLoading] = useState(true);
-
   const router = useRouter();
 
+  const [assignments, setAssignments] = useState<AssignmentWithConversation[]>([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    async function fetchAssignmentsWithConversations() {
+    async function fetchData() {
       if (!user) return;
 
       try {
@@ -74,15 +82,12 @@ function StudentPage() {
           ]
         );
 
-        const assignments = assignmentRes.documents;
+        const assignments = assignmentRes.documents as Assignment[];
 
-        const conversationIds = assignments.map(
-          (a) => a.conversationId
-        );
+        const conversationIds = assignments.map((a) => a.conversationId);
 
         if (conversationIds.length === 0) {
           setAssignments([]);
-          setLoading(false);
           return;
         }
 
@@ -92,28 +97,29 @@ function StudentPage() {
           [Query.equal("$id", conversationIds)]
         );
 
-        const conversations = conversationRes.documents;
+        const conversations = conversationRes.documents as Conversation[];
 
-        const enrichedAssignments = assignments.map(
-          (assignment) => {
-            const convo = conversations.find(
-              (c) => c.$id === assignment.conversationId
-            );
+        const merged: AssignmentWithConversation[] = assignments.map((a) => {
+          const convo = conversations.find(
+            (c) => c.$id === a.conversationId
+          );
 
-            return {
-              ...assignment,
-              title: convo?.title || "Untitled",
-              level: convo?.level || "Unknown",
-              category: convo?.category || "General",
-              description:
-                convo?.description ||
-                "Continue practicing your conversation skills.",
-              isPro: convo?.isPro ?? false,
-            };
-          }
-        );
+          return {
+            $id: a.$id,
+            conversationId: a.conversationId,
+            status: a.status,
 
-        setAssignments(enrichedAssignments);
+            title: convo?.title ?? "Untitled",
+            level: convo?.level ?? "Unknown",
+            category: convo?.category ?? "General",
+            description:
+              convo?.description ??
+              "Continue practicing your conversation skills.",
+            isPro: convo?.isPro ?? false,
+          };
+        });
+
+        setAssignments(merged);
       } catch (err) {
         console.error("Failed to load assignments:", err);
       } finally {
@@ -121,35 +127,29 @@ function StudentPage() {
       }
     }
 
-    fetchAssignmentsWithConversations();
+    fetchData();
   }, [user]);
 
-  const handleMarkComplete = async (
-    assignmentId: string
-  ) => {
+  const handleMarkComplete = async (id: string) => {
     try {
       await databases.updateDocument(
         databaseId,
         assignmentsId,
-        assignmentId,
+        id,
         { status: "Completed" }
       );
 
-      setAssignments((prev) =>
-        prev.filter((a) => a.$id !== assignmentId)
-      );
+      setAssignments((prev) => prev.filter((a) => a.$id !== id));
     } catch (err) {
-      console.error("Failed to update status:", err);
+      console.error(err);
     }
   };
 
   return (
-    <Card className="bg-background h-full w-full lg:w-full flex flex-col">
+    <Card className="bg-background h-full flex flex-col">
       <CardHeader>
         <CardTitle>My Assigned Tasks</CardTitle>
-        <CardDescription>
-          Your tasks assigned by your tutor
-        </CardDescription>
+        <CardDescription>Your tasks assigned by your tutor</CardDescription>
       </CardHeader>
 
       <CardContent className="flex-1 min-h-0 p-0">
@@ -157,104 +157,68 @@ function StudentPage() {
           {loading ? (
             <p>Loading...</p>
           ) : assignments.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <BookOpen
-                className="text-muted-foreground mb-3"
-                size={32}
-              />
-
-              <p className="font-medium">
-                No assignments yet
-              </p>
-
-              <p className="text-sm text-muted-foreground">
-                Your tutor assigned conversations will
-                appear here.
-              </p>
-            </div>
+            <p className="text-muted-foreground text-center py-10">
+              No assignments yet
+            </p>
           ) : (
             <div className="space-y-4 pb-5">
               {assignments.map((a) => (
                 <motion.div
                   key={a.$id}
-                  transition={{ duration: 0.15 }}
-                  className="
-                    group
-                    rounded-xl
-                    border
-                    bg-background
-                    p-4
-                    transition-all
-                  "
+                  className="rounded-xl border p-4"
                 >
                   <div className="flex justify-between gap-4">
-                    <div className="flex gap-3 flex-1">
+                    <div className="flex flex-col flex-1">
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-semibold">{a.title}</h4>
 
-                      <div className="flex flex-col flex-1">
-                        <div className="flex items-center gap-2">
-                          <h4 className="font-semibold text-base">
-                            {a.title}
-                          </h4>
+                        {a.isPro && (
+                          <Sparkles size={14} className="text-pink-500" />
+                        )}
+                      </div>
 
-                          {a.isPro && (
-                            <Sparkles
-                              size={15}
-                              className="text-pink-500"
-                            />
-                          )}
-                        </div>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {a.description}
+                      </p>
 
-                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                          {a.description}
-                        </p>
-
-                        <div className="flex flex-wrap gap-2 mt-3">
-                          <Badge variant="secondary">
-                            {a.level}
-                          </Badge>
-
-                          <Badge variant="outline">
-                            {a.category}
-                          </Badge>
-                        </div>
+                      <div className="flex gap-2 mt-3">
+                        <Badge variant="secondary">{a.level}</Badge>
+                        <Badge variant="outline">{a.category}</Badge>
                       </div>
                     </div>
 
-                    <div className="flex flex-col items-end justify-between gap-3">
-                      {/* Dropdown */}
+                    <div className="flex flex-col items-end gap-2">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="opacity-70 hover:opacity-100 cursor-pointer"
-                          >
+                          <Button variant="ghost" size="icon">
                             <MoreHorizontal size={18} />
                           </Button>
                         </DropdownMenuTrigger>
 
-                        <DropdownMenuContent align="end" className={`${geist.className}`}>
+                        <DropdownMenuContent align="end" className={geist.className}>
                           <DropdownMenuItem
-                            className="cursor-pointer"
                             onClick={() =>
                               router.push(
-                                `conversations/${a.conversationId}`)}>
-                              Open
+                                `/conversations/${a.conversationId}`
+                              )
+                            }
+                          >
+                            Open
                           </DropdownMenuItem>
 
                           <DropdownMenuItem
-                            className="cursor-pointer"
-                            onClick={() => handleMarkComplete(a.$id)}>
+                            onClick={() => handleMarkComplete(a.$id)}
+                          >
                             Mark as Complete
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
 
                       <Button
-                        className="cursor-pointer"
                         onClick={() =>
-                          router.push(
-                            `conversations/${a.conversationId}`)}>
+                          router.push(`/conversations/${a.conversationId}`)
+                        }
+                      >
                         <BookOpen />
                         Open
                       </Button>

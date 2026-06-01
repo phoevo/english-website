@@ -37,6 +37,19 @@ type AssignmentWithConversation = {
   [key: string]: unknown;
 };
 
+type AssignmentDocument = {
+  $id: string;
+  conversationId: string;
+  status: "Pending" | "Completed";
+  studentId: string;
+};
+
+type ConversationDocument = {
+  $id: string;
+  title?: string;
+  level?: string;
+};
+
 function TeacherPage() {
   const { friends } = useUserStore();
   const studentFriends = friends.filter((f) => !f.isTeacher);
@@ -57,56 +70,67 @@ function TeacherPage() {
   };
 
   useEffect(() => {
-    if (!selectedStudentId) return;
+  if (!selectedStudentId) return;
 
-    async function fetchStudentAssignments() {
-      setLoading(true);
-      try {
-        const assignmentRes = await databases.listDocuments(
-          databaseId,
-          assignmentsId,
-          [Query.equal("studentId", selectedStudentId)]
-        );
+  async function fetchStudentAssignments() {
+    setLoading(true);
 
-        const assignments = assignmentRes.documents;
-        const conversationIds = assignments.map((a) => a.conversationId);
+    try {
+      if (!selectedStudentId) return;
 
-        if (conversationIds.length === 0) {
-          setAssignments([]);
-          setLoading(false);
-          return;
-        }
+    const assignmentRes = await databases.listDocuments(
+      databaseId,
+      assignmentsId,
+      [
+        Query.equal("studentId", selectedStudentId),
+      ]
+    );
 
-        const conversationRes = await databases.listDocuments(
-          databaseId,
-          conversationsCollectionId,
-          [Query.equal("$id", conversationIds)]
-        );
+      const assignmentDocs = assignmentRes.documents;
 
-        const conversations = conversationRes.documents;
+      if (assignmentDocs.length === 0) {
+        setAssignments([]);
+        return;
+      }
 
-        const enrichedAssignments = assignments.map((assignment) => {
-          const convo = conversations.find(
-            (c) => c.$id === assignment.conversationId
+      const conversationIds = assignmentDocs.map(
+        (a: any) => a.conversationId
+      );
+
+      const conversationRes = await databases.listDocuments(
+        databaseId,
+        conversationsCollectionId,
+        [Query.equal("$id", conversationIds)]
+      );
+
+      const conversationDocs = conversationRes.documents;
+
+      const enrichedAssignments: AssignmentWithConversation[] =
+        assignmentDocs.map((a: any) => {
+          const convo = conversationDocs.find(
+            (c: any) => c.$id === a.conversationId
           );
 
           return {
-            ...assignment,
-            title: convo?.title || "Untitled",
-            level: convo?.level || "Unknown",
+            $id: a.$id,
+            conversationId: a.conversationId,
+            status: a.status,
+
+            title: convo?.title ?? "Untitled",
+            level: convo?.level ?? "Unknown",
           };
         });
 
-        setAssignments(enrichedAssignments);
-      } catch (err) {
-        console.error("Failed to load assignments:", err);
-      } finally {
-        setLoading(false);
-      }
+      setAssignments(enrichedAssignments);
+    } catch (err) {
+      console.error("Failed to load assignments:", err);
+    } finally {
+      setLoading(false);
     }
+  }
 
-    fetchStudentAssignments();
-  }, [selectedStudentId]);
+  fetchStudentAssignments();
+}, [selectedStudentId]);
 
   return (
     <Card className="flex flex-col h-full lg:w-full h-full bg-background">

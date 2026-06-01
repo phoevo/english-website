@@ -328,7 +328,6 @@ export async function deleteAccountServer(): Promise<void> {
       body: JSON.stringify({}),
     });
 
-
     const data = await resp.json().catch(() => ({}));
     if (!resp.ok) {
       throw new Error(data?.error || data?.message || 'Failed to delete account');
