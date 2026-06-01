@@ -37,13 +37,6 @@ type AssignmentWithConversation = {
   [key: string]: unknown;
 };
 
-type AssignmentDocument = {
-  $id: string;
-  conversationId: string;
-  status: "Pending" | "Completed";
-  studentId: string;
-};
-
 type ConversationDocument = {
   $id: string;
   title?: string;
