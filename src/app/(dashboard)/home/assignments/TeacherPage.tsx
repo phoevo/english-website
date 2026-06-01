@@ -81,7 +81,7 @@ function TeacherPage() {
       }
 
       const conversationIds = assignmentDocs.map(
-        (a: any) => a.conversationId
+        (a) => a.conversationId
       );
 
       const conversationRes = await databases.listDocuments(
@@ -93,9 +93,9 @@ function TeacherPage() {
       const conversationDocs = conversationRes.documents;
 
       const enrichedAssignments: AssignmentWithConversation[] =
-        assignmentDocs.map((a: any) => {
+        assignmentDocs.map((a) => {
           const convo = conversationDocs.find(
-            (c: any) => c.$id === a.conversationId
+            (c) => c.$id === a.conversationId
           );
 
           return {
