@@ -37,12 +37,6 @@ type AssignmentWithConversation = {
   [key: string]: unknown;
 };
 
-type ConversationDocument = {
-  $id: string;
-  title?: string;
-  level?: string;
-};
-
 function TeacherPage() {
   const { friends } = useUserStore();
   const studentFriends = friends.filter((f) => !f.isTeacher);
