@@ -22,7 +22,7 @@ import {
   assignmentsId,
   conversationsCollectionId,
 } from "@/data/appwrite";
-import { Query } from "appwrite";
+import { Query, Models } from "appwrite";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -41,15 +41,13 @@ type AssignmentWithConversation = {
   level: string;
 };
 
-type AssignmentDocument = {
-  $id: string;
+type AssignmentDocument = Models.Document & {
   conversationId: string;
   status: "Pending" | "Completed";
   studentId: string;
 };
 
-type ConversationDocument = {
-  $id: string;
+type ConversationDocument = Models.Document & {
   title?: string;
   level?: string;
 };
@@ -61,20 +59,14 @@ function TeacherPage() {
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(
     null
   );
-  const [assignments, setAssignments] = useState<
-    AssignmentWithConversation[]
-  >([]);
+  const [assignments, setAssignments] = useState<AssignmentWithConversation[]>([]);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
   const handleDeleteAssignment = async (assignmentId: string) => {
     try {
-      await databases.deleteDocument(
-        databaseId,
-        assignmentsId,
-        assignmentId
-      );
+      await databases.deleteDocument(databaseId, assignmentsId, assignmentId);
 
       setAssignments((prev) => prev.filter((a) => a.$id !== assignmentId));
       toast.success("Assignment removed.");
@@ -85,67 +77,64 @@ function TeacherPage() {
   };
 
   useEffect(() => {
-  if (!selectedStudentId) return;
+    if (!selectedStudentId) return;
 
-  const studentId = selectedStudentId; // ✅ snapshot fixes TS narrowing
+    const studentId = selectedStudentId;
 
-  async function fetchStudentAssignments() {
-    setLoading(true);
+    async function fetchStudentAssignments() {
+      setLoading(true);
 
-    try {
-      const assignmentRes = await databases.listDocuments(
-        databaseId,
-        assignmentsId,
-        [Query.equal("studentId", studentId)]
-      );
+      try {
+        const assignmentRes = await databases.listDocuments(
+          databaseId,
+          assignmentsId,
+          [Query.equal("studentId", studentId)]
+        );
 
-      const assignmentDocs =
-        assignmentRes.documents as unknown as AssignmentDocument[];
+        const assignmentDocs = assignmentRes.documents as AssignmentDocument[];
 
-      if (assignmentDocs.length === 0) {
-        setAssignments([]);
-        return;
+        if (assignmentDocs.length === 0) {
+          setAssignments([]);
+          return;
+        }
+
+        const conversationIds = assignmentDocs.map((a) => a.conversationId);
+
+        const conversationRes = await databases.listDocuments(
+          databaseId,
+          conversationsCollectionId,
+          [Query.equal("$id", conversationIds)]
+        );
+
+        const conversationDocs =
+          conversationRes.documents as ConversationDocument[];
+
+        const enrichedAssignments: AssignmentWithConversation[] =
+          assignmentDocs.map((a) => {
+            const convo = conversationDocs.find(
+              (c) => c.$id === a.conversationId
+            );
+
+            return {
+              $id: a.$id,
+              conversationId: a.conversationId,
+              status: a.status,
+              title: convo?.title ?? "Untitled",
+              level: convo?.level ?? "Unknown",
+            };
+          });
+
+        setAssignments(enrichedAssignments);
+      } catch (err) {
+        console.error("Failed to load assignments:", err);
+        toast.error("Failed to load assignments.");
+      } finally {
+        setLoading(false);
       }
-
-      const conversationIds = assignmentDocs.map(
-        (a) => a.conversationId
-      );
-
-      const conversationRes = await databases.listDocuments(
-        databaseId,
-        conversationsCollectionId,
-        [Query.equal("$id", conversationIds)]
-      );
-
-      const conversationDocs =
-        conversationRes.documents as unknown as ConversationDocument[];
-
-      const enrichedAssignments: AssignmentWithConversation[] =
-        assignmentDocs.map((a) => {
-          const convo = conversationDocs.find(
-            (c) => c.$id === a.conversationId
-          );
-
-          return {
-            $id: a.$id,
-            conversationId: a.conversationId,
-            status: a.status,
-            title: convo?.title ?? "Untitled",
-            level: convo?.level ?? "Unknown",
-          };
-        });
-
-      setAssignments(enrichedAssignments);
-    } catch (err) {
-      console.error("Failed to load assignments:", err);
-      toast.error("Failed to load assignments.");
-    } finally {
-      setLoading(false);
     }
-  }
 
-  fetchStudentAssignments();
-}, [selectedStudentId]);
+    fetchStudentAssignments();
+  }, [selectedStudentId]);
 
   return (
     <Card className="flex flex-col h-full lg:w-full bg-background">
@@ -159,7 +148,7 @@ function TeacherPage() {
 
         {studentFriends.length > 0 ? (
           <Select
-            onValueChange={(value) => setSelectedStudentId(value)}
+            onValueChange={setSelectedStudentId}
             value={selectedStudentId || ""}
           >
             <SelectTrigger className="w-1/3">
