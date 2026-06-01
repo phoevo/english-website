@@ -26,6 +26,7 @@ import {
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Sparkle } from "lucide-react";
 
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
@@ -34,7 +35,7 @@ const dmSans = DM_Sans({ subsets: ['latin'] });
 const convoGuideSteps: GuideStep[] = [
   { target: "convo-title", title: "Conversations", description: "Browse all available conversations organized by level and category." },
   { target: "convo-filters", title: "Filters", description: "Use these filters to narrow conversations by difficulty level and topic." },
-  { target: "convo-grid", title: "Conversation Cards", description: "Click a conversation to start reading. The dot next to the title indicates a free tier or plus tier converesation. Every word is interactive, so you can hover for definitions and save them to your dictionary." },
+  { target: "convo-grid", title: "Conversation Cards", description: "Click a conversation to start reading. The pink sparkle indicates Plus content, the green check indicates completion. Every word is interactive, so you can hover for definitions and save them to your dictionary."}
 ];
 
 

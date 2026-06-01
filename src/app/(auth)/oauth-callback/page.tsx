@@ -55,7 +55,7 @@ export default function OAuthCallback() {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <p>Completing sign-in...</p>
+      <p>Signing in...</p>
       <LoaderCircle className="animate-spin" size={25}/>
 
     </div>

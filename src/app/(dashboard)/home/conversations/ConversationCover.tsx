@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import { useUserStore } from "@/data/useUserStore";
 import { Badge } from "@/components/ui/badge";
-import { Send, LoaderCircle, Dot } from "lucide-react";
+import { Send, LoaderCircle, Dot, Check, Sparkle, Sparkles } from "lucide-react";
 import Assign from "./Assign";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -92,10 +92,9 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
     >
     <Card className="w-full lg:w-full lg:h-60 bg-background cursor-pointer">
       <CardHeader>
-        <CardTitle className="flex flex-row justify-between items-center border-b">
-          <div className="flex flex-row items-center">
+        <CardTitle className="flex flex-row justify-between items-center border-b py-1">
+          <div className="flex flex-row items-center gap-1">
             {conversationTitle}
-            {isPro? (<Dot className="text-pink-500"/>) : (<Dot className="text-foreground"/>)}
           </div>
 
         <div className="flex flex-col gap-1">
@@ -113,12 +112,15 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
                 }
               />}
 
-        {isComplete && <Badge variant="default" className="bg-green-500 max-h-6">Complete</Badge>}
+
         </div>
         </CardTitle>
         <div className="flex flex-row items-center justify-start gap-2 ">
           <p className="text-sm">{level}</p>
           <p className="text-sm text-muted-foreground">{category}</p>
+          {isComplete &&
+          <Check size={18} strokeWidth="3px" className="text-green-500"/>}
+          {isPro? (<Sparkles size={15} className="text-pink-500"/>) : ""}
           {isLoading && <LoaderCircle className="animate-spin" size={15}/>}
         </div>
 
