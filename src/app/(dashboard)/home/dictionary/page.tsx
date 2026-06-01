@@ -18,7 +18,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import WordBoard from "./wordBoard";
-import { DM_Sans, Geist } from "next/font/google";
+import { Geist } from "next/font/google";
 
 const geist = Geist({ subsets: ['latin'] });
 

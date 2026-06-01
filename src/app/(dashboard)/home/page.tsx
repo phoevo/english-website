@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import News from "./News";
-import { DM_Sans, Geist } from "next/font/google";
+import { Geist } from "next/font/google";
 import { Calendar, Sword, Swords } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";

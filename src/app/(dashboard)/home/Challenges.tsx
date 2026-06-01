@@ -5,7 +5,7 @@ import {
   CardContent, CardDescription, CardHeader, CardTitle,
 } from "@/components/ui/card";
 
-import { Geist, DM_Sans } from "next/font/google";
+import { Geist } from "next/font/google";
 import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { useUserStore } from "@/data/useUserStore";

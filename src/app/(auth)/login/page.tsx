@@ -14,6 +14,7 @@ import { PasswordInput } from '@/components/ui/PasswordInput'
 import { account } from '@/data/appwrite'
 import { ensureUserDocument } from '@/data/getData'
 import { OAuthProvider } from 'appwrite'
+import Image from 'next/image'
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -183,7 +184,7 @@ if (checkingSession) {
               </Button>
 
               <Button onClick={handleGoogleLogin} variant="outline" type='button' className="w-full cursor-pointer" disabled={isLoading}>
-                <img src='google-logo.svg' className='w-6'/>
+                <Image alt='Google logo' src='google-logo.svg' height={20} width={"20"}/>
                 Login with Google
               </Button>
             </div>

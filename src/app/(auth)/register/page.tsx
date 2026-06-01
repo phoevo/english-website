@@ -21,7 +21,6 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/PasswordInput'
-
 import { account } from '@/data/appwrite'
 import { ID } from 'appwrite'
 import { OAuthProvider } from 'appwrite'
@@ -30,6 +29,7 @@ import { ensureUserDocument } from '@/data/getData'
 import { useRouter } from 'next/navigation'
 import { useUserStore } from '@/data/useUserStore'
 import { sendWelcomeEmail } from '@/services/emailService'
+import Image from 'next/image'
 
 
 const formSchema = z
@@ -149,7 +149,7 @@ export default function Register() {
         {error && <p className="text-red-500 text-sm">{error}</p>}
 
         <Button onClick={handleGoogleSignup} variant="outline" type="button" className="flex w-full cursor-pointer" disabled={isLoading}>
-          <img src='google-logo.svg' className='w-6'/>
+          <Image alt="Google logo" src='google-logo.svg' width={20} height={20}/>
           Sign up with Google
         </Button>
 

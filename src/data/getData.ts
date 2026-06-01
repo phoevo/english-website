@@ -257,7 +257,7 @@ export async function unsubscribeUser2(userId: string) {
       return JSON.parse(response.responseBody || '{}');
     }
     // fall through to proxy on non-completed
-  } catch (_err) {
+  } catch {
     // fall back to proxy
   }
 
@@ -336,7 +336,7 @@ export async function deleteAccountServer(): Promise<void> {
 }
 
 // Simple function to check subscription via Appwrite function
-export async function checkSubscriptionFromStripe(_userEmail: string): Promise<boolean> {
+export async function checkSubscriptionFromStripe(): Promise<boolean> {
   try {
     const jwt = await account.createJWT();
     const client = new Client()

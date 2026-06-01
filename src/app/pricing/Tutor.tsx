@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useUserStore } from '@/data/useUserStore'
 import { motion } from 'motion/react';
-import { DM_Sans, Geist } from 'next/font/google';
+import { Geist } from 'next/font/google';
 import Link from 'next/link';
 import router from 'next/router';
 import { toast } from 'sonner';

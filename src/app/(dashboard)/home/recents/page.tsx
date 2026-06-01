@@ -15,7 +15,7 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card"
-import { DM_Sans, Geist } from "next/font/google";
+import { Geist } from "next/font/google";
 
 
 const geist = Geist({ subsets: ['latin'] });

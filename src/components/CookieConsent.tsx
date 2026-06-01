@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Button } from "@/components/ui/button";
-import { Geist, DM_Sans } from "next/font/google";
+import { Geist} from "next/font/google";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 

@@ -18,7 +18,7 @@ import {
   CardHeader,
   CardContent,
 } from "@/components/ui/card";
-import { DM_Sans, Geist } from "next/font/google";
+import { Geist } from "next/font/google";
 import { ID } from "appwrite";
 
 

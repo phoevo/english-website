@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import React from 'react'
 import { useUserStore } from '@/data/useUserStore'
-import { DM_Sans, Geist } from 'next/font/google'
+import { DM_Sans } from 'next/font/google'
 import { subscribeUser2 } from '@/data/getData'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation';

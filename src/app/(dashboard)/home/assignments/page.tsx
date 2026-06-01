@@ -17,7 +17,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import { Geist, DM_Sans } from "next/font/google";
+import { Geist } from "next/font/google";
 import { motion} from "motion/react";
 import { toast } from "sonner";
 import { fetchPendingRequests, hasPendingRequest, sendFriendRequest, updateRequestStatus, addFriend, deleteFriendRequest, removeFriend, removeActiveStudent } from "@/data/friendRequests";
