@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { account } from '@/data/appwrite'
-import { LoaderCircle } from 'lucide-react'
 
 export default function LoginChecker() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null)

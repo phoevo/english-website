@@ -26,11 +26,9 @@ import {
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Sparkle } from "lucide-react";
 
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
-const dmSans = DM_Sans({ subsets: ['latin'] });
 
 const convoGuideSteps: GuideStep[] = [
   { target: "convo-title", title: "Conversations", description: "Browse all available conversations organized by level and category." },

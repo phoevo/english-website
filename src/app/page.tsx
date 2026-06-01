@@ -20,7 +20,6 @@ import TestWorkflow from "./(dashboard)/TestWorkflow";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,

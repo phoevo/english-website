@@ -4,24 +4,15 @@ import { CardContent, CardDescription, CardHeader, CardTitle } from '@/component
 import React from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import { Geist, DM_Sans } from 'next/font/google'
 import Link from 'next/link'
 import { useUserStore } from '@/data/useUserStore'
 import {
   Card,
-  CardFooter,
 } from "@/components/ui/card"
 
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { ArrowDown, Briefcase, CircleArrowDown, CircleArrowUp, Notebook, User } from 'lucide-react'
+import { Briefcase, CircleArrowDown, CircleArrowUp, Notebook, User } from 'lucide-react'
 import { motion } from "motion/react";
 import {
   Tabs,
@@ -43,7 +34,6 @@ import {
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
 const geist = Geist({ subsets: ['latin'] });
-
 
 type Tier = {
   tutorBadge: string;
