@@ -38,7 +38,7 @@ function getStreakColor(streak: number) {
 
 
 const Navbar = () => {
-  const { user, loading, isSubscribed, setSubscribed, challengeCount, taskCount, streak } = useUserStore();
+  const { user, loading, isSubscribed, challengeCount, taskCount, streak } = useUserStore();
   const router = useRouter();
 
   const badgeColor = getStreakColor(streak);

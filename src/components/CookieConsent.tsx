@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Geist, DM_Sans } from "next/font/google";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
-const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "";
 const STORAGE_KEY = "cookie-consent";

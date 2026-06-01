@@ -155,7 +155,7 @@ React.useEffect(() => {
     try {
       const ok = await isConversationAssignedToStudent(user.$id, conversation.$id);
       setAssignedForThisConvo(ok);
-    } catch (e) {
+    } catch (_e) {
       setAssignedForThisConvo(false);
     } finally {
       setAssignmentChecking(false);

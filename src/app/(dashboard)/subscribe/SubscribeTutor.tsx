@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
 import { CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
-import { DialogHeader, Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import React from 'react'
@@ -11,7 +10,6 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation';
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
-const geist = Geist({ subsets: ['latin'] });
 
 const paidOption = {
     title: "Tutor Pro",

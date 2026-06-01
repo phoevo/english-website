@@ -6,7 +6,7 @@ import { useUserStore } from '@/data/useUserStore'
 import React from 'react'
 
 function Enterprise() {
-  const { user, isSubscribed } = useUserStore();
+  useUserStore();
 
   return (
     <div>

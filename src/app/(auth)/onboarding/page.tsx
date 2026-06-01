@@ -11,7 +11,6 @@ import { toast } from 'sonner'
 import { account, databases, databaseId, usersCollectionId } from '@/data/appwrite'
 import { ensureUserDocument } from '@/data/getData'
 import { useUserStore } from '@/data/useUserStore'
-import { Badge } from '@/components/ui/badge'
 import { sendWelcomeEmail } from '@/services/emailService'
 import { CircleAlert } from 'lucide-react'
 
@@ -19,7 +18,6 @@ export default function Onboarding() {
   const [role, setRole] = useState<'student' | 'tutor' | null>(null)
   const router = useRouter()
   const { user, setIsTeacher, fetchUser } = useUserStore()
-  const [isPro, setIsPro] = useState(false)
   const [isBootstrapping, setIsBootstrapping] = useState(true)
 
 
@@ -137,7 +135,7 @@ export default function Onboarding() {
            <div className="p-3 rounded-xl bg-red-200 dark:bg-red-400 border-2 border-red-400 dark:border-red-200 text-sm text-red-500 dark:text-foreground flex flex-row items-center gap-2">
             <CircleAlert size={50}/>
             <p>
-              Synomilo is designed to be used during online lessons. For the best experience, it's recommended to use a laptop or desktop rather than a mobile device.
+              Synomilo is designed to be used during online lessons. For the best experience, it&apos;s recommended to use a laptop or desktop rather than a mobile device.
             </p>
         </div>
 
@@ -147,7 +145,7 @@ export default function Onboarding() {
 
       <CardContent className="space-y-6">
 
-      <p>I'm signing up as a...</p>
+      <p>I&apos;m signing up as a...</p>
 
         <RadioGroup
           value={role || ''}

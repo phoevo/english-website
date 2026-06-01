@@ -13,8 +13,7 @@ import { subscribeUser2 } from '@/data/getData'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
-const geist = Geist({ subsets: ['latin'] })
-const dmSans = DM_Sans({ subsets: ['latin'] });
+const geist = Geist({ subsets: ['latin'] });
 
 
 

@@ -15,7 +15,6 @@ import { Progress } from "@/components/ui/progress"
 
 
 const geist = Geist({ subsets: ['latin'] });
-const dmSans = DM_Sans({ subsets: ['latin'] });
 
 
 

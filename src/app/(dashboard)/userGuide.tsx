@@ -26,7 +26,7 @@ type UserGuidePopoverProps = {
 
 export default function UserGuidePopover({
   id,
-  title,
+  title: _title,
   media,
   content,
   footer,

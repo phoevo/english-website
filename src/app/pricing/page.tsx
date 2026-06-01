@@ -134,7 +134,7 @@ const faqs: FAQItem[] = [
     question: "What does Tutor Free include?",
     answer: (
       <>
-        Tutor Free has all conversations unlocked, but in "read-only" mode. Essentially just text. You are limited to screensharing during lessons.
+        Tutor Free has all conversations unlocked, but in &quot;read-only&quot; mode. Essentially just text. You are limited to screensharing during lessons.
         <br /><br />
         You cannot assign conversations or track student progress.
       </>
@@ -144,7 +144,7 @@ const faqs: FAQItem[] = [
     question: "What is read-only?",
     answer: (
       <>
-        "Read-only" only allows the tutors to view the conversations text, like a PDF document would. No access to features like hover or audio.
+        &quot;Read-only&quot; only allows the tutors to view the conversations text, like a PDF document would. No access to features like hover or audio.
       </>
     ),
   },
@@ -175,7 +175,7 @@ const faqs: FAQItem[] = [
     question: "How do I unsubscribe?",
     answer: (
       <>
-       Esnure you're signed in and head to the Billing Payments tab on the
+       Esnure you&apos;re signed in and head to the Billing Payments tab on the
        <Link href={"/profile"} className='underline px-1'>Profile page</Link>
 
       </>
@@ -234,7 +234,7 @@ function renderTier(tier: Tier, idx: number) {
 
 
 function SubscribePage() {
-  const {isSubscribed, user} = useUserStore();
+  const { user} = useUserStore();
 
 
   return (

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card"
 import { useUserStore } from "@/data/useUserStore";
 import { Badge } from "@/components/ui/badge";
-import { Send, LoaderCircle, Dot, Check, Sparkle, Sparkles } from "lucide-react";
+import { Send, LoaderCircle, Check, Sparkles } from "lucide-react";
 import Assign from "./Assign";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

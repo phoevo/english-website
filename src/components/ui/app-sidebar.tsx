@@ -24,16 +24,11 @@ import { Button } from "./button";
 import Challenges from "@/app/(dashboard)/home/Challenges";
 import { Badge } from "./badge";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./hover-card";
-import ModeToggle from "./ModeToggle";
-import { Switch } from "./switch";
 import { useTheme } from "next-themes";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
@@ -80,7 +75,7 @@ const items = [
 
 export function AppSidebar() {
 
-  const { user, loading, isSubscribed, setSubscribed, challengeCount, taskCount, streak } = useUserStore();
+  const { user, loading, isSubscribed, challengeCount, taskCount, streak } = useUserStore();
   const router = useRouter();
 
   const { theme, systemTheme, setTheme } = useTheme();

@@ -12,8 +12,7 @@ import { toast } from 'sonner';
 import { subscribeUser2 } from '@/data/getData';
 
 
-const geist = Geist({ subsets: ['latin'] })
-const dmSans = DM_Sans({ subsets: ['latin'] });
+const geist = Geist({ subsets: ['latin'] });
 
 function Tutor() {
   const {user, isSubscribed, isTeacher} = useUserStore();

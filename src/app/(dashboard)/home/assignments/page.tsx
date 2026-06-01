@@ -20,13 +20,12 @@ import {
 import { Geist, DM_Sans } from "next/font/google";
 import { motion} from "motion/react";
 import { toast } from "sonner";
-import { fetchPendingRequests, hasPendingRequest, sendFriendRequest, updateRequestStatus, addFriend, deleteFriendRequest, removeFriend, addActiveStudent, removeActiveStudent } from "@/data/friendRequests";
+import { fetchPendingRequests, hasPendingRequest, sendFriendRequest, updateRequestStatus, addFriend, deleteFriendRequest, removeFriend, removeActiveStudent } from "@/data/friendRequests";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const geist = Geist({ subsets: ['latin'] });
-const dmSans = DM_Sans({ subsets: ['latin'] });
 
 const assignGuideSteps: GuideStep[] = [
   { target: "assign-title", title: "Assignments", description: "A shared workspace where tutors assign conversations and students complete them." },
@@ -53,7 +52,7 @@ function getStreakBadgeClass(streak: number): string {
 function AssignmentsPage() {
   const { user, loading, friendsList, friends, isTeacher, activeStudents, setActiveStudents, isSubscribed } = useUserStore();
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<unknown[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const studentConnectionsCount = (friends || []).filter((f) => !f.isTeacher).length;

@@ -18,7 +18,6 @@ import {
 import { DM_Sans, Geist } from "next/font/google";
 
 
-const dmSans = DM_Sans({ subsets: ['latin'] });
 const geist = Geist({ subsets: ['latin'] });
 
 const recentsGuideSteps: GuideStep[] = [

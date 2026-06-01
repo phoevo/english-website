@@ -46,7 +46,7 @@ const accountFormSchema = z.object({
 });
 
 export default function ProfileLayout() {
-  const { user, fetchUser, setSubscribed, isSubscribed, setUser } = useUserStore();
+  const { user, fetchUser, setSubscribed, isSubscribed } = useUserStore();
   const router = useRouter();
 
   const [isCheckingUser, setIsCheckingUser] = useState(true);

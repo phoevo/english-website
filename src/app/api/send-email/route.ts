@@ -2,7 +2,7 @@ import { Client, Functions } from 'appwrite'
 
 export async function POST(req: Request) {
   try {
-    const { type, userEmail, userName } = await req.json().catch(() => ({} as any));
+    const { type, userEmail, userName } = await req.json().catch(() => ({} as Record<string, unknown>));
     if (!type || !userEmail || !userName) {
       return new Response(JSON.stringify({ error: 'Missing type, userEmail, or userName' }), { status: 400 });
     }
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     );
 
     const body = exec.responseBody || '{}';
-    let data: any;
+    let data: unknown;
     try {
       data = JSON.parse(body);
     } catch {
@@ -62,11 +62,11 @@ export async function POST(req: Request) {
       JSON.stringify({ ok, status: exec.status, errors: exec.errors, logs: exec.logs, ...data, ...debug }),
       { status: statusCode, headers: { 'content-type': 'application/json' } }
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
     // Log server-side for debugging during dev
     console.error('[api/send-email] proxy failed:', err);
     return new Response(
-      JSON.stringify({ error: 'Send-email proxy failed', message: err?.message || String(err) }),
+      JSON.stringify({ error: 'Send-email proxy failed', message: (err as Error)?.message || String(err) }),
       { status: 500, headers: { 'content-type': 'application/json' } }
     );
   }

@@ -1,5 +1,3 @@
-import { vocabA1 } from "./vocab-a1";
-import { vocabB1 } from "./vocab-b1";
 import { vocabA1toB2 } from "./vocab-a1-a2";
 import { vocabB1toB2 } from "./vocab-b1-b2";
 

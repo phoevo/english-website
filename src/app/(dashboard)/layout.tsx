@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import Navbar from "@/components/ui/Navbar";
 import { Toaster } from "sonner";
 import { Geist } from "next/font/google";
 import { useUserStore } from "@/data/useUserStore";

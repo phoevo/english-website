@@ -10,7 +10,7 @@ import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/c
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TestConversation } from "./(dashboard)/TestConversation";
 import TestDictionary from "./(dashboard)/TestDictionary";
-import { AlignLeft, ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BookOpenCheck, Check, GalleryHorizontalEnd, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
+import { AlignLeft, ArrowDown, ArrowRight, BookOpenCheck, Check, GalleryHorizontalEnd, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
 import TestWordBoard from "./(dashboard)/TestWordBoard";
 import { Badge } from "@/components/ui/badge";
 import TestConversationCover from "./(dashboard)/TestConversationCover";

@@ -34,7 +34,7 @@ type AssignmentWithConversation = {
   status: "Pending" | "Completed";
   title: string;
   level: string;
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 function TeacherPage() {

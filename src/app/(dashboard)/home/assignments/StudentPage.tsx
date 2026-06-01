@@ -48,7 +48,7 @@ type AssignmentWithConversation = {
   isPro: boolean;
   category?: string;
   description?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 function StudentPage() {

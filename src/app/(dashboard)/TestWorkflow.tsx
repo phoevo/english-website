@@ -20,14 +20,11 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { motion } from "motion/react";
-import { Separator } from "@/components/ui/separator";
-
 const geist = Geist({ subsets: ["latin"] });
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
 
 const TUTOR_NAME = "tutor";
-const TUTOR_EMAIL = "tutor@gmail.com";
 const STUDENT_NAME = "student";
 const STUDENT_EMAIL = "student@gmail.com";
 
@@ -317,13 +314,13 @@ export default function TestWorkflow() {
                     <span className="font-semibold min-w-[60px]">
                       Hannah
                     </span>
-                    <p>Wait, we're not even a proper conversation?</p>
+                    <p>Wait, we&apos;re not even a proper conversation?</p>
                   </div>
                   <div className="flex gap-3">
                     <span className="font-semibold min-w-[60px]">
                       Mark
                     </span>
-                    <p>Yeah, it's unfortunate, really.</p>
+                    <p>Yeah, it&apos;s unfortunate, really.</p>
                   </div>
                 </div>
               </div>
@@ -347,13 +344,13 @@ export default function TestWorkflow() {
                       <span className="font-semibold min-w-[60px]">
                         Hanna
                       </span>
-                      <p>Wait, we're not even a proper conversation?</p>
+                      <p>Wait, we&apos;re not even a proper conversation?</p>
                     </div>
                     <div className="flex gap-3">
                       <span className="font-semibold min-w-[60px]">
                         Mark
                       </span>
-                      <p>Yeah, it's unfortunate, really.</p>
+                      <p>Yeah, it&apos;s unfortunate, really.</p>
                     </div>
                   </div>
                   <div className="border-t p-3 flex justify-start">

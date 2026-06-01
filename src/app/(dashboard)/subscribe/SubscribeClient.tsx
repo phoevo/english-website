@@ -1,31 +1,17 @@
 "use client"
 
-import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import React from 'react'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Geist, DM_Sans } from 'next/font/google'
-import Link from 'next/link'
+import { DM_Sans } from 'next/font/google'
 import { useUserStore } from '@/data/useUserStore'
-import { useRouter } from 'next/navigation';
 import SubscribeStudent from './SubscribeStudent'
 import SubscribeTutor from './SubscribeTutor'
 import { Skeleton } from '@/components/ui/skeleton'
 
-const geist = Geist({ subsets: ['latin'] })
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
 export function SubscribeClient() {
-  const { isSubscribed, user, isTeacher, loading } = useUserStore();
-  const router = useRouter();
+  const { isTeacher, loading } = useUserStore();
 
   return (
     <div className='w-full mt-5 h-screen overflow-y-auto'>

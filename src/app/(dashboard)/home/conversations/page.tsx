@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useConversations } from "@/hooks/useConversations";
 import { Label } from "@/components/ui/label";
 import ConversationCover from "./ConversationCover";
-import { Geist, DM_Sans } from "next/font/google";
+import { Geist } from "next/font/google";
 import {
   Select,
   SelectContent,

@@ -22,7 +22,6 @@ import { DM_Sans, Geist } from "next/font/google";
 import { ID } from "appwrite";
 
 
-const dmSans = DM_Sans({ subsets: ['latin'] });
 const geist = Geist({ subsets: ['latin'] });
 
 const feedbackGuideSteps: GuideStep[] = [

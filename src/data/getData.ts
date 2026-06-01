@@ -257,7 +257,7 @@ export async function unsubscribeUser2(userId: string) {
       return JSON.parse(response.responseBody || '{}');
     }
     // fall through to proxy on non-completed
-  } catch (err) {
+  } catch (_err) {
     // fall back to proxy
   }
 
@@ -317,7 +317,7 @@ export async function deleteAccountServer(): Promise<void> {
       // ignore non-JSON bodies
     }
     return; // success
-  } catch (err) {
+  } catch (_err) {
     // Fallback: call same-origin Next.js proxy to bypass CORS/network issues
     const resp = await fetch('/api/delete-account', {
       method: 'POST',
@@ -336,7 +336,7 @@ export async function deleteAccountServer(): Promise<void> {
 }
 
 // Simple function to check subscription via Appwrite function
-export async function checkSubscriptionFromStripe(userEmail: string): Promise<boolean> {
+export async function checkSubscriptionFromStripe(_userEmail: string): Promise<boolean> {
   try {
     const jwt = await account.createJWT();
     const client = new Client()

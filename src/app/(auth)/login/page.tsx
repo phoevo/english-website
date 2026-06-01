@@ -14,7 +14,6 @@ import { PasswordInput } from '@/components/ui/PasswordInput'
 import { account } from '@/data/appwrite'
 import { ensureUserDocument } from '@/data/getData'
 import { OAuthProvider } from 'appwrite'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),

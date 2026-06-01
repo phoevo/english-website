@@ -112,11 +112,11 @@ fetchUser: async () => {
     const res = await account.get();
 
     // Fetch the Users document; if it's been deleted (404), continue with null doc
-    let userDoc: any = null;
+    let userDoc: unknown = null;
     try {
       userDoc = await databases.getDocument(databaseId, usersCollectionId, res.$id);
-    } catch (err: any) {
-      if (typeof err?.code === 'number' && err.code === 404) {
+    } catch (err: unknown) {
+      if (typeof (err as { code?: number })?.code === 'number' && (err as { code?: number }).code === 404) {
         // Expected when the profile doc was deleted (e.g., during account deletion)
         userDoc = null;
       } else {

@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     )
 
     const body = exec.responseBody || '{}'
-    let data: any
+    let data: unknown
     try {
       data = JSON.parse(body)
     } catch {
@@ -42,9 +42,9 @@ export async function POST(req: Request) {
       JSON.stringify({ ok, status: exec.status, errors: exec.errors, logs: exec.logs, ...data }),
       { status: ok ? 200 : 502, headers: { 'content-type': 'application/json' } }
     )
-  } catch (err: any) {
+  } catch (err: unknown) {
     return new Response(
-      JSON.stringify({ error: 'Unsubscribe proxy failed', message: err?.message || String(err) }),
+      JSON.stringify({ error: 'Unsubscribe proxy failed', message: (err as Error)?.message || String(err) }),
       { status: 500, headers: { 'content-type': 'application/json' } }
     )
   }
