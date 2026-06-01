@@ -317,7 +317,7 @@ export async function deleteAccountServer(): Promise<void> {
       // ignore non-JSON bodies
     }
     return; // success
-  } catch (_err) {
+  } catch {
     // Fallback: call same-origin Next.js proxy to bypass CORS/network issues
     const resp = await fetch('/api/delete-account', {
       method: 'POST',
@@ -327,6 +327,7 @@ export async function deleteAccountServer(): Promise<void> {
       },
       body: JSON.stringify({}),
     });
+
 
     const data = await resp.json().catch(() => ({}));
     if (!resp.ok) {
