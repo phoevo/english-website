@@ -85,68 +85,67 @@ function TeacherPage() {
   };
 
   useEffect(() => {
-    if (!selectedStudentId) return;
+  if (!selectedStudentId) return;
 
-    async function fetchStudentAssignments() {
-      setLoading(true);
+  const studentId = selectedStudentId; // ✅ snapshot fixes TS narrowing
 
-      try {
-        // 1. Fetch assignments
-        const assignmentRes = await databases.listDocuments(
-          databaseId,
-          assignmentsId,
-          [Query.equal("studentId", selectedStudentId)]
-        );
+  async function fetchStudentAssignments() {
+    setLoading(true);
 
-        const assignmentDocs =
-          assignmentRes.documents as unknown as AssignmentDocument[];
+    try {
+      const assignmentRes = await databases.listDocuments(
+        databaseId,
+        assignmentsId,
+        [Query.equal("studentId", studentId)]
+      );
 
-        if (assignmentDocs.length === 0) {
-          setAssignments([]);
-          return;
-        }
+      const assignmentDocs =
+        assignmentRes.documents as unknown as AssignmentDocument[];
 
-        const conversationIds = assignmentDocs.map(
-          (a) => a.conversationId
-        );
-
-        // 2. Fetch related conversations
-        const conversationRes = await databases.listDocuments(
-          databaseId,
-          conversationsCollectionId,
-          [Query.equal("$id", conversationIds)]
-        );
-
-        const conversationDocs =
-          conversationRes.documents as unknown as ConversationDocument[];
-
-        // 3. Merge data
-        const enrichedAssignments: AssignmentWithConversation[] =
-          assignmentDocs.map((a) => {
-            const convo = conversationDocs.find(
-              (c) => c.$id === a.conversationId
-            );
-
-            return {
-              $id: a.$id,
-              conversationId: a.conversationId,
-              status: a.status,
-              title: convo?.title ?? "Untitled",
-              level: convo?.level ?? "Unknown",
-            };
-          });
-
-        setAssignments(enrichedAssignments);
-      } catch (err) {
-        console.error("Failed to load assignments:", err);
-        toast.error("Failed to load assignments.");
-      } finally {
-        setLoading(false);
+      if (assignmentDocs.length === 0) {
+        setAssignments([]);
+        return;
       }
-    }
 
-    fetchStudentAssignments();
-  }, [selectedStudentId]);
+      const conversationIds = assignmentDocs.map(
+        (a) => a.conversationId
+      );
+
+      const conversationRes = await databases.listDocuments(
+        databaseId,
+        conversationsCollectionId,
+        [Query.equal("$id", conversationIds)]
+      );
+
+      const conversationDocs =
+        conversationRes.documents as unknown as ConversationDocument[];
+
+      const enrichedAssignments: AssignmentWithConversation[] =
+        assignmentDocs.map((a) => {
+          const convo = conversationDocs.find(
+            (c) => c.$id === a.conversationId
+          );
+
+          return {
+            $id: a.$id,
+            conversationId: a.conversationId,
+            status: a.status,
+            title: convo?.title ?? "Untitled",
+            level: convo?.level ?? "Unknown",
+          };
+        });
+
+      setAssignments(enrichedAssignments);
+    } catch (err) {
+      console.error("Failed to load assignments:", err);
+      toast.error("Failed to load assignments.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  fetchStudentAssignments();
+}, [selectedStudentId]);
 
   return (
     <Card className="flex flex-col h-full lg:w-full bg-background">
