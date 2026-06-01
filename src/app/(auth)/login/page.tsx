@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {Form,FormControl,FormField,FormItem,FormLabel,FormMessage,} from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import {CardContent,CardDescription,CardHeader,CardTitle,} from '@/components/ui/card'
@@ -14,6 +14,7 @@ import { PasswordInput } from '@/components/ui/PasswordInput'
 import { account } from '@/data/appwrite'
 import { ensureUserDocument } from '@/data/getData'
 import type { OAuthProvider } from 'appwrite'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -48,8 +49,39 @@ export default function Login() {
 
 
   const router = useRouter()
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        await account.get()
+        router.replace('/home')
+      } catch {
+      }
+    }
+
+    checkSession()
+  }, [router])
+
   const [isLoading, setIsLoading] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
+  const [checkingSession, setCheckingSession] = useState(true)
+
+useEffect(() => {
+  const checkSession = async () => {
+    try {
+      await account.get()
+      router.replace('/home')
+    } catch {
+      setCheckingSession(false)
+    }
+  }
+
+  checkSession()
+}, [router])
+
+if (checkingSession) {
+  return null
+}
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true);

@@ -915,5 +915,229 @@ export const vocabB1toB2: Record<string, { text: string; type: string; definitio
   type: "phrase",
   definition: "a polite way to express anticipation of future communication",
   context: "I look forward to hearing from you."
-}
+},
+  "40": { text: "40", type: "noun", definition: "the number 40", context: "The speed limit on this residential street is 40 kilometers per hour." },
+  "sophie": { text: "sophie:", type: "noun", definition: "Name of a person", context: "Oh look, is that Sophie? Sophia? I forgot." },
+  "mark": { text: "mark", type: "noun", definition: "Name of a person", context: "You should meet my cousin; Mark. You too would get along." },
+  "heading": { text: "heading", type: "verb", definition: "moving in a particular direction; going toward a specific destination", context: "We're heading towards the coast for our summer vacation." },
+  "home": { text: "home", type: "noun", definition: "the place where one lives; one's residence or dwelling", context: "After years abroad, she finally decided to return home." },
+  "packing": { text: "packing", type: "verb", definition: "putting things into a container or bag in an organized manner for transport or storage", context: "She's packing her suitcase for her business trip to Berlin." },
+  "laptop": { text: "laptop", type: "noun", definition: "a portable personal computer designed for use while traveling or in various locations", context: "I always bring my laptop to coffee shops when I need to work remotely." },
+  "office": { text: "office", type: "noun", definition: "a room or building where administrative or professional work is conducted", context: "She spends eight hours a day working in the office." },
+  "probably": { text: "probably", type: "adverb", definition: "almost certainly; with high likelihood but without complete certainty", context: "It will probably rain later this week based on the forecast." },
+  "gotten": { text: "gotten", type: "verb", definition: "past participle of 'get'; acquired or became accustomed to", context: "She's gotten quite proficient at managing video conferences." },
+  "used": { text: "used", type: "adjective", definition: "accustomed or habituated to something through experience or practice", context: "I'm used to starting my day with a cup of coffee." },
+  "full-time": { text: "full-time", type: "adverb", definition: "involving work or engagement for the standard number of hours per week, typically 35-40 hours", context: "He decided to take a full-time position rather than continue freelancing." },
+  "opposite": { text: "opposite", type: "noun", definition: "a person or thing that is entirely different from another", context: "Her approach to project management is the opposite of what we typically implement here." },
+  "productive": { text: "productive", type: "adjective", definition: "capable of producing or creating results; generating or yielding something beneficial", context: "The team proved remarkably productive after implementing the new workflow system." },
+  "hmm": { text: "hmm", type: "interjection", definition: "an expression used to indicate thought, consideration, or hesitation", context: "Hmm, that's an interesting perspective I hadn't previously considered." },
+  "ton": { text: "ton", type: "noun", definition: "a unit of weight; informally, a large amount or quantity of something", context: "The conference generated a ton of valuable insights that will influence our strategy going forward." },
+  "miss": { text: "miss", type: "verb", definition: "to fail to catch, hit, or reach something intended", context: "If you leave now, you might miss the last train home." },
+  "daily": { text: "daily", type: "adjective", definition: "occurring or done every day or most days", context: "Her daily routine includes meditation and exercise to maintain mental clarity." },
+  "commute": { text: "commute", type: "noun", definition: "a regular journey between one's place of residence and place of work or study", context: "His commute from the suburbs to the city center takes approximately two hours each day." },
+  "takes": { text: "takes", type: "verb", definition: "requires a specified length of time to accomplish or complete something", context: "It takes dedication and perseverance to master a foreign language at an advanced level." },
+  "minutes": { text: "minutes", type: "noun", definition: "a unit of time equal to sixty seconds or one sixtieth of an hour", context: "The meeting will last approximately 45 minutes, so please plan accordingly." },
+  "commuting": { text: "commuting", type: "verb", definition: "traveling regularly between one's place of residence and place of work", context: "Commuting by public transport has helped her reduce her carbon footprint significantly." },
+  "exhausting": { text: "exhausting", type: "adjective", definition: "very tiring or demanding, causing extreme fatigue", context: "The conference was intellectually stimulating but ultimately exhausting after three full days." },
+  "works": { text: "works", type: "verb", definition: "functions or operates; performs tasks or labor", context: "The new software works efficiently for our remote team." },
+  "remotely": { text: "remotely", type: "adverb", definition: "from a distance, without being physically present", context: "Many employees now work remotely from their homes." },
+  "becomes": { text: "becomes", type: "verb", definition: "starts to be; transitions into a new state or condition", context: "Project management becomes more challenging without face-to-face meetings." },
+  "sometimes": { text: "sometimes", type: "adverb", definition: "occasionally; at irregular intervals", context: "Sometimes we schedule in-person meetings to strengthen relationships." },
+  "loop": { text: "loop", type: "noun", definition: "a repetitive sequence of events or communications that repeats itself", context: "We're caught in a loop of miscommunication between departments." },
+  "depend": { text: "depend", type: "verb", definition: "relies on; is determined or influenced by", context: "Success may depend on how well we adapt to remote working practices." },
+  "uses": { text: "uses", type: "verb", definition: "employs or utilizes something for a purpose", context: "Our organization uses multiple platforms to facilitate daily communication." },
+  "video": { text: "video", type: "noun", definition: "a recording or broadcast of moving images and sound", context: "We conduct important meetings through video conferencing systems." },
+  "calls": { text: "calls", type: "noun", definition: "telephone conversations; instances of contacting someone by voice", context: "Daily video calls help us maintain interpersonal connections." },
+  "chats": { text: "chats", type: "noun", definition: "informal written conversations or messages exchanged online", context: "Quick chats through messaging apps allow for spontaneous problem-solving." },
+  "page": { text: "page", type: "noun", definition: "a single sheet of paper in a book or document, or a website", context: "The information you're looking for is on page fifteen of the report." },
+  "maybe": { text: "maybe", type: "adverb", definition: "possibly; expressing uncertainty", context: "Maybe we should postpone the decision until we have more information." },
+  "virtual": { text: "virtual", type: "adjective", definition: "existing or occurring online or via computer networks rather than physically", context: "The company conducted virtual interviews with international candidates." },
+  "meetings": { text: "meetings", type: "noun", definition: "gatherings or assemblies of people for discussion or consultation", context: "We have three important meetings scheduled for this week." },
+  "face-to-face": { text: "face-to-face", type: "adjective", definition: "involving direct personal interaction between people in the same physical location", context: "Face-to-face meetings often facilitate better communication than email exchanges." },
+  "conversations": { text: "conversations", type: "noun", definition: "informal exchanges of ideas or thoughts between people", context: "Meaningful conversations with colleagues strengthen workplace relationships." },
+  "bounce": { text: "bounce", type: "verb", definition: "to spring back or rebound; in conversation, to exchange ideas rapidly", context: "We like to bounce ideas around during brainstorming sessions." },
+  "each": { text: "each", type: "determiner/pronoun", definition: "every individual one of a group considered separately", context: "Each team member contributed valuable insights to the discussion." },
+  "true": { text: "true", type: "adjective", definition: "in accordance with fact or reality; genuine", context: "It's true that remote work has increased productivity for many organizations." },
+  "offices": { text: "offices", type: "noun", definition: "rooms or buildings where administrative or professional work is conducted", context: "Many companies are redesigning their offices to support collaborative work." },
+  "distracting": { text: "distracting", type: "adjective", definition: "causing someone to lose concentration or attention from what they are doing", context: "The noise from the construction site was extremely distracting while I was trying to study." },
+  "focus": { text: "focus", type: "verb", definition: "to direct attention or effort toward a particular person, thing, or task", context: "We need to focus on finding sustainable solutions to climate change." },
+  "starts": { text: "starts", type: "verb", definition: "begins something; initiates an action or process", context: "The meeting starts at 10 o'clock sharp tomorrow morning." },
+  "interrupts": { text: "interrupts", type: "verb", definition: "stops someone from speaking or from continuing an activity by doing something else", context: "It's impolite when someone interrupts you while you're explaining your ideas." },
+  "teamwork": { text: "teamwork", type: "noun", definition: "the coordinated effort of individuals working together toward a common goal", context: "The project's success depended entirely on the quality of teamwork among department members." },
+  "shut": { text: "shut", type: "verb", definition: "to close something; to stop speaking or operating", context: "Please shut the door quietly so you don't disturb the others in the office." },
+  "saying": { text: "saying", type: "verb", definition: "speaking or uttering words; expressing something in words", context: "Without saying a word, he communicated his disapproval through his facial expressions." },
+  "isn’t": { text: "isn’t", type: "unknown", definition: "No definition available.", context: "No context available." },
+  "flexibility": { text: "flexibility", type: "noun", definition: "the quality of being adaptable or capable of bending without breaking; the ability to adjust to different circumstances", context: "The flexibility to work from home has become increasingly important to modern employees." },
+  "others": { text: "others", type: "pronoun", definition: "different people or things; the remaining members of a group", context: "Some team members communicate effectively online, while others struggle with virtual collaboration." },
+  "prefer": { text: "prefer", type: "verb", definition: "to like something or someone more than another; to have a greater liking for", context: "Many professionals prefer hybrid arrangements that combine office and remote work." },
+  "companies": { text: "companies", type: "noun", definition: "commercial businesses or organizations; groups of people engaged in commercial enterprise", context: "Leading companies are recognizing that workplace flexibility is crucial for talent retention." },
+  "lose": { text: "lose", type: "verb", definition: "to misplace; to be deprived of; to cease to have or experience", context: "Organizations risk losing valuable talent if they ignore employee preferences for flexible working." },
+  "employees": { text: "employees", type: "noun", definition: "people engaged by a business or organization to perform work in exchange for compensation", context: "Satisfied employees are more likely to remain loyal and productive contributors to the organization." },
+  "culture": { text: "culture", type: "noun", definition: "the shared values, beliefs, customs, and behaviors of a group or organization", context: "A strong organizational culture that values respect and inclusion attracts top talent." },
+  "matters": { text: "matters", type: "verb/noun", definition: "to be important or significant; issues of concern or importance", context: "What matters most to employees varies widely, from career development to personal well-being." },
+  "work-life": { text: "work-life", type: "adjective", definition: "relating to the balance between professional responsibilities and personal or family time", context: "Many organizations are investing in work-life balance initiatives to improve employee satisfaction and reduce burnout." },
+  "balance": { text: "balance", type: "noun", definition: "a state of equilibrium where different elements are in proportion; or the remainder of money in an account", context: "Maintaining a healthy balance between work and leisure is essential for well-being." },
+  "exercise": { text: "exercise", type: "noun", definition: "physical activity performed to improve or maintain fitness and health", context: "Regular exercise can significantly reduce the risk of cardiovascular disease." },
+  "cooking": { text: "cooking", type: "noun", definition: "the process of preparing food by heat; or the culinary art", context: "My passion for cooking developed when I travelled through Italy and learnt traditional recipes." },
+  "spending": { text: "spending", type: "verb", definition: "the act of using money to buy something; or using time on an activity", context: "She's been spending too much time on social media instead of focusing on her studies." },
+  "grabbing": { text: "grabbing", type: "verb", definition: "the act of seizing or taking something quickly and abruptly", context: "He's always grabbing a coffee before rushing to the office in the morning." },
+  "snack": { text: "snack", type: "noun", definition: "a small amount of food or drink consumed between meals, typically light and quick to eat", context: "She keeps nutritious snacks like almonds and fruit at her desk for afternoon energy boosts." },
+  "whenever": { text: "whenever", type: "conjunction", definition: "at any time that; every time that something happens", context: "Whenever I face a difficult decision, I consult with my mentor for guidance." },
+  "sound": { text: "sound", type: "verb", definition: "to produce or emit noise; or to appear to be a certain way based on what is heard", context: "That proposal sounds promising, but we'll need more detailed analysis before committing." },
+  "i’ll": { text: "i’ll", type: "unknown", definition: "No definition available.", context: "No context available." },
+  "admit": { text: "admit", type: "verb", definition: "to confess or acknowledge something reluctantly; to allow entry", context: "I must admit that the film was far more compelling than I had anticipated." },
+  "i’d": { text: "i’d", type: "unknown", definition: "No definition available.", context: "No context available." },
+  "rather": { text: "rather", type: "adverb", definition: "used to express preference or a stronger degree of something; somewhat or fairly", context: "I'd rather spend the evening reading than watching television." },
+  "stay": { text: "stay", type: "verb", definition: "to remain in a particular place, condition, or position", context: "We decided to stay at a boutique hotel during our trip to Barcelona." },
+  "pajamas": { text: "pajamas", type: "noun", definition: "loose-fitting garment worn for sleeping, typically consisting of a shirt and trousers", context: "She wore comfortable pajamas throughout the day while working from home." },
+  "wake": { text: "wake", type: "verb", definition: "to stop sleeping or cause someone to stop sleeping", context: "The alarm clock will wake me up at 6 AM tomorrow morning." },
+  "ten": { text: "ten", type: "number", definition: "the number 10; one more than nine", context: "The meeting is scheduled to start at ten o'clock sharp." },
+  "hybrid": { text: "hybrid", type: "adjective", definition: "a thing made by combining two different elements; combining characteristics of different types", context: "The new hybrid work model allows employees to balance office and remote collaboration." },
+  "worlds": { text: "worlds", type: "noun", definition: "plural of world; distinct spheres of activity, experience, or existence", context: "The meeting brought together people from completely different worlds of academia and business." },
+  "agree": { text: "agree", type: "verb", definition: "to have the same opinion as someone; to consent to something", context: "Most experts agree that climate change requires immediate global action." },
+  "remote": { text: "remote", type: "adjective", definition: "situated far away from populated areas; conducted from a distance without physical presence", context: "She prefers remote work because it allows her to maintain a better work-life balance." },
+  "collaborate": { text: "collaborate", type: "verb", definition: "to work jointly with others toward a common goal", context: "We decided to collaborate with international partners to strengthen our research." },
+  "week": { text: "week", type: "noun", definition: "a period of seven consecutive days", context: "We're planning to finalize the contract within the next week." },
+  "flexibility…": { text: "flexibility…", type: "unknown", definition: "No definition available.", context: "No context available." },
+  "waking": { text: "waking", type: "adjective", definition: "related to the state of being awake; conscious", context: "She spent most of her waking hours preparing for the important conference." },
+  "especially": { text: "especially", type: "adverb", definition: "to a great extent; particularly; more so than usual", context: "This approach is especially useful for complex projects requiring multiple perspectives." },
+  "guess": { text: "guess", type: "verb", definition: "to form an opinion or estimate without having complete information", context: "I'd guess that the project will require at least three months to complete." },
+  "we’ve": { text: "we’ve", type: "unknown", definition: "No definition available.", context: "No context available." },
+  "found": { text: "found", type: "verb", definition: "past tense of find; to discover or locate something", context: "Our research found that flexible working arrangements improve employee productivity." },
+  "after": { text: "after", type: "preposition", definition: "at a later time than; following in time or order", context: "After finishing her degree, she decided to travel abroad for a year." },
+  "looks": { text: "looks", type: "verb", definition: "to direct one's gaze or appear in a particular way", context: "She looks exhausted after working double shifts all week." },
+  "forth": { text: "forth", type: "adverb", definition: "forward in time, place, or direction; onwards", context: "The company set forth ambitious plans to expand into three new markets." },
+  "eventually": { text: "eventually", type: "adverb", definition: "in the end; after some time; ultimately", context: "Although the project faced numerous obstacles initially, they eventually managed to complete it successfully." },
+  "out_of_the_loop": {
+    text: "out of the loop",
+    type: "idiom",
+    definition: "not informed about something or unaware of what is happening",
+    context: "I was out of the loop during the meeting, so I had no idea about the new project."
+  },
+
+  "on_the_same_page": {
+    text: "on the same page",
+    type: "idiom",
+    definition: "having the same understanding or agreement about something",
+    context: "Before we start the project, let's make sure we're all on the same page."
+  },
+
+  "bounce_ideas_off_each_other": {
+    text: "bounce ideas off each other",
+    type: "idiom",
+    definition: "to discuss ideas together and get feedback from one another",
+    context: "We met for coffee to bounce ideas off each other before the presentation."
+  },
+
+  "shut_everyone_out": {
+    text: "shut everyone out",
+    type: "idiom",
+    definition: "to ignore or exclude other people from communication or interaction",
+    context: "After the argument, he shut everyone out and stopped answering messages."
+  },
+
+  "coming_around": {
+    text: "coming around",
+    type: "idiom",
+    definition: "gradually beginning to agree with or accept an idea",
+    context: "She didn't like the proposal at first, but she's slowly coming around."
+  },
+
+  "don't_push_your_luck": {
+    text: "don't push your luck",
+    type: "idiom",
+    definition: "don't take advantage of a situation too much or go too far",
+    context: "The boss let you leave early today, so don't push your luck by asking for tomorrow off too."
+  },
+
+  "the_best_of_both_worlds": {
+    text: "the best of both worlds",
+    type: "idiom",
+    definition: "a situation where someone enjoys the advantages of two different options",
+    context: "Working part-time from home gives me the best of both worlds."
+  },
+
+  "common_ground": {
+    text: "common ground",
+    type: "idiom",
+    definition: "shared interests, opinions, or understanding that help people agree",
+    context: "Despite their differences, they found common ground and reached an agreement."
+  },
+
+  "i_don't_know_about_that":{
+    text: "i don't know about that",
+    type: "phrase",
+    definition: "a polite way to express doubt or disagreement",
+    context: "I don't know about that; I think there might be a better solution."
+  },
+
+  "fair_point": {
+    text: "fair point",
+    type: "phrase",
+    definition: "an expression used to acknowledge that someone has made a valid argument",
+    context: "Fair point. I hadn't considered that perspective before."
+  },
+
+  "at_the_same_time": {
+    text: "at the same time",
+    type: "phrase",
+    definition: "used to introduce a contrasting or balancing idea",
+    context: "I enjoy working from home, but at the same time I miss seeing my colleagues."
+  },
+
+  "that_depends_on": {
+    text: "that depends on",
+    type: "phrase",
+    definition: "used to indicate that the answer varies according to the situation",
+    context: "Whether we hire more staff depends on next year's budget."
+  },
+
+  "i_get_where_you're_coming_from": {
+    text: "i get where you're coming from",
+    type: "phrase",
+    definition: "I understand your opinion or perspective",
+    context: "I get where you're coming from, but I see the situation differently."
+  },
+
+  "i_still_believe": {
+    text: "i still believe",
+    type: "phrase",
+    definition: "used to maintain an opinion despite hearing other viewpoints",
+    context: "I still believe this is the best approach for the team."
+  },
+
+  "i_can_agree_with_that": {
+    text: "i can agree with that",
+    type: "phrase",
+    definition: "used when acknowledging that someone else's point is reasonable",
+    context: "Actually, I can agree with that. Your suggestion makes sense."
+  },
+
+  "same_here": {
+    text: "same here",
+    type: "phrase",
+    definition: "me too; an informal way to say that you feel or think the same way",
+    context: "I'm exhausted after work today. Same here."
+  },
+
+  "see?": {
+    text: "see?",
+    type: "phrase",
+    definition: "used to emphasize that something proves a point",
+    context: "See? I told you the shortcut would save us time."
+  },
+
+  "looks_like_it": {
+    text: "looks like it",
+    type: "phrase",
+    definition: "used to indicate that something appears to be true",
+    context: "Are we going to finish early today? Looks like it."
+  },
+
+  "back_and_forth": {
+    text: "back and forth",
+    type: "idiom",
+    definition: "a discussion or exchange involving repeated disagreement or changing opinions",
+    context: "There was a lot of back and forth before the team made a final decision."
+  }
 };

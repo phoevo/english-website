@@ -26,11 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
-
-
-
-
+import LoginChecker from "./(auth)/login/loginChecker";
 
 const geist = Geist({ subsets: ['latin'] });
 const dmSans = DM_Sans({ subsets: ['latin'] });
@@ -147,8 +143,8 @@ return (
 
             <div className={`flex absolute right-5 md:right-5 lg:right-10 md:gap-0 lg:gap-1 ${geist.className}`}>
               <Link href={"/register"}> <Button className="hidden md:block lg:block cursor-pointer" variant={"ghost"}>Sign up</Button> </Link>
-              <Link href={"/login"}> <Button className="hidden md:block lg:block cursor-pointer" variant="ghost">Log in</Button> </Link>
-              <Link href="/pricing"> <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Pricing</Button></Link>
+              <LoginChecker/>
+              <Link href={"/pricing"}> <Button className="hidden md:block lg:block cursor-pointer" variant={"ghost"}>Pricing</Button> </Link>
               <Link href="/blog"> <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Blog</Button></Link>
               <ModeToggle />
             </div>
@@ -311,6 +307,7 @@ return (
       Built for ESL tutors, Synomilo helps reduce prep time with real-world, ready-made conversations,
       assignments, and student progress tracking. Stay organized and prepared for every session.
     </p>
+    <span className="text-pink-500">Try it yourself, everything here is interactive.</span>
 
     <div className="flex flex-col items-center space-y-12 lg:space-y-6">
 
@@ -447,7 +444,7 @@ return (
 
 
         <motion.div
-          className="flex flex-col w-full lg:w-1/2 space-y-6 p-10 rounded-md lg:shadow-md"
+          className="flex flex-col w-full lg:w-1/2 space-y-6 p-10 rounded-md lg:bg-background/60 lg:shadow-md"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
@@ -553,9 +550,11 @@ return (
 
           <h1 className="text-2xl lg:text-4xl font-normal">Workflow</h1>
           <p className="text-md lg:text-lg text-muted-foreground">
-            Here's a glimpse of Synomilo's usual workflow. <span className="text-pink-500">The UI is interactable, give it a try.</span>
+            Here's a glimpse of Synomilo's usual workflow.
           </p>
           </div>
+
+          <span className="text-pink-500">Try it yourself, everything here is interactive.</span>
           <TestWorkflow />
 
 
