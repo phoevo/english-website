@@ -99,7 +99,7 @@ export default function ProfileLayout() {
 
     try {
       if (
-        values.username === user?.name &&
+        values.username === user!.name &&
         !values.newPassword) {
         toast('No changes detected', {
           description: 'Please update your username, role, or password before saving.',
@@ -108,11 +108,11 @@ export default function ProfileLayout() {
         return;
       }
 
-      if (values.username !== user?.name) {
+      if (values.username !== user!.name) {
         // Update Appwrite auth account name
         await account.updateName(values.username);
         // Mirror the change into the Users collection so all pages (e.g., Assignments) see the same name
-        await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
+        await databases.updateDocument(databaseId, usersCollectionId, user!.$id, {
           name: values.username,
         });
         toast('Username updated', {
@@ -171,12 +171,18 @@ const handleUnsubscribe = async () => {
     setIsLoading(false)
 
   } catch (error) {
-    console.error('Unsubscription failed:', error);
+  console.error('Unsubscription failed:', error);
 
-    toast.error('Unsubscription failed. Please try again later.', {
-      description: 'We encountered an error while processing your request.',
-    });
-  }
+  toast.error(
+    'Unsubscription failed. Please try again later.',
+    {
+      description:
+        'We encountered an error while processing your request.',
+    }
+  );
+} finally {
+  setIsLoading(false);
+}
 };
 
 
@@ -549,4 +555,4 @@ const handleUnsubscribe = async () => {
 </Tabs>
     </main>
   )
-}
+};
