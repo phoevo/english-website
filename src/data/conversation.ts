@@ -21,7 +21,7 @@ export interface Conversation {
   level: string;
   audioFileId: string;
   content: string | DialogueLine[];
-  isPro?: boolean;
+  isPro: boolean;
   category: string;
 }
 
