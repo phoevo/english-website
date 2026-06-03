@@ -126,29 +126,12 @@ fetchUser: async () => {
 
     // Use stored subscription status for fast loading
     // Only check Stripe periodically or whefn explicitly needed
-    const isSubscribed = !!userDoc?.isSubscribed;
+    let isSubscribed = !!userDoc?.isSubscribed;
+
 
     // Optionally check Stripe in background (don't await)
     // Disabled by default; enable by setting NEXT_PUBLIC_ENABLE_STRIPE_SYNC=true
-    if (ENABLE_STRIPE_SYNC) {
-      checkSubscriptionFromStripe(res.email)
-        .then(stripeStatus => {
-          if (stripeStatus !== isSubscribed) {
-            console.log(`Background sync: updating subscription ${isSubscribed} -> ${stripeStatus}`);
-            databases.updateDocument(databaseId, usersCollectionId, res.$id, {
-              isSubscribed: stripeStatus
-            }).catch(err => console.warn("Background subscription update failed:", err));
 
-            // Update the store immediately
-            set(state => ({
-              ...state,
-              isSubscribed: stripeStatus,
-              user: state.user ? { ...state.user, isSubscribed: stripeStatus } : null
-            }));
-          }
-        })
-        .catch(err => console.warn("Background Stripe check failed:", err));
-    }
 
 
     // Other user data from document

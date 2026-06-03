@@ -59,7 +59,7 @@ export async function POST(req: Request) {
     } : {};
 
     return new Response(
-      JSON.stringify({ ok, status: exec.status, errors: exec.errors, logs: exec.logs, ...data, ...debug }),
+      JSON.stringify({ ok, status: exec.status, errors: exec.errors, logs: exec.logs, data, ...debug }),
       { status: statusCode, headers: { 'content-type': 'application/json' } }
     );
   } catch (err: unknown) {

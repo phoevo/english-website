@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 
     const ok = exec.status === 'completed'
     return new Response(
-      JSON.stringify({ ok, status: exec.status, errors: exec.errors, logs: exec.logs, ...data }),
+      JSON.stringify({ ok, status: exec.status, errors: exec.errors, logs: exec.logs, data }),
       { status: ok ? 200 : 502, headers: { 'content-type': 'application/json' } }
     )
   } catch (err: unknown) {

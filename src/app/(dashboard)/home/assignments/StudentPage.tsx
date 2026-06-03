@@ -216,7 +216,7 @@ function StudentPage() {
 
                       <Button
                         onClick={() =>
-                          router.push(`/conversations/${a.conversationId}`)
+                          router.push(`conversations/${a.conversationId}`)
                         }
                       >
                         <BookOpen />

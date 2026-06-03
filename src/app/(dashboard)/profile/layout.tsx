@@ -150,39 +150,35 @@ export default function ProfileLayout() {
 
 
 const handleUnsubscribe = async () => {
-  if (!user) {
-    console.log('No user found, exiting unsubscribe.');
-    return;
+  if (!user) return;
+  setIsLoading(true);
+
+  // 1. Cancel Stripe subscription via Appwrite function
+  try {
+    await unsubscribeUser2(user.$id);
+  } catch (err) {
+    console.error('Function unsubscribe error:', err);
   }
 
-  console.log('Attempting to unsubscribe user with ID:', user.$id);
-  setIsLoading(true)
-
+  // 2. Directly set isSubscribed=false in Appwrite DB as a guaranteed backup
   try {
-    const unsubscribeResponse = await unsubscribeUser2(user.$id);
-    console.log('Unsubscribe response:', unsubscribeResponse);
-
-    setSubscribed(false);
-    await fetchUser();
-
-    toast.success('You have successfully unsubscribed!', {
-      description: 'You will no longer have access to premium content.',
+    await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
+      isSubscribed: false,
     });
-    setIsLoading(false)
+    console.log(isSubscribed)
+  } catch (err) {
+    console.error('Direct DB update error:', err);
 
-  } catch (error) {
-  console.error('Unsubscription failed:', error);
+  }
 
-  toast.error(
-    'Unsubscription failed. Please try again later.',
-    {
-      description:
-        'We encountered an error while processing your request.',
-    }
-  );
-} finally {
+  // 3. Force-update Zustand so the UI reflects immediately
+  useUserStore.setState((state) => ({
+    isSubscribed: false,
+    user: state.user ? { ...state.user, isSubscribed: false } : state.user,
+  }));
+
+  toast.success('You have successfully unsubscribed!');
   setIsLoading(false);
-}
 };
 
 

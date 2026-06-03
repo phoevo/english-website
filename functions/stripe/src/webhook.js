@@ -208,6 +208,23 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
     }
   }
 
+  // For cancellation/deletion events, force plan to "free" regardless of price ID
+  const cancellationEvents = [
+    "customer.subscription.deleted",
+    "customer.subscription.paused",
+  ];
+  if (cancellationEvents.includes(event.type)) {
+    plan = "free";
+  }
+
+  // For updated subscriptions, check if the status is actually active
+  if (event.type === "customer.subscription.updated") {
+    const subStatus = event.data.object.status;
+    if (subStatus === "canceled" || subStatus === "unpaid" || subStatus === "incomplete_expired") {
+      plan = "free";
+    }
+  }
+
   console.log("Determined plan:", plan);
 
   await provision({ plan, userId, adminClient });

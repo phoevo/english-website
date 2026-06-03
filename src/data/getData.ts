@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import { account, conversationsCollectionId, databaseId, databases, usersCollectionId, } from "./appwrite";
+import { account, conversationsCollectionId, databaseId, databases, usersCollectionId, functions as appwriteFunctions } from "./appwrite";
 import { Client, Functions } from "appwrite";
 
 
@@ -57,16 +57,14 @@ export async function subscribeUser2(documentId: string, plan: string): Promise<
   // Refresh the JWT token to ensure it's valid
   const user = await account.get();
   console.log("Logged in user:", user);
-  const jwt = await account.createJWT();
-  localStorage.setItem('jwt', jwt.jwt);
+
 
   // First try direct call (best when CORS is correctly configured)
   try {
-    const client = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(PROJECT_ID).setJWT(jwt.jwt);
+    const client = new Client().setEndpoint(APPWRITE_ENDPOINT).setProject(PROJECT_ID);
     const functions = new Functions(client);
 
     console.log("Calling Appwrite function with:", { plan, documentId });
-    console.log("JWT token refreshed and exists:", !!jwt.jwt);
     console.log("Project ID:", PROJECT_ID);
 
     const response = await functions.createExecution(
@@ -90,11 +88,10 @@ export async function subscribeUser2(documentId: string, plan: string): Promise<
   }
 
   // Fallback: call same-origin Next.js proxy to bypass CORS
-  const resp = await fetch('/api/checkout', {
+  const resp = await fetch('/api/ checkout', {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-      authorization: `Bearer ${jwt.jwt}`,
     },
     body: JSON.stringify({ plan, documentId }),
   });
@@ -106,8 +103,8 @@ export async function subscribeUser2(documentId: string, plan: string): Promise<
     return;
   }
   if (data?.checkout_url) {
-    window.location.href = data.checkout_url;
-  } else {
+  window.location.href = data.checkout_url;
+  }else {
     toast.dismiss('subscription-loading');
     toast.error('No checkout URL returned.');
   }
@@ -232,51 +229,24 @@ export async function getUserPlan(): Promise<"free" | "pro"> {
 
 
 export async function unsubscribeUser2(userId: string) {
-  const jwt = await account.createJWT();
+  const response = await appwriteFunctions.createExecution(
+    STRIPE_FUNCTION,
+    JSON.stringify({ userId }),
+    false,
+    "/unsubscribe",
+    "POST" as unknown as import("appwrite").ExecutionMethod
+  );
 
-  // Try direct call first (will fail with CORS in browser if not configured)
-  try {
-    const client = new Client()
-      .setEndpoint(APPWRITE_ENDPOINT)
-      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
-      .setJWT(jwt.jwt);
-
-    const functions = new Functions(client);
-
-    const payload = JSON.stringify({ user_id: userId, jwt: jwt.jwt });
-
-    const response = await functions.createExecution(
-      STRIPE_FUNCTION,
-      payload,
-      false,
-      "/unsubscribe",
-      "POST" as unknown as import("appwrite").ExecutionMethod
-    );
-
-    if (response.status === "completed") {
-      return JSON.parse(response.responseBody || '{}');
-    }
-    // fall through to proxy on non-completed
-  } catch {
-    // fall back to proxy
+  if (response.status !== "completed") {
+    throw new Error(response.responseBody || "Unsubscribe failed in function");
   }
 
-  // Fallback proxy to bypass CORS
-  const resp = await fetch('/api/unsubscribe', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      authorization: `Bearer ${jwt.jwt}`,
-    },
-    body: JSON.stringify({ userId }),
-  });
-
-  const data = await resp.json();
-  if (!resp.ok) {
-    throw new Error(data?.error || 'Failed to unsubscribe user');
-  }
-  return data;
+  return JSON.parse(response.responseBody || "{}");
 }
+
+
+
+
 
 export async function deleteAccountServer(): Promise<void> {
   // Uses the current user's JWT to authenticate the request to the Appwrite Function
@@ -368,20 +338,37 @@ export async function checkSubscriptionFromStripe(): Promise<boolean> {
 
 export async function syncUserSubscriptionStatusWithStripe(userId: string): Promise<void> {
   try {
-    const hasActiveSubscription = await checkSubscriptionFromStripe(userId);
+    const jwt = await account.createJWT();
 
-    // Update the user's isSubscribed field based on Stripe
-    await databases.updateDocument(
-      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-      process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!,
-      userId,
-      { isSubscribed: hasActiveSubscription }
+    const client = new Client()
+      .setEndpoint(APPWRITE_ENDPOINT)
+      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
+      .setJWT(jwt.jwt);
+
+    const functions = new Functions(client);
+
+    const response = await functions.createExecution(
+      STRIPE_FUNCTION_ID_CHECK_SUBSCRIPTION,
+      JSON.stringify({ user_id: userId }),
+      false,
+      "/check-subscription",
+      "POST" as any
     );
 
-    console.log(`User ${userId} isSubscribed status synced with Stripe to:`, hasActiveSubscription);
-  } catch (error) {
-    console.error("Error syncing user subscription status with Stripe:", error);
-    throw error;
+    if (response.status !== "completed") return;
+
+    const result = JSON.parse(response.responseBody || "{}");
+
+    await databases.updateDocument(
+      databaseId,
+      usersCollectionId,
+      userId,
+      {
+        isSubscribed: !!result.isSubscribed,
+      }
+    );
+  } catch (err) {
+    console.error("Sync failed:", err);
   }
 }
 
