@@ -30,11 +30,14 @@ export default function OAuthCallback() {
           localStorage.setItem('jwt', jwt.jwt)
         } catch {}
 
+        let isNewUser = false
         try {
-          await ensureUserDocument()
+          const { created } = await ensureUserDocument()
+          isNewUser = created
         } catch {}
 
-        router.replace(redirect)
+        // New users always go to onboarding, returning users go to the requested page
+        router.replace(isNewUser ? '/onboarding' : redirect)
       } catch (err) {
         console.error('OAuth session creation failed:', err)
         setError('Failed to complete sign-in. Please try again.')

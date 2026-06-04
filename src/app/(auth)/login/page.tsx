@@ -37,7 +37,7 @@ export default function Login() {
     try {
       account.createOAuth2Token(
         OAuthProvider.Google,
-        `${window.location.origin}/oauth-callback?redirect=/home`,
+        `${window.location.origin}/oauth-callback`,
         `${window.location.origin}/login`
       );
     } catch (error: unknown) {
@@ -185,7 +185,7 @@ if (checkingSession) {
 
               <Button onClick={handleGoogleLogin} variant="outline" type='button' className="w-full cursor-pointer" disabled={isLoading}>
                 <Image alt='Google logo' src='google-logo.svg' height={20} width={"20"}/>
-                Login with Google
+                Continue with Google
               </Button>
             </div>
           </form>

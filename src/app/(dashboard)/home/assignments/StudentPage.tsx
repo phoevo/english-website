@@ -22,6 +22,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import {
   BookOpen,
+  ClipboardCheck,
   MoreHorizontal,
   Sparkles,
 } from "lucide-react";
@@ -157,9 +158,20 @@ function StudentPage() {
           {loading ? (
             <p>Loading...</p>
           ) : assignments.length === 0 ? (
-            <p className="text-muted-foreground text-center py-10">
-              No assignments yet
-            </p>
+             <div className="flex flex-col items-center justify-center py-12 text-center">
+              <ClipboardCheck
+                className="text-muted-foreground mb-3"
+                size={32}
+              />
+
+              <p className="font-medium">
+                No assignments yet
+              </p>
+
+              <p className="text-sm text-muted-foreground">
+                Make sure you've added your tutor and they have assigned you a conversation.
+              </p>
+            </div>
           ) : (
             <div className="space-y-4 pb-5">
               {assignments.map((a) => (

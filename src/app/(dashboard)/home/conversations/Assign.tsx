@@ -129,7 +129,7 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
           <div className="space-y-2 max-h-100 w-auto overflow-y-auto">
             {studentFriends.length === 0 ? (
               <p className="text-sm text-muted-foreground">
-                No student friends found.
+                No students found
               </p>
             ) : (
               studentFriends.map((student) => {

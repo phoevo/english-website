@@ -71,7 +71,7 @@ export default function Register() {
     try {
       account.createOAuth2Token(
         OAuthProvider.Google,
-        `${window.location.origin}/oauth-callback?redirect=/onboarding`,
+        `${window.location.origin}/oauth-callback`,
         `${window.location.origin}/register`
       );
     } catch (e: unknown) {
@@ -150,7 +150,7 @@ export default function Register() {
 
         <Button onClick={handleGoogleSignup} variant="outline" type="button" className="flex w-full cursor-pointer" disabled={isLoading}>
           <Image alt="Google logo" src='google-logo.svg' width={20} height={20}/>
-          Sign up with Google
+          Continue with Google
         </Button>
 
         <div className='flex justify-center my-5 text-muted-foreground'>

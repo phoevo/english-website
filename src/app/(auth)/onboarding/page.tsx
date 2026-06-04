@@ -20,6 +20,11 @@ export default function Onboarding() {
   const { user, setIsTeacher, fetchUser } = useUserStore()
   const [isBootstrapping, setIsBootstrapping] = useState(true)
 
+  useEffect(() => {
+  console.log("ONBOARDING MOUNTED")
+}, [])
+
+console.log("USER:", user)
 
   useEffect(() => {
     (async () => {
@@ -110,6 +115,7 @@ export default function Onboarding() {
   try {
     await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
       isTeacher: role === 'tutor',
+      onboardingComplete: true,
     })
 
     setIsTeacher(role === 'tutor')

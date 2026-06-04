@@ -30,6 +30,7 @@ export async function ensureUserDocument(): Promise<{ created: boolean }> {
         email: user.email,
         name: user.name ?? "",
         recentConversations: [],
+        onboardingComplete: false,
       });
       return { created: true };
     } else {
