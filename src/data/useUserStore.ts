@@ -31,6 +31,22 @@ interface Conversation {
   isPro?: boolean;
 }
 
+type UserDoc = {
+  isSubscribed?: boolean;
+  recentConversations?: string[];
+  dictionaryWords?: string[];
+  completeConversations?: string[];
+  customColors?: string[];
+  challengeCount?: string[];
+  taskCount?: number;
+  lastActive?: string | null;
+  streak?: number;
+  isTeacher?: boolean;
+  friendsList?: string[];
+  activeStudents?: string[];
+  name?: string;
+};
+
 interface UserState {
   user: User | null;
   isSubscribed: boolean;
@@ -103,61 +119,54 @@ export const useUserStore = create<UserState>((set, get) => ({
 },
 
 
+
 fetchUser: async () => {
   set({ loading: true });
 
   try {
     const res = await account.get();
 
-    // Fetch the Users document; if it's been deleted (404), continue with null doc
-    let userDoc: unknown = null;
+    let userDoc: UserDoc | null = null;
+
     try {
-      userDoc = await databases.getDocument(databaseId, usersCollectionId, res.$id);
-    } catch (err: unknown) {
-      if (typeof (err as { code?: number })?.code === 'number' && (err as { code?: number }).code === 404) {
-        // Expected when the profile doc was deleted (e.g., during account deletion)
+      userDoc = (await databases.getDocument(
+        databaseId,
+        usersCollectionId,
+        res.$id
+      )) as UserDoc;
+    } catch (err: any) {
+      if (err?.code === 404) {
         userDoc = null;
       } else {
-        throw err; // bubble up unexpected errors
+        throw err;
       }
     }
 
-    // Use stored subscription status for fast loading
-    // Only check Stripe periodically or whefn explicitly needed
+    // ---- Safe defaults ----
     const isSubscribed = !!userDoc?.isSubscribed;
-
-
-    // Optionally check Stripe in background (don't await)
-    // Disabled by default; enable by setting NEXT_PUBLIC_ENABLE_STRIPE_SYNC=true
-
-
-
-    // Other user data from document
-    const conversationIds: string[] = userDoc?.recentConversations || [];
-    const dictionaryWords = userDoc?.dictionaryWords || [];
-    const completeConversations: string[] = userDoc?.completeConversations || [];
-    const customColors = userDoc?.customColors || [];
-    const challengeCount: string[] = userDoc?.challengeCount || [];
-    const taskCount: number = typeof userDoc?.taskCount === "number" ? userDoc.taskCount : 0;
+    const conversationIds = userDoc?.recentConversations ?? [];
+    const dictionaryWords = userDoc?.dictionaryWords ?? [];
+    const completeConversations = userDoc?.completeConversations ?? [];
+    const customColors = userDoc?.customColors ?? [];
+    const challengeCount = userDoc?.challengeCount ?? [];
+    const taskCount = userDoc?.taskCount ?? 0;
     const lastActive = userDoc?.lastActive ?? null;
-    const streak = typeof userDoc?.streak === "number" ? userDoc.streak : 0;
+    const streak = userDoc?.streak ?? 0;
     const isTeacher = !!userDoc?.isTeacher;
-    const friendsList: string[] = userDoc?.friendsList || [];
-    const activeStudents: string[] = userDoc?.activeStudents || [];
+    const friendsList = userDoc?.friendsList ?? [];
+    const activeStudents = userDoc?.activeStudents ?? [];
 
-
-    // Fetch conversations in parallel for better performance
+    // ---- Fetch conversations in parallel ----
     const conversations: Conversation[] = [];
-    const validConversationIds: string[] = [];
 
     if (conversationIds.length > 0) {
-      const conversationPromises = conversationIds.map(id =>
-        getConversationFromDB(id).catch(() => null)
+      const fetched = await Promise.all(
+        conversationIds.map((id) =>
+          getConversationFromDB(id).catch(() => null)
+        )
       );
 
-      const fetchedConversations = await Promise.all(conversationPromises);
-
-      fetchedConversations.forEach((convo, index) => {
+      fetched.forEach((convo) => {
         if (convo) {
           conversations.push({
             $id: convo.$id,
@@ -167,25 +176,18 @@ fetchUser: async () => {
             category: convo.category,
             isPro: convo.isPro,
           });
-          validConversationIds.push(convo.$id);
-        } else {
-          console.warn(`Skipping deleted conversation ID: ${conversationIds[index]}`);
         }
       });
-
-      // Update document in background if needed (don't await)
-      if (validConversationIds.length !== conversationIds.length) {
-        databases.updateDocument(databaseId, usersCollectionId, res.$id, {
-          recentConversations: validConversationIds,
-        }).catch(err => console.warn("Background conversation cleanup failed:", err));
-      }
     }
 
+    // ---- Set state ----
     set({
       user: {
         $id: res.$id,
-        // Prefer the Users collection display name to keep consistency with other user-facing lists
-        name: (typeof userDoc?.name === "string" && userDoc.name.trim().length > 0) ? userDoc.name : res.name,
+        name:
+          userDoc?.name?.trim()?.length
+            ? userDoc.name
+            : res.name,
         email: res.email,
         isTeacher,
         friendsList,
@@ -209,11 +211,15 @@ fetchUser: async () => {
       activeStudents,
     });
 
-    // Fetch friends in background to avoid blocking initial load
-    get().fetchFriends().catch(err => console.warn("Background friends fetch failed:", err));
-
+    // background fetch (non-blocking)
+    get()
+      .fetchFriends()
+      .catch((err) =>
+        console.warn("Background friends fetch failed:", err)
+      );
   } catch (error) {
     console.error("Failed to fetch user or conversations:", error);
+
     set({
       user: null,
       isTeacher: false,
@@ -228,6 +234,7 @@ fetchUser: async () => {
       taskCount: 0,
       lastActive: null,
       streak: 0,
+      activeStudents: [],
     });
   } finally {
     set({ loading: false });
