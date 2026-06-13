@@ -307,35 +307,36 @@ export async function deleteAccountServer(): Promise<void> {
 }
 
 // Simple function to check subscription via Appwrite function
-export async function checkSubscriptionFromStripe(): Promise<boolean> {
-  try {
-    const jwt = await account.createJWT();
-    const client = new Client()
-      .setEndpoint(APPWRITE_ENDPOINT)
-      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
-      .setJWT(jwt.jwt);
+// export async function checkSubscriptionFromStripe(): Promise<boolean> {
+//   try {
+//     const jwt = await account.createJWT();
+//     const client = new Client()
+//       .setEndpoint(APPWRITE_ENDPOINT)
+//       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
+//       .setJWT(jwt.jwt);
 
-    const functions = new Functions(client);
+//     const functions = new Functions(client);
 
-    const response = await functions.createExecution(
-      "68794e830018a53dcad6",
-      JSON.stringify({ plan, documentId, jwt: jwt.jwt }),
-      false,
-      "/payments",
-      "POST" as unknown as import("appwrite").ExecutionMethod
-    );
 
-    if (response.status !== "completed") {
-      return false;
-    }
+//     const response = await functions.createExecution(
+//       "68794e830018a53dcad6",
+//       JSON.stringify({ plan, documentId, jwt: jwt.jwt }),
+//       false,
+//       "/payments",
+//       "POST" as unknown as import("appwrite").ExecutionMethod
+//     );
 
-    const result = JSON.parse(response.responseBody || "{}");
-    return result.isSubscribed || false;
-  } catch (error) {
-    console.error("Error checking subscription:", error);
-    return false;
-  }
-}
+//     if (response.status !== "completed") {
+//       return false;
+//     }
+
+//     const result = JSON.parse(response.responseBody || "{}");
+//     return result.isSubscribed || false;
+//   } catch (error) {
+//     console.error("Error checking subscription:", error);
+//     return false;
+//   }
+// }
 
 // export async function syncUserSubscriptionStatusWithStripe(userId: string): Promise<void> {
 //   try {
