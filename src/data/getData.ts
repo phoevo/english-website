@@ -337,41 +337,41 @@ export async function checkSubscriptionFromStripe(): Promise<boolean> {
   }
 }
 
-export async function syncUserSubscriptionStatusWithStripe(userId: string): Promise<void> {
-  try {
-    const jwt = await account.createJWT();
+// export async function syncUserSubscriptionStatusWithStripe(userId: string): Promise<void> {
+//   try {
+//     const jwt = await account.createJWT();
 
-    const client = new Client()
-      .setEndpoint(APPWRITE_ENDPOINT)
-      .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
-      .setJWT(jwt.jwt);
+//     const client = new Client()
+//       .setEndpoint(APPWRITE_ENDPOINT)
+//       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
+//       .setJWT(jwt.jwt);
 
-    const functions = new Functions(client);
+//     const functions = new Functions(client);
 
-    const response = await functions.createExecution(
-      STRIPE_FUNCTION_ID_CHECK_SUBSCRIPTION,
-      JSON.stringify({ user_id: userId }),
-      false,
-      "/check-subscription",
-      "POST" as any
-    );
+//     const response = await functions.createExecution(
+//       STRIPE_FUNCTION_ID_CHECK_SUBSCRIPTION,
+//       JSON.stringify({ user_id: userId }),
+//       false,
+//       "/check-subscription",
+//       "POST" as any
+//     );
 
-    if (response.status !== "completed") return;
+//     if (response.status !== "completed") return;
 
-    const result = JSON.parse(response.responseBody || "{}");
+//     const result = JSON.parse(response.responseBody || "{}");
 
-    await databases.updateDocument(
-      databaseId,
-      usersCollectionId,
-      userId,
-      {
-        isSubscribed: !!result.isSubscribed,
-      }
-    );
-  } catch (err) {
-    console.error("Sync failed:", err);
-  }
-}
+//     await databases.updateDocument(
+//       databaseId,
+//       usersCollectionId,
+//       userId,
+//       {
+//         isSubscribed: !!result.isSubscribed,
+//       }
+//     );
+//   } catch (err) {
+//     console.error("Sync failed:", err);
+//   }
+// }
 
 export async function checkSubscriptionStatus(userId: string): Promise<boolean> {
   try {

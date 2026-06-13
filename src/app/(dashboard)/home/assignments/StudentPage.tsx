@@ -109,7 +109,6 @@ function StudentPage() {
             $id: a.$id,
             conversationId: a.conversationId,
             status: a.status,
-
             title: convo?.title ?? "Untitled",
             level: convo?.level ?? "Unknown",
             category: convo?.category ?? "General",
@@ -169,7 +168,7 @@ function StudentPage() {
               </p>
 
               <p className="text-sm text-muted-foreground">
-                Make sure you've added your tutor and they have assigned you a conversation.
+                Make sure you&apos;ve connected with your tutor and they have assigned you a conversation.
               </p>
             </div>
           ) : (

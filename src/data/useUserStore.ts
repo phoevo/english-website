@@ -7,9 +7,7 @@ import {
   databaseId,
   getUserById,
 } from "@/data/appwrite";
-  import { checkSubscriptionFromStripe } from "@/data/getData"; // Disabled in beta to avoid overriding local tier
 
-  const ENABLE_STRIPE_SYNC = process.env.NEXT_PUBLIC_ENABLE_STRIPE_SYNC === 'true';
 
 interface User {
   isSubscribed: boolean;
@@ -126,7 +124,7 @@ fetchUser: async () => {
 
     // Use stored subscription status for fast loading
     // Only check Stripe periodically or whefn explicitly needed
-    let isSubscribed = !!userDoc?.isSubscribed;
+    const isSubscribed = !!userDoc?.isSubscribed;
 
 
     // Optionally check Stripe in background (don't await)
