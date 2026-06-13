@@ -134,12 +134,8 @@ fetchUser: async () => {
         usersCollectionId,
         res.$id
       )) as UserDoc;
-    } catch (err: any) {
-      if (err?.code === 404) {
-        userDoc = null;
-      } else {
-        throw err;
-      }
+    } catch{
+      console.log("User not found")
     }
 
     // ---- Safe defaults ----
