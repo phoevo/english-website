@@ -144,7 +144,6 @@ return (
               <Link href={"/register"}> <Button className="hidden md:block lg:block cursor-pointer" variant={"ghost"}>Sign up</Button> </Link>
               <LoginChecker/>
               <Link href={"/pricing"}> <Button className="hidden md:block lg:block cursor-pointer" variant={"ghost"}>Pricing</Button> </Link>
-              <Link href="/blog"> <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Blog</Button></Link>
               <ModeToggle />
             </div>
         </div>
@@ -479,12 +478,7 @@ return (
           whether that’s traveling, working, studying, or everyday communication.
         </p>
 
-            <h3 className="text-2xl lg:text-4xl font-normal mt-5">AI</h3>
-             <p className="text-md lg:text-lg text-muted-foreground">
-             AI is not used to write any material. Every conversation is written by native English speakers,
-             ensuring they sound as natural as possible and reflect real spoken English. For now, AI is only used
-             for audio. As the platform grows, a switch will be made to record and use audio from native speakers.
-            </p>
+
 
 
         </motion.div>
@@ -530,7 +524,7 @@ return (
 
         <div className="hidden lg:block z-20 sticky top-30 left-43 text lg:left-0 lg:top-62 self-start m-4 mb-23 lg:text-2xl font-semibold">
         <span className="px-1 text-pink-500 text">
-          2.
+          3.
         </span>
         Workflow
         </div>
@@ -562,7 +556,7 @@ return (
 
         <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-72 lg:mb-14 self-start m-4 lg:text-2xl font-semibold">
         <span className="px-1 text-pink-500">
-          3.
+          4.
         </span>
         Tools & Features
         </div>

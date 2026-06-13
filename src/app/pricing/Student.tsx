@@ -164,7 +164,7 @@ function Student() {
     {paidOptions.map((option, index) => (
       <div
   key={index}
-className="relative flex flex-col justify-between p-4 border rounded-xl w-full lg:w-sm h-60 lg:h-90 shadow-md transition-all hover:shadow-lg hover:-translate-y-1">
+className="relative flex flex-col justify-between p-4 border rounded-xl w-full lg:w-sm h-60 lg:h-90 shadow-md transition-all hover:shadow-lg">
 
         {option.time === "year" && (
             <div className="absolute -top-3 left-1/2 -translate-x-1/2">

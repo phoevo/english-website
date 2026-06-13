@@ -29,7 +29,7 @@ function Tutor() {
         return;
       }
       toast.loading("Redirecting to payment...", { id: 'subscription-loading' });
-      await subscribeUser2(user.$id, plan);
+      await subscribeUser2(user!.$id, plan);
     } catch (err) {
       console.error("Subscription failed", err);
       toast.dismiss('subscription-loading');
@@ -160,7 +160,7 @@ function Tutor() {
     {tutorPlans.map((plan, index) => (
 <div
   key={index}
-  className="relative flex flex-col justify-between p-4 border rounded-xl w-full lg:w-sm h-70 lg:h-90 shadow-md transition-all hover:shadow-lg hover:-translate-y-1">
+  className="relative flex flex-col justify-between p-4 border rounded-xl w-full lg:w-sm h-70 lg:h-90 shadow-md transition-all hover:shadow-lg">
 
        {plan.time === "year" && (
          <div className="absolute -top-3 left-1/2 -translate-x-1/2">
