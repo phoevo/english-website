@@ -32,7 +32,7 @@ function Student() {
         return;
       }
       toast.loading("Redirecting to payment...", { id: 'subscription-loading' });
-      await subscribeUser2(user!!.$id, plan);
+      await subscribeUser2(user!.$id, plan);
     } catch (err) {
       console.error("Subscription failed", err);
       toast.dismiss('subscription-loading');
