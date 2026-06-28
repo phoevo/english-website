@@ -208,28 +208,32 @@ const handleUnsubscribe = async () => {
     };
 
     try {
-      try {
-        await unsubscribeUser2(userId);
-      } catch (e) {
-        console.warn('Unsubscribe step failed or not applicable:', e);
+      // Only call unsubscribe if user is actually subscribed
+      if (isSubscribed) {
+        try {
+          await unsubscribeUser2(userId);
+        } catch (e) {
+          console.warn('Unsubscribe step failed or not applicable:', e);
+        }
       }
 
+      // Clean up user-owned documents (client-side, fast direct DB access)
       await safeDeleteDocs(decksCollectionId, [Query.equal('userID', userId)]);
-
       await safeDeleteDocs(friendRequestsId, [Query.equal('fromUserId', userId)]);
       await safeDeleteDocs(friendRequestsId, [Query.equal('toUserId', userId)]);
-
       await safeDeleteDocs(assignmentsId, [Query.equal('studentId', userId)]);
       await safeDeleteDocs(assignmentsId, [Query.equal('teacherId', userId)]);
 
+      // Delete user document from DB
       try {
         await databases.deleteDocument(databaseId, usersCollectionId, userId);
       } catch (e) {
         console.warn('Failed to delete user document:', e);
       }
 
+      // Delete auth user via Appwrite function (only thing that needs admin key)
       try {
-        await deleteAccountServer();
+        await deleteAccountServer(userId);
       } catch (e) {
         console.warn('Failed to delete Appwrite auth user:', e);
       }

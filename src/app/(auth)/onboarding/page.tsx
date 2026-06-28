@@ -24,7 +24,6 @@ export default function Onboarding() {
   console.log("ONBOARDING MOUNTED")
 }, [])
 
-console.log("USER:", user)
 
   useEffect(() => {
     (async () => {

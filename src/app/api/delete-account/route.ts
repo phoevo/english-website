@@ -1,46 +1,40 @@
-import { Client, Functions } from 'appwrite'
-
 export async function POST(req: Request) {
   try {
-    // We don't require a body; JWT comes from Authorization header
-    const auth = req.headers.get('authorization') || ''
-    if (!auth.startsWith('Bearer ')) {
-      return new Response(JSON.stringify({ error: 'Missing Authorization bearer token' }), { status: 401 })
-    }
+    const { userId } = await req.json()
 
-    const token = auth.slice(7).trim()
+    if (!userId) {
+      return new Response(JSON.stringify({ error: 'Missing userId' }), { status: 400 })
+    }
 
     const endpoint = (process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || 'https://fra.cloud.appwrite.io/v1').replace(/\/$/, '')
     const project = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!
-    const fnId = process.env.NEXT_PUBLIC_APPWRITE_STRIPE_FUNCTION!
+    const apiKey = process.env.APPWRITE_API_KEY!
 
-    const client = new Client().setEndpoint(endpoint).setProject(project).setJWT(token)
-    const functions = new Functions(client)
+    // Direct REST call to Appwrite — no function cold start needed
+    const resp = await fetch(`${endpoint}/users/${userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Appwrite-Project': project,
+        'X-Appwrite-Key': apiKey,
+      },
+    })
 
-    const exec = await functions.createExecution(
-      fnId,
-      JSON.stringify({ jwt: token }),
-      false,
-      '/delete-account',
-      'POST' as unknown as import('appwrite').ExecutionMethod
-    )
-
-    const body = exec.responseBody || '{}'
-    let data: unknown
-    try {
-      data = JSON.parse(body)
-    } catch {
-      data = { raw: body }
+    if (!resp.ok) {
+      const body = await resp.text()
+      return new Response(
+        JSON.stringify({ error: 'Failed to delete auth user', status: resp.status, details: body }),
+        { status: resp.status, headers: { 'content-type': 'application/json' } }
+      )
     }
 
-    const ok = exec.status === 'completed'
     return new Response(
-      JSON.stringify({ ok, status: exec.status, errors: exec.errors, logs: exec.logs, data }),
-      { status: ok ? 200 : 502, headers: { 'content-type': 'application/json' } }
+      JSON.stringify({ success: true, userId }),
+      { status: 200, headers: { 'content-type': 'application/json' } }
     )
   } catch (err: unknown) {
     return new Response(
-      JSON.stringify({ error: 'Delete-account proxy failed', message: (err as Error)?.message || String(err) }),
+      JSON.stringify({ error: 'Delete-account failed', message: (err as Error)?.message || String(err) }),
       { status: 500, headers: { 'content-type': 'application/json' } }
     )
   }

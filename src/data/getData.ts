@@ -249,60 +249,18 @@ export async function unsubscribeUser2(userId: string) {
 
 
 
-export async function deleteAccountServer(): Promise<void> {
-  // Uses the current user's JWT to authenticate the request to the Appwrite Function
-  const jwt = await account.createJWT();
-  const client = new Client()
-    .setEndpoint(APPWRITE_ENDPOINT)
-    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
-    .setJWT(jwt.jwt);
+export async function deleteAccountServer(userId: string): Promise<void> {
+  // Use Next.js API route which calls Appwrite REST API directly
+  // No function cold start, no timeout issues
+  const resp = await fetch('/api/delete-account', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ userId }),
+  });
 
-  const functions = new Functions(client);
-
-  // Prefer configured function ID to avoid hardcoding mismatches across envs
-  const fnId = STRIPE_FUNCTION;
-
-  try {
-    const response = await functions.createExecution(
-      fnId,
-      JSON.stringify({ jwt: jwt.jwt }),
-      false,
-      "/delete-account",
-      "POST" as unknown as import("appwrite").ExecutionMethod
-    );
-
-    // Surface detailed errors to help debugging
-    if (response.status !== "completed") {
-      const body = (() => { try { return JSON.parse(response.responseBody || '{}'); } catch { return {}; } })();
-      const message = body?.error || body?.message || `Delete account function did not complete (status=${response.status})`;
-      throw new Error(message);
-    }
-
-    // If completed, still check the function payload for reported errors
-    try {
-      const body = JSON.parse(response.responseBody || '{}');
-      if (body?.error) {
-        throw new Error(body.error);
-      }
-    } catch {
-      // ignore non-JSON bodies
-    }
-    return; // success
-  } catch {
-    // Fallback: call same-origin Next.js proxy to bypass CORS/network issues
-    const resp = await fetch('/api/delete-account', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${jwt.jwt}`,
-      },
-      body: JSON.stringify({}),
-    });
-
+  if (!resp.ok) {
     const data = await resp.json().catch(() => ({}));
-    if (!resp.ok) {
-      throw new Error(data?.error || data?.message || 'Failed to delete account');
-    }
+    throw new Error(data?.error || 'Failed to delete account');
   }
 }
 

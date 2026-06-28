@@ -192,7 +192,7 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
                               <div className="flex gap-2 items-center mt-2">
                                 <div className="flex flex-row border-1 rounded-full p-1 h-8 shadow-xs">
                                   {student.isSubscribed ? (
-                                    <Badge className="text-foreground bg-pink-500 border-none">Plus</Badge>
+                                    <Badge className="text-white bg-pink-500 border-none">Plus</Badge>
                                   ) : (
                                     <Badge className="text-background bg-foreground border-none">Free</Badge>
                                   )}

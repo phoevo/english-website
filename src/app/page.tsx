@@ -531,7 +531,7 @@ return (
 
 
         <motion.div
-          className={`w-full lg:w-2/3 m-10 space-y-6 lg:border-1 p-10 rounded-md shadow-md`}
+          className={`w-full lg:w-2/3 m-10 space-y-6 lg:border-1 p-10 bg-landing-bg lg:bg-background/60 rounded-md shadow-md`}
           initial={{ opacity: 0, y: 80 }}
           whileInView={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 200 }}
@@ -550,13 +550,141 @@ return (
           <span className="text-pink-500">Try it yourself, everything here is interactive.</span>
           <TestWorkflow />
 
-
         </motion.div>
-
 
         <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-72 lg:mb-14 self-start m-4 lg:text-2xl font-semibold">
         <span className="px-1 text-pink-500">
           4.
+        </span>
+        So What?
+        </div>
+
+        <motion.div
+      className={`w-full lg:w-2/3 m-10 space-y-10 lg:border-1 p-10 bg-landing-bg lg:bg-background/60 rounded-md shadow-md`}
+      initial={{ opacity: 0, y: 80 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 200 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={transition2}
+    >
+
+  <div className="flex flex-col space-y-6 justify-start items-start">
+
+    <h1 className="text-2xl lg:text-4xl font-normal">
+      So What?
+    </h1>
+
+    <p className="text-md lg:text-lg text-muted-foreground">
+      Assigning conversations isn't just about sharing and tracking material.
+      Students have access to assigned content even after class ends.
+    </p>
+
+    <p className="text-md lg:text-lg text-muted-foreground">
+      A tutor subscribes once, assigns content to students, and everyone benefits.
+      Students receive structured practice between lessons, while tutors gain
+      visibility into what was completed before the next session.
+    </p>
+
+  </div>
+
+  <div className="flex flex-col items-center gap-6">
+
+      <div className="flex flex-col items-center justify-center gap-1 text-md lg:text-lg">
+        <div className="flex flex-row items-center gap-1 border rounded-xl p-4 "><Badge className="bg-pink-500 text-white">Plus</Badge>Tutor</div>
+        <p className="text-base">Subscribed Tutor assigns conversations</p>
+      </div>
+
+    <ArrowDown className="text-pink-500" />
+<p className="text-center ">
+  One tutor subscription unlocks assigned content for every connected student.
+</p>
+
+<p className="text-center text-muted-foreground">
+  3 students? 10 students? 20 students?
+  One Tutor subscription benefits all their students.
+</p>
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 w-full">
+
+      <div className="border rounded-xl p-4 text-center bg-none">
+        <div className="flex flex-row items-center justify-center gap-1">
+          <Badge className="bg-foreground">Free</Badge>Student A
+          </div>
+        <p className="text-xs text-muted-foreground">
+          Assigned conversations
+        </p>
+      </div>
+
+      <div className="border rounded-xl p-4 text-center bg-none">
+        <div className="flex flex-row items-center justify-center gap-1">
+          <Badge className="bg-foreground">Free</Badge>Student B
+          </div>
+        <p className="text-xs text-muted-foreground">
+          Assigned conversations
+        </p>
+      </div>
+
+      <div className="border rounded-xl p-4 text-center bg-none">
+        <div className="flex flex-row items-center justify-center gap-1">
+          <Badge className="bg-foreground">Free</Badge>Student C
+          </div>
+        <p className="text-xs text-muted-foreground">
+          Assigned conversations
+        </p>
+      </div>
+
+      <div className="border rounded-xl p-4 text-center bg-none">
+        <div className="flex flex-row items-center justify-center gap-1">
+          <Badge className="bg-foreground">Free</Badge>Student D
+          </div>
+        <p className="text-xs text-muted-foreground">
+          Assigned conversations
+        </p>
+      </div>
+
+    </div>
+
+    <ArrowDown className="text-pink-500" />
+
+
+    <div className="flex flex-col w-full xl:w-2/3 space-y-3 text-md lg:text-lg text-muted-foreground">
+        <Table>
+  <TableHeader className="text-lg">
+    <TableRow>
+      <TableHead className="">Benefits for Tutors</TableHead>
+      <TableHead>Benefits for Students</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody className="text-base">
+    <TableRow>
+      <TableCell>Less lesson preparation</TableCell>
+      <TableCell>Structured practice between lessons</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>No subscription friction with students</TableCell>
+      <TableCell>Premium content for free</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Track completion automatically</TableCell>
+      <TableCell>Clear learning direction</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Know what students did before class</TableCell>
+      <TableCell>Better prepared for the next session</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>
+      </div>
+
+
+
+  </div>
+
+</motion.div>
+
+
+        <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-82 lg:mb-14 self-start m-4 lg:text-2xl font-semibold">
+        <span className="px-1 text-pink-500">
+          5.
         </span>
         Tools & Features
         </div>

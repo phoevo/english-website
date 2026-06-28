@@ -50,8 +50,8 @@ module.exports = async function main({ req, res, log, error }) {
     .setProject(PROJECT_ID)
     .setJWT(incomingJwt);
 
-  // Allow unauthenticated for specific public routes
-  const isPublicRoute = ["/webhook", "/send-reset-notice"].includes(req.path);
+  // Allow unauthenticated for specific routes that use adminClient + userId from body
+  const isPublicRoute = ["/webhook", "/send-reset-notice", "/delete-account", "/unsubscribe"].includes(req.path);
   if (!isPublicRoute && !incomingJwt) {
     error("No JWT token provided");
     return res.json({ error: "Authentication required" }, 401);

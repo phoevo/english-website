@@ -1,9 +1,12 @@
 import { vocabA1toB2 } from "./vocab-a1-a2";
 import { vocabB1toB2 } from "./vocab-b1-b2";
+import { vocabC1toC2 } from "./vocab-c1-c2";
 
 export const vocabIndex: Record<string, Record<string, { type: string; definition: string; context: string;}>> = {
   "A1": vocabA1toB2,
   "A2": vocabA1toB2,
   "B1": vocabB1toB2,
   "B2": vocabB1toB2,
+  "C1": vocabC1toC2,
+  "C2": vocabC1toC2
 };

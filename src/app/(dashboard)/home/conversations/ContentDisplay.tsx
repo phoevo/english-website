@@ -388,10 +388,10 @@ React.useEffect(() => {
         {Array.isArray(rawDialogue) && rawDialogue.length > 0 ? (
           rawDialogue.map((line, i) => (
             <div key={i} className="flex flex-col md:flex-col lg:flex-row mb-10">
-              <div className="font-semibold text-lg lg:pr-6 lg:border-r-1 border-zinc-500 min-w-[100px] ">
+              <div className="font-semibold text-lg lg:pr-4 lg:border-r-1 border-zinc-500 min-w-[100px]">
                 {line.speaker}
               </div>
-              <div className="ml-6 flex flex-wrap gap-1">
+              <div className="ml-4 flex flex-wrap gap-1">
                 {line.words.map((word, j) => (
                   <RenderWord key={j} word={word} />
                 ))}
