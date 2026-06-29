@@ -27,11 +27,12 @@ import { ID, Query, Models } from "appwrite";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { X, Plus, Trash2, ArrowUpRight } from "lucide-react";
+import { X, Plus, Trash2, ArrowUpRight} from "lucide-react";
 import { toast } from "sonner";
 import { Geist } from "next/font/google";
 import { motion } from "motion/react";
 import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -191,9 +192,9 @@ function TeacherPage() {
   }, [selectedStudentId, user]);
 
   return (
-    <Card className={`flex flex-col lg:w-full bg-backgroud h-full ${geist.className}`}>
+    <Card className={`flex flex-col lg:w-full h-full bg-background ${geist.className}`}>
       <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <CardTitle>Student Overview</CardTitle>
           <CardDescription>
             Select a student to view assignments and notes
@@ -227,13 +228,13 @@ function TeacherPage() {
       </CardHeader>
 
       {selectedStudentId && (
-        <CardContent className="flex-1 overflow-y-auto space-y-6">
+        <CardContent className="flex-1 min-h-0 flex flex-col">
           {loading ? (
             <p>Loading...</p>
           ) : (
             <>
               {/* Assignments section */}
-              <div>
+              <div className="h-1/3">
                 <h3 className="font-semibold text-sm mb-2">Assigned Conversations</h3>
                 {assignments.length === 0 ? (
                   <p className="text-sm text-muted-foreground">
@@ -259,18 +260,21 @@ function TeacherPage() {
                           >
                             {a.status}
                           </Badge>
+
+                          <Link
+                          href={`conversations/${a.conversationId}`}
+                          target="blank">
                           <Button
                           size={"sm"}
                           variant={"link"}
 
                           className="cursor-pointer "
-                          onClick={() =>
-                            router.push(`conversations/${a.conversationId}`
 
-                            )
-                          }>
+
+                        >
                             Open <ArrowUpRight size={10}/>
                           </Button>
+                          </Link>
                         </div>
 
                         {a.status === "Completed" && (
@@ -294,10 +298,10 @@ function TeacherPage() {
                 )}
               </div>
 
-              <Separator />
 
-              {/* Notes section */}
-              <div>
+
+              {/* Notes section — fills remaining space */}
+              <div className="h-2/3 flex flex-col">
                 <h3 className="font-semibold text-sm mb-2">Notes</h3>
 
                 {/* Create note */}
@@ -319,13 +323,13 @@ function TeacherPage() {
                   </Button>
                 </div>
 
-                {/* Notes list */}
+                {/* Notes list — scrolls within remaining space */}
                 {notes.length === 0 ? (
                   <p className="text-sm text-muted-foreground">
                     No notes yet for this student.
                   </p>
                 ) : (
-                  <div className="space-y-2 h-50 overflow-auto">
+                  <div className="flex-1 min-h-0 overflow-y-auto space-y-2">
                     {notes.map((note) => (
                       <div
                         key={note.$id}

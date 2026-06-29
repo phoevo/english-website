@@ -11,26 +11,26 @@ const geist = Geist({ subsets: ['latin'] });
 
 function homeLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`flex h-screen w-auto ${geist.className}`}>
-      <div className='flex h-auto w-auto'>
-       <SidebarProvider
-         defaultOpen={true}
-         className="md:[--app-sidebar-width:10rem] lg:[--app-sidebar-width:16rem]"
-         style={{ "--sidebar-width": "var(--app-sidebar-width, 16rem)" } as React.CSSProperties}
-       >
-      <AppSidebar />
-      <main className="">
-        <SidebarTrigger />
-      </main>
-    </SidebarProvider>
-    </div>
-      <div className='flex bg-background border-1 rounded-lg relative min-h-svm mb-4 overflow-y-auto lg:overflow-hidden w-screen'>
-        <ChallengeWatcher/>
-       {children}
+    <div className={`flex h-screen w-full overflow-hidden ${geist.className}`}>
+      <div className="flex h-full shrink-0">
+        <SidebarProvider
+          defaultOpen={true}
+          className="md:[--app-sidebar-width:10rem] lg:[--app-sidebar-width:16rem]"
+          style={{ "--sidebar-width": "var(--app-sidebar-width, 16rem)" } as React.CSSProperties}
+        >
+          <AppSidebar />
+          <main>
+            <SidebarTrigger />
+          </main>
+        </SidebarProvider>
       </div>
 
+      <div className="flex flex-1 min-w-0 h-[calc(100vh-1rem)] min-h-0 mb-4 bg-background border rounded-lg relative overflow-hidden">
+        <ChallengeWatcher />
+        {children}
+      </div>
     </div>
-  )
+  );
 }
 
 export default homeLayout
