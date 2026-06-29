@@ -32,6 +32,7 @@ import { Geist } from "next/font/google";
 import { motion } from "motion/react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -225,20 +226,20 @@ function TeacherPage() {
       </CardHeader>
 
       {selectedStudentId && (
-        <CardContent className="flex-1 min-h-0 flex flex-col">
+        <CardContent className="flex-1 gap-5 min-h-0 flex flex-col">
           {loading ? (
             <p>Loading...</p>
           ) : (
             <>
               {/* Assignments section */}
-              <div className="lg:h-1/3">
-                <h3 className="font-semibold text-sm mb-2">Assigned Conversations</h3>
+                <h3 className="font-semibold text-sm">Assigned Conversations</h3>
+              <ScrollArea className="lg:min-h-[70px] lg:max-h-[150px] overflow-y-auto mb-2 border-x p-2 ">
                 {assignments.length === 0 ? (
                   <p className="text-sm text-muted-foreground">
                     No assignments for this student.
                   </p>
                 ) : (
-                  <ul className="space-y-2 lg:h-35 h-auto mb-2 overflow-auto">
+                  <ul className="space-y-2 overflow-auto">
                     {assignments.map((a) => (
                       <li
                         key={a.$id}
@@ -293,7 +294,7 @@ function TeacherPage() {
                     ))}
                   </ul>
                 )}
-              </div>
+              </ScrollArea>
 
 
 
@@ -326,11 +327,11 @@ function TeacherPage() {
                     No notes yet for this student.
                   </p>
                 ) : (
-                  <div className="flex-1 min-h-0 overflow-y-auto space-y-2">
+                  <ScrollArea className="flex flex-col min-h-0 space-y-2">
                     {notes.map((note) => (
                       <div
                         key={note.$id}
-                        className="flex items-start justify-between gap-2 p-2 rounded-md bg-muted"
+                        className="flex items-start justify-between gap-2 p-2 mb-2 rounded-md bg-muted"
                       >
                         <div className="flex-1">
                           <p className="text-xs text-muted-foreground">
@@ -354,7 +355,7 @@ function TeacherPage() {
                         </Button>
                       </div>
                     ))}
-                  </div>
+                  </ScrollArea>
                 )}
               </div>
             </>
