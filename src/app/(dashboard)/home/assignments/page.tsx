@@ -219,7 +219,7 @@ useEffect(() => {
     }
 
 return (
-<div className="m-5 lg:m-10 flex flex-col w-full lg:h-full lg:min-h-0">
+<div className="m-5 lg:m-10 flex flex-col w-full overflow-y-auto lg:h-full lg:min-h-0">
 
     <div className="flex flex-row justify-between items-center gap-10 ">
       <div className="flex flex-col space-y-6">
@@ -233,7 +233,7 @@ return (
 
     </div>
 
-<div className="flex flex-col lg:flex-row gap-6 mt-5 lg:min-h-0 lg:mb-12">
+<div className="flex flex-col lg:flex-row gap-6 mt-5 flex-1 lg:overflow-auto lg:min-h-0 lg:mb-12">
 
       <div data-guide="assign-tasks" className="lg:w-1/2 h-full">
         {isTeacher ? <TeacherPage/> : <StudentPage />}

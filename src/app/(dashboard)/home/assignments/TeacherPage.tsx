@@ -234,14 +234,14 @@ function TeacherPage() {
           ) : (
             <>
               {/* Assignments section */}
-              <div className="h-1/3">
+              <div className="lg:h-1/3">
                 <h3 className="font-semibold text-sm mb-2">Assigned Conversations</h3>
                 {assignments.length === 0 ? (
                   <p className="text-sm text-muted-foreground">
                     No assignments for this student.
                   </p>
                 ) : (
-                  <ul className="space-y-2 h-35 overflow-auto">
+                  <ul className="space-y-2 lg:h-35 h-auto mb-2 overflow-auto">
                     {assignments.map((a) => (
                       <li
                         key={a.$id}
@@ -301,7 +301,7 @@ function TeacherPage() {
 
 
               {/* Notes section — fills remaining space */}
-              <div className="h-2/3 flex flex-col">
+              <div className="lg:h-2/3 flex flex-col">
                 <h3 className="font-semibold text-sm mb-2">Notes</h3>
 
                 {/* Create note */}
