@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
   BookOpen,
   ClipboardCheck,
@@ -138,6 +139,8 @@ function StudentPage() {
         id,
         { status: "Completed" }
       );
+      toast.success("Assignment complete");
+
 
       setAssignments((prev) => prev.filter((a) => a.$id !== id));
     } catch (err) {
@@ -153,7 +156,7 @@ function StudentPage() {
       </CardHeader>
 
       <CardContent className="flex-1 min-h-0 p-0">
-        <ScrollArea className="h-full px-5">
+        <ScrollArea className="max-h-140 overflow-auto px-5">
           {loading ? (
             <p>Loading...</p>
           ) : assignments.length === 0 ? (
@@ -219,6 +222,7 @@ function StudentPage() {
 
                           <DropdownMenuItem
                             onClick={() => handleMarkComplete(a.$id)}
+
                           >
                             Mark as Complete
                           </DropdownMenuItem>

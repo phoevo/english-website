@@ -219,7 +219,7 @@ useEffect(() => {
     }
 
 return (
-  <div className="m-5 lg:m-10 flex flex-col w-full h-5/6">
+  <div className="m-5 lg:m-10 flex flex-col w-full h-full">
 
     <div className="flex flex-row justify-between items-center gap-10">
       <div className="flex flex-col space-y-6">
@@ -233,11 +233,12 @@ return (
 
     </div>
 
-    <div className="flex flex-col lg:flex-row gap-6 mt-10 h-5/6">
+    <div className="flex flex-col lg:flex-row gap-6 mt-5 h-full mb-15">
 
       <div data-guide="assign-tasks" className="lg:w-1/2">
         {isTeacher ? <TeacherPage/> : <StudentPage />}
       </div>
+
 
       <Card data-guide="assign-connections" className="bg-background p-5 h-full lg:w-1/2 flex flex-col min-h-0">
 
@@ -652,12 +653,12 @@ return (
 </div>
 
       </Card>
+      </div>
 
 
 
 
     </div>
-  </div>
 );
 
 }

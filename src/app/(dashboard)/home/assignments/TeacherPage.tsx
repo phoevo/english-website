@@ -21,15 +21,17 @@ import {
   databases,
   assignmentsId,
   conversationsCollectionId,
+  notesCollectionId,
 } from "@/data/appwrite";
-import { Query, Models } from "appwrite";
+import { ID, Query, Models } from "appwrite";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, Plus, Trash2, ArrowUpRight } from "lucide-react";
 import { toast } from "sonner";
 import { Geist } from "next/font/google";
 import { motion } from "motion/react";
+import { Separator } from "@/components/ui/separator";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -39,6 +41,14 @@ type AssignmentWithConversation = {
   status: "Pending" | "Completed";
   title: string;
   level: string;
+};
+
+type Note = {
+  $id: string;
+  tutorId: string;
+  studentId: string;
+  content: string;
+  $createdAt: string;
 };
 
 type AssignmentDocument = Models.Document & {
@@ -53,21 +63,23 @@ type ConversationDocument = Models.Document & {
 };
 
 function TeacherPage() {
-  const { friends } = useUserStore();
+  const { user, friends } = useUserStore();
   const studentFriends = friends.filter((f) => !f.isTeacher);
 
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(
     null
   );
   const [assignments, setAssignments] = useState<AssignmentWithConversation[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [newNoteText, setNewNoteText] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submittingNote, setSubmittingNote] = useState(false);
 
   const router = useRouter();
 
   const handleDeleteAssignment = async (assignmentId: string) => {
     try {
       await databases.deleteDocument(databaseId, assignmentsId, assignmentId);
-
       setAssignments((prev) => prev.filter((a) => a.$id !== assignmentId));
       toast.success("Assignment removed.");
     } catch (err) {
@@ -76,87 +88,132 @@ function TeacherPage() {
     }
   };
 
+  const handleCreateNote = async () => {
+    const content = newNoteText.trim();
+    if (!content || !user || !selectedStudentId) return;
+
+    setSubmittingNote(true);
+    try {
+      const res = await databases.createDocument(
+        databaseId,
+        notesCollectionId,
+        ID.unique(),
+        {
+          tutorId: user.$id,
+          studentId: selectedStudentId,
+          content,
+        }
+      );
+      setNotes((prev) => [res as unknown as Note, ...prev]);
+      setNewNoteText("");
+      toast.success("Note added");
+    } catch (err) {
+      console.error("Failed to create note:", err);
+      toast.error("Failed to add note");
+    } finally {
+      setSubmittingNote(false);
+    }
+  };
+
+  const handleDeleteNote = async (noteId: string) => {
+    try {
+      await databases.deleteDocument(databaseId, notesCollectionId, noteId);
+      setNotes((prev) => prev.filter((n) => n.$id !== noteId));
+      toast.success("Note deleted");
+    } catch (err) {
+      console.error("Failed to delete note:", err);
+      toast.error("Failed to delete note");
+    }
+  };
+
+  // Fetch assignments AND notes when student changes
   useEffect(() => {
-    if (!selectedStudentId) return;
+    if (!selectedStudentId || !user) return;
 
     const studentId = selectedStudentId;
+    const tutorId = user.$id;
 
-    async function fetchStudentAssignments() {
+    async function fetchStudentData() {
       setLoading(true);
 
       try {
-        const assignmentRes = await databases.listDocuments(
-          databaseId,
-          assignmentsId,
-          [Query.equal("studentId", studentId)]
-        );
+        // Fetch assignments and notes in parallel
+        const [assignmentRes, notesRes] = await Promise.all([
+          databases.listDocuments(databaseId, assignmentsId, [
+            Query.equal("studentId", studentId),
+          ]),
+          databases.listDocuments(databaseId, notesCollectionId, [
+            Query.equal("tutorId", tutorId),
+            Query.equal("studentId", studentId),
+            Query.orderDesc("$createdAt"),
+          ]),
+        ]);
 
+        // Process assignments
         const assignmentDocs = assignmentRes.documents as AssignmentDocument[];
 
         if (assignmentDocs.length === 0) {
           setAssignments([]);
-          return;
+        } else {
+          const conversationIds = assignmentDocs.map((a) => a.conversationId);
+          const conversationRes = await databases.listDocuments(
+            databaseId,
+            conversationsCollectionId,
+            [Query.equal("$id", conversationIds)]
+          );
+          const conversationDocs = conversationRes.documents as ConversationDocument[];
+
+          setAssignments(
+            assignmentDocs.map((a) => {
+              const convo = conversationDocs.find((c) => c.$id === a.conversationId);
+              return {
+                $id: a.$id,
+                conversationId: a.conversationId,
+                status: a.status,
+                title: convo?.title ?? "Untitled",
+                level: convo?.level ?? "Unknown",
+              };
+            })
+          );
         }
 
-        const conversationIds = assignmentDocs.map((a) => a.conversationId);
-
-        const conversationRes = await databases.listDocuments(
-          databaseId,
-          conversationsCollectionId,
-          [Query.equal("$id", conversationIds)]
-        );
-
-        const conversationDocs =
-          conversationRes.documents as ConversationDocument[];
-
-        const enrichedAssignments: AssignmentWithConversation[] =
-          assignmentDocs.map((a) => {
-            const convo = conversationDocs.find(
-              (c) => c.$id === a.conversationId
-            );
-
-            return {
-              $id: a.$id,
-              conversationId: a.conversationId,
-              status: a.status,
-              title: convo?.title ?? "Untitled",
-              level: convo?.level ?? "Unknown",
-            };
-          });
-
-        setAssignments(enrichedAssignments);
+        // Process notes
+        setNotes(notesRes.documents as unknown as Note[]);
       } catch (err) {
-        console.error("Failed to load assignments:", err);
-        toast.error("Failed to load assignments.");
+        console.error("Failed to load student data:", err);
+        toast.error("Failed to load student data.");
       } finally {
         setLoading(false);
       }
     }
 
-    fetchStudentAssignments();
-  }, [selectedStudentId]);
+    fetchStudentData();
+  }, [selectedStudentId, user]);
 
   return (
-    <Card className="flex flex-col h-full lg:w-full bg-background">
+    <Card className={`flex flex-col lg:w-full bg-backgroud h-full ${geist.className}`}>
       <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <div className="flex flex-col gap-4">
-          <CardTitle>My Assigned Tasks</CardTitle>
+          <CardTitle>Student Overview</CardTitle>
           <CardDescription>
-            Select a student to view their assigned conversations
+            Select a student to view assignments and notes
           </CardDescription>
         </div>
 
         {studentFriends.length > 0 ? (
           <Select
-            onValueChange={setSelectedStudentId}
+            onValueChange={(value) => {
+              setSelectedStudentId(value);
+              setNewNoteText("");
+            }}
             value={selectedStudentId || ""}
           >
-            <SelectTrigger className="w-1/3">
+            <SelectTrigger className="w-1/3 cursor-pointer">
               <SelectValue placeholder="Select Student" />
             </SelectTrigger>
-            <SelectContent className={geist.className}>
+            <SelectContent className={`cusor-pointer ${geist.className}`}>
               {studentFriends.map((student) => (
-                <SelectItem key={student.$id} value={student.$id}>
+                <SelectItem key={student.$id} value={student.$id} className="cursor-pointer">
                   {student.name}
                 </SelectItem>
               ))}
@@ -169,67 +226,140 @@ function TeacherPage() {
         )}
       </CardHeader>
 
-      <CardContent className="flex-1 min-h-0 overflow-y-auto">
-        {selectedStudentId ? (
-          loading ? (
+      {selectedStudentId && (
+        <CardContent className="flex-1 overflow-y-auto space-y-6">
+          {loading ? (
             <p>Loading...</p>
-          ) : assignments.length === 0 ? (
-            <p className="text-muted-foreground">
-              No assignments found for this student.
-            </p>
           ) : (
-            <ul className="space-y-3">
-              {assignments.map((a) => (
-                <li
-                  key={a.$id}
-                  className="flex items-center justify-between border p-4 rounded-md hover:bg-muted transition"
-                >
-                  <div
-                    onClick={() =>
-                      router.push(`conversations/${a.conversationId}`)
-                    }
-                    className="cursor-pointer flex-1"
-                  >
-                    <h4 className="font-semibold">{a.title}</h4>
-                    <p className="text-sm text-muted-foreground mb-1">
-                      Level: {a.level}
-                    </p>
+            <>
+              {/* Assignments section */}
+              <div>
+                <h3 className="font-semibold text-sm mb-2">Assigned Conversations</h3>
+                {assignments.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    No assignments for this student.
+                  </p>
+                ) : (
+                  <ul className="space-y-2 h-35 overflow-auto">
+                    {assignments.map((a) => (
+                      <li
+                        key={a.$id}
+                        className="flex items-center justify-between border p-3 rounded-md hover:bg-muted transition"
 
-                    <Badge
-                      variant={
-                        a.status === "Completed" ? "default" : "outline"
-                      }
-                      className={
-                        a.status === "Completed"
-                          ? "bg-green-500 text-white"
-                          : ""
-                      }
-                    >
-                      {a.status}
-                    </Badge>
-                  </div>
-
-                  {a.status === "Completed" && (
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      className="ml-3 h-5 w-5 shrink-0"
-                      onClick={() => handleDeleteAssignment(a.$id)}
-                    >
-                      <motion.div
-                        whileHover={{ rotate: 90 }}
-                        transition={{ duration: 0.1 }}
                       >
-                        <X className="h-4 w-4" />
-                      </motion.div>
-                    </Button>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )
-        ) : null}
-      </CardContent>
+                        <div
+
+                          className="flex flex-row gap-1 items-center"
+                        >
+                          <h4 className="font-semibold text-sm border-r pr-1">{a.title}</h4>
+                          <p className="text-sm border-r pr-1">{a.level}</p>
+                          <Badge
+                            variant={a.status === "Completed" ? "default" : "outline"}
+                            className={a.status === "Completed" ? "bg-green-500 text-white" : ""}
+                          >
+                            {a.status}
+                          </Badge>
+                          <Button
+                          size={"sm"}
+                          variant={"link"}
+
+                          className="cursor-pointer "
+                          onClick={() =>
+                            router.push(`conversations/${a.conversationId}`
+
+                            )
+                          }>
+                            Open <ArrowUpRight size={10}/>
+                          </Button>
+                        </div>
+
+                        {a.status === "Completed" && (
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            className="ml-3 h-5 w-5 shrink-0 cursor-pointer"
+                            onClick={() => handleDeleteAssignment(a.$id)}
+                          >
+                            <motion.div
+                              whileHover={{ rotate: 90 }}
+                              transition={{ duration: 0.1 }}
+                            >
+                              <X className="h-4 w-4" />
+                            </motion.div>
+                          </Button>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <Separator />
+
+              {/* Notes section */}
+              <div>
+                <h3 className="font-semibold text-sm mb-2">Notes</h3>
+
+                {/* Create note */}
+                <div className="flex gap-2 mb-3">
+                  <textarea
+                    placeholder="Write a note about this student..."
+                    value={newNoteText}
+                    onChange={(e) => setNewNoteText(e.target.value)}
+                    className="flex-1 min-h-16 rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none resize-none"
+                  />
+                  <Button
+                    size="sm"
+                    className="self-end cursor-pointer h-7 gap-1"
+                    disabled={!newNoteText.trim() || submittingNote}
+                    onClick={handleCreateNote}
+                  >
+                    <Plus size={14} />
+                    {submittingNote ? "Saving..." : "Add"}
+                  </Button>
+                </div>
+
+                {/* Notes list */}
+                {notes.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    No notes yet for this student.
+                  </p>
+                ) : (
+                  <div className="space-y-2 h-50 overflow-auto">
+                    {notes.map((note) => (
+                      <div
+                        key={note.$id}
+                        className="flex items-start justify-between gap-2 p-2 rounded-md bg-muted"
+                      >
+                        <div className="flex-1">
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(note.$createdAt).toLocaleDateString(undefined, {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </p>
+                          <p className="text-sm whitespace-pre-wrap">{note.content}</p>
+                        </div>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          className="ml-4 cursor-pointer h-5 w-5 self-center"
+                          onClick={() => handleDeleteNote(note.$id)}
+                          >
+                          <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
+                          <X className="h-4 w-4" />
+                          </motion.div>
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </CardContent>
+      )}
     </Card>
   );
 }
