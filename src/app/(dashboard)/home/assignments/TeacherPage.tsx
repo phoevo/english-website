@@ -24,10 +24,9 @@ import {
   notesCollectionId,
 } from "@/data/appwrite";
 import { ID, Query, Models } from "appwrite";
-import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { X, Plus, Trash2, ArrowUpRight} from "lucide-react";
+import { X, Plus, ArrowUpRight } from "lucide-react";
 import { toast } from "sonner";
 import { Geist } from "next/font/google";
 import { motion } from "motion/react";
@@ -75,8 +74,6 @@ function TeacherPage() {
   const [newNoteText, setNewNoteText] = useState("");
   const [loading, setLoading] = useState(false);
   const [submittingNote, setSubmittingNote] = useState(false);
-
-  const router = useRouter();
 
   const handleDeleteAssignment = async (assignmentId: string) => {
     try {
@@ -212,7 +209,7 @@ function TeacherPage() {
             <SelectTrigger className="w-1/3 cursor-pointer">
               <SelectValue placeholder="Select Student" />
             </SelectTrigger>
-            <SelectContent className={`cusor-pointer ${geist.className}`}>
+            <SelectContent className={`cursor-pointer ${geist.className}`}>
               {studentFriends.map((student) => (
                 <SelectItem key={student.$id} value={student.$id} className="cursor-pointer">
                   {student.name}
