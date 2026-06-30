@@ -232,132 +232,139 @@ function TeacherPage() {
           ) : (
             <>
               {/* Assignments section */}
-                <h3 className="font-semibold text-sm">Assigned Conversations</h3>
-              <ScrollArea className="lg:min-h-[70px] lg:max-h-[150px] overflow-y-auto mb-2 border-x p-2 ">
-                {assignments.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">
-                    No assignments for this student.
-                  </p>
-                ) : (
-                  <ul className="space-y-2 overflow-auto">
-                    {assignments.map((a) => (
-                      <li
-                        key={a.$id}
-                        className="flex items-center justify-between border p-3 rounded-md hover:bg-muted transition"
+               <>
+  {/* Assignments section */}
+  <section className="rounded-lg border bg-background p-4">
+    <div className="mb-3 flex items-center gap-1">
+      <h3 className="font-semibold text-sm">Assigned Conversations</h3>
+      <Badge variant="outline">{assignments.length}</Badge>
+    </div>
 
-                      >
-                        <div
+    <ScrollArea className="min-h-[30px] h-[150px]">
+      {assignments.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          No assignments for this student.
+        </p>
+      ) : (
+        <ul className="space-y-2 pr-2">
+          {assignments.map((a) => (
+            <li
+              key={a.$id}
+              className="flex items-center justify-between rounded-md border bg-card p-3 transition "
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <h4 className="font-semibold text-sm">{a.title}</h4>
 
-                          className="flex flex-row gap-1 items-center"
-                        >
-                          <h4 className="font-semibold text-sm border-r pr-1">{a.title}</h4>
-                          <p className="text-sm border-r pr-1">{a.level}</p>
-                          <Badge
-                            variant={a.status === "Completed" ? "default" : "outline"}
-                            className={a.status === "Completed" ? "bg-green-500 text-white" : ""}
-                          >
-                            {a.status}
-                          </Badge>
+                <Badge variant="outline">{a.level}</Badge>
 
-                          <Link
-                          href={`conversations/${a.conversationId}`}
-                          target="blank">
-                          <Button
-                          size={"sm"}
-                          variant={"link"}
+                <Badge
+                  variant={a.status === "Completed" ? "default" : "outline"}
+                  className={
+                    a.status === "Completed" ? "bg-green-500 text-white" : ""
+                  }
+                >
+                  {a.status}
+                </Badge>
 
-                          className="cursor-pointer "
-
-
-                        >
-                            Open <ArrowUpRight size={10}/>
-                          </Button>
-                          </Link>
-                        </div>
-
-                        {a.status === "Completed" && (
-                          <Button
-                            variant="destructive"
-                            size="icon"
-                            className="ml-3 h-5 w-5 shrink-0 cursor-pointer"
-                            onClick={() => handleDeleteAssignment(a.$id)}
-                          >
-                            <motion.div
-                              whileHover={{ rotate: 90 }}
-                              transition={{ duration: 0.1 }}
-                            >
-                              <X className="h-4 w-4" />
-                            </motion.div>
-                          </Button>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </ScrollArea>
-
-
-
-              {/* Notes section — fills remaining space */}
-              <div className="lg:h-2/3 flex flex-col">
-                <h3 className="font-semibold text-sm mb-2">Notes</h3>
-
-                {/* Create note */}
-                <div className="flex gap-2 mb-3">
-                  <textarea
-                    placeholder="Write a note about this student..."
-                    value={newNoteText}
-                    onChange={(e) => setNewNoteText(e.target.value)}
-                    className="flex-1 min-h-16 rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none resize-none"
-                  />
-                  <Button
-                    size="sm"
-                    className="self-end cursor-pointer h-7 gap-1"
-                    disabled={!newNoteText.trim() || submittingNote}
-                    onClick={handleCreateNote}
-                  >
-                    <Plus size={14} />
-                    {submittingNote ? "Saving..." : "Add"}
+                <Link href={`conversations/${a.conversationId}`} target="_blank">
+                  <Button size="sm" variant="link" className="h-auto p-0 cursor-pointer">
+                    Open <ArrowUpRight size={12} />
                   </Button>
-                </div>
-
-                {/* Notes list — scrolls within remaining space */}
-                {notes.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">
-                    No notes yet for this student.
-                  </p>
-                ) : (
-                  <ScrollArea className="flex flex-col min-h-0 space-y-2">
-                    {notes.map((note) => (
-                      <div
-                        key={note.$id}
-                        className="flex items-start justify-between gap-2 p-2 mb-2 rounded-md bg-muted"
-                      >
-                        <div className="flex-1">
-                          <p className="text-xs text-muted-foreground">
-                            {new Date(note.$createdAt).toLocaleDateString(undefined, {
-                              day: "numeric",
-                              month: "short",
-                              year: "numeric",
-                            })}
-                          </p>
-                          <p className="text-sm whitespace-pre-wrap">{note.content}</p>
-                        </div>
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          className="ml-4 cursor-pointer h-5 w-5 self-center"
-                          onClick={() => handleDeleteNote(note.$id)}
-                          >
-                          <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
-                          <X className="h-4 w-4" />
-                          </motion.div>
-                        </Button>
-                      </div>
-                    ))}
-                  </ScrollArea>
-                )}
+                </Link>
               </div>
+
+              {a.status === "Completed" && (
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  className="ml-3 h-5 w-5 shrink-0 cursor-pointer"
+                  onClick={() => handleDeleteAssignment(a.$id)}
+                >
+                  <motion.div
+                    whileHover={{ rotate: 90 }}
+                    transition={{ duration: 0.1 }}
+                  >
+                    <X className="h-4 w-4" />
+                  </motion.div>
+                </Button>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </ScrollArea>
+  </section>
+
+  {/* Notes section */}
+  <section className="flex min-h-0 flex-1 flex-col rounded-lg border bg-muted p-4">
+    <div className="mb-3 flex items-center gap-1">
+      <h3 className="font-semibold text-sm">Notes</h3>
+      <Badge variant="outline">{notes.length}</Badge>
+    </div>
+
+    <div className="mb-3 flex gap-2">
+      <textarea
+        placeholder="Write a note about this student..."
+        value={newNoteText}
+        onChange={(e) => setNewNoteText(e.target.value)}
+        className="flex-1 h-[50px] resize-none rounded-md border bg-background px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+      />
+
+      <Button
+        size="sm"
+        className="self-end h-7 cursor-pointer gap-1"
+        disabled={!newNoteText.trim() || submittingNote}
+        onClick={handleCreateNote}
+      >
+        <Plus size={14} />
+        {submittingNote ? "Saving..." : "Add"}
+      </Button>
+    </div>
+
+    {notes.length === 0 ? (
+      <p className="text-sm text-muted-foreground">
+        No notes yet for this student.
+      </p>
+    ) : (
+      <ScrollArea className="min-h-0 flex-1">
+        <div className="space-y-2 pr-2">
+          {notes.map((note) => (
+            <div
+              key={note.$id}
+              className="flex items-start justify-between gap-2 rounded-md border bg-background p-3"
+            >
+              <div className="flex-1">
+                <p className="text-xs text-muted-foreground">
+                  {new Date(note.$createdAt).toLocaleDateString(undefined, {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </p>
+
+                <p className="text-sm whitespace-pre-wrap">{note.content}</p>
+              </div>
+
+              <Button
+                variant="destructive"
+                size="icon"
+                className="ml-4 h-5 w-5 cursor-pointer self-center"
+                onClick={() => handleDeleteNote(note.$id)}
+              >
+                <motion.div
+                  whileHover={{ rotate: 90 }}
+                  transition={{ duration: 0.1 }}
+                >
+                  <X className="h-4 w-4" />
+                </motion.div>
+              </Button>
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
+    )}
+  </section>
+</>
             </>
           )}
         </CardContent>
