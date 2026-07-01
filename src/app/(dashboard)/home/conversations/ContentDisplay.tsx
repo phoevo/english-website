@@ -421,7 +421,7 @@ React.useEffect(() => {
             </Badge>
           )}
           {isComplete && (
-            <Badge className="bg-green-500 mt-3">Complete</Badge>
+            <Badge className="bg-green-500 text-white mt-3">Complete</Badge>
           )}
         </div>
 

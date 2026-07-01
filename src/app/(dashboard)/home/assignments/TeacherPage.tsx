@@ -30,7 +30,6 @@ import { X, Plus, ArrowUpRight } from "lucide-react";
 import { toast } from "sonner";
 import { Geist } from "next/font/google";
 import { motion } from "motion/react";
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
 

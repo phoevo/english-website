@@ -235,7 +235,7 @@ return (
 
 <div className="flex flex-col lg:flex-row gap-6 mt-5 flex-1 lg:overflow-auto lg:min-h-0 lg:mb-12">
 
-      <div data-guide="assign-tasks" className="lg:w-1/2 h-full">
+      <div data-guide="assign-tasks" className="lg:w-2/3 h-full">
         {isTeacher ? <TeacherPage/> : <StudentPage />}
       </div>
 

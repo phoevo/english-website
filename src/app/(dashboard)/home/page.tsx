@@ -166,7 +166,6 @@ const studentFriends = friends?.filter(f => !f.isTeacher) || [];
               <Card className="bg-background">
                 <CardHeader>
                   <CardTitle>Recently active students</CardTitle>
-                  <CardDescription>Students who have been active recently</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ScrollArea className="h-50">
