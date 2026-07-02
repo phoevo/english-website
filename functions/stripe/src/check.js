@@ -27,20 +27,55 @@ module.exports = async function handleCheckPayment({
       status: "all",
     });
 
-    const subscriberDoc = await databases.listDocuments(
-      process.env.APPWRITE_DATABASE_ID || process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
-      process.env.APPWRITE_STRIPE_CUSTOMERS_ID || process.env.NEXT_PUBLIC_APPWRITE_STRIPE_CUSTOMERS_ID,
-      [Query.equal("stripe_customer_id", checkoutSession.customer)]
+    const dbId = process.env.APPWRITE_DATABASE_ID || process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
+    const usersCollectionId = process.env.APPWRITE_USERS_COLLECTION_ID || process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID;
+
+    const usersByCustomer = await databases.listDocuments(
+      dbId,
+      usersCollectionId,
+      [Query.equal("stripeCustomerId", checkoutSession.customer)]
     );
 
-    if (subscriberDoc.documents.length === 0) {
-      return res.json({ error: "No subscriber found for this checkout." }, 404);
+    let userId;
+    if (usersByCustomer.total > 0) {
+      userId = usersByCustomer.documents[0].$id;
+    } else {
+      // Fallback: resolve by the checkout session email, then backfill.
+      let email = checkoutSession.customer_email || checkoutSession.customer_details?.email;
+      if (!email && checkoutSession.customer) {
+        try {
+          const cust = await stripe.customers.retrieve(checkoutSession.customer);
+          email = cust?.email;
+        } catch {}
+      }
+
+      if (!email) {
+        return res.json({ error: "No subscriber found for this checkout." }, 404);
+      }
+
+      const users = await databases.listDocuments(dbId, usersCollectionId, [
+        Query.equal("email", email),
+      ]);
+
+      if (users.total === 0) {
+        return res.json({ error: "No subscriber found for this checkout." }, 404);
+      }
+
+      userId = users.documents[0].$id;
+
+      try {
+        await databases.updateDocument(dbId, usersCollectionId, userId, {
+          stripeCustomerId: checkoutSession.customer,
+        });
+      } catch (err) {
+        console.error("Failed to backfill stripeCustomerId on user:", err);
+      }
     }
 
     if (subscriptions.data.length === 0) {
       await provision({
         plan: "free",
-        userId: subscriberDoc.documents[0].user_id,
+        userId,
         adminClient,
       });
 
@@ -73,7 +108,7 @@ module.exports = async function handleCheckPayment({
 
     await provision({
       plan,
-      userId: subscriberDoc.documents[0].user_id,
+      userId,
       adminClient,
     });
 

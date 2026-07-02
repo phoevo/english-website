@@ -1,4 +1,4 @@
-const { Account, Client, Databases, Query } = require("node-appwrite");
+const { Account, Client, Databases } = require("node-appwrite");
 const Stripe = require("stripe");
 
 module.exports = async function handleGetSubscription({
@@ -31,44 +31,28 @@ module.exports = async function handleGetSubscription({
       apiVersion: "2023-08-16",
     });
 
-    // Get Stripe customer ID from our customers collection
-    const stripeCustomersCollectionId = '687a74fb003d6808b5fd';
-    const customerDocs = await databases.listDocuments(
-      process.env.APPWRITE_DATABASE_ID || process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
-      stripeCustomersCollectionId,
-      [Query.equal("user_id", user.$id)]
-    );
+    // Get Stripe customer ID directly from the user's document
+    const dbId = process.env.APPWRITE_DATABASE_ID || process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
+    const usersCollectionId = process.env.APPWRITE_USERS_COLLECTION_ID || process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID;
 
-    if (customerDocs.total === 0) {
-      // Fallback: try finding by email in Stripe
+    const userDoc = await databases.getDocument(dbId, usersCollectionId, user.$id);
+    let stripe_customer_id = userDoc.stripeCustomerId;
+
+    if (!stripe_customer_id) {
+      // Fallback: try finding by email in Stripe, then backfill onto the user doc
       const customers = await stripe.customers.list({ email: user.email, limit: 1 });
       if (customers.data.length === 0) {
         return res.json({ plan: "free", hasActiveSubscription: false });
       }
-      const stripe_customer_id = customers.data[0].id;
-      // Continue flow below using this stripe_customer_id without relying on DB mapping
-      const subscriptions = await stripe.subscriptions.list({ customer: stripe_customer_id, status: 'active' });
-      if (subscriptions.data.length === 0) {
-        return res.json({ plan: "free", hasActiveSubscription: false });
+      stripe_customer_id = customers.data[0].id;
+
+      try {
+        await databases.updateDocument(dbId, usersCollectionId, user.$id, {
+          stripeCustomerId: stripe_customer_id,
+        });
+      } catch (err) {
+        console.error("Failed to backfill stripeCustomerId on user:", err);
       }
-      const activeSubscription = subscriptions.data[0];
-      const priceId = activeSubscription.items.data[0].price.id;
-      let planName = "free";
-      if (priceId === process.env.STRIPE_STUDENT_MONTHLY) planName = "Student Monthly";
-      else if (priceId === process.env.STRIPE_STUDENT_YEARLY) planName = "Student Yearly";
-      else if (priceId === process.env.STRIPE_TUTOR_MONTHLY) planName = "Tutor Monthly";
-      else if (priceId === process.env.STRIPE_TUTOR_YEARLY) planName = "Tutor Yearly";
-      return res.json({ plan: planName, hasActiveSubscription: true, subscriptionId: activeSubscription.id, status: activeSubscription.status });
-    }
-
-    const customer = customerDocs.documents[0];
-    const stripe_customer_id = customer.stripe_customer_id;
-
-    if (!stripe_customer_id) {
-      return res.json({
-        plan: "free",
-        hasActiveSubscription: false
-      });
     }
 
     // Get active subscriptions from Stripe
@@ -88,15 +72,20 @@ module.exports = async function handleGetSubscription({
     const activeSubscription = subscriptions.data[0];
     const priceId = activeSubscription.items.data[0].price.id;
 
-    // Map price IDs to plan names (you'll need to adjust these based on your Stripe setup)
+    // Map price IDs to plan names (same env vars + fallbacks as webhook.js)
+    const PRICE_STUDENT_MONTHLY = process.env.STRIPE_MONTHLY_PRICE_ID || "price_1RjNY6PoApFikZNYFIHlqq3t";
+    const PRICE_STUDENT_YEARLY = process.env.STRIPE_YEARLY_PRICE_ID || "price_1RmIPcPoApFikZNYDnmuR2hA";
+    const PRICE_TUTOR_MONTHLY = process.env.STRIPE_TUTOR_MONTHLY || "price_1ScV06PoApFikZNYoWPINm74";
+    const PRICE_TUTOR_YEARLY = process.env.STRIPE_TUTOR_YEARLY || "price_1SyYn4PoApFikZNYC69TOcVL";
+
     let planName = "free";
-    if (priceId === process.env.STRIPE_STUDENT_MONTHLY) {
+    if (priceId === PRICE_STUDENT_MONTHLY) {
       planName = "Student Monthly";
-    } else if (priceId === process.env.STRIPE_STUDENT_YEARLY) {
+    } else if (priceId === PRICE_STUDENT_YEARLY) {
       planName = "Student Yearly";
-    } else if (priceId === process.env.STRIPE_TUTOR_MONTHLY) {
+    } else if (priceId === PRICE_TUTOR_MONTHLY) {
       planName = "Tutor Monthly";
-    } else if (priceId === process.env.STRIPE_TUTOR_YEARLY) {
+    } else if (priceId === PRICE_TUTOR_YEARLY) {
       planName = "Tutor Yearly";
     }
 

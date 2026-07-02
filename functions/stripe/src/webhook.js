@@ -99,17 +99,20 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
   const databases = new Databases(adminClient);
 
   const dbId = process.env.APPWRITE_DATABASE_ID || process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
-  const stripeCustomersCollectionId = process.env.APPWRITE_STRIPE_CUSTOMERS_ID || process.env.NEXT_PUBLIC_APPWRITE_STRIPE_CUSTOMERS_ID;
   const usersCollectionId = process.env.APPWRITE_USERS_COLLECTION_ID || process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID;
 
-  const subscriptionDoc = await databases.listDocuments(
+  // Resolve the user directly from the Users collection via stripeCustomerId.
+  const usersByCustomer = await databases.listDocuments(
     dbId,
-    stripeCustomersCollectionId,
-    [Query.equal("stripe_customer_id", customerId)]
+    usersCollectionId,
+    [Query.equal("stripeCustomerId", customerId)]
   );
 
   let userId;
-  if (subscriptionDoc.documents.length === 0) {
+  if (usersByCustomer.total > 0) {
+    userId = usersByCustomer.documents[0].$id;
+  } else {
+    // Fallback: resolve by email, then backfill stripeCustomerId for future events.
     let email = event.data.object?.customer_email;
     if (!email) {
       try {
@@ -118,40 +121,28 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
       } catch {}
     }
 
-    if (email) {
-      const users = await databases.listDocuments(dbId, usersCollectionId, [
-        Query.equal("email", email),
-      ]);
-      if (users.total > 0) {
-        userId = users.documents[0].$id;
-
-        const existingForUser = await databases.listDocuments(dbId, stripeCustomersCollectionId, [
-          Query.equal("user_id", userId),
-        ]);
-
-        if (existingForUser.total > 0) {
-          await databases.updateDocument(
-            dbId,
-            stripeCustomersCollectionId,
-            existingForUser.documents[0].$id,
-            { stripe_customer_id: customerId }
-          );
-        } else {
-          await databases.createDocument(
-            dbId,
-            stripeCustomersCollectionId,
-            "unique()",
-            { user_id: userId, stripe_customer_id: customerId }
-          );
-        }
-      } else {
-        return res.json({ error: "No user found for customer email" }, 404);
-      }
-    } else {
-      return res.json({ error: "No matching customer document found" }, 404);
+    if (!email) {
+      return res.json({ error: "No customer email to resolve user" }, 404);
     }
-  } else {
-    userId = subscriptionDoc.documents[0].user_id;
+
+    const users = await databases.listDocuments(dbId, usersCollectionId, [
+      Query.equal("email", email),
+    ]);
+
+    if (users.total === 0) {
+      return res.json({ error: "No user found for customer email" }, 404);
+    }
+
+    userId = users.documents[0].$id;
+
+    // Backfill so subsequent events resolve directly by stripeCustomerId.
+    try {
+      await databases.updateDocument(dbId, usersCollectionId, userId, {
+        stripeCustomerId: customerId,
+      });
+    } catch (err) {
+      console.error("Failed to backfill stripeCustomerId on user:", err);
+    }
   }
 
   console.log("Found user ID:", userId);
@@ -162,7 +153,7 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
   const PRICE_STUDENT_MONTHLY = process.env.STRIPE_MONTHLY_PRICE_ID || "price_1RjNY6PoApFikZNYFIHlqq3t";
   const PRICE_STUDENT_YEARLY = process.env.STRIPE_YEARLY_PRICE_ID || "price_1RmIPcPoApFikZNYDnmuR2hA";
   const PRICE_TUTOR_MONTHLY  = process.env.STRIPE_TUTOR_MONTHLY || "price_1ScV06PoApFikZNYoWPINm74";
-  const PRICE_TUTOR_PERSEAT  = process.env.STRIPE_TUTOR_YEARLY || "price_1SyYn4PoApFikZNYC69TOcVL";
+  const PRICE_TUTOR_YEARLY   = process.env.STRIPE_TUTOR_YEARLY || "price_1SyYn4PoApFikZNYC69TOcVL";
 
   if (priceId) {
     switch (priceId) {
@@ -199,8 +190,8 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
         case PRICE_TUTOR_MONTHLY:
           plan = "Tutor Monthly";
           break;
-        case PRICE_TUTOR_PERSEAT:
-          plan = "Tutor per seat";
+        case PRICE_TUTOR_YEARLY:
+          plan = "Tutor Yearly";
           break;
         default:
           plan = "free";
