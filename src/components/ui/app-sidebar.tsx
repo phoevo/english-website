@@ -18,7 +18,6 @@ import { Geist } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/data/useUserStore";
 import { account } from "@/data/appwrite";
-import { Skeleton } from "./skeleton";
 import DailyTasks from "@/app/(dashboard)/home/dailyTasks";
 import { Button } from "./button";
 import Challenges from "@/app/(dashboard)/home/Challenges";

@@ -78,6 +78,7 @@ export default function Register() {
       console.error('Google signup error:', e);
       setError('Failed to authenticate with Google.');
     }
+
   };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {

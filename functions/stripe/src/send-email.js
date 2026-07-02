@@ -21,54 +21,115 @@ module.exports = async function handleSendEmail({ req, res, client, adminClient 
       case 'welcome':
         subject = 'Welcome to Synomilo!';
         content = `
-          <html>
-            <head>
-              <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                .header { background-color: #f4f4f4; padding: 20px; text-align: center; }
-                .content { padding: 20px; }
-                .footer { background-color: #f4f4f4; padding: 10px; text-align: center; font-size: 12px; }
-                ul { padding-left: 20px; }
-                li { margin-bottom: 8px; }
-              </style>
-            </head>
-            <body>
-              <div class="container">
-                <div class="header">
-                  <h1>Welcome</h1>
+          <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Synomilo</title>
+  </head>
+
+  <body style="margin:0; padding:0; background:#f6f7fb; font-family:Arial, Helvetica, sans-serif; color:#111111;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f7fb; padding:32px 16px;">
+      <tr>
+        <td align="center">
+          <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; background:#ffffff; border-radius:16px; overflow:hidden; border:1px solid #e5e7eb;">
+
+            <tr>
+              <td style="padding:40px 28px 28px; text-align:center; background:#1e1e1e;">
+                <img
+                  src="https://synomilo.com/favicon-96x96.png"
+                  alt="Synomilo"
+                  width="64"
+                  height="64"
+                  style="display:block; margin:0 auto 20px; border:0; outline:none;"
+                />
+
+                <h1 style="margin:0; color:#ffffff; font-size:30px; line-height:1.2; font-weight:700;">
+                  Welcome to Synomilo
+                </h1>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:32px 28px; background:#ffffff;">
+                <h2 style="margin:0 0 16px; font-size:22px; line-height:1.3; color:#111111;">
+                  Hi ${userName},
+                </h2>
+
+                <p style="margin:0 0 20px; font-size:16px; line-height:1.6; color:#333333;">
+                  Thanks for signing up to Synomilo. I'm excited to have you join during early access.
+                </p>
+
+                <div style="text-align:center; margin:28px 0;">
+                  <a
+                    href="https://synomilo.com/home"
+                    style="background:#1e1e1e; color:#ffffff; text-decoration:none; padding:14px 24px; border-radius:10px; display:inline-block; font-size:15px; font-weight:bold;"
+                  >
+                    Go to Synomilo
+                  </a>
                 </div>
-                <div class="content">
-                  <h2>Hi ${userName},</h2>
-                  <p>Thank you for signing up to Synomilo. We're excited to have you on board as part of our early access.</p>
 
-                  <h3>Here's what you can do next:</h3>
+                <h2 style="margin:32px 0 12px; font-size:24px; line-height:1.3; color:#111111;">
+                  What you can do next
+                </h2>
 
-                  <p>Follow the link back to Synomilo: https://synomilo.com/home</p>
-                  <ul>
-                    <li>Read the guides on each page</li>
-                    <li>Browse our learning materials</li>
-                    <li>Start your first conversation</li>
-                    <li>Start and maintain your learning streak</li>
-                    <li>Tell us what you like/dislike! We're craving feedback at this stage of launch.</li>
-                  </ul>
+                <h3 style="margin:20px 0 8px; font-size:18px; color:#111111;">
+                  Students
+                </h3>
 
-                  <h3>Here's what's coming soon</h3>
-                  <ul>
-                    <li>We are going to try our best to integrate popular requests from your feedback.</li>
-                    <li>Tutor integration: No more sharing your screen with your tutor, they will have their own UI soon.</li>
-                    <li>Tutors can assign conversations for out-of-class practice as well as track what you've done.</li>
-                    <li>Paid options for students and tutors</li>
-                  </ul>
+                <ul style="margin:0; padding-left:20px; font-size:15px; line-height:1.7; color:#333333;">
+                  <li>Start your first conversation</li>
+                  <li>Add a word to your Dictionary</li>
+                  <li>Add your tutor on the Assignments page</li>
+                  <li>Build and maintain your learning streak</li>
+                  <li>Send feedback on what was good, bad, or needs to change for student users. I'm actively shaping Synomilo around early users.</li>
+                </ul>
 
-                  <p><strong>The Synomilo Team</strong></p>
-                </div>
-                <div class="footer">
-                  <p>This email was sent because you signed up for Synomilo. If you didn't sign up, please ignore this email.</p>
-                </div>
-              </div>
-            </body>
-          </html>
+                <h3 style="margin:24px 0 8px; font-size:18px; color:#111111;">
+                  Tutors
+                </h3>
+
+                <ul style="margin:0; padding-left:20px; font-size:15px; line-height:1.7; color:#333333;">
+                  <li>Add your students on the Assignments page</li>
+                  <li>Browse the learning materials</li>
+                  <li>Use Synomilo during one of your lessons</li>
+                  <li>Send feedback on what was good, bad, or needs to change for tutors. I want Synomilo to be as useful as possible for your lessons.</li>
+                </ul>
+
+                <h2 style="margin:32px 0 12px; font-size:24px; line-height:1.3; color:#111111;">
+                  Coming soon
+                </h2>
+
+                <ul style="margin:0; padding-left:20px; font-size:15px; line-height:1.7; color:#333333;">
+                  <li>New link sharing, so tutors can share a conversation with a student without requiring an account.</li>
+                  <li>More progress tracking for tutors and students</li>
+                  <li>More features shaped by user feedback</li>
+                </ul>
+
+                <p style="margin:28px 0 0; font-size:16px; line-height:1.6; color:#333333;">
+                  Thanks again for joining early.
+                </p>
+
+                <p style="margin:18px 0 0; font-size:16px; color:#111111;">
+                  <strong>The Synomilo Team</strong>
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:18px 28px; text-align:center; background:#f9fafb; color:#6b7280; font-size:12px; line-height:1.5;">
+                This email was sent because you signed up for Synomilo.
+                If you didn’t sign up, you can ignore this email.
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
         `;
         break;
 

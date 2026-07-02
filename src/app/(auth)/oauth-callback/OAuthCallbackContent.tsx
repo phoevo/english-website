@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { account } from '@/data/appwrite'
 import { ensureUserDocument } from '@/data/getData'
 import { LoaderCircle } from 'lucide-react'
+import { sendWelcomeEmail } from '@/services/emailService'
 
 export default function OAuthCallback() {
   const router = useRouter()
@@ -31,10 +32,24 @@ export default function OAuthCallback() {
         } catch {}
 
         let isNewUser = false
-        try {
-          const { created } = await ensureUserDocument()
-          isNewUser = created
-        } catch {}
+
+try {
+  const { created } = await ensureUserDocument()
+  isNewUser = created
+
+  if (created) {
+    const user = await account.get()
+
+    try {
+      await sendWelcomeEmail({
+        userEmail: user.email,
+        userName: user.name || user.email,
+      })
+    } catch (err) {
+      console.warn('Welcome email failed:', err)
+    }
+  }
+} catch {}
 
         // New users always go to onboarding, returning users go to the requested page
         router.replace(isNewUser ? '/onboarding' : redirect)
