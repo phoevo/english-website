@@ -27,7 +27,7 @@ module.exports = async function handleGetSubscription({
     }
 
     // Initialize Stripe
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST, {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
       apiVersion: "2023-08-16",
     });
 
@@ -73,10 +73,10 @@ module.exports = async function handleGetSubscription({
     const priceId = activeSubscription.items.data[0].price.id;
 
     // Map price IDs to plan names (same env vars + fallbacks as webhook.js)
-    const PRICE_STUDENT_MONTHLY = process.env.STRIPE_MONTHLY_PRICE_ID || "price_1RjNY6PoApFikZNYFIHlqq3t";
-    const PRICE_STUDENT_YEARLY = process.env.STRIPE_YEARLY_PRICE_ID || "price_1RmIPcPoApFikZNYDnmuR2hA";
-    const PRICE_TUTOR_MONTHLY = process.env.STRIPE_TUTOR_MONTHLY || "price_1ScV06PoApFikZNYoWPINm74";
-    const PRICE_TUTOR_YEARLY = process.env.STRIPE_TUTOR_YEARLY || "price_1SyYn4PoApFikZNYC69TOcVL";
+    const PRICE_STUDENT_MONTHLY = process.env.STRIPE_STUDENT_MONTHLY_EA;
+    const PRICE_STUDENT_YEARLY = process.env.STRIPE_STUDENT_YEARLY_EA;
+    const PRICE_TUTOR_MONTHLY = process.env.STRIPE_TUTOR_MONTHLY_EA;
+    const PRICE_TUTOR_YEARLY = process.env.STRIPE_TUTOR_YEARLY_EA;
 
     let planName = "free";
     if (priceId === PRICE_STUDENT_MONTHLY) {

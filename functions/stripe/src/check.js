@@ -14,7 +14,7 @@ module.exports = async function handleCheckPayment({
   }
 
   const databases = new Databases(adminClient);
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST, {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: "2023-08-16",
   });
 
@@ -87,16 +87,16 @@ module.exports = async function handleCheckPayment({
     let plan;
 
     switch (priceId) {
-      case "price_1RjNY6PoApFikZNYFIHlqq3t":
+      case process.env.STRIPE_STUDENT_MONTHLY_EA:
         plan = "Student Monthly";
         break;
-      case "price_1RmIPcPoApFikZNYDnmuR2hA":
+      case process.env.STRIPE_STUDENT_YEARLY_EA:
         plan = "Student Yearly";
         break;
-      case "price_1ScV06PoApFikZNYoWPINm74":
+      case process.env.STRIPE_TUTOR_MONTHLY_EA:
         plan = "Tutor Monthly";
         break;
-      case "price_1SyYn4PoApFikZNYC69TOcVL":
+      case process.env.STRIPE_TUTOR_YEARLY_EA:
         plan = "Tutor Yearly";
         break;
       default:

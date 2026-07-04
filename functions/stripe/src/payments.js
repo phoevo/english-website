@@ -9,10 +9,10 @@ const serverPlans = [
 ];
 
 const priceMap = {
-  "Student Monthly": "price_1RjNY6PoApFikZNYFIHlqq3t",
-  "Student Yearly": "price_1RmIPcPoApFikZNYDnmuR2hA",
-  "Tutor Monthly": "price_1ScV06PoApFikZNYoWPINm74",
-  "Tutor Yearly": "price_1SyYn4PoApFikZNYC69TOcVL",
+  "Student Monthly": process.env.STRIPE_STUDENT_MONTHLY_EA,
+  "Student Yearly": process.env.STRIPE_STUDENT_YEARLY_EA,
+  "Tutor Monthly": process.env.STRIPE_TUTOR_MONTHLY_EA,
+  "Tutor Yearly": process.env.STRIPE_TUTOR_YEARLY_EA,
 };
 
 module.exports = async function handlePayments({
@@ -43,7 +43,7 @@ module.exports = async function handlePayments({
       return res.json({ error: "Invalid plan" }, 400);
     }
 
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST, {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
       apiVersion: "2023-08-16",
     });
 

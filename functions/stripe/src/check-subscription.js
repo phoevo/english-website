@@ -10,9 +10,7 @@ module.exports = async function handleCheckSubscription({
 
   try {
     // Debug environment variables
-    console.log("Environment variables check:");
-    console.log("NEXT_PUBLIC_STRIPE_SECRET_KEY:", process.env.STRIPE_SECRET_KEY_TEST ? "✓ Present" : "✗ Missing");
-    console.log("STRIPE_SECRET_KEY:", process.env.STRIPE_SECRET_KEY_TEST ? "✓ Present" : "✗ Missing");
+
 
     // Get the current user
     const user = await account.get();
@@ -23,7 +21,7 @@ module.exports = async function handleCheckSubscription({
     }
 
     // Initialize Stripe with server-side secret
-    const stripeKey = process.env.STRIPE_SECRET_KEY_TEST;
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
 
     if (!stripeKey) {
       console.error("No Stripe secret key found in environment variables");
