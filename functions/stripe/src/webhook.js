@@ -7,11 +7,11 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
   console.log("Headers:", JSON.stringify(req.headers, null, 2));
 
   // Use TEST or LIVE depending on environment
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST, {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: "2023-08-16",
   });
 
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET_TEST;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   const signature = req.headers["stripe-signature"];
 
   // Ensure raw buffer

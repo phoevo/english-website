@@ -1026,7 +1026,7 @@ return (
       <ul className="flex justify-center text-xs lg:text-md flex-col gap-2">
         <Link href="/privacy">Privacy Policy</Link>
         <Link href="/ToS">Terms of Service</Link>
-        {/*<Link href="/">Refund and Cancellation Policy</Link>*/}
+        <Link href="/refund">Refund Policy</Link>
       </ul>
     </div>
   </div>
