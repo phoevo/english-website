@@ -9,10 +9,10 @@ const serverPlans = [
 ];
 
 const priceMap = {
-  "Student Monthly": process.env.STRIPE_STUDENT_MONTHLY_EA,
-  "Student Yearly": process.env.STRIPE_STUDENT_YEARLY_EA,
-  "Tutor Monthly": process.env.STRIPE_TUTOR_MONTHLY_EA,
-  "Tutor Yearly": process.env.STRIPE_TUTOR_YEARLY_EA,
+  "Student Monthly": "price_1TdZO8L2R3rDklxBcFuGHgko",
+  "Student Yearly": "price_1TdZPSL2R3rDklxBhKtzSVX0",
+  "Tutor Monthly": "price_1TdZQ2L2R3rDklxB4yDMyHKS",
+  "Tutor Yearly": "price_1TdZRFL2R3rDklxBcfkm5QxD",
 };
 
 module.exports = async function handlePayments({

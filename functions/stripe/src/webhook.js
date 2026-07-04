@@ -150,10 +150,10 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
   let plan = "free";
 
   // Resolve price IDs from env with fallbacks for dev/test
-  const PRICE_STUDENT_MONTHLY = process.env.STRIPE_STUDENT_MONTHLY_EA;
-  const PRICE_STUDENT_YEARLY = process.env.STRIPE_STUDENT_YEARLY_EA;
-  const PRICE_TUTOR_MONTHLY  = process.env.STRIPE_TUTOR_MONTHLY_EA;
-  const PRICE_TUTOR_YEARLY   = process.env.STRIPE_TUTOR_YEARLY_EA;
+  const PRICE_STUDENT_MONTHLY = "price_1TdZO8L2R3rDklxBcFuGHgko";
+  const PRICE_STUDENT_YEARLY = "price_1TdZPSL2R3rDklxBhKtzSVX0";
+  const PRICE_TUTOR_MONTHLY  = "price_1TdZQ2L2R3rDklxB4yDMyHKS";
+  const PRICE_TUTOR_YEARLY   = "price_1TdZRFL2R3rDklxBcfkm5QxD";
 
   if (priceId) {
     switch (priceId) {
