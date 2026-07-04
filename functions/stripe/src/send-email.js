@@ -37,13 +37,6 @@ module.exports = async function handleSendEmail({ req, res, client, adminClient 
 
             <tr>
               <td style="padding:40px 28px 28px; text-align:center; background:#1e1e1e;">
-                <img
-                  src="https://synomilo.com/favicon-96x96.png"
-                  alt="Synomilo"
-                  width="64"
-                  height="64"
-                  style="display:block; margin:0 auto 20px; border:0; outline:none;"
-                />
 
                 <h1 style="margin:0; color:#ffffff; font-size:30px; line-height:1.2; font-weight:700;">
                   Welcome to Synomilo

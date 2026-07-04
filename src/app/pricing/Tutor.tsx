@@ -88,7 +88,7 @@ function Tutor() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0 }}>
       <ul className='text-base list-disc marker:text-popover-foreground space-y-1 justify-start'>
-        <li>All conversations A1-C2 in read-only</li>
+        <li>All conversations A1-B2 in read-only</li>
 
       </ul>
       </motion.div>
@@ -124,7 +124,7 @@ function Tutor() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0 }}>
       <ul className='text-base text-muted-foreground list-disc marker:text-pink-500 px-10 space-y-1 w-full'>
-        <li>All conversations A1-C2 in read-only</li>
+        <li>All conversations A1-B2 in read-only</li>
         <li>Assignments page: Track and manage your students</li>
         <li>Assign feature: Assign conversations to your students. Students view assigned conversations with Plus features, even they have a free accounts</li>
       </ul>

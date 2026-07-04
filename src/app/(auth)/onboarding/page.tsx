@@ -118,7 +118,7 @@ export default function Onboarding() {
     })
 
     setIsTeacher(role === 'tutor')
-    toast.success('Onboarding complete! Welcome')
+    toast.success('Account created. Welcome!')
     router.push('/home')
   } catch (error) {
     console.error("Failed to update user role:", error)

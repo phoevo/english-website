@@ -114,7 +114,7 @@ const faqs: FAQItem[] = [
       <>
         Plus unlocks the full experience.
         <br /><br />
-        <strong>Students</strong> get full access to all conversations (A1–C2), conversation audio, color customization and challenges.
+        <strong>Students</strong> get full access to all conversations (A1–B2), conversation audio, color customization and challenges.
         <br />
         <strong>Tutors</strong> can assign conversations that include all Plus features, even to Free Students. They also get to track assigned conversations for each student to check on progress.
       </>
@@ -200,7 +200,7 @@ function renderTier(tier: Tier, idx: number) {
           <User strokeWidth={1} size={60} className="md:w-[90px] md:h-[90px]" />
           <Notebook className="absolute bottom-3 md:bottom-5 ml-6 md:ml-10 bg-background z-10" size={20} />
         </div>
-        <Badge className={studentIsPlus ? "bg-pink-500 text-foreground" : ""}>{tier.studentBadge}</Badge>
+        <Badge className={studentIsPlus ? "bg-pink-500 text-white" : ""}>{tier.studentBadge}</Badge>
 
       </div>
 
@@ -209,7 +209,7 @@ function renderTier(tier: Tier, idx: number) {
           <User strokeWidth={1} size={60} className="md:w-[90px] md:h-[90px]" />
           <Briefcase className="absolute bottom-1 md:bottom-4 ml-6 md:ml-10 bg-background z-10" size={25} />
         </div>
-        <Badge className={tutorIsPlus ? "bg-pink-500 text-mutedforeground" : ""}>{tier.tutorBadge}</Badge>
+        <Badge className={tutorIsPlus ? "bg-pink-500 text-white" : ""}>{tier.tutorBadge}</Badge>
       </div>
 
     </div>

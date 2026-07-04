@@ -249,7 +249,7 @@ function TeacherPage() {
           {assignments.map((a) => (
             <li
               key={a.$id}
-              className="flex items-center justify-between rounded-md border bg-card p-3 transition "
+              className="flex items-center justify-between rounded-md border bg-muted p-3 transition "
             >
               <div className="flex flex-wrap items-center gap-2">
                 <h4 className="font-semibold text-sm">{a.title}</h4>

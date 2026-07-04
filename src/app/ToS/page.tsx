@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 };
 
 export default function TermsPage() {
-  const effectiveDate: string = "2025-09-10"; // update when needed
+  const effectiveDate: string = "July 4th, 2026"; // update when needed
   const companyName: string = "Synomilo";
-  const contactEmail: string = "synomilo@gmail.com";
+  const contactEmail: string = "synomiloteam@gmail.com";
 
   return (
     <main className={`pt-10 max-w-4xl mx-auto prose prose-neutral ${geist.className}`}>
@@ -45,13 +45,35 @@ export default function TermsPage() {
         </section>
 
         <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2">Subscriptions and payments</h2>
-          <p>
-            Some features of the Service may require a paid subscription. Payments are processed by our third-party
-            provider (e.g., Stripe) and subject to their terms. We do not store payment card details. Subscription
-            details, pricing, and refund policies will be presented at the point of purchase.
-          </p>
-        </section>
+  <h2 className="text-2xl font-semibold mb-2">Intellectual property</h2>
+  <p>
+    The Service, including its software, design, branding, text, conversations, graphics, and other materials, belongs to {companyName} or its licensors.
+    You may not copy, resell, redistribute, or exploit any part of the Service without our permission.
+  </p>
+</section>
+
+        <section className="mb-6">
+  <h2 className="text-2xl font-semibold mb-2">Subscriptions and payments</h2>
+  <p>
+    Some features of the Service may require a paid subscription. Payments are processed by Stripe.
+    We do not store your payment card details.
+  </p>
+  <p className="mt-2">
+    Subscriptions renew automatically unless cancelled before the next billing date. You may cancel your subscription at any time.
+    Cancellation stops future renewals, but you will keep access until the end of your current paid billing period.
+  </p>
+</section>
+
+<section className="mb-6">
+  <h2 className="text-2xl font-semibold mb-2">Refunds and digital access</h2>
+  <p>
+    Because the Service provides immediate access to digital content and subscription features, refunds are generally not provided once access has been granted,
+    except where required by applicable law or where there has been an error, duplicate charge, or incorrect billing.
+  </p>
+  <p className="mt-2">
+    Where required by law, you may be asked before purchase to expressly request immediate access and acknowledge that you lose your statutory right of withdrawal once access begins.
+  </p>
+</section>
 
         <section className="mb-6">
           <h2 className="text-2xl font-semibold mb-2">Acceptable use</h2>
@@ -62,19 +84,21 @@ export default function TermsPage() {
           </ul>
         </section>
 
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2">Account termination</h2>
-          <p>
-            You may delete your account at any time in your account settings, which will permanently erase your data. We
-            may suspend or terminate your account if you violate these Terms or misuse the Service.
-          </p>
-        </section>
+       <section className="mb-6">
+  <h2 className="text-2xl font-semibold mb-2">Account termination</h2>
+  <p>
+    You may delete your account at any time in your account settings. Account deletion removes your access to the Service and deletes your account data in accordance with our Privacy Policy.
+  </p>
+  <p className="mt-2">
+    We may suspend or terminate your account if you violate these Terms, misuse the Service, or use the Service in a way that may harm us, other users, or the platform.
+  </p>
+</section>
 
         <section className="mb-6">
           <h2 className="text-2xl font-semibold mb-2">Disclaimer of warranties</h2>
           <p>
             The Service is provided “as is” and “as available.” We make no guarantees about uptime, reliability, or
-            suitability for your purposes, especially while in beta.
+            suitability for your purposes, especially while in early access.
           </p>
         </section>
 
@@ -85,6 +109,28 @@ export default function TermsPage() {
             special, or consequential damages arising out of or relating to your use of the Service.
           </p>
         </section>
+
+        <section className="mb-6">
+  <h2 className="text-2xl font-semibold mb-2">Changes to the Service</h2>
+  <p>
+    We may modify, suspend, or discontinue parts of the Service at any time, especially while the Service is in early access.
+    We will try to avoid unnecessary disruption, but we do not guarantee that all features will remain available permanently.
+  </p>
+</section>
+
+<section className="mb-6">
+  <h2 className="text-2xl font-semibold mb-2">Consumer rights</h2>
+  <p>
+    Nothing in these Terms limits any mandatory consumer rights that you may have under applicable law.
+  </p>
+</section>
+
+<section className="mb-6">
+  <h2 className="text-2xl font-semibold mb-2">Governing law</h2>
+  <p>
+    These Terms are governed by the laws of Greece, without limiting any mandatory consumer protection rights available to you under applicable law.
+  </p>
+</section>
 
         <section className="mb-6">
           <h2 className="text-2xl font-semibold mb-2">Changes to these Terms</h2>
