@@ -9,9 +9,9 @@ const serverPlans = [
 ];
 
 const priceMap = {
-  "Student Monthly": "price_1TdZO8L2R3rDklxBcFuGHgko",
+  "Student Monthly": "price_1TpZBNL2R3rDklxBncRgUey9",
   "Student Yearly": "price_1TdZPSL2R3rDklxBhKtzSVX0",
-  "Tutor Monthly": "price_1TdZQ2L2R3rDklxB4yDMyHKS",
+  "Tutor Monthly": "price_1TpZLxL2R3rDklxB0dwVxVU2",
   "Tutor Yearly": "price_1TdZRFL2R3rDklxBcfkm5QxD",
 };
 
@@ -75,9 +75,12 @@ module.exports = async function handlePayments({
     // =========================
     if (!stripeCustomerId) {
       const customer = await stripe.customers.create({
-        email: user.email,
-        name: user.name,
-      });
+  name: user.name,
+  email: user.email,
+  metadata: {
+    appwriteUserId: user.$id,
+  },
+});
 
       stripeCustomerId = customer.id;
 
@@ -94,17 +97,38 @@ module.exports = async function handlePayments({
     const baseUrl = process.env.FRONTEND_URL || "http://localhost:3000";
 
     const session = await stripe.checkout.sessions.create({
-      customer: stripeCustomerId,
-      mode: "subscription",
-      line_items: [
-        {
-          price: priceMap[plan],
-          quantity: 1,
-        },
-      ],
-      success_url: `${baseUrl}/home?success=true`,
-      cancel_url: `${baseUrl}/subscribe?canceled=true`,
-    });
+  customer: stripeCustomerId,
+  mode: "subscription",
+
+  line_items: [
+    {
+      price: priceMap[plan],
+      quantity: 1,
+    },
+  ],
+
+  // ✅ Enable Stripe Tax
+  automatic_tax: {
+    enabled: true,
+  },
+
+  // ✅ Ask for billing address (at least the country)
+  billing_address_collection: "required",
+
+  // ✅ Save the address back to the customer
+  customer_update: {
+    address: "auto",
+    name: "auto",
+  },
+
+  // ✅ If you might sell to businesses later
+  tax_id_collection: {
+    enabled: true,
+  },
+
+  success_url: `${baseUrl}/pricing/success`,
+  cancel_url: `${baseUrl}/pricing/canceled`,
+});
 
     return res.json({
       checkout_url: session.url,

@@ -167,7 +167,7 @@ export default function CustomColors({ userId }: { userId: string }) {
         <Button className="cursor-pointer" onClick={savePreferences}>Save Preferences</Button>)
         :
 
-        (<Link href="/subscribe">
+        (<Link href="/pricing">
           <Button>Save Preferences</Button>
           </Link>)
     }

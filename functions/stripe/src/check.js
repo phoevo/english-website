@@ -87,13 +87,13 @@ module.exports = async function handleCheckPayment({
     let plan;
 
     switch (priceId) {
-      case "price_1TdZO8L2R3rDklxBcFuGHgko":
+      case "price_1TpZBNL2R3rDklxBncRgUey9":
         plan = "Student Monthly";
         break;
       case "price_1TdZPSL2R3rDklxBhKtzSVX0":
         plan = "Student Yearly";
         break;
-      case "price_1TdZQ2L2R3rDklxB4yDMyHKS":
+      case "price_1TpZLxL2R3rDklxB0dwVxVU2":
         plan = "Tutor Monthly";
         break;
       case "price_1TdZRFL2R3rDklxBcfkm5QxD":

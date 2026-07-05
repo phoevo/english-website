@@ -1,9 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-import { toast } from "sonner";
 import { useUserStore } from "@/data/useUserStore";
-import { checkSubscriptionStatus } from "@/data/getData";
 import Link from "next/link";
 // import DailyTasks from "./dailyTasks";
 import GuideTour, { type GuideStep } from "../GuideTour";
@@ -42,34 +39,6 @@ function getLastActive(value: unknown): string | null {
 
 function Page() {
   const { user, recentConversations, loading, dictionaryWords, friends, isTeacher } = useUserStore();
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("success") !== "true") return;
-
-    toast.success("Thanks for subscribing! Your Pro access is being activated.");
-    // Remove the query param so the toast doesn't fire again on refresh.
-    window.history.replaceState({}, "", "/home");
-
-    // Stripe provisions via the webhook asynchronously, so poll the user doc
-    // briefly and flip the local subscribed state once it lands (avoids a full reload).
-    let cancelled = false;
-    (async () => {
-      for (let attempt = 0; attempt < 8 && !cancelled; attempt++) {
-        const uid = useUserStore.getState().user?.$id;
-        if (uid && (await checkSubscriptionStatus(uid))) {
-          useUserStore.getState().setSubscribed(true);
-          break;
-        }
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const conversation = recentConversations[0]; // get the first one
   const firstFiveWords = [...dictionaryWords].reverse().slice(0, 5);
