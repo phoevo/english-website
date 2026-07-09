@@ -5,6 +5,12 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Geist } from "next/font/google";
+import {
+  account,
+  databases,
+  databaseId,
+  usersCollectionId,
+} from "@/data/appwrite";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -24,62 +30,135 @@ export default function GuideTour({ id, steps }: GuideTourProps) {
   const [step, setStep] = useState(0);
   const [rect, setRect] = useState<DOMRect | null>(null);
   const [mounted, setMounted] = useState(false);
-  const prevElRef = useRef<Element | null>(null);
 
-  useEffect(() => setMounted(true), []);
+  const prevElRef = useRef<Element | null>(null);
+  const localKey = `guide-${id}`;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!mounted) return;
-    if (localStorage.getItem(`guide-${id}`)) return;
-    const t = setTimeout(() => setActive(true), 600);
-    return () => clearTimeout(t);
-  }, [id, mounted]);
+
+    let cancelled = false;
+    let timeout: ReturnType<typeof setTimeout>;
+
+    async function checkGuideProgress() {
+      if (localStorage.getItem(localKey) === "true") return;
+
+      try {
+        const authUser = await account.get();
+
+        const userDoc = await databases.getDocument(
+          databaseId,
+          usersCollectionId,
+          authUser.$id
+        );
+
+        if (cancelled) return;
+
+        const completedGuides = userDoc.guideTour ?? [];
+
+        if (completedGuides.includes(id)) {
+          localStorage.setItem(localKey, "true");
+          return;
+        }
+
+        timeout = setTimeout(() => {
+          if (!cancelled) setActive(true);
+        }, 600);
+      } catch (error) {
+        console.error("Failed to check guide progress:", error);
+
+        timeout = setTimeout(() => {
+          if (!cancelled) setActive(true);
+        }, 600);
+      }
+    }
+
+    checkGuideProgress();
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timeout);
+    };
+  }, [id, mounted, localKey]);
 
   const measure = useCallback(() => {
     if (!active || !steps[step]) return;
 
-    if (prevElRef.current) {
-      prevElRef.current.classList.remove("guide-highlight");
-    }
+    prevElRef.current?.classList.remove("guide-highlight");
 
     const el = document.querySelector(`[data-guide="${steps[step].target}"]`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      requestAnimationFrame(() => {
-        setRect(el.getBoundingClientRect());
-        el.classList.add("guide-highlight");
-        prevElRef.current = el;
-      });
-    } else {
+
+    if (!el) {
       setRect(null);
+      return;
     }
+
+    el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    requestAnimationFrame(() => {
+      setRect(el.getBoundingClientRect());
+      el.classList.add("guide-highlight");
+      prevElRef.current = el;
+    });
   }, [active, step, steps]);
 
   useEffect(() => {
     measure();
+
     window.addEventListener("resize", measure);
     window.addEventListener("scroll", measure, true);
+
     return () => {
       window.removeEventListener("resize", measure);
       window.removeEventListener("scroll", measure, true);
-      if (prevElRef.current) {
-        prevElRef.current.classList.remove("guide-highlight");
-      }
+      prevElRef.current?.classList.remove("guide-highlight");
     };
   }, [measure]);
 
-  const dismiss = useCallback(() => {
-    localStorage.setItem(`guide-${id}`, "true");
-    if (prevElRef.current) {
-      prevElRef.current.classList.remove("guide-highlight");
-      prevElRef.current = null;
+  const dismiss = useCallback(async () => {
+    localStorage.setItem(localKey, "true");
+
+    try {
+      const authUser = await account.get();
+
+      const userDoc = await databases.getDocument(
+        databaseId,
+        usersCollectionId,
+        authUser.$id
+      );
+
+      const completedGuides = userDoc.guideTour ?? [];
+
+      if (!completedGuides.includes(id)) {
+        await databases.updateDocument(
+          databaseId,
+          usersCollectionId,
+          authUser.$id,
+          {
+            guideTour: [...completedGuides, id],
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Failed to save guide progress:", error);
     }
+
+    prevElRef.current?.classList.remove("guide-highlight");
+    prevElRef.current = null;
+
     setActive(false);
-  }, [id]);
+  }, [id, localKey]);
 
   const next = () => {
-    if (step < steps.length - 1) setStep((s) => s + 1);
-    else dismiss();
+    if (step < steps.length - 1) {
+      setStep((s) => s + 1);
+    } else {
+      dismiss();
+    }
   };
 
   const back = () => {
@@ -120,13 +199,16 @@ export default function GuideTour({ id, steps }: GuideTourProps) {
           transition={{ duration: 0.2 }}
         >
           <p className="font-semibold text-sm">{current.title}</p>
+
           <p className="text-sm text-muted-foreground mt-1">
             {current.description}
           </p>
+
           <div className="flex justify-between items-center mt-3">
             <span className="text-xs text-muted-foreground">
               {step + 1} / {steps.length}
             </span>
+
             <div className="flex gap-2">
               {step > 0 && (
                 <Button
@@ -138,6 +220,7 @@ export default function GuideTour({ id, steps }: GuideTourProps) {
                   Back
                 </Button>
               )}
+
               <Button size="sm" className="cursor-pointer" onClick={next}>
                 {step === steps.length - 1 ? "Got it" : "Next"}
               </Button>
