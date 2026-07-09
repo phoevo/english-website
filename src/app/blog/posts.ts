@@ -21,6 +21,13 @@ export const posts: Post[] = [
     date: "2025-10-18",
     tags: ["Speaking", "Fluency", "Mistakes"],
   },
+  {
+    title: "What do do when your ESL lesson finishes early.",
+    slug: "what-to-do-when-your-ESL-lesson-finishes-early",
+    excerpt: "Correct commmon mistakes to improve your fluency.",
+    date: "2025-10-18",
+    tags: ["Speaking", "Fluency", "Mistakes"],
+  },
 ];
 
 export default posts;

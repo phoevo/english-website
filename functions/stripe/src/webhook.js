@@ -20,6 +20,7 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
     ? rawBodyString
     : Buffer.from(rawBodyString || "", "utf8");
 
+
   let event;
 
   try {
@@ -58,35 +59,9 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
   console.log("Processing event:", event.type);
   console.log("Event data:", JSON.stringify(event.data, null, 2));
 
-  let customerId;
-  let priceId;
-
-  /** ---- LOGIC BELOW UNCHANGED ---- */
-
-  // Handle different event types
-  if (event.type === "checkout.session.completed") {
-    customerId = event.data.object.customer;
-    const lineItems = event.data.object.display_items || event.data.object.line_items;
-    if (lineItems && lineItems.length > 0) {
-      priceId = lineItems[0].price?.id;
-    }
-    if (!priceId && event.data.object.subscription) {
-      const subscription = await stripe.subscriptions.retrieve(event.data.object.subscription);
-      priceId = subscription.items.data[0].price.id;
-    }
-  } else {
-    customerId = event.data.object.customer;
-    if (event.data.object.items) {
-      priceId = event.data.object.items.data[0].price.id;
-    }
-    if (!priceId && event.type.startsWith("invoice.")) {
-      const lines = event.data.object?.lines?.data || [];
-      const first = lines[0];
-      if (first?.pricing?.price_details?.price) {
-        priceId = first.pricing.price_details.price;
-      }
-    }
-  }
+  // Every handled event (checkout session, subscription, invoice, payment
+  // intent) carries the Stripe customer id on its object.
+  const customerId = event.data.object.customer;
 
   if (!customerId) {
     console.error("No customer ID found in event");
@@ -94,7 +69,6 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
   }
 
   console.log("Customer ID:", customerId);
-  console.log("Price ID:", priceId);
 
   const databases = new Databases(adminClient);
 
@@ -147,73 +121,39 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
 
   console.log("Found user ID:", userId);
 
+  // Entitlement is derived from the customer's ACTUAL subscription status in
+  // Stripe, never from the price id carried on the event. Failed-payment
+  // events (invoice.payment_failed, payment_intent.payment_failed) and
+  // not-yet-paid subscriptions (status "incomplete") still reference a paid
+  // price, so keying off the price alone granted access even when the charge
+  // never succeeded. A subscription only grants access while Stripe reports it
+  // as "active" or "trialing".
+  const PRICE_TO_PLAN = {
+    price_1TpZBNL2R3rDklxBncRgUey9: "Student Monthly",
+    price_1TdZPSL2R3rDklxBhKtzSVX0: "Student Yearly",
+    price_1TpZLxL2R3rDklxB0dwVxVU2: "Tutor Monthly",
+    price_1TdZRFL2R3rDklxBcfkm5QxD: "Tutor Yearly",
+  };
+  const GRANTING_STATUSES = ["active", "trialing"];
+
   let plan = "free";
-
-  // Resolve price IDs from env with fallbacks for dev/test
-  const PRICE_STUDENT_MONTHLY = "price_1TpZBNL2R3rDklxBncRgUey9";
-  const PRICE_STUDENT_YEARLY = "price_1TdZPSL2R3rDklxBhKtzSVX0";
-  const PRICE_TUTOR_MONTHLY  = "price_1TpZLxL2R3rDklxB0dwVxVU2";
-  const PRICE_TUTOR_YEARLY   = "price_1TdZRFL2R3rDklxBcfkm5QxD";
-
-  if (priceId) {
-    switch (priceId) {
-      case PRICE_STUDENT_MONTHLY:
-        plan = "Student Monthly";
-        break;
-      case PRICE_STUDENT_YEARLY:
-        plan = "Student Yearly";
-        break;
-      case PRICE_TUTOR_MONTHLY:
-        plan = "Tutor Monthly";
-        break;
-      case PRICE_TUTOR_YEARLY:
-        plan = "Tutor Yearly";
-        break;
-      default:
-        plan = "free";
-    }
-  } else {
+  try {
     const subscriptions = await stripe.subscriptions.list({
       customer: customerId,
-      limit: 1,
-      status: "active",
+      status: "all",
+      limit: 10,
     });
-    if (subscriptions.data.length > 0) {
-      const activePriceId = subscriptions.data[0].items.data[0].price.id;
-      switch (activePriceId) {
-        case PRICE_STUDENT_MONTHLY:
-          plan = "Student Monthly";
-          break;
-        case PRICE_STUDENT_YEARLY:
-          plan = "Student Yearly";
-          break;
-        case PRICE_TUTOR_MONTHLY:
-          plan = "Tutor Monthly";
-          break;
-        case PRICE_TUTOR_YEARLY:
-          plan = "Tutor Yearly";
-          break;
-        default:
-          plan = "free";
-      }
+    const grantingSub = subscriptions.data.find((s) =>
+      GRANTING_STATUSES.includes(s.status)
+    );
+    if (grantingSub) {
+      const activePriceId = grantingSub.items.data[0].price.id;
+      plan = PRICE_TO_PLAN[activePriceId] || "free";
     }
-  }
-
-  // For cancellation/deletion events, force plan to "free" regardless of price ID
-  const cancellationEvents = [
-    "customer.subscription.deleted",
-    "customer.subscription.paused",
-  ];
-  if (cancellationEvents.includes(event.type)) {
+  } catch (err) {
+    console.error("Failed to resolve subscription status for customer:", customerId, err);
+    // Fail closed: never grant access when the active subscription can't be confirmed.
     plan = "free";
-  }
-
-  // For updated subscriptions, check if the status is actually active
-  if (event.type === "customer.subscription.updated") {
-    const subStatus = event.data.object.status;
-    if (subStatus === "canceled" || subStatus === "unpaid" || subStatus === "incomplete_expired") {
-      plan = "free";
-    }
   }
 
   console.log("Determined plan:", plan);

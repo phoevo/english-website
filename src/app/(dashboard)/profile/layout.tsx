@@ -153,32 +153,41 @@ const handleUnsubscribe = async () => {
   if (!user) return;
   setIsLoading(true);
 
-  // 1. Cancel Stripe subscription via Appwrite function
-  try {
-    await unsubscribeUser2(user.$id);
-  } catch (err) {
-    console.error('Function unsubscribe error:', err);
-  }
+  // Reassure the user while the (Stripe-bound) cancellation runs.
+  const toastId = 'unsubscribe';
+  toast.loading('Unsubscribing…', { id: toastId });
+  const reassure1 = setTimeout(() => toast.loading('Almost there…', { id: toastId }), 2000);
+  const reassure2 = setTimeout(() => toast.loading('Almost done…', { id: toastId }), 4000);
 
-  // 2. Directly set isSubscribed=false in Appwrite DB as a guaranteed backup
   try {
-    await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
+    // 1. Cancel Stripe subscription via Appwrite function
+    try {
+      await unsubscribeUser2(user.$id);
+    } catch (err) {
+      console.error('Function unsubscribe error:', err);
+    }
+
+    // 2. Directly set isSubscribed=false in Appwrite DB as a guaranteed backup
+    try {
+      await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
+        isSubscribed: false,
+      });
+    } catch (err) {
+      console.error('Direct DB update error:', err);
+    }
+
+    // 3. Force-update Zustand so the UI reflects immediately
+    useUserStore.setState((state) => ({
       isSubscribed: false,
-    });
-    console.log(isSubscribed)
-  } catch (err) {
-    console.error('Direct DB update error:', err);
+      user: state.user ? { ...state.user, isSubscribed: false } : state.user,
+    }));
 
+    toast.success('You have successfully unsubscribed!', { id: toastId });
+  } finally {
+    clearTimeout(reassure1);
+    clearTimeout(reassure2);
+    setIsLoading(false);
   }
-
-  // 3. Force-update Zustand so the UI reflects immediately
-  useUserStore.setState((state) => ({
-    isSubscribed: false,
-    user: state.user ? { ...state.user, isSubscribed: false } : state.user,
-  }));
-
-  toast.success('You have successfully unsubscribed!');
-  setIsLoading(false);
 };
 
 

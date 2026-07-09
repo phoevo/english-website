@@ -9,14 +9,14 @@ const dmSans = DM_Sans({ subsets: ['latin'] });
 
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ScrollArea className="h-[100dvh] w-full lg:pr-10">
+    <ScrollArea className="h-[100dvh] w-full">
       <a href={"/"}>
-        <p className={`${dmSans.className} flex flex-row items-center gap-1 absolute top-1 m-2 left-10 cursor-pointer hover:border-b border-foreground`}>
+        <p className={`${dmSans.className} flex flex-row items-center gap-1 absolute top-1 m-2 left-5 cursor-pointer hover:border-b border-foreground`}>
           <CircleArrowLeft size={15}/> Back to app</p>
       </a>
-      <div className="flex flex-col lg:flex-row bg-muted/30 rounded-lg w-full p-4 lg:p-10 mx-auto gap-8 lg:pr-4">
+      <div className="flex flex-col lg:flex-row bg-muted/30 rounded-lg w-full p-4 lg:p-5 mx-auto gap-8 lg:pr-4">
 
-       <aside className="lg:w-xs lg:sticky lg:top-11 self-start bg-card border rounded-lg p-4 space-y-6">
+       <aside className="lg:w-[200px] lg:sticky lg:top-11 self-start bg-card border rounded-lg p-2 space-y-6">
         <div>
           <h2 className={`font-semibold text-sm uppercase tracking-wide mb-3 ${dmSans.className}`}>Articles</h2>
           <ul className="space-y-2">
@@ -24,7 +24,7 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
               <li key={post.slug} className={`${geist.className}`}>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="text-muted-foreground hover:text-foreground"
+                  className="text-muted-foreground text-xs hover:text-foreground border-b"
                 >
                   {post.title}
                 </Link>
