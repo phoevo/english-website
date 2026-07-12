@@ -102,7 +102,7 @@ const discussionQuestions = [
   "What would your ideal working week look like?",
 ];
 
-const relatedLessons = [
+const relatedLessons: any[] = [
 
 ];
 
