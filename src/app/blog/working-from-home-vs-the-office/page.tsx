@@ -102,9 +102,12 @@ const discussionQuestions = [
   "What would your ideal working week look like?",
 ];
 
-const relatedLessons: any[] = [
+type RelatedLesson = {
+  title: string;
+  href: string;
+};
 
-];
+const relatedLessons: RelatedLesson[] = [];
 
 export default function PostPage() {
   return (
