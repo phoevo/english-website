@@ -71,7 +71,7 @@ function Student() {
   return (
     <div>
 
-      <Card className='border-none bg-background shadow-none'>
+      <Card className='border-none border-muted shadow-none bg-gradient'>
             <CardHeader>
               <CardTitle className='flex justify-center text-2xl'>Billed monthly or yearly</CardTitle>
             </CardHeader>
@@ -121,7 +121,7 @@ function Student() {
 
 
 
-<div className='flex flex-col justify-between p-2 border-1 border-pink-500 rounded-xl shadow-xs h-100 w-xs md:w-md'>
+<div className='flex flex-col justify-between p-2 bg-background/50 border-1 border-pink-500 rounded-xl shadow-xs h-100 w-xs md:w-md'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10 bg-pink-500 text-white'>Plus</Badge>
       <motion.div className='flex justify-center items-center'

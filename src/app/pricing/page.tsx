@@ -1,12 +1,13 @@
 "use client"
 // import { useState } from 'react'
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Geist, DM_Sans } from 'next/font/google'
 import Link from 'next/link'
 import { useUserStore } from '@/data/useUserStore'
+import { account } from '@/data/appwrite'
 import {
   Card,
 } from "@/components/ui/card"
@@ -30,6 +31,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import LoginChecker from '../(auth)/login/loginChecker'
 
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
@@ -94,12 +96,7 @@ const faqs: FAQItem[] = [
 
       <br /><br />
 
-      Assigning is simply a more structured option. It lets Students interact with conversations on their own time, while Tutors can keep track of progress and completion in one place.
-
-      <br /><br />
-
-      It also means Free Students can access Plus features inside assigned conversations without needing their own subscription.
-    </>
+      Assigning is a structured way for Tutors to share conversations with Students. Assigned conversations unlock all premium features <i>without requiring the Student to have a subscription</i>, allowing them to complete activities at their own pace while Tutors track progress and completion in one place.    </>
     ),
   },
   {
@@ -134,17 +131,9 @@ const faqs: FAQItem[] = [
     question: "What does Tutor Free include?",
     answer: (
       <>
-        Tutor Free has all conversations unlocked, but in &quot;read-only&quot; mode. Essentially just text. You are limited to screensharing during lessons.
+        Tutor Free has all conversations unlocked, but with limited features. You are limited to screensharing during lessons.
         <br /><br />
         You cannot assign conversations or track student progress.
-      </>
-    ),
-  },
-  {
-    question: "What is read-only?",
-    answer: (
-      <>
-        &quot;Read-only&quot; only allows the tutors to view the conversations text, like a PDF document would. No access to features like hover or audio.
       </>
     ),
   },
@@ -234,25 +223,42 @@ function renderTier(tier: Tier, idx: number) {
 
 
 function SubscribePage() {
-  const { user} = useUserStore();
+  const { user, fetchUser } = useUserStore();
 
+  useEffect(() => {
+    if (user) return;
+
+    let cancelled = false;
+    const init = async () => {
+      try {
+        await account.get();
+      } catch {
+        return;
+      }
+
+      if (!cancelled) {
+        await fetchUser();
+      }
+    };
+
+    init();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [fetchUser, user]);
 
   return (
-
-    <ScrollArea className={`w-full h-screen overflow-y-auto ${dmSans.className}`}>
-      <nav className="sticky bg-none top-0 w-full z-30">
+    <ScrollArea className={`w-full h-screen overflow-y-auto bg-gradient ${dmSans.className}`}>
+      <nav className="sticky top-0 w-full z-30">
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-12 lg:h-18">
             <h1 className="hidden lg:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
 
             <div className={`flex absolute right-5 md:right-5 lg:right-10 md:gap-0 lg:gap-1 ${geist.className}`}>
-              <Link href={"/register"}> <Button className="hidden md:block lg:block cursor-pointer" variant={"ghost"}>Sign up</Button> </Link>
-              {user ? (
-                <Link href={"/home"}> <Button className="hidden md:block lg:block cursor-pointer" variant="ghost">Home</Button> </Link>
-              ) :
-                <Link href={"/login"}> <Button className="hidden md:block lg:block cursor-pointer" variant="ghost">Log in</Button> </Link> }
-
-              <Link href="/pricing"> <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer">Pricing</Button></Link>
+              <Link href={"/register"}> <Button className="hidden md:block lg:block cursor-pointer hover:bg-gradient" variant={"ghost"}>Sign up</Button> </Link>
+              <LoginChecker/>
+              <Link href="/pricing"> <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer hover:bg-gradient">Pricing</Button></Link>
               <ModeToggle />
             </div>
         </div>
@@ -304,7 +310,7 @@ function SubscribePage() {
 </div>
 
 
-<Card className='h-auto w-full lg:w-2/3 mb-5 bg-background shadow-md'>
+<Card className='h-auto w-full lg:w-2/3 mb-5 bg-background/50 shadow-md'>
   <CardHeader>
     <CardTitle className='text-lg md:text-2xl'>More about Pricing and Subscriptions</CardTitle>
     <CardDescription className='text-sm md:text-base'>How Students and Tutors interact depends on who owns a subscription</CardDescription>
@@ -317,7 +323,7 @@ function SubscribePage() {
 </div>
 
 <div className='flex justify-center items-center flex-col lg:flex-row w-full md:w-full lg:w-full mt-10 gap-5 md:gap-10 p-4'>
-  <Card className='h-auto w-full lg:w-2/3 mb-5 bg-background shadow-md'>
+  <Card className='h-auto w-full lg:w-2/3 mb-5 bg-background/50 shadow-md'>
   <CardHeader>
     <CardTitle className='text-xl md:text-2xl'>FAQ</CardTitle>
     <CardDescription className='text-sm md:text-base'>Potential questions concerning how Student and Tutor plans work together</CardDescription>

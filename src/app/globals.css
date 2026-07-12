@@ -47,6 +47,35 @@
   --sidebar-ring: oklch(0.87 0 0);
   --landing-bg: oklch(100% 0 339);
   --dot-color: oklch(0.100 0 0 / 0.1);
+  --bg-gradient:
+    radial-gradient(
+      var(--gradient-size) circle at 0% 0%,
+      oklch(62.02% 0.30332 316.44 / var(--gradient-opacity)) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      var(--gradient-size) circle at 110% 1%,
+      oklch(66.463% 0.27897 346.883 / var(--gradient-opacity)) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      1000px circle at 20% 100%,
+      oklch(46.28% 0.30597 264.201 / var(--gradient-opacity)) 0%,
+      transparent 65%
+    ),
+    radial-gradient(
+      var(--gradient-size) circle at 75% 80%,
+      oklch(76.084% 0.14392 225.484 / var(--gradient-opacity)) 0%,
+      transparent 65%
+    ),
+    linear-gradient(
+      180deg,
+      oklch(0.995 0 0),
+      oklch(0.975 0 0)
+    );
+    --gradient-opacity: 0.30;
+    --gradient-size: 1200px;
+
 }
 
 .dark {
@@ -85,6 +114,46 @@
   --sidebar-ring: oklch(0.439 0 0);
   --landing-bg: oklch(0.170 0 0);
   --dot-color: oklch(0.90 0 0 / 0.15);
+    --bg-gradient:
+    radial-gradient(
+      var(--gradient-size) circle at 5% 5%,
+      oklch(62.02% 0.30332 316.44 / var(--gradient-opacity)) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      var(--gradient-size) circle at 100% 10%,
+      oklch(66.463% 0.27897 346.883 / var(--gradient-opacity)) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      1000px circle at 15% 100%,
+      oklch(46.28% 0.30597 264.201 / var(--gradient-opacity)) 0%,
+      transparent 65%
+    ),
+    radial-gradient(
+      800px circle at 80% 100%,
+      oklch(0.7219 0.1511 202.9/ var(--gradient-opacity)) 0%,
+      transparent 65%
+    ),
+    linear-gradient(
+      180deg,
+      oklch(0.19 0 0),
+      oklch(0.16 0 0)
+    );
+    --gradient-opacity: 0.15;
+    --gradient-size:1300px;
+
+}
+@media (max-width: 768px) {
+  :root {
+    --gradient-opacity: 0.30;
+    --gradient-size:400px;
+  }
+
+  .dark {
+    --gradient-opacity: 0.10;
+    --gradient-size:400px;
+  }
 }
 
 @theme inline {
@@ -126,6 +195,13 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-landing-bg: var(--landing-bg);
 
+}
+
+.bg-gradient {
+  background: var(--bg-gradient);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .guide-highlight {

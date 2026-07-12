@@ -26,7 +26,7 @@ export default function LoginChecker() {
   return (
     <Link href={isLoggedIn ? '/home' : '/login'}>
       <Button
-        className="hidden md:block lg:block cursor-pointer"
+        className="hidden md:block lg:block cursor-pointer hover:bg-gradient"
         variant="ghost"
       >
         {isLoggedIn ? "Home" : "Log in"}

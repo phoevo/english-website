@@ -28,31 +28,8 @@ export default function RefundPolicyPage() {
        <p className="mb-6">
   This Refund Policy explains when refunds may be available for subscriptions
   purchased through {companyName} (&quot;we&quot;, &quot;us&quot;, or
-  &quot;our&quot;). By purchasing or starting a free trial of a subscription,
-  you agree to this Refund Policy.
+  &quot;our&quot;). By purchasing a subscription, you agree to this Refund Policy.
 </p>
-
-        <section className="mb-6">
-  <h2 className="text-2xl font-semibold mb-2">
-    Free trial and subscription billing
-  </h2>
-  <p>
-    Eligible subscriptions include a free 2-day trial, allowing you to explore
-    the Service before being charged.
-  </p>
-  <p className="mt-2">
-    Unless cancelled before the end of the trial period, your subscription will
-    automatically begin and your selected payment method will be charged.
-    Thereafter, subscriptions renew automatically unless cancelled before the
-    next billing date.
-  </p>
-  <p className="mt-2">
-    You may cancel your subscription at any time from your account settings.
-    Cancelling your subscription prevents future renewals but does not
-    immediately end your access to the Service. You will continue to have access
-    until the end of your current paid billing period.
-  </p>
-</section>
 
 
 
@@ -60,10 +37,6 @@ export default function RefundPolicyPage() {
   <h2 className="text-2xl font-semibold mb-2">
     Immediate access to digital content
   </h2>
-  <p>
-    During your free trial and any active subscription, you receive immediate
-    access to premium digital content and features.
-  </p>
   <p className="mt-2">
     Where permitted by applicable law, you may be asked during checkout to
     expressly request immediate access to the Service and acknowledge that your
@@ -77,10 +50,6 @@ export default function RefundPolicyPage() {
     When refunds are generally not available
   </h2>
   <ul className="list-disc pl-5 space-y-2">
-    <li>
-      If you do not cancel before your free trial ends and your subscription is
-      charged.
-    </li>
     <li>For subscription renewal payments.</li>
     <li>For unused time remaining in an active subscription.</li>
     <li>

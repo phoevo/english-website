@@ -1,144 +1,233 @@
-"use client"; // Needed for useParams()
+"use client";
+
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
+
 import ContentDisplay from "../ContentDisplay";
 import TeacherContentDisplay from "../TeacherContentDisplay";
-import { loadConversation } from "@/data/conversation";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Conversation } from "@/data/conversation";
+
+import {
+  Conversation,
+  loadConversation,
+} from "@/data/conversation";
 import { useUserStore } from "@/data/useUserStore";
 import { isConversationAssignedToStudent } from "@/data/appwrite";
 
+import { Skeleton } from "@/components/ui/skeleton";
+
 export default function ConversationPage() {
   const params = useParams();
-  const { isTeacher, user, loading: userLoading } = useUserStore();
 
-  const conversationId = params.id ? (Array.isArray(params.id) ? params.id[0] : params.id) : "";
+  const {
+    isTeacher,
+    user,
+    loading: userLoading,
+  } = useUserStore();
 
-  const [conversation, setConversation] = useState<Conversation | null>(null);
+  const conversationId = Array.isArray(params.id)
+    ? params.id[0]
+    : params.id ?? "";
+
+  const [conversation, setConversation] =
+    useState<Conversation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Wait until authentication has finished loading.
+    if (userLoading) {
+      return;
+    }
+
+    let cancelled = false;
+
     const fetchConversation = async () => {
-      if (conversationId && user) {
-        try {
-          setLoading(true);
-          const fetchedConversation = await loadConversation(conversationId);
+      if (!conversationId) {
+        setError("Invalid conversation ID.");
+        setConversation(null);
+        setLoading(false);
+        return;
+      }
 
-          if (fetchedConversation) {
-            // Check authorization - same logic as ConversationCover
-            const isPro = fetchedConversation.isPro;
-            const isSubscribed = user.isSubscribed;
+      try {
+        setLoading(true);
+        setError(null);
+        setConversation(null);
 
-            // Teachers have access to all conversations.
-            // Students need subscription for pro content, unless the convo was assigned to them by a subscribed tutor.
-            if (isPro && !isSubscribed && !isTeacher) {
-              const assigned = await isConversationAssignedToStudent(user.$id, conversationId);
-              if (!assigned) {
-                setError("This is a Pro conversation. It must be assigned by your tutor or you need a subscription to access.");
-                setLoading(false);
-                return;
-              }
+        const fetchedConversation =
+          await loadConversation(conversationId);
+
+        if (cancelled) {
+          return;
+        }
+
+        if (!fetchedConversation) {
+          setError("Conversation not found.");
+          return;
+        }
+
+        /*
+         * Anonymous users can view the limited version.
+         *
+         * Authorization checks below only apply to
+         * authenticated users.
+         */
+        if (user) {
+          const requiresProAccess =
+            fetchedConversation.isPro &&
+            !user.isSubscribed &&
+            !isTeacher;
+
+          if (requiresProAccess) {
+            const assigned =
+              await isConversationAssignedToStudent(
+                user.$id,
+                conversationId
+              );
+
+            if (cancelled) {
+              return;
             }
-            setConversation(fetchedConversation);
-          } else {
-            setError("Conversation not found.");
+
+            if (!assigned) {
+              setError(
+                "This is a Pro conversation. It must be assigned by your tutor or you need a subscription to access."
+              );
+              return;
+            }
           }
-        } catch (err) {
-          console.error("Error loading conversation:", err);
-          setError("Failed to load conversation.");
-        } finally {
+        }
+
+        setConversation(fetchedConversation);
+      } catch (err) {
+        if (cancelled) {
+          return;
+        }
+
+        console.error(
+          "Error loading conversation:",
+          err
+        );
+
+        setError("Failed to load conversation.");
+      } finally {
+        if (!cancelled) {
           setLoading(false);
         }
-      } else if (conversationId && !user) {
-        // Wait for user to load
-        return;
-      } else {
-        setError("Invalid conversation ID.");
-        setLoading(false);
       }
     };
 
     fetchConversation();
-  }, [conversationId, user, isTeacher]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    conversationId,
+    user,
+    isTeacher,
+    userLoading,
+  ]);
 
   if (loading || userLoading) {
-    return(
-      <div className="grid grid-rows-[auto_1fr] h-full w-full bg-background text-foreground rounded-lg">
-
-      <div className="border-b px-10 py-4 text-2xl">
-        <Skeleton className="w-50 h-8"/>
-      </div>
-
-
-      <div className="grid grid-cols-[6fr_1fr] overflow-hidden h-full">
-        <div className="h-full w-full overflow-y-auto p-6 flex flex-col gap-10">
-
-        <div className="flex flex-row">
-        <Skeleton className="w-20 h-6"/>
-
-        <div className="flex flex-col gap-1 ml-10">
-          <Skeleton className="w-150 h-4"/>
-          <Skeleton className="w-50 h-4"/>
-        </div>
-
-        </div>
-
-        <div className="flex flex-row opacity-25">
-        <Skeleton className="w-20 h-6"/>
-
-        <div className="flex flex-col gap-1 ml-10">
-          <Skeleton className="w-200 h-4"/>
-          <Skeleton className="w-100 h-4"/>
-        </div>
-
-        </div>
-
-        <div className="flex flex-row opacity-10">
-        <Skeleton className="w-20 h-6"/>
-
-        <div className="flex flex-col gap-1 ml-10">
-          <Skeleton className="w-150 h-4"/>
-          <Skeleton className="w-50 h-4"/>
-        </div>
-
-        </div>
-
-
-
-        </div>
-
-
-
-
-
-
-        <div className="p-5 h-full border-l-1">
-          <div className="flex flex-col items-center gap-4">
-            <span className="flex gap-1 items-center">
-              <Skeleton className="w-20 h-5"/>
-            </span>
-
-          </div>
-        </div>
-      </div>
-      </div>
-    )}
-
-
+    return <ConversationLoadingSkeleton />;
+  }
 
   if (error) {
-    return <div className="text-center p-10 text-red-500">{error}</div>;
+    return (
+      <div className="p-10 text-center text-red-500">
+        {error}
+      </div>
+    );
+  }
+
+  if (!conversation) {
+    return (
+      <div className="p-10 text-center text-muted-foreground">
+        Conversation unavailable.
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col w-full h-full">
-      {conversation && (user?.isTeacher ? (
+  <div className="flex h-full w-full flex-col">
+    {!user && (
+      <div className="border-b border-red-500 bg-red-300 dark:border-red-100 dark:bg-red-400 px-4 py-2 text-sm text-foreground">
+        No user is logged in. Displaying limited features.
+      </div>
+    )}
+
+    <div className="min-h-0 flex-1">
+      {!user || isTeacher ? (
         <TeacherContentDisplay conversation={conversation} />
       ) : (
         <ContentDisplay conversation={conversation} />
-      ))}
+      )}
+    </div>
+  </div>
+);
+
+function ConversationLoadingSkeleton() {
+  return (
+    <div className="grid h-full w-full grid-rows-[auto_1fr] rounded-lg bg-background text-foreground">
+      <div className="border-b px-10 py-4 text-2xl">
+        <Skeleton className="h-8 w-50" />
+      </div>
+
+      <div className="grid h-full grid-cols-[6fr_1fr] overflow-hidden">
+        <div className="flex h-full w-full flex-col gap-10 overflow-y-auto p-6">
+          <SkeletonRow
+            firstWidth="w-150"
+            secondWidth="w-50"
+          />
+
+          <SkeletonRow
+            firstWidth="w-200"
+            secondWidth="w-100"
+            className="opacity-25"
+          />
+
+          <SkeletonRow
+            firstWidth="w-150"
+            secondWidth="w-50"
+            className="opacity-10"
+          />
+        </div>
+
+        <div className="h-full border-l p-5">
+          <div className="flex flex-col items-center gap-4">
+            <Skeleton className="h-5 w-20" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
+
+type SkeletonRowProps = {
+  firstWidth: string;
+  secondWidth: string;
+  className?: string;
+};
+
+function SkeletonRow({
+  firstWidth,
+  secondWidth,
+  className = "",
+}: SkeletonRowProps) {
+  return (
+    <div className={`flex flex-row ${className}`}>
+      <Skeleton className="h-6 w-20" />
+
+      <div className="ml-10 flex flex-col gap-1">
+        <Skeleton
+          className={`h-4 ${firstWidth}`}
+        />
+        <Skeleton
+          className={`h-4 ${secondWidth}`}
+        />
+      </div>
+    </div>
+  );
+}
+};

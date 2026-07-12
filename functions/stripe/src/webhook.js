@@ -6,7 +6,6 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
   console.log("Webhook received. Event type:", req.method);
   console.log("Headers:", JSON.stringify(req.headers, null, 2));
 
-  // Use TEST or LIVE depending on environment
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: "2023-08-16",
   });

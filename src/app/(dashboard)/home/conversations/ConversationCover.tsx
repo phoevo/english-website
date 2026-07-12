@@ -39,7 +39,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
 
    const handleClick = async () => {
   if (!user) {
-    console.warn("User not loaded yet");
+    toast.error("No user detected. Please sign in to view this conversation.");
     return;
   }
 

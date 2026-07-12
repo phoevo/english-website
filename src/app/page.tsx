@@ -134,23 +134,24 @@ export default function LandingPage() {
 
 
 return (
-    <ScrollArea id="landing-scroll" className={`flex scroll-auto bg-landing-bg flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
+  <div className="bg-gradient">
+    <ScrollArea id="landing-scroll" className={`flex scroll-auto flex-col items-center h-screen overflow-x-hidden ${dmSans.className}`}>
        <nav className="sticky backdrop-blur-2xl top-0 w-full z-30">
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-12 lg:h-18">
             <h1 className="hidden lg:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
 
             <div className={`flex absolute right-5 md:right-5 lg:right-10 md:gap-0 lg:gap-1 ${geist.className}`}>
-              <Link href={"/register"}> <Button className="hidden md:block lg:block cursor-pointer" variant={"ghost"}>Sign up</Button> </Link>
+              <Link href={"/register"}> <Button className="hidden md:block lg:block cursor-pointer hover:bg-gradient" variant={"ghost"}>Sign up</Button> </Link>
               <LoginChecker/>
-              <Link href={"/pricing"}> <Button className="hidden md:block lg:block cursor-pointer" variant={"ghost"}>Pricing</Button> </Link>
+              <Link href={"/pricing"}> <Button className="hidden md:block lg:block cursor-pointer hover:bg-gradient" variant={"ghost"}>Pricing</Button> </Link>
               <ModeToggle />
             </div>
         </div>
     </nav>
 
 
-      <div className="flex flex-col w-screen border-b bg-landing-bg justify-center items-center gap-20">
+      <div className="flex flex-col w-screen border-b  justify-center items-center gap-20">
         <div className="flex flex-col gap-2 items-center">
 
              <motion.div
@@ -160,14 +161,14 @@ return (
             whileInView={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="flex flex-col items-center lg:flex-row lg:ml-35 text-6xl lg:text-8xl bg-landing-bg font-normal">Synomilo
-            <span className="text-muted-foreground lg:w-auto text-sm lg:text-lg font-capital bg-muted px-3 py-1 lg:px-3 rounded-full">Early Access</span>
+            className="flex flex-col items-center lg:flex-row lg:ml-35 text-6xl lg:text-8xl font-normal">Synomilo
+            <span className="text-muted-foreground lg:w-auto text-sm lg:text-lg font-capital px-3 py-1 lg:px-3 rounded-full">Early Access</span>
 
             </motion.div>
 
 
 
-          {/* <div className="flex flex-row bg-landing-bg text-1xl font-normal mt-3 gap-2" >
+          {/* <div className="flex flex-row  text-1xl font-normal mt-3 gap-2" >
             <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
           </div> */}
 
@@ -178,7 +179,7 @@ return (
             whileInView={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="text-zinc-500 bg-landing-bg">Greek for: &quot;I converse&quot;
+            className="text-zinc-500 ">Greek for: &quot;I converse&quot;
             </motion.div>
         </div>
 
@@ -193,9 +194,8 @@ return (
             className="flex flex-col lg:gap-5 items-center justify-center"
             >
 
-        <p className="text-2xl p-5 text-center md:w-2/3 lg:text-5xl lg:p-0 font-medium bg-landing-bg">
-          Conversation-based ESL tool for tutors and students
-        </p>
+        <p className="text-2xl p-5 text-center md:w-2/3 lg:text-5xl lg:p-0 font-medium ">
+Conversation-based ESL tool for tutors and students        </p>
 
         <motion.div
             layout
@@ -203,9 +203,9 @@ return (
             animate={{ opacity: 1, height: "auto"}}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.4 , delay:0.2, ease: "easeInOut" }}
-            className="flex flex-col max-w-4xl bg-card rounded-4xl justify-start items-center overflow-hidden"
+            className="flex flex-col max-w-4xl rounded-4xl justify-start items-center overflow-hidden"
           >
-            <p className={`text-md p-2 lg:text-xl leading-relaxed bg-landing-bg text-center ${dmSans.className}`}>
+            <p className={`text-md p-2 lg:text-xl leading-relaxed text-center ${dmSans.className}`}>
             Built for ESL tutors, online teachers, and independent learners, Synomilo provides conversation content, interactive tools, assignments, and student progress tracking for real world English practice.
             </p>
 
@@ -264,7 +264,7 @@ return (
 
 
 
-        <div className="w-screen gap-10 flex flex-col justify-center items-center border-b bg-landing-bg">
+        <div className="w-screen gap-10 flex flex-col justify-center items-center border-b ">
 
        <motion.div
         className="sticky top-5 z-30 mt-20 p-3 lg:p-4 bg-card border-1 rounded-full shadow-lg"
@@ -293,7 +293,7 @@ return (
         Tutors
         </motion.div>
 
-         <motion.div className="w-full lg:w-2/3 space-y-8 border-none lg:border lg:border-border/50 p-6 lg:p-10 rounded-2xl lg:shadow-lg bg-landing-bg lg:bg-background/60 backdrop-blur-sm"
+         <motion.div className="w-full lg:w-2/3 space-y-8 border-none lg:border lg:border-border/50 p-6 lg:p-10 rounded-2xl lg:shadow-lg  lg:bg-background/60 backdrop-blur-sm"
           initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -392,7 +392,7 @@ return (
         </div>
 
         <motion.div
-          className={`w-full lg:w-2/3 mx-auto space-y-8 lg:border lg:border-border/50 p-6 lg:p-10 rounded-2xl shadow-lg bg-landing-bg lg:bg-background/60 backdrop-blur-sm`}
+          className={`w-full lg:w-2/3 mx-auto space-y-8 lg:border lg:border-border/50 p-6 lg:p-10 rounded-2xl shadow-lg  lg:bg-background/60 backdrop-blur-sm`}
           initial={{ opacity: 0, y: 80 }}
           whileInView={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 200 }}
@@ -484,7 +484,7 @@ return (
         </motion.div>
 
         <motion.div
-  className={`w-full lg:w-2/3 space-y-8 lg:border lg:border-border/50 p-6 lg:p-10 rounded-2xl shadow-lg bg-landing-bg lg:bg-background/60 backdrop-blur-sm`}
+  className={`w-full lg:w-2/3 space-y-8 lg:border lg:border-border/50 p-6 lg:p-10 rounded-2xl shadow-lg  lg:bg-background/60 backdrop-blur-sm`}
   initial={{ opacity: 0, y: 80 }}
   whileInView={{ opacity: 1, y: 0 }}
   exit={{ opacity: 0, y: 40 }}
@@ -531,7 +531,7 @@ return (
 
 
         <motion.div
-          className={`w-full lg:w-2/3 m-10 space-y-6 lg:border-1 p-10 bg-landing-bg lg:bg-background/60 rounded-md shadow-md`}
+          className={`w-full lg:w-2/3 m-10 space-y-6 lg:border-1 p-10  lg:bg-background/60 rounded-md shadow-md`}
           initial={{ opacity: 0, y: 80 }}
           whileInView={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 200 }}
@@ -560,7 +560,7 @@ return (
         </div>
 
         <motion.div
-      className={`w-full lg:w-2/3 m-10 space-y-10 lg:border-1 p-10 bg-landing-bg lg:bg-background/60 rounded-md shadow-md`}
+      className={`w-full lg:w-2/3 m-10 space-y-10 lg:border-1 p-10  lg:bg-background/60 rounded-md shadow-md`}
       initial={{ opacity: 0, y: 80 }}
       whileInView={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 200 }}
@@ -825,7 +825,7 @@ return (
 
 
         <motion.div
-        className="flex flex-col justify-start items-center text-center bg-landing-bg w-full lg:p-20 m-0 z-26"
+        className="flex flex-col justify-start items-center text-center backdrop-blur-3xl w-full lg:p-20 z-26"
         initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
@@ -847,13 +847,6 @@ return (
       </motion.div>
 
         </div>
-
-
-
-
-
-
-
         </div>
 
 
@@ -864,7 +857,7 @@ return (
       </div>
 
 
-      {/*<div className="flex w-screen h-auto items-center justify-evenly flex-row bg-landing-bg p-40 border-b">
+      {/*<div className="flex w-screen h-auto items-center justify-evenly flex-row  p-40 border-b">
       <div className="sticky top-1/3 self-start border-b ">
         <motion.h1 className="text-5xl font-semibold"
          initial={{ opacity: 0 }}
@@ -964,7 +957,7 @@ return (
 
 
 
-      <div className="flex w-screen h-auto items-center justify-center flex-col bg-landing-bg p-40 border-b">
+      <div className="flex w-screen h-auto items-center justify-center flex-col  p-40 border-b">
       <div className="">
         <motion.h1 className="text-5xl font-semibold flex justify-center"
          initial={{ opacity: 0 }}
@@ -991,8 +984,7 @@ return (
       */}
 
 
-
-    <div className="flex w-screen h-auto items-center justify-center flex-col bg-accent">
+    <div className="flex w-screen h-auto items-center justify-center flex-col">
       <h2 className="text-3xl lg:text-5xl font-normal m-10">Some questions you may have</h2>
 
       <Accordion className="w-full p-10 lg:w-1/2" type="single" collapsible>
@@ -1007,11 +999,9 @@ return (
         </AccordionItem>
       ))}
     </Accordion>
-
-
     </div>
 
-      <footer className="mb-[env(safe-area-inset-bottom)] lg:mb-0 w-screen lg:w-full bg-landing-bg z-50 shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)]">
+      <footer className="bg-background/50 mb-[env(safe-area-inset-bottom)] lg:mb-0 w-screen lg:w-full z-50 shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)]">
   <div className="flex flex-row lg:flex-row items-center h-auto lg:h-40 gap-5 p-10">
     <div className="flex justify-center w-1/3">
       <ul className="flex flex-col text-xs lg:text-md gap-2">
@@ -1035,6 +1025,7 @@ return (
 
 
     </ScrollArea>
+    </div>
 
   );
 }

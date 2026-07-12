@@ -1,33 +1,26 @@
 export type Post = {
-  title: string;
   slug: string;
-  excerpt: string;
+  title: string;
+  description: string
+  level: string;
+  topic: string;
   date: string; // ISO date
   tags?: string[];
 };
 
-export const posts: Post[] = [
+const posts = [
   {
-    title: "How to Sound More Native",
-    slug: "how-to-sound-native",
-    excerpt: "Use natural expressions to sound fluent fast.",
-    date: "2025-10-10",
-    tags: ["Speaking", "Fluency"],
-  },
-  {
-    title: "Common English Conversation Mistakes",
-    slug: "common-english-conversation-mistakes",
-    excerpt: "Correct commmon mistakes to improve your fluency.",
-    date: "2025-10-18",
-    tags: ["Speaking", "Fluency", "Mistakes"],
-  },
-  {
-    title: "What do do when your ESL lesson finishes early.",
-    slug: "what-to-do-when-your-ESL-lesson-finishes-early",
-    excerpt: "Correct commmon mistakes to improve your fluency.",
-    date: "2025-10-18",
-    tags: ["Speaking", "Fluency", "Mistakes"],
-  },
+    slug: "working-from-home-vs-the-office",
+    title: "Working From Home vs the Office",
+    description:
+      "A B2 ESL lesson with workplace vocabulary, discussion questions and activities about remote and office work.",
+    level: "B2",
+    topic: "Work and Careers",
+    date: "2026-07-11",
+    },
+
+
+
 ];
 
 export default posts;

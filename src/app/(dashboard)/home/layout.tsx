@@ -11,7 +11,7 @@ const geist = Geist({ subsets: ['latin'] });
 
 function homeLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`flex h-screen w-full overflow-hidden ${geist.className}`}>
+    <div className={`flex h-screen w-full overflow-hidden${geist.className}`}>
       <div className="flex h-full shrink-0">
         <SidebarProvider
           defaultOpen={true}

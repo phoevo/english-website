@@ -67,7 +67,7 @@ function Tutor() {
   return (
     <div>
 
-      <Card className='border-none bg-background shadow-none'>
+      <Card className='border-none bg-gradient shadow-none'>
             <CardHeader>
               <CardTitle className='flex justify-center text-2xl'>Billed monthly or yearly</CardTitle>
             </CardHeader>
@@ -116,7 +116,7 @@ function Tutor() {
   </div>
 
 
-<div className='flex flex-col justify-between bg-background p-2 border-pink-500 rounded-xl shadow-xs h-100 w-xs md:w-md border-1'>
+<div className='flex flex-col justify-between bg-background/50 p-2 border-pink-500 rounded-xl shadow-xs h-100 w-xs md:w-md border-1'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10 bg-pink-500 text-white'>Plus</Badge>
       <motion.div className='flex justify-center items-center'

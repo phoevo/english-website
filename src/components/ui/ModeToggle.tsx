@@ -12,7 +12,7 @@ export default function ModeToggle() {
       variant="ghost"
       size="icon"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="relative cursor-pointer group hover:scale-110 transition-transform duration-150"
+      className="relative cursor-pointer group hover:scale-110 transition-transform duration-150 hover:bg-gradient"
     >
       <SunIcon
         className="
