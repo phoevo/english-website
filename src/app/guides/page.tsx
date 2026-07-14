@@ -12,7 +12,7 @@ export const metadata = {
     "Explore ESL conversation lessons, vocabulary guides, discussion questions and teaching activities.",
 };
 
-export default function BlogPage() {
+export default function GuidesPage() {
   const sortedPosts = [...posts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
@@ -49,7 +49,7 @@ export default function BlogPage() {
 
       <div className="mt-10 grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
         <aside className="self-start rounded-xl border bg-background p-4 lg:sticky lg:top-6">
-          <nav aria-label="Blog topics">
+          <nav aria-label="Guide topics">
             <h2
               className={`${dmSans.className} text-sm font-semibold uppercase tracking-wide`}
             >
@@ -74,7 +74,7 @@ export default function BlogPage() {
               <h2
                 className={`text-2xl font-semibold tracking-tight`}
               >
-                Latest articles <span>({sortedPosts.length})</span>
+                Latest guides <span>({sortedPosts.length})</span>
               </h2>
 
               <p className="mt-1 text-sm text-muted-foreground">
@@ -87,55 +87,63 @@ export default function BlogPage() {
           </div>
 
           <section
-  className={`${geist.className} mt-6 grid max-h-[70vh] gap-5 overflow-y-auto md:grid-cols-2`}
+  className={`${geist.className} mt-6 grid max-h-[70vh] gap-5 overflow-y-auto md:grid-cols-3`}
           >
             {sortedPosts.map((post) => (
-              <article
-                key={post.slug}
-      className="flex flex-col rounded-xl border bg-background p-5 transition-shadow hover:shadow-sm"
-              >
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-full bg-muted px-2.5 py-1 text-xs font-medium">
-                    {post.level}
-                  </span>
+           <article
+  key={post.slug}
+  className="flex flex-col rounded-xl border bg-background transition-shadow hover:shadow-sm"
+>
+  <img
+    className="rounded-t-xl"
+    src={post.img}
+    alt={post.title}
+  />
 
-                  <span className="text-xs font-medium text-muted-foreground">
-                    {post.topic}
-                  </span>
-                </div>
+  <div className="flex flex-1 flex-col p-5">
+    <h3
+      className={`${dmSans.className} text-xl font-semibold leading-snug`}
+    >
+      <Link
+        href={`/guides/${post.slug}`}
+        className="flex items-start gap-2 hover:underline"
+      >
+        <span className="min-w-0">{post.title}</span>
 
-                <h3
-                  className={`${dmSans.className} mt-4 text-xl font-semibold leading-snug`}
-                >
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className="hover:underline"
-                  >
-                    {post.title}
-                  </Link>
-                </h3>
+        <span className="shrink-0 rounded-full border bg-secondary px-2 py-0.5 text-sm font-medium">
+          {post.level}
+        </span>
+      </Link>
+    </h3>
 
-                <p className="mt-3 line-clamp-3 text-sm leading-6 text-muted-foreground">
-                  {post.description}
-                </p>
+    <div className="flex flex-wrap items-center gap-2">
+      <span className="text-xs font-medium text-muted-foreground">
+        {post.topic}
+      </span>
+    </div>
 
-                <time
-                  dateTime={post.date}
-                  className="mt-4 text-xs text-muted-foreground"
-                >
-                  {formatDate(post.date)}
-                </time>
+    <p className="mt-3 text-sm text-muted-foreground">
+      {post.description}
+    </p>
 
-                <div className="mt-auto pt-6">
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className={`${dmSans.className} inline-flex items-center gap-1 text-sm font-semibold hover:underline`}
-                  >
-                    Read article
-                    <ArrowRight size={15} />
-                  </Link>
-                </div>
-              </article>
+    <time
+      dateTime={post.date}
+      className="mt-4 text-xs text-muted-foreground"
+    >
+      {formatDate(post.date)}
+    </time>
+
+    <div className="mt-auto pt-4">
+      <Link
+        href={`/guides/${post.slug}`}
+        className={`${dmSans.className} inline-flex items-center gap-1 text-sm font-semibold hover:underline`}
+      >
+        Read guide
+        <ArrowRight size={15} />
+      </Link>
+    </div>
+  </div>
+</article>
             ))}
           </section>
         </main>

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
+  ArrowLeft,
   ArrowRight,
   BookOpen,
   Check,
@@ -15,9 +16,17 @@ const geist = Geist({ subsets: ["latin"] });
 
 export const metadata = {
   title:
-    "B2 Remote Work ESL Lesson | Discussion Questions and Activities | Synomilo",
+    "B2 Remote Work ESL Lesson: Vocabulary and Discussion Questions | Synomilo",
   description:
-    "Teach remote work with this B2 ESL lesson workflow. Includes vocabulary, comprehension questions, discussion prompts, speaking activities, and a writing task.",
+    "A ready-to-use B2 remote work ESL lesson with vocabulary, comprehension questions, discussion prompts, speaking practice, and homework.",
+  alternates: { canonical: "/guides/working-from-home-vs-the-office" },
+  openGraph: {
+    title: "B2 Remote Work ESL Lesson | Synomilo",
+    description:
+      "Teach remote work and office English with vocabulary, discussion questions, speaking practice, and homework for B2 learners.",
+    url: "/guides/working-from-home-vs-the-office",
+    type: "article",
+  },
 };
 
 const keyVocabulary = [
@@ -107,46 +116,63 @@ type RelatedLesson = {
   href: string;
 };
 
-const relatedLessons: RelatedLesson[] = [];
+const relatedGuides: RelatedLesson[] = [
+  {
+    title: "Job Interview English: B2 ESL Lesson",
+    href: "/guides/job-interview",
+  },
+  {
+    title: "English Networking Event: B1 ESL Guide",
+    href: "/guides/networking-event",
+  },
+];
 
 export default function PostPage() {
   return (
-    <div className="flex flex-col lg:flex-row">
-    <aside className={`p-5 pt-20 lg:sticky lg:top-20 ${geist.className}`}>
+    <div className={`flex flex-col lg:flex-row ${geist.className}`}>
+    <aside className="self-start p-5 pt-10 lg:sticky lg:top-8 lg:w-80">
+        <Link
+          href="/guides"
+          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
+        >
+          <ArrowLeft size={16} />
+          Back to all guides
+        </Link>
+
         <section className="space-y-4">
           <h2 className="border-b pb-2 text-2xl">
-            Related ESL Lessons
+            Related Conversation Guides
           </h2>
 
-          <div className="flex flex-col gap-2">
-            {relatedLessons.length === 0 ? (
-              <p className="text-muted-foreground">
-                No related lessons yet.
-              </p>
-            ) : (
-              relatedLessons.map((lesson) => (
-                <Link
-                  key={lesson.href}
-                  href={lesson.href}
-                  className="group rounded-md border bg-card p-4 transition hover:shadow-sm"
-                >
-                  <strong className="font-semibold group-hover:underline">
-                    {lesson.title}
-                  </strong>
+          <div className="flex flex-col gap-3">
+            {relatedGuides.map((guide) => (
+              <Link
+                key={guide.href}
+                href={guide.href}
+                className="group rounded-md border bg-card p-4 transition hover:shadow-sm"
+              >
+                <strong className="font-semibold group-hover:underline">
+                  {guide.title}
+                </strong>
 
-                  <span className="mt-3 flex items-center gap-1 text-sm text-muted-foreground">
-                    Read lesson
-                    <ArrowRight size={14} />
-                  </span>
-                </Link>
-              ))
-            )}
+                <span className="mt-3 flex items-center gap-1 text-sm text-muted-foreground">
+                  Read guide
+                  <ArrowRight size={14} />
+                </span>
+              </Link>
+            ))}
           </div>
         </section>
       </aside>
 
-    <article className={`lg:w-2/3 h-screen space-y-16 p-5 m-2 bg-background rounded-lg overflow-y-auto ${geist.className}`}>
+    <article className={`m-2 space-y-16 rounded-lg bg-background p-5 lg:w-2/3 h-screen overflow-y-auto ${geist.className}`}>
       <header className="space-y-5">
+        <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
+          <Link href="/guides" className="hover:text-foreground hover:underline">Guides</Link>
+          <span className="px-2">/</span>
+          <span>Remote Work ESL Lesson</span>
+        </nav>
+
         <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
           <span className="rounded-full border bg-card px-3 py-1">B2</span>
           <span className="rounded-full border bg-card px-3 py-1">
@@ -158,14 +184,13 @@ export default function PostPage() {
         </div>
 
         <h1 className="border-b pb-3 text-4xl leading-tight">
-          Working From Home vs The Office: B2 ESL Lesson
+          Remote Work vs Office Work: B2 ESL Lesson
         </h1>
 
         <p className="max-w-3xl text-lg text-muted-foreground">
-          Use this lesson to help B2 students discuss remote work, office
-          culture, productivity, and work-life balance. The activities focus on
-          expressing opinions, responding to opposing viewpoints, and reaching
-          an agreement.
+          A ready-to-use B2 Business English lesson about remote and office
+          work, including vocabulary, comprehension questions, discussion
+          prompts, polite disagreement practice, and homework.
         </p>
       </header>
 
@@ -306,28 +331,24 @@ export default function PostPage() {
         </div>
       </section>
 
-      {/* CTA to app */}
-      <section className="rounded-md bg-accent p-8 text-center">
-        <BookOpen className="mx-auto mb-4" size={30} />
-
-        <h2 className="text-2xl font-semibold">
-          Read the Full Interactive Conversation for Free
-        </h2>
-
-        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
-          Open the complete conversation in Synomilo to read the dialogue,
-          listen to the audio(requires plus account for students), highlight vocabulary, and save useful expressions
-          to a personal dictionary.
+      {/* Conversation preview */}
+      <section className="space-y-4">
+        <h2 className="border-b pb-2 text-2xl">Remote Work Conversation Preview</h2>
+        <p>
+          The full conversation follows two colleagues with different views on
+          remote work. One values flexibility and avoiding the commute, while
+          the other prefers face-to-face collaboration and office culture.
         </p>
-
-        <Link href="/home/conversations/6a1c68581f9bbab1c1d9">
-          <Button
-            className="mt-6 cursor-pointer bg-pink-500 text-background hover:bg-pink-500/85"
-          >
-            Open the conversation
-            <ArrowRight className="ml-2" size={17} />
-          </Button>
-        </Link>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="rounded-md border bg-card p-5">
+            <strong>Working from home</strong>
+            <p className="mt-2 text-sm text-muted-foreground">Flexibility, fewer interruptions, no commute, and improved work-life balance.</p>
+          </div>
+          <div className="rounded-md border bg-card p-5">
+            <strong>Working in the office</strong>
+            <p className="mt-2 text-sm text-muted-foreground">Faster communication, easier collaboration, stronger team relationships, and a clearer work routine.</p>
+          </div>
+        </div>
       </section>
 
       {/* Comprehension */}
@@ -364,6 +385,32 @@ export default function PostPage() {
             <li key={question}>{question}</li>
           ))}
         </ol>
+      </section>
+
+
+      {/* CTA to app */}
+      <section className="rounded-md bg-accent p-8 text-center">
+        <BookOpen className="mx-auto mb-4" size={30} />
+
+        <h2 className="text-2xl font-semibold">
+          Open in Synomilo
+        </h2>
+
+        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+          Read the full dialogue, highlight useful vocabulary, and save
+          expressions to a personal dictionary. Reading tools are free;
+          student audio requires a Plus account.
+        </p>
+
+        <Link href="/home/conversations/6a1c68581f9bbab1c1d9"
+          target="blank">
+          <Button
+            className="mt-6 cursor-pointer bg-pink-500 text-background hover:bg-pink-500/85"
+          >
+            Open the conversation
+            <ArrowRight className="ml-2" size={17} />
+          </Button>
+        </Link>
       </section>
 
 
@@ -442,6 +489,12 @@ export default function PostPage() {
       </section>
 
 
+      <footer className="border-t pt-8">
+        <Link href="/guides" className="inline-flex items-center gap-2 font-medium text-pink-500 hover:underline">
+          <ArrowLeft size={16} />
+          Back to all Synomilo articles
+        </Link>
+      </footer>
     </article>
     </div>
   );

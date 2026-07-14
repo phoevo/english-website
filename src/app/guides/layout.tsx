@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export default function BlogLayout({
+export default function GuideLayout({
   children,
 }: {
   children: ReactNode;
