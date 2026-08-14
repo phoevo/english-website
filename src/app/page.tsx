@@ -10,13 +10,15 @@ import {Accordion, AccordionContent, AccordionItem, AccordionTrigger,} from "@/c
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TestConversation } from "./(dashboard)/TestConversation";
 import TestDictionary from "./(dashboard)/TestDictionary";
-import { AlignLeft, ArrowDown, ArrowRight, BookOpenCheck, Check, GalleryHorizontalEnd, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords } from "lucide-react";
+import { AlignLeft, ArrowDown, ArrowRight, BookOpenCheck, Check, CheckCircle2, GalleryHorizontalEnd, IterationCcw, MousePointer2, Pause, Play, RectangleHorizontal, Sword, Swords, X } from "lucide-react";
 import TestWordBoard from "./(dashboard)/TestWordBoard";
 import { Badge } from "@/components/ui/badge";
 import TestConversationCover from "./(dashboard)/TestConversationCover";
 import TestFriends from "./(dashboard)/TestFriends";
 import TestTeacherPage from "./(dashboard)/TestTeacherPage";
 import TestWorkflow from "./(dashboard)/TestWorkflow";
+import TestTutorConversation from "./(dashboard)/TestTutorConversation";
+import HoverOverWords from "./(dashboard)/HoverOverWords";
 import {
   Table,
   TableBody,
@@ -26,6 +28,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import LoginChecker from "./(auth)/login/loginChecker";
+import { Card, CardContent } from "@/components/ui/card";
 
 const geist = Geist({ subsets: ['latin'] });
 const dmSans = DM_Sans({ subsets: ['latin'] });
@@ -55,6 +58,44 @@ const transitionImage = {
   },
 };
 
+const conversationTopics = [
+  {
+    title: "Everyday Conversations",
+    description:
+      "Everyday situations like shopping, hobbies, family and daily routines.",
+    category: "Beginner - Intermediate",
+    href: "/home/conversations/68d7ccc8ad1883908843",
+  },
+  {
+    title: "Travel & Directions",
+    description:
+      "Airports, hotels, transport and asking for directions with confidence.",
+    category: "Beginner - Intermediate",
+    href: "/home/conversations/68f1112fe34924c519ad",
+  },
+  {
+    title: "Business English",
+    description:
+      "Job interviews, meetings, networking and workplace communication.",
+    category: "Intermediate",
+    href: "/home/conversations/68ce638012a4e95d0cfe",
+  },
+  {
+  title: "Everyday Life",
+  description:
+    "Conversations about hobbies, relationships, routines and the people around us.",
+  category: "All",
+  href: "/home/conversations/69ff65793c924e35625a",
+},
+  // {
+  //   title: "Health",
+  //   description:
+  //     "Doctor visits, pharmacies and other situations where clear communication matters.",
+  //   category: "All",
+  //   href: "/home/conversations/health",
+  // },
+];
+
 
 
 
@@ -63,13 +104,13 @@ export default function LandingPage() {
 
 
 
-  const handleScroll = () => {
-    const viewport = document.querySelector('#landing-scroll [data-slot="scroll-area-viewport"]') as HTMLElement | null;
-    viewport?.scrollBy({
-      top: 900,
-      behavior: "smooth",
-    });
-  };
+  // const handleScroll = () => {
+  //   const viewport = document.querySelector('#landing-scroll [data-slot="scroll-area-viewport"]') as HTMLElement | null;
+  //   viewport?.scrollBy({
+  //     top: 900,
+  //     behavior: "smooth",
+  //   });
+  // };
 
   const questions = [
           {
@@ -139,81 +180,108 @@ return (
        <nav className="sticky backdrop-blur-2xl top-0 w-full z-30">
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-12 lg:h-18">
-            <h1 className="hidden lg:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
+            <h1 className="text-xl lg:text-3xl font-normal absolute left-2 lg:left-10">Synomilo</h1>
 
-            <div className={`flex absolute right-5 md:right-5 lg:right-10 md:gap-0 lg:gap-1 ${geist.className}`}>
-              <Link href={"/register"}> <Button className="hidden md:block lg:block cursor-pointer hover:bg-gradient" variant={"ghost"}>Sign up</Button> </Link>
+            <div className={`flex absolute right-2 md:right-5 lg:right-10 gap-1 lg:gap-2 ${geist.className}`}>
+              <Link href={"/register"}> <Button className="md:block rounded-lg lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"default"}>Start free</Button> </Link>
               <LoginChecker/>
-              <Link href={"/pricing"}> <Button className="hidden md:block lg:block cursor-pointer hover:bg-gradient" variant={"ghost"}>Pricing</Button> </Link>
+              <Link href={"/pricing"}> <Button className="border border-foreground md:border-none md:block lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"ghost"}>Pricing</Button> </Link>
               <ModeToggle />
             </div>
         </div>
     </nav>
 
+     <div className="flex flex-col w-screen border-b justify-center items-center">
+       <div className="flex flex-col items-center space-y-[300px]">
+   <motion.div
+  layout
+  initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, height: 0 }}
+    transition={{ duration: 0.3, ease: "easeInOut" }}
+    className="flex flex-col mt-10 p-5 lg:px-20 h-full items-start justify-center lg:flex-row"
+  >
+  <div className="w-full justify-center lg:w-1/2 space-y-4">
 
-      <div className="flex flex-col w-screen border-b  justify-center items-center gap-20">
-        <div className="flex flex-col gap-2 items-center">
+    <div className="flex w-full flex-col justify-center lg:flex-row lg:items-start lg:p-5">
+      <div className="space-y-8">
+        <Badge className="border border-foreground bg-transparent text-foreground">
+      Early Access
+    </Badge>
 
-             <motion.div
-            layout
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, height: "auto"}}
-            whileInView={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="flex flex-col items-center lg:flex-row lg:ml-35 text-6xl lg:text-8xl font-normal">Synomilo
-            <span className="text-muted-foreground lg:w-auto text-sm lg:text-lg font-capital px-3 py-1 lg:px-3 rounded-full">Early Access</span>
+        <h1 className="w-full text-start text-5xl font-semibold md:w-2/3 lg:w-xl lg:text-7xl">
+        Ready-made conversation material for English tutors.
+      </h1>
 
-            </motion.div>
+      <p
+        className={`text-start text-base leading-relaxed text-muted-foreground lg:w-xl lg:text-lg ${geist.className}`}
+      >
+        Realistic conversations for English learners. Use them during online
+        lessons, adapt them to your teaching style, or build your own activities
+        around them.
+      </p>
+      </div>
+    </div>
+  </div>
+
+  <div className="flex flex-col w-full items-start justify-end lg:w-1/2 mt-10">
+
+
+    <TestTutorConversation />
+  </div>
+
+</motion.div>
+
+<section className="w-full border-t py-24">
+  <div className="mx-auto flex max-w-7xl flex-col items-center px-6">
+
+    <h2 className="text-center text-4xl font-semibold lg:text-5xl">
+      Browse Conversations
+    </h2>
+
+    <p className={`mt-4 max-w-2xl text-center text-base lg:text-lg text-muted-foreground ${geist.className}`}>
+      Choose from realistic conversations covering everyday and professional topics.
+    </p>
+
+    <div className="mt-14 grid w-full grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+  {conversationTopics.map((topic) => (
+    <Link key={topic.title} href={topic.href}>
+      <Card className="group h-full cursor-pointer transition-all hover:shadow-lg">
+        <CardContent className="flex h-full flex-col">
+          <Badge variant={"secondary"} className="">{topic.category}</Badge>
+
+          <h3 className="mt-5 font-semibold">{topic.title}</h3>
+
+          <p className="mt-2 flex-1 text-sm text-muted-foreground">
+            {topic.description}
+          </p>
+
+          <div className="mt-6 flex items-center gap-2 border-t pt-4 text-sm font-medium">
+            <span>Try conversation</span>
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
+  ))}
+</div>
+
+    <Link href="/home/conversations">
+      <Button size="lg" className="mt-12 rounded-full cursor-pointer">
+        Browse all conversations
+      </Button>
+    </Link>
+
+  </div>
+</section>
+
+<section className="py-24">
 
 
 
-          {/* <div className="flex flex-row  text-1xl font-normal mt-3 gap-2" >
-            <p>/ˌsɪn.oʊˈmiː.loʊ/</p> <span>•</span> <span>sin-oh-MEE-low</span>
-          </div> */}
+</section>
 
-           <motion.div
-            layout
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, height: "auto"}}
-            whileInView={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="text-zinc-500 ">Greek for: &quot;I converse&quot;
-            </motion.div>
-        </div>
-
-        <div className="flex flex-col items-center gap-2">
-
-         <motion.div
-            layout
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{duration: 0.3, delay:0.1, ease: "easeInOut" }}
-            className="flex flex-col lg:gap-5 items-center justify-center"
-            >
-
-        <p className="text-2xl p-5 text-center md:w-2/3 lg:text-5xl lg:p-0 font-medium ">
-Conversation-based ESL tool for tutors and students        </p>
-
-        <motion.div
-            layout
-            initial={{ opacity: 0, height: "auto" }}
-            animate={{ opacity: 1, height: "auto"}}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.4 , delay:0.2, ease: "easeInOut" }}
-            className="flex flex-col max-w-4xl rounded-4xl justify-start items-center overflow-hidden"
-          >
-            <p className={`text-md p-2 lg:text-xl leading-relaxed text-center ${dmSans.className}`}>
-            Built for ESL tutors, online teachers, and independent learners, Synomilo provides conversation content, interactive tools, assignments, and student progress tracking for real world English practice.
-            </p>
-
-          </motion.div>
-
-        </motion.div>
-
-        <motion.div
+        {/* <motion.div
           layout
           initial={{ opacity: 0, height: "auto" }}
           animate={{ opacity: 1, height: "auto"}}
@@ -232,7 +300,7 @@ Conversation-based ESL tool for tutors and students        </p>
           See more <ArrowDown/>
           </Button>
 
-        </motion.div>
+        </motion.div> */}
 
         {/* <p className="flex justify-center text-sm lg:text-xl m-2 text-muted-foreground">This isn't theory. It's rehearsal for when you're face to face.</p> */}
 
@@ -261,12 +329,21 @@ Conversation-based ESL tool for tutors and students        </p>
         </Card>
       </motion.div> */}
 
+        <motion.div
+            layout
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{duration: 0.6, ease: "easeInOut" }}
+            className="flex flex-col items-center justify-center space-y-4">
 
+
+        </motion.div>
 
 
         <div className="w-screen gap-10 flex flex-col justify-center items-center border-b ">
 
-       <motion.div
+       {/* <motion.div
         className="sticky top-5 z-30 mt-20 p-3 lg:p-4 bg-card border-1 rounded-full shadow-lg"
         initial={{ opacity: 0, y: 80 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -276,7 +353,8 @@ Conversation-based ESL tool for tutors and students        </p>
           <div className="flex flex-row text-xl lg:text-xl font-semibold gap-2 z-20 items-center">
           Here&apos;s what&apos;s offered <span><ArrowDown className= "text-pink-500" size={30}/></span>
           </div>
-      </motion.div>
+      </motion.div> */}
+
 
 
 
@@ -682,7 +760,7 @@ Conversation-based ESL tool for tutors and students        </p>
 </motion.div>
 
 
-        <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-82 lg:mb-14 self-start m-4 lg:text-2xl font-semibold">
+        {/* <div className="hidden lg:block z-20 sticky top-30 left-full lg:left-0 text-1xl lg:top-82 lg:mb-14 self-start m-4 lg:text-2xl font-semibold">
         <span className="px-1 text-pink-500">
           5.
         </span>
@@ -820,7 +898,7 @@ Conversation-based ESL tool for tutors and students        </p>
 
   <div className="flex items-center justify-center text-center">Streaks</div>
 </motion.div>
-</div>
+</div> */}
 
 
 

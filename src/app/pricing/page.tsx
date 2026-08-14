@@ -250,15 +250,15 @@ function SubscribePage() {
 
   return (
     <ScrollArea className={`w-full h-screen overflow-y-auto bg-gradient ${dmSans.className}`}>
-      <nav className="sticky top-0 w-full z-30">
+      <nav className="sticky backdrop-blur-2xl top-0 w-full z-30">
         {/*shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)] */}
         <div className="flex items-center h-12 lg:h-18">
-            <h1 className="hidden lg:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
+            <h1 className="hidden md:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
 
-            <div className={`flex absolute right-5 md:right-5 lg:right-10 md:gap-0 lg:gap-1 ${geist.className}`}>
-              <Link href={"/register"}> <Button className="hidden md:block lg:block cursor-pointer hover:bg-gradient" variant={"ghost"}>Sign up</Button> </Link>
+            <div className={`flex absolute right-5 md:right-5 lg:right-10 md:gap-0 lg:gap-2 ${geist.className}`}>
+              <Link href={"/register"}> <Button className="hidden md:block rounded-lg lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"default"}>Start free</Button> </Link>
               <LoginChecker/>
-              <Link href="/pricing"> <Button variant="ghost" className="hidden md:block lg:block shadow-[0_0_5px_1px_rgba] cursor-pointer hover:bg-gradient">Pricing</Button></Link>
+              <Link href={"/pricing"}> <Button className="hidden md:block lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"ghost"}>Pricing</Button> </Link>
               <ModeToggle />
             </div>
         </div>
