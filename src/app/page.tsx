@@ -267,18 +267,62 @@ return (
 </div>
 
     <Link href="/home/conversations">
-      <Button size="lg" className="mt-12 rounded-full cursor-pointer">
+      <Button size="lg"
+      variant={"outline"}
+      className="mt-14 cursor-pointer rounded-full">
         Browse all conversations
+
+      <ArrowRight className="ml-2 h-4 w-4" />
+
       </Button>
     </Link>
 
   </div>
 </section>
 
-<section className="py-24">
+<section className="w-full border-t py-24">
+  <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2 lg:gap-20">
+
+    <div className="space-y-6">
 
 
+      <h2 className="text-4xl font-semibold lg:text-5xl">
+        Want to build more around the conversation?
+      </h2>
 
+      <p className="max-w-xl text-base leading-relaxed text-muted-foreground lg:text-lg">
+        Each conversation has an optional teaching guide with related vocabulary
+        lesson warm-ups, discussion prompts, speaking activities and
+        homework ideas.
+      </p>
+
+      <p className="max-w-xl text-base leading-relaxed text-muted-foreground lg:text-lg">
+        Use the whole guide, take a few ideas from it, or teach the
+        conversation entirely your own way.
+      </p>
+
+      <Link href="/guides">
+        <Button
+          size="lg"
+          variant="outline"
+          className="mt-2 cursor-pointer rounded-full"
+        >
+          View teaching guides
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
+      </Link>
+    </div>
+
+    <div className="w-full">
+      <Card className="overflow-hidden shadow-sm">
+        <CardContent className="p-0">
+
+          <div className="aspect-[4/3] w-full bg-muted" />
+        </CardContent>
+      </Card>
+    </div>
+
+  </div>
 </section>
 
         {/* <motion.div
