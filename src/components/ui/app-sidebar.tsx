@@ -117,7 +117,7 @@ export function AppSidebar() {
         <div className="hidden group-data-[collapsible=icon]:flex items-end">
           <UserRound className="h-4 w-" />
         </div>
-        <div className="flex flex-row items-center gap-1 group-data-[collapsible=icon]:hidden">
+        <div className={`flex flex-row items-center gap-1 group-data-[collapsible=icon]:hidden ${geist.className}`}>
           <p className="text-lg">
             {user ? user.name : "Guest"}
           </p>
@@ -203,7 +203,7 @@ export function AppSidebar() {
 
 
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Home">
+                  <SidebarMenuButton asChild closeOnSelectMobile tooltip="Home">
                     <Link href="/home">
                       <HomeIcon/>
                       <span>Home</span>
@@ -220,7 +220,7 @@ export function AppSidebar() {
 
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild tooltip={item.title}>
+                  <SidebarMenuButton asChild closeOnSelectMobile tooltip={item.title}>
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -237,7 +237,7 @@ export function AppSidebar() {
             <SidebarMenu>
 
               <SidebarMenuItem key="Classroom">
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild closeOnSelectMobile>
                     <Link href="/home/assignments" className="cursor-pointer">
                       <ClipboardCheck />
                       <span>Assignments</span>
@@ -254,7 +254,7 @@ export function AppSidebar() {
           <SidebarGroupContent className={`${geist.className}`}>
             <SidebarMenu>
               <SidebarMenuItem key="Classroom">
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild closeOnSelectMobile >
                       <Link href="/home/feedback">
                       <MessageCirclePlus/>
                       <span className="">Feedback</span>

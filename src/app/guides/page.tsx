@@ -22,7 +22,7 @@ export default function GuidesPage() {
   );
 
   return (
-    <div className="flex justify-center items-center flex-col mx-auto w-full max-w-7xl px-4 py-6">
+    <div className="mx-auto flex h-dvh w-full flex-col overflow-hidden px-4 py-6">
       <Link
         href="/"
         className={`${dmSans.className} inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground`}
@@ -47,7 +47,7 @@ export default function GuidesPage() {
         </p>
       </header>
 
-      <div className="mt-10 grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)]">
+      <div className="mt-5 grid h-full flex-1 min-h-0 gap-8 lg:grid-cols-[210px_minmax(0,1fr)]">
         <aside className="self-start rounded-xl border bg-background p-4 lg:sticky lg:top-6">
           <nav aria-label="Guide topics">
             <h2
@@ -68,26 +68,11 @@ export default function GuidesPage() {
           </nav>
         </aside>
 
-        <main className="min-w-0">
-          <div className="flex items-end gap-4">
-            <div className={`${dmSans.className}`}>
-              <h2
-                className={`text-2xl font-semibold tracking-tight`}
-              >
-                Latest guides <span>({sortedPosts.length})</span>
-              </h2>
+        <main className="min-w-0 min-h-0 h-full">
 
-              <p className="mt-1 text-sm text-muted-foreground">
-                Lesson ideas and resources for conversation-focused English
-                practice.
-              </p>
-            </div>
-
-
-          </div>
 
           <section
-  className={`${geist.className} mt-6 grid max-h-[70vh] gap-5 overflow-y-auto md:grid-cols-3`}
+            className={`${geist.className} mt-6 grid h-full min-h-0 gap-5 overflow-y-auto pb-4 md:grid-cols-3`}
           >
             {sortedPosts.map((post) => (
            <article
@@ -95,7 +80,7 @@ export default function GuidesPage() {
   className="flex flex-col rounded-xl border bg-background transition-shadow hover:shadow-sm"
 >
   <img
-    className="rounded-t-xl"
+    className="rounded-t-xl min-h-md"
     src={post.img}
     alt={post.title}
   />

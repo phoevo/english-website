@@ -40,6 +40,16 @@ const posts = [
     topic: "Work and Careers",
     date: "2026-07-13",
     },
+    {
+  slug: "directions",
+  img: "https://images.unsplash.com/photo-1556741533-6e6a62bd8b49?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  title: "Asking for Directions",
+  description:
+    "An A2 ESL lesson guide with vocabulary needed for networking, discussion questions and activities about networking events and interactions.",
+  level: "A2",
+  topic: "Everyday & Travel English",
+  date: "2026-08-22",
+},
 
 
 
