@@ -18,24 +18,6 @@ import { GuidePreview } from "./guides/GuidePreview";
 const geist = Geist({ subsets: ['latin'] });
 const dmSans = DM_Sans({ subsets: ['latin'] });
 
-const transition2 = {
-  duration: 0.2,
-  delay: 0.1,
-  ease: [0, 0.71, 0.2, 1.01],
-}
-
-const transitionImage = {
-  initial: { opacity: 0.3, scale: 0.9 },
-  whileInView: { opacity: 1, scale: 1 },
-  viewport: { margin: "-200px" },
-  transition: {
-    duration: 2,
-    delay: 0,
-    ease: [0, 0.71, 0.4, 0.91]
-
-  },
-};
-
 const conversationTopics = [
   {
     title: "Everyday Conversations",

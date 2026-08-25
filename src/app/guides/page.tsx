@@ -1,5 +1,6 @@
 import { DM_Sans, Geist } from "next/font/google";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, CircleArrowLeft } from "lucide-react";
 import posts from "./posts";
 
@@ -31,7 +32,7 @@ export default function GuidesPage() {
         Back to Synomilo
       </Link>
 
-      <header className="">
+      <header className="flex flex-col items-center">
 
         <h1
           className={`${dmSans.className} mt-2 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl`}
@@ -79,10 +80,13 @@ export default function GuidesPage() {
   key={post.slug}
   className="flex flex-col rounded-xl border bg-background transition-shadow hover:shadow-sm"
 >
-  <img
+  <Image
     className="rounded-t-xl min-h-md"
     src={post.img}
     alt={post.title}
+    width={1200}
+    height={800}
+    sizes="(max-width: 768px) 100vw, 33vw"
   />
 
   <div className="flex flex-1 flex-col p-5">
