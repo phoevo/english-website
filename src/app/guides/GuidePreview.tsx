@@ -87,7 +87,7 @@ export function GuidePreview() {
           </div>
 
           <h3 className="mt-4 text-2xl font-semibold">
-            Job Interview English
+            Guide: Job Interview
           </h3>
 
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">

@@ -3,7 +3,8 @@ export type Post = {
   img?: string;
   title: string;
   description: string
-  level: string;
+  level?: string;
+  readTime?: string;
   topic: string;
   date: string; // ISO date
   tags?: string[];
@@ -59,6 +60,16 @@ const posts = [
   level: "A2–B2",
   topic: "Lesson Planning",
   date: "2026-08-26",
+},
+{
+  slug: "esl-conversation-lessons-build-a-reusable-prep-template",
+  img: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  title: "ESL Conversation Lessons: Build a Reusable Prep Template",
+  description:
+    "Build a reusable ESL conversation lesson template and fill every stage with ready-made material in under 15 minutes. Follow this step-by-step prep tutorial.",
+  level: "A2–B2",
+  topic: "For Tutors",
+  date: "2026-08-27",
 },
 
 
