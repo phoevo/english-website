@@ -71,7 +71,33 @@ const posts = [
   topic: "For Tutors",
   date: "2026-08-27",
 },
-
+{
+  slug: "online-teaching-resources-why-usability-beats-breadth",
+  img: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by5wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  title: "Online Teaching Resources: Why Usability Beats Breadth",
+  description:
+    "Find out why the best online teaching resources prioritize immediate usability over breadth and how tutors can stop wasting prep time on sprawling libraries.",
+  topic: "Teaching Resources",
+  date: "2026-08-28",
+},
+{
+  slug: "self-correction-the-tutor-skill-nobody-teaches",
+  img: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  title: "Self-Correction: The Tutor Skill Nobody Teaches",
+  description:
+    "Discover why self-correction outperforms traditional corrective feedback in one-to-one lessons and how tutors can build this powerful habit in learners.",
+  topic: "Teaching Resources",
+  date: "2026-08-28",
+},
+{
+  slug: "fluency-system-for-esl-why-b1-learners-freeze",
+  img: "https://images.unsplash.com/photo-1514369118554-e20d93546b30?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  title: "Fluency System for ESL: Why B1 Learners Freeze",
+  description:
+    "Discover why B1 ESL students freeze mid-conversation despite strong comprehension skills, and how scenario-based speaking practice can close the gap.",
+  topic: "Teaching Resources",
+  date: "2026-08-28",
+},
 
 
 ];

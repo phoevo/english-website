@@ -23,7 +23,7 @@ export default function GuidesPage() {
   );
 
   return (
-    <div className="mx-auto flex h-dvh w-full flex-col overflow-hidden px-4 py-6">
+    <div className="mx-auto flex h-dvh w-full flex-col overflow-hidden py-6">
       <Link
         href="/"
         className={`${dmSans.className} inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground`}
@@ -35,21 +35,21 @@ export default function GuidesPage() {
       <header className="flex flex-col items-center">
 
         <h1
-          className={`${dmSans.className} mt-2 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl`}
+          className={`${dmSans.className} mt-2 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl px-5`}
         >
           ESL Conversation Activities and Teaching Resources
         </h1>
 
         <p
-          className={`${dmSans.className} mt-4 text-base leading-7 text-muted-foreground sm:text-lg`}
+          className={`${dmSans.className} mt-4 text-base leading-7 text-muted-foreground sm:text-lg px-5`}
         >
           Explore conversation lessons, vocabulary guides, discussion
           questions and practical activities for English tutors and learners.
         </p>
       </header>
 
-      <div className="mt-5 grid h-full flex-1 min-h-0 gap-8 lg:grid-cols-[210px_minmax(0,1fr)]">
-        <aside className="self-start rounded-xl border bg-background p-4 lg:sticky lg:top-6">
+      <div className="h-full w-full min-h-0">
+         {/* <aside className="hidden lg:block self-start rounded-xl border bg-background p-4 lg:sticky lg:top-6">
           <nav aria-label="Guide topics">
             <h2
               className={`${dmSans.className} text-sm font-semibold uppercase tracking-wide`}
@@ -67,13 +67,13 @@ export default function GuidesPage() {
               ))}
             </ul>
           </nav>
-        </aside>
+        </aside> */}
 
-        <main className="min-w-0 min-h-0 h-full">
+        <main className="min-w-0 min-h-0 h-full w-full">
 
 
           <section
-            className={`${geist.className} mt-6 grid h-full min-h-0 gap-5 overflow-y-auto pb-4 md:grid-cols-3`}
+            className={`${geist.className} mt-6 grid h-full min-h-0 gap-5 overflow-y-auto pb-4 md:grid-cols-2 lg:grid-cols-3 px-5 lg:px-20`}
           >
             {sortedPosts.map((post) => (
            <article
@@ -99,9 +99,9 @@ export default function GuidesPage() {
       >
         <span className="min-w-0">{post.title}</span>
 
-        <span className="shrink-0 rounded-full border bg-secondary px-2 py-0.5 text-sm font-medium">
+        {post.level && <span className="shrink-0 rounded-full border bg-secondary px-2 py-0.5 text-sm font-medium">
           {post.level}
-        </span>
+        </span>}
       </Link>
     </h3>
 

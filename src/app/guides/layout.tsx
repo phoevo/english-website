@@ -5,5 +5,5 @@ export default function GuideLayout({
 }: {
   children: ReactNode;
 }) {
-  return <div className="flex items-start h-screen bg-gradient">{children}</div>;
+  return <div className="flex items-start h-screen bg-background">{children}</div>;
 }
