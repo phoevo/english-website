@@ -18,9 +18,9 @@ export default function GuidesPage() {
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
-  const topics = Array.from(
-    new Set(sortedPosts.map((post) => post.topic).filter(Boolean))
-  );
+  // const topics = Array.from(
+  //   new Set(sortedPosts.map((post) => post.topic).filter(Boolean))
+  // );
 
   return (
     <div className="mx-auto flex h-dvh w-full flex-col overflow-hidden py-6">

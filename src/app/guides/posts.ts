@@ -5,7 +5,7 @@ export type Post = {
   description: string
   level?: string;
   readTime?: string;
-  topic: string;
+  topic?: string;
   date: string; // ISO date
   tags?: string[];
 };
