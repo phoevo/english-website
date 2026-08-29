@@ -13,6 +13,7 @@ export const metadata = {
   description:
     "Explore ESL conversation lessons, vocabulary guides, discussion questions and teaching activities.",
 };
+export const dynamic = "force-dynamic";
 
 export default async function GuidesPage() {
   const appwriteGuides = await fetchPublishedGuides();
