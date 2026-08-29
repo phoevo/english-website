@@ -55,7 +55,7 @@ export default async function GuidePage({ params }: Props) {
         : null;
 
   return (
-    <article className={`mx-auto max-w-4xl px-5 py-8 lg:px-8 ${dmSans.className}`}>
+    <article className={`mx-auto max-w-4xl px-5 py-8 lg:px-8 h-screen overflow-y-auto ${dmSans.className}`}>
       <Link
         href="/guides"
         className="inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
@@ -112,7 +112,7 @@ export default async function GuidePage({ params }: Props) {
       ) : null}
 
       <section
-        className="prose prose-zinc mt-8 max-w-none dark:prose-invert"
+        className="prose prose-zinc prose-lg mt-10 max-w-none dark:prose-invert prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-foreground prose-h2:mt-12 prose-h2:mb-4 prose-h2:border-b prose-h2:pb-2 prose-h2:text-3xl prose-h3:mt-10 prose-h3:mb-3 prose-h3:text-2xl prose-p:my-5 prose-p:leading-8 prose-li:my-1 prose-ul:my-5 prose-ol:my-5 prose-blockquote:my-8 prose-blockquote:border-l-2 prose-blockquote:pl-6 prose-blockquote:text-2xl prose-blockquote:font-medium prose-a:text-pink-500 prose-a:no-underline hover:prose-a:underline prose-strong:text-foreground prose-code:rounded prose-code:bg-muted prose-code:px-1 prose-code:py-0.5"
         dangerouslySetInnerHTML={{ __html: guide.content }}
       />
     </article>

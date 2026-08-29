@@ -102,6 +102,7 @@ return (
               <Link href={"/register"}> <Button className="md:block rounded-lg lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"default"}>Start free</Button> </Link>
               <LoginChecker/>
               <Link href={"/pricing"}> <Button className="border border-foreground md:border-none md:block lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"ghost"}>Pricing</Button> </Link>
+              <Link href={"/guides"}> <Button className="border border-foreground md:border-none md:block lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"ghost"}>Guides</Button> </Link>
               <ModeToggle />
             </div>
         </div>
