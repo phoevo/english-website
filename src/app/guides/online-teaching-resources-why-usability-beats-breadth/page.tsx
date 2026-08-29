@@ -86,7 +86,7 @@ export default function PostPage() {
     <div className={`flex flex-col lg:flex-row ${geist.className}`}>
       {/* Sidebar */}
       <aside
-        className={`p-5 pt-20 hidden lg:block lg:sticky lg:top-20 lg:w-xs ${geist.className}`}
+        className={`p-5 pt-20 hidden lg:block lg:sticky lg:top-20 lg:w-xs bg-muted ${geist.className}`}
       >
         <section className="space-y-6">
           <Link

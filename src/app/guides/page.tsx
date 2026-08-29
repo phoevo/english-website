@@ -26,7 +26,7 @@ export default function GuidesPage() {
     <div className="mx-auto flex h-dvh w-full flex-col overflow-hidden py-6">
       <Link
         href="/"
-        className={`${dmSans.className} inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground`}
+        className={`${dmSans.className} inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground pl-2`}
       >
         <CircleArrowLeft size={16} />
         Back to Synomilo

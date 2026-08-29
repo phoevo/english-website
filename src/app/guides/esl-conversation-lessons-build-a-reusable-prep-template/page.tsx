@@ -176,7 +176,7 @@ export default function PostPage() {
   return (
     <div className={`flex flex-col lg:flex-row ${geist.className}`}>
       {/* Sidebar */}
-      <aside className="self-start p-5 pt-10 lg:sticky lg:top-8 lg:w-80">
+      <aside className="self-start p-5 pt-10 lg:sticky lg:top-8 lg:w-80 bg-muted">
         <Link
           href="/guides"
           className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"

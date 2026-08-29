@@ -94,7 +94,7 @@ export default function PostPage() {
     <div className={`flex flex-col lg:flex-row ${geist.className}`}>
       {/* Sidebar */}
       <aside
-        className={`hidden p-5 pt-20 lg:sticky lg:top-20 lg:block lg:w-xs ${geist.className}`}
+        className={`p-5 pt-20 hidden lg:block lg:sticky lg:top-20 lg:w-xs bg-muted ${geist.className}`}
       >
         <section className="space-y-6">
           <Link
@@ -107,7 +107,7 @@ export default function PostPage() {
 
           <div>
             <h2 className="border-b pb-2 text-2xl">
-              In this article
+              On this guide
             </h2>
 
             <nav className="mt-4 flex flex-col gap-2">
@@ -179,9 +179,9 @@ export default function PostPage() {
       <article
         className={`m-2 space-y-16 h-screen overflow-y-auto rounded-lg bg-background p-5 lg:w-2/3 ${geist.className}`}
       >
-        <div className="">
+        <div className="space-y-16">
           {/* Article Header */}
-          <header className="space-y-6">
+          <header className="space-y-5">
             <nav
               aria-label="Breadcrumb"
               className="text-sm text-muted-foreground"
@@ -213,11 +213,11 @@ export default function PostPage() {
             </div>
 
             <div className="space-y-5">
-              <h1 className="text-5xl leading-[1.08] tracking-tight lg:text-6xl">
+              <h1 className="border-b pb-3 text-5xl leading-tight">
                 Fluency System for ESL: Why B1 Learners Freeze
               </h1>
 
-              <p className="max-w-2xl text-xl leading-8 text-muted-foreground">
+              <p className="max-w-3xl text-lg text-muted-foreground">
                 The gap between understanding English and speaking it is not a
                 knowledge problem — it's a practice system that's missing
               </p>
@@ -231,7 +231,7 @@ export default function PostPage() {
               <span>Real-life conversation</span>
             </div>
 
-            <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
+            <p className="max-w-3xl text-muted-foreground">
               Discover why B1 ESL students freeze mid-conversation despite
               strong comprehension skills. Learn how real-life speaking
               activities, structured as a repeatable system, close the gap that
@@ -240,13 +240,12 @@ export default function PostPage() {
           </header>
 
           {/* TL;DR */}
-          <section className="rounded-lg border bg-card p-6 lg:p-8">
-            <div className="space-y-5">
-              <h2 className="text-xl font-semibold tracking-tight">
+          <section className="space-y-5">
+              <h2 className="border-b pb-2 text-2xl">
                 TL;DR
               </h2>
 
-              <ul className="list-disc space-y-4 pl-6 leading-7">
+              <ul className="list-disc space-y-3 pl-6">
                 <li>
                   <strong>The freeze isn't a knowledge gap</strong> - B1
                   learners already know enough English; they lack structured
@@ -273,7 +272,6 @@ export default function PostPage() {
                   rehearsed enough to stop fearing.
                 </li>
               </ul>
-            </div>
           </section>
 
           {/* You Already Know Enough English */}
@@ -281,11 +279,10 @@ export default function PostPage() {
             id="you-already-know-enough-english"
             className="scroll-mt-24 space-y-6"
           >
-            <h2 className="text-3xl font-semibold tracking-tight lg:text-4xl">
+            <h2 className="border-b pb-2 text-2xl">
               You Already Know Enough English. So Why Can't You Say It?
             </h2>
-
-            <div className="space-y-5 text-[17px] leading-8">
+            <div className="space-y-5">
               <p>
                 There's a particular kind of frustration that B1 ESL students
                 know well. You watch a show in English and follow the plot. You
@@ -309,11 +306,10 @@ export default function PostPage() {
             id="the-myth-that-more-study-fixes-the-freeze"
             className="scroll-mt-24 space-y-6"
           >
-            <h2 className="text-3xl font-semibold tracking-tight lg:text-4xl">
+            <h2 className="border-b pb-2 text-2xl">
               The Myth That More Study Fixes the Freeze
             </h2>
-
-            <div className="space-y-5 text-[17px] leading-8">
+            <div className="space-y-5">
               <p>
                 The standard advice for learners stuck at this stage is
                 predictable: learn more vocabulary, review your grammar, do
@@ -353,7 +349,7 @@ export default function PostPage() {
             id="the-real-problem-is-a-missing-fluency-system"
             className="scroll-mt-24 space-y-6"
           >
-            <h2 className="text-3xl font-semibold tracking-tight lg:text-4xl">
+            <h2 className="border-b pb-2 text-2xl">
               The Real Problem Is a Missing Fluency System for ESL Learners
             </h2>
 
@@ -362,7 +358,7 @@ export default function PostPage() {
               problem. It's an infrastructure problem.
             </blockquote>
 
-            <div className="space-y-5 text-[17px] leading-8">
+            <div className="space-y-5">
               <p>
                 Here's what we actually believe: no one has given these learners
                 a system for practicing the exact situations where freezing
@@ -376,11 +372,10 @@ export default function PostPage() {
             id="where-freezing-actually-lives"
             className="scroll-mt-24 space-y-7"
           >
-            <h2 className="text-3xl font-semibold tracking-tight lg:text-4xl">
+            <h2 className="border-b pb-2 text-2xl">
               Where Freezing Actually Lives
             </h2>
-
-            <div className="space-y-5 text-[17px] leading-8">
+            <div className="space-y-5">
               <p>
                 Think about when the freeze hits. It's not during a grammar
                 quiz. It's not when you're reading a menu. It almost always
@@ -479,11 +474,10 @@ export default function PostPage() {
             id="what-changes-if-we-take-this-seriously"
             className="scroll-mt-24 space-y-6"
           >
-            <h2 className="text-3xl font-semibold tracking-tight lg:text-4xl">
+            <h2 className="border-b pb-2 text-2xl">
               What Changes If We Take This Seriously
             </h2>
-
-            <div className="space-y-5 text-[17px] leading-8">
+            <div className="space-y-5">
               <p>
                 If the freeze is a practice-design problem rather than a
                 knowledge problem, the implications are significant. It means
@@ -542,11 +536,10 @@ export default function PostPage() {
             id="stop-thinking-fluency-start-thinking-readiness"
             className="scroll-mt-24 space-y-6"
           >
-            <h2 className="text-3xl font-semibold tracking-tight lg:text-4xl">
+            <h2 className="border-b pb-2 text-2xl">
               Stop Thinking "Fluency." Start Thinking "Readiness."
             </h2>
-
-            <div className="space-y-5 text-[17px] leading-8">
+            <div className="space-y-5">
               <p>
                 The word "fluency" is part of the problem. It sounds like a
                 destination, a permanent state you arrive at after enough study.
@@ -581,11 +574,10 @@ export default function PostPage() {
             id="the-words-are-already-there"
             className="scroll-mt-24 space-y-6"
           >
-            <h2 className="text-3xl font-semibold tracking-tight lg:text-4xl">
+            <h2 className="border-b pb-2 text-2xl">
               The Words Are Already There
             </h2>
-
-            <div className="space-y-5 text-[17px] leading-8">
+            <div className="space-y-5">
               <p>
                 You don't need more English. You need more reps in the moments
                 that matter. The freeze isn't evidence that you're not ready.
@@ -605,7 +597,7 @@ export default function PostPage() {
             id="frequently-asked-questions"
             className="scroll-mt-24 space-y-7"
           >
-            <h2 className="text-3xl font-semibold tracking-tight lg:text-4xl">
+            <h2 className="border-b pb-2 text-2xl">
               Frequently Asked Questions
             </h2>
 
@@ -616,7 +608,7 @@ export default function PostPage() {
                   learners?
                 </h3>
 
-                <p className="mt-2 text-[17px] leading-8 text-muted-foreground">
+                <p className="mt-2 text-muted-foreground">
                   They replicate the social pressure and unpredictability of
                   actual conversations, which generic exercises can't simulate.
                   As a result, practicing within a realistic context builds the
@@ -682,11 +674,10 @@ export default function PostPage() {
             id="sources"
             className="scroll-mt-24 space-y-5"
           >
-            <h2 className="text-3xl font-semibold tracking-tight lg:text-4xl">
+            <h2 className="border-b pb-2 text-2xl">
               Sources
             </h2>
-
-            <ol className="list-decimal space-y-3 pl-6 text-[17px] leading-8">
+            <ol className="list-decimal space-y-3 pl-6">
               {sourceLinks.map((source) => (
                 <li key={source.href}>
                   <a
