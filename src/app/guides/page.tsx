@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, CircleArrowLeft } from "lucide-react";
 import posts from "./posts";
+import { fetchPublishedGuides } from "@/lib/guides";
 
 const geist = Geist({ subsets: ["latin"] });
 const dmSans = DM_Sans({ subsets: ["latin"] });
@@ -13,8 +14,21 @@ export const metadata = {
     "Explore ESL conversation lessons, vocabulary guides, discussion questions and teaching activities.",
 };
 
-export default function GuidesPage() {
-  const sortedPosts = [...posts].sort(
+export default async function GuidesPage() {
+  const appwriteGuides = await fetchPublishedGuides();
+  const fromAppwrite = appwriteGuides.map((guide) => ({
+    slug: guide.slug,
+    img: guide.featuredImage || "",
+    title: guide.title,
+    description: guide.meta_description || guide.description || "",
+    level: guide.level,
+    topic: guide.topic || "Teaching Resources",
+    date: guide.published || guide.updated || guide.$createdAt || new Date().toISOString(),
+  }));
+  const staticFallback = posts.filter(
+    (post) => !fromAppwrite.some((guide) => guide.slug === post.slug)
+  );
+  const sortedPosts = [...fromAppwrite, ...staticFallback].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
@@ -80,14 +94,18 @@ export default function GuidesPage() {
   key={post.slug}
   className="flex flex-col rounded-xl border bg-background transition-shadow hover:shadow-sm"
 >
-  <Image
-    className="rounded-t-xl min-h-md"
-    src={post.img}
-    alt={post.title}
-    width={1200}
-    height={800}
-    sizes="(max-width: 768px) 100vw, 33vw"
-  />
+  {post.img ? (
+    <Image
+      className="rounded-t-xl min-h-md"
+      src={post.img}
+      alt={post.title}
+      width={1200}
+      height={800}
+      sizes="(max-width: 768px) 100vw, 33vw"
+    />
+  ) : (
+    <div className="min-h-md rounded-t-xl bg-muted" />
+  )}
 
   <div className="flex flex-1 flex-col p-5">
     <h3
