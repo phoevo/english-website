@@ -23,7 +23,7 @@ export default async function GuidesPage() {
     title: guide.title,
     description: guide.meta_description || guide.description || "",
     level: guide.level,
-    topic: guide.topic || "Teaching Resources",
+    topic: guide.topic,
     date: guide.published || guide.updated || guide.$createdAt || new Date().toISOString(),
   }));
   const staticFallback = posts.filter(
