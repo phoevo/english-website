@@ -9,60 +9,80 @@ const dmSans = DM_Sans({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "About",
   description:
-    "About us and what we do",
+    "Synomilo helps English tutors create practical, conversation-focused lessons built around real-world situations.",
 };
 
 export default function AboutPage() {
-
-
   return (
-   <main className={`pt-10 max-w-4xl mx-auto prose prose-neutral ${geist.className}`}>
-  <ScrollArea className="h-screen overflow-y-auto px-2">
-    <h1 className={`text-4xl sm:text-5xl md:text-6xl font-normal mb-10 ${dmSans.className}`}>
-      About
-    </h1>
+    <main
+      className={`pt-10 max-w-4xl mx-auto prose prose-neutral ${geist.className} text-foreground`}
+    >
+      <ScrollArea className="h-screen overflow-y-auto px-2">
+        <h1
+          className={`text-4xl sm:text-5xl md:text-6xl font-normal mb-3 text-foreground ${dmSans.className}`}
+        >
+          About
+        </h1>
 
-    <h2 className="text-2xl font-semibold mb-2">The Goal</h2>
-    <p className="mb-4">
-      Synomilo is built to prepare students for real conversations. The goal is
-      to give learners practical experience before they face the same
-      situations in the real world.
-    </p>
+        <h2 className="text-2xl font-semibold mb-2 text-foreground">
+          The Goal
+        </h2>
+        <p className="mb-4 text-muted-foreground">
+          Synomilo is built to help English tutors spend less time preparing
+          materials and more time teaching. It provides practical,
+          conversation-focused material built around situations learners are
+          likely to encounter outside the classroom.
+        </p>
 
-    <h2 className="text-2xl font-semibold mb-2">The Problem</h2>
-    <p className="mb-4">
-      Traditional language learning relies heavily on grammar drills, sentence
-      structure exercises, and worksheets. Matching words to definitions or
-      circling correct answers does little to prepare students for real communication. Many learners know the rules but
-      still freeze when the times comes to respond, and theres no notes infront of them for help.
-    </p>
+        <h2 className="text-2xl font-semibold mb-2 text-foreground">
+          The Problem
+        </h2>
+        <p className="mb-4 text-muted-foreground">
+          Creating a good speaking lesson takes more than finding a topic and
+          writing a few questions. Tutors often have to search for suitable
+          material, write realistic dialogues, adapt activities to different
+          levels, and figure out how to turn everything into something they
+          can actually use in a lesson. That preparation adds up, especially
+          when the goal is to give students meaningful practice rather than
+          another worksheet.
+        </p>
 
-    <h2 className="text-2xl font-semibold mb-2">The Approach</h2>
-    <p className="mb-4">
-      Synomilo removes the busywork and focuses on practice. Instead of
-      worksheets, we provide realistic, meaningful conversations that simulate
-      real-world scenarios. This is preparation, training, simulation - not repetition of
-      what you already know.
-    </p>
+        <h2 className="text-2xl font-semibold mb-2 text-foreground">
+          The Approach
+        </h2>
+        <p className="mb-4 text-muted-foreground">
+          Synomilo focuses on the situations behind the language. Instead of
+          starting with isolated grammar points or vocabulary lists, tutors
+          can start with a realistic scenario and build practice around the
+          conversation that could happen there. The material is designed to
+          give students something concrete to rehearse, adapt, and respond to,
+          while giving tutors a practical framework to teach from.
+        </p>
 
-    <h2 className="text-2xl font-semibold mb-2">For Students and Tutors</h2>
-    <p className="mb-4">
-      Synomilo can be used independently or together with a tutor. Students can
-      practice scenarios on their own with the available tools, or work through them
-      in a live lesson for immediate feedback. Tutors can run conversation-based
-      classes without spending time writing dialogues or searching online for
-      specific situations. Synomilo provides ready-to-use material so both sides
-      can focus on what matters: the conversation itself.
-    </p>
+        <h2 className="text-2xl font-semibold mb-2 text-foreground">
+          Built for Tutors
+        </h2>
+        <p className="mb-4 text-muted-foreground">
+          Synomilo is designed to fit into the way tutors already teach.
+          Scenarios can be used as the foundation for a full lesson, as focused
+          speaking practice, or as a starting point for discussion and
+          follow-up activities. Tutors can adapt the material to their
+          students instead of spending their preparation time creating
+          everything from scratch.
+        </p>
 
-    <h2 className="text-2xl font-semibold mb-2">The Outcome</h2>
-    <p className="mb-4">
-      Students get to practice responding naturally, adapting in the moment, and building their confidence.
-      And for tutors, it saves time and gives them a solid framework to lean on, whether it’s for the whole
-       lesson or just part of it.
-    </p>
-  </ScrollArea>
-</main>
-
+        <h2 className="text-2xl font-semibold mb-2 text-foreground">
+          The Outcome
+        </h2>
+        <p className="mb-15 text-muted-foreground">
+          Tutors get practical material they can use without hours of
+          preparation. Students get more opportunities to practice the kind of
+          English they actually need to use: responding naturally, handling
+          unexpected turns, and keeping a conversation going. The aim is
+          simple — make speaking practice easier to prepare and more useful to
+          teach.
+        </p>
+      </ScrollArea>
+    </main>
   );
 }
