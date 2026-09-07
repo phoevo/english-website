@@ -32,6 +32,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import LoginChecker from '../(auth)/login/loginChecker'
+import { MobileLandingSidebar } from '@/components/ui/MobileLandingSidebar'
 
 
 const dmSans = DM_Sans({ subsets: ['latin'] });
@@ -255,11 +256,15 @@ function SubscribePage() {
         <div className="flex items-center h-12 lg:h-18">
             <h1 className="hidden md:block text-3xl lg:text-3xl font-normal absolute left-5 lg:left-10">Synomilo</h1>
 
-            <div className={`flex absolute right-5 md:right-5 lg:right-10 md:gap-0 lg:gap-2 ${geist.className}`}>
-              <Link href={"/register"}> <Button className="hidden md:block rounded-lg lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"default"}>Start free</Button> </Link>
+             <div className={`hidden md:flex absolute right-2 md:right-5 lg:right-10 gap-1 lg:gap-2 ${geist.className}`}>
+              <Link href={"/register"}> <Button className="md:block rounded-lg lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"default"}>Start free</Button> </Link>
               <LoginChecker/>
-              <Link href={"/pricing"}> <Button className="hidden md:block lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"ghost"}>Pricing</Button> </Link>
+              <Link href={"/pricing"}> <Button className="border border-foreground md:border-none md:block lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"ghost"}>Pricing</Button> </Link>
+              <Link href={"/guides"}> <Button className="border border-foreground md:border-none md:block lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"ghost"}>Guides</Button> </Link>
               <ModeToggle />
+            </div>
+            <div className="absolute right-2 xs:hidden">
+              <MobileLandingSidebar />
             </div>
         </div>
     </nav>

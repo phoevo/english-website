@@ -14,6 +14,7 @@ import TestTutorConversation from "./(dashboard)/TestTutorConversation";
 import LoginChecker from "./(auth)/login/loginChecker";
 import { Card, CardContent } from "@/components/ui/card";
 import { GuidePreview } from "./guides/GuidePreview";
+import { MobileLandingSidebar } from "@/components/ui/MobileLandingSidebar";
 
 const geist = Geist({ subsets: ['latin'] });
 const dmSans = DM_Sans({ subsets: ['latin'] });
@@ -98,12 +99,15 @@ return (
         <div className="flex items-center h-12 lg:h-18">
             <h1 className="text-xl lg:text-3xl font-normal absolute left-2 lg:left-10">Synomilo</h1>
 
-            <div className={`flex absolute right-2 md:right-5 lg:right-10 gap-1 lg:gap-2 ${geist.className}`}>
+            <div className={`hidden md:flex absolute right-2 md:right-5 lg:right-10 gap-1 lg:gap-2 ${geist.className}`}>
               <Link href={"/register"}> <Button className="md:block rounded-lg lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"default"}>Start free</Button> </Link>
               <LoginChecker/>
               <Link href={"/pricing"}> <Button className="border border-foreground md:border-none md:block lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"ghost"}>Pricing</Button> </Link>
               <Link href={"/guides"}> <Button className="border border-foreground md:border-none md:block lg:block cursor-pointer hover:bg-gradient" size={"sm"} variant={"ghost"}>Guides</Button> </Link>
               <ModeToggle />
+            </div>
+            <div className="absolute right-2 xs:hidden">
+              <MobileLandingSidebar />
             </div>
         </div>
     </nav>
@@ -164,7 +168,7 @@ return (
       Realistic conversations covering everyday and professional topics.
     </p>
 
-    <div className="mt-14 grid w-full grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+    <div className="mt-14 grid w-full grid-cols-1 gap-5 md:grid-cols-3 lg:grid-cols-4">
   {conversationTopics.map((topic, index) => (
     <motion.div
       key={topic.title}
@@ -272,7 +276,7 @@ return (
 
 
         <motion.div
-        className="flex flex-col justify-start items-center text-center w-full py-24"
+        className="flex flex-col justify-start items-center text-center w-full px-4 py-24"
         initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
@@ -311,7 +315,7 @@ return (
       </div>
 
 
-    <div className="flex w-screen h-auto items-center justify-center flex-col mt-20 bg-background/40 py-10">
+    <div className="flex w-screen h-auto items-center justify-center flex-col mt-20 bg-background/40 px-4 py-10">
       <h2 className="text-3xl lg:text-5xl font-normal">Some questions you may have</h2>
 
       <Accordion className="w-full p-10 lg:w-1/2" type="single" collapsible>
@@ -328,7 +332,7 @@ return (
     </Accordion>
     </div>
 
-      <footer className="bg-background/50 mb-[env(safe-area-inset-bottom)] lg:mb-0 w-screen lg:w-full z-50 shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)]">
+      <footer className="bg-background/50 lg:mb-0 w-screen lg:w-full z-50 shadow-[0_1px_5px_var(--color-ring)] dark:shadow-[0_0.5px_5px_var(--color-ring)]">
   <div className="flex flex-row lg:flex-row items-center h-auto lg:h-40 gap-5 p-10">
     <div className="flex justify-center w-1/3">
       <ul className="flex flex-col text-xs lg:text-md gap-2">

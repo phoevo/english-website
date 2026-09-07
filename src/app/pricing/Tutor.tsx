@@ -77,19 +77,16 @@ function Tutor() {
 
 
 
-     <div className='flex flex-col md:flex-col gap-5 w-auto'>
-
-    <div className='flex flex-col lg:flex-row gap-5'>
-  <div className='flex flex-col justify-between p-2 bg-muted rounded-xl shadow-md h-100 w-xs md:w-md text-muted-foreground'>
+     <div className='flex flex-col lg:flex-row gap-5'>
+  <div className='flex flex-col justify-between p-2 bg-muted rounded-xl shadow-md h-80 lg:h-100 w-xs md:w-md text-muted-foreground'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10'>Free</Badge>
       <motion.div className='flex justify-center'
       initial={{ opacity: 0, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0 }}>
-      <ul className='text-base list-disc marker:text-popover-foreground space-y-1 justify-start'>
+      <ul className='text-sm lg:text-base list-disc marker:text-popover-foreground space-y-1 px-5 justify-start'>
         <li>All conversations A1-B2 in read-only</li>
-
       </ul>
       </motion.div>
 
@@ -116,14 +113,14 @@ function Tutor() {
   </div>
 
 
-<div className='flex flex-col justify-between bg-background/50 p-2 border-pink-500 rounded-xl shadow-xs h-100 w-xs md:w-md border-1'>
+<div className='flex flex-col justify-between bg-background/50 p-2 border-pink-500 rounded-xl shadow-xs h-80 lg:h-100 w-xs md:w-md border-1'>
     <div className='flex flex-col items-center flex-grow'>
       <Badge className='mb-10 bg-pink-500 text-white'>Plus</Badge>
       <motion.div className='flex justify-center items-center'
       initial={{ opacity: 0, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 0 }}>
-      <ul className='text-base text-muted-foreground list-disc marker:text-pink-500 px-10 space-y-1 w-full'>
+      <ul className='text-sm lg:text-base text-muted-foreground list-disc marker:text-pink-500 px-5 justify-start space-y-1'>
         <li>All conversations A1-B2 in read-only</li>
         <li>Assignments page: Track and manage your students</li>
         <li>Assign feature: Assign conversations to your students. Students view assigned conversations with Plus features, even they have a free accounts</li>
@@ -142,25 +139,23 @@ function Tutor() {
     </Button>
   </DialogTrigger>
 
-  <DialogContent className={`lg:min-w-4xl h-auto lg:p-10  ${geist.className}`}>
+  <DialogContent className={`lg:min-w-4xl h-auto lg:p-10 ml-2 ${geist.className}`}>
     <DialogHeader>
       <DialogHeader>
-  <DialogTitle className='text-2xl'>Tutor Plans</DialogTitle>
-  <DialogDescription>
+  <DialogTitle className='lg:text-2xl'>Tutor Plans</DialogTitle>
+  <DialogDescription className='text-xs lg:text-md'>
   These plans are part of the early access period and will increase as I continue building and improving Synomilo.
   <span className='text-green-500'> Your rate is locked in and won’t change, even after future pricing updates.</span>
 </DialogDescription>
-<DialogDescription>
-  I&apos;m grateful for your contribution and for being one of the platform&apos;s first supporters.
-</DialogDescription>
 
 
 
-  <div className="flex flex-col lg:flex-row justify-center items-center gap-4 mt-4">
+
+  <div className="flex flex-col lg:flex-row justify-center items-center gap-2 lg:mt-4">
     {tutorPlans.map((plan, index) => (
 <div
   key={index}
-  className="relative flex flex-col justify-between p-4 border rounded-xl w-full lg:w-sm h-70 lg:h-90 shadow-md transition-all hover:shadow-lg">
+  className="relative flex flex-col justify-between p-2 lg:p-4 border rounded-xl w-full lg:w-sm h-60 lg:h-90 shadow-md transition-all hover:shadow-lg">
 
        {plan.time === "year" && (
          <div className="absolute -top-3 left-1/2 -translate-x-1/2">
@@ -172,12 +167,12 @@ function Tutor() {
 
           <div className="flex flex-col items-start">
             <div className='flex flex-col space-y-2 items-start my-2'>
-              <h1 className="text-xl font-semibold border-l border-pink-500 pl-2">{plan.title}</h1>
-                  <p className='text-2xl font-semibold tracking-tight'>€{plan.price}/{plan.time}
+              <h1 className="lg:text-xl font-semibold border-l border-pink-500 pl-2">{plan.title}</h1>
+                  <p className='lg:text-2xl font-semibold tracking-tight'>€{plan.price}/{plan.time}
                     <span className='text-muted-foreground font-normal text-sm'> + applicable taxes</span>
                   </p>
               </div>
-              <div className='mb-4 text-sm text-muted-foreground'>{plan.info}</div>
+              <div className='mb-4 text-xs lg:text-sm text-muted-foreground'>{plan.info}</div>
               <ul className="list-disc text-xs text-left lg:items-center lg:text-sm marker:text-pink-500 space-y-1 px-4 text-muted-foreground mb-2">
               {plan.desc.map((item, i) => (
                 <li key={i}>{item}</li>
@@ -187,7 +182,7 @@ function Tutor() {
 
     {!user ? (
     <Link href="/register" className="w-full">
-      <Button variant="outline" className="w-full cursor-pointer">
+      <Button size="sm" variant="outline" className="w-full cursor-pointer text-xs lg:text-base">
         Get Started
       </Button>
     </Link>
@@ -230,7 +225,6 @@ function Tutor() {
   </div>
 
 
-      </div>
       </div>
 
 

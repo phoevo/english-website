@@ -50,13 +50,13 @@ export default async function GuidesPage() {
       <header className="flex flex-col items-center">
 
         <h1
-          className={`${dmSans.className} mt-2 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl px-5`}
+          className={`${dmSans.className} lg:mt-2 text-2xl font-bold tracking-tight sm:text-4xl lg:text-5xl px-5`}
         >
           ESL Conversation Activities and Teaching Resources
         </h1>
 
         <p
-          className={`${dmSans.className} mt-4 text-base leading-7 text-muted-foreground sm:text-lg px-5`}
+          className={`${dmSans.className} lg:mt-4 text-sm text-muted-foreground sm:text-lg px-5`}
         >
           Explore conversation lessons, vocabulary guides, discussion
           questions and practical activities for English tutors and learners.
@@ -88,7 +88,7 @@ export default async function GuidesPage() {
 
 
           <section
-            className={`${geist.className} mt-6 grid h-full min-h-0 gap-5 overflow-y-auto pb-4 md:grid-cols-2 lg:grid-cols-3 px-5 lg:px-20`}
+            className={`${geist.className} lg:mt-2 grid h-full min-h-0 gap-5 overflow-y-auto pb-4 md:grid-cols-2 lg:grid-cols-3 px-5 lg:px-20`}
           >
             {sortedPosts.map((post) => (
            <article
