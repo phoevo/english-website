@@ -2,7 +2,7 @@ import React from "react"
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/ui/app-sidebar'
 import { Geist } from "next/font/google";
-import ChallengeWatcher from '@/data/ChallengeWatcher';
+
 
 
 const geist = Geist({ subsets: ['latin'] });
@@ -11,7 +11,7 @@ const geist = Geist({ subsets: ['latin'] });
 
 function homeLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`flex h-screen w-full overflow-hidden${geist.className}`}>
+    <div className={`flex h-screen w-full overflow-hidden ${geist.className}`}>
       <div className="flex h-full shrink-0">
         <SidebarProvider
           defaultOpen={true}
@@ -26,7 +26,7 @@ function homeLayout({ children }: { children: React.ReactNode }) {
       </div>
 
       <div className="flex flex-1 min-w-0 h-[calc(100vh-1rem)] min-h-0 mb-4 bg-background border rounded-lg relative overflow-hidden">
-        <ChallengeWatcher />
+
         {children}
       </div>
     </div>

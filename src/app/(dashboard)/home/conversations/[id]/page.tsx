@@ -91,7 +91,7 @@ export default function ConversationPage() {
 
             if (!assigned) {
               setError(
-                "This is a Pro conversation. It must be assigned by your tutor or you need a subscription to access."
+                "This conversation requires a Plus subscription."
               );
               return;
             }
@@ -158,7 +158,7 @@ export default function ConversationPage() {
     )}
 
     <div className="min-h-0 flex-1">
-      {!user || isTeacher ? (
+      {!user ? (
         <TeacherContentDisplay conversation={conversation} />
       ) : (
         <ContentDisplay conversation={conversation} />

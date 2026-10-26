@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useConversations } from "@/hooks/useConversations";
 import { Label } from "@/components/ui/label";
 import ConversationCover from "./ConversationCover";
@@ -12,7 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useUserStore } from "@/data/useUserStore";
-import GuideTour, { type GuideStep } from "../../GuideTour";
 import { CardContent } from "@/components/ui/card";
 import PlacementTest from "../placementTest";
 import {
@@ -30,17 +31,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
-const convoGuideSteps: GuideStep[] = [
-  { target: "convo-title", title: "Conversations", description: "Browse all available conversations organized by level and category." },
-  { target: "convo-filters", title: "Filters", description: "Use these filters to narrow conversations by difficulty level and topic." },
-  { target: "convo-grid", title: "Conversation Cards", description: "Click a conversation to start reading. The pink sparkle indicates Plus content, the green check indicates completion. Every word is interactive, so you can hover for definitions and save them to your dictionary."}
-];
-
-
 function ConversationsPage() {
   const { conversations, loading: conversationsLoading, error } = useConversations();
   const [selectedLevel, setSelectedLevel] = useState<string | undefined>();
   const [category, setCategory] = useState<string | undefined>();
+  const [search, setSearch] = useState("");
   const [test, setTest] = useState(false);
 
   const {loading: userLoading, user, isTeacher} = useUserStore();
@@ -61,7 +56,8 @@ function ConversationsPage() {
     const categoryMatches = !category || category === "All" || conv.category === category;
     const isProConversation = !!conv.isPro;
     const userCanAccess = isTeacher || !isProConversation || !!user?.isSubscribed;
-    return levelMatches && categoryMatches && userCanAccess;
+    const searchMatches = `${conv.title} ${conv.description || ""}`.toLowerCase().includes(search.toLowerCase().trim());
+    return levelMatches && categoryMatches && userCanAccess && searchMatches;
   });
 
 
@@ -71,25 +67,25 @@ function ConversationsPage() {
   }
 
   return (
-    <div className="flex flex-col m-5 lg:m-10 h-svh space-y-3 lg:space-y-5">
+    <div className="flex flex-col w-full min-h-0 p-5 lg:p-10 gap-5">
 
-      <GuideTour id="conversations-page" steps={convoGuideSteps} />
       <div data-guide="convo-title">
         <h1 className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Conversations</h1>
       </div>
 
 
 
-      <p className="text-sm lg:text-base text-muted-foreground">Conversation material from all levels</p>
-      <div data-guide="convo-filters" className="mt-2 flex flex-row items-center justify-between lg:justify-start gap-5 lg:gap-20">
+      <p className="text-sm lg:text-base text-muted-foreground">Find ready-to-teach conversations by CEFR level and topic.</p>
+      <div className="max-w-xl"><Label htmlFor="conversation-search" className="sr-only">Search conversations</Label><Input id="conversation-search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search titles and topics…" /></div>
+      <div data-guide="convo-filters" className="flex flex-wrap items-start gap-5">
 
         <div className="flex flex-col gap-1">
 
-          <Label htmlFor="Select" className="text-sm lg:text-base font-semibold">Level</Label>
+          <Label htmlFor="conversation-level" className="text-sm lg:text-base font-semibold">Level</Label>
 
         <div className="flex w-full flex-row items-start lg:items-center gap-1">
         <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-            <SelectTrigger className=" w-[110px] lg:w-[165px]">
+            <SelectTrigger id="conversation-level" className="w-[165px]">
               <SelectValue placeholder="All" />
             </SelectTrigger>
             <SelectContent className={geist.className}>
@@ -98,8 +94,8 @@ function ConversationsPage() {
               <SelectItem value="A2">A2 - Basic</SelectItem>
               <SelectItem value="B1">B1 - Intermediate</SelectItem>
               <SelectItem value="B2">B2 - Independent</SelectItem>
-              {/* <SelectItem value="C1">C1 - Advanced</SelectItem>
-              <SelectItem value="C2">C2 - Mastery</SelectItem> */}
+              <SelectItem value="C1">C1 - Advanced</SelectItem>
+              <SelectItem value="C2">C2 - Mastery</SelectItem>
             </SelectContent>
         </Select>
 
@@ -132,10 +128,10 @@ function ConversationsPage() {
 
           <div className="flex flex-col gap-1">
 
-           <Label htmlFor="Select" className="text-sm lg:text-base font-semibold">Categories</Label>
+           <Label htmlFor="conversation-category" className="text-sm lg:text-base font-semibold">Categories</Label>
 
         <Select value={category} onValueChange={setCategory}>
-          <SelectTrigger className="w-[110px] lg:w-[180px]">
+          <SelectTrigger id="conversation-category" className="w-[180px]">
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent className={geist.className}>
@@ -159,7 +155,9 @@ function ConversationsPage() {
 
       </div>
 
-    <ScrollArea className="h-2/3">
+    <p role="status" className="text-sm text-muted-foreground">{filtered.length} conversation{filtered.length === 1 ? "" : "s"}</p>
+    <ScrollArea className="flex-1 min-h-0">
+      {!filtered.length && <div className="py-12 text-center"><p className="mb-4 text-muted-foreground">No conversations match these filters.</p><Button variant="outline" onClick={() => { setSearch(""); setCategory("All"); setSelectedLevel("All"); }}>Clear filters</Button></div>}
       <div data-guide="convo-grid" className="grid p-1 grid-cols-1 gap-4 m-0 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filtered.map(conv => (
           <ConversationCover

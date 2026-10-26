@@ -92,9 +92,8 @@ function Student() {
         <li>8 conversations, 2 per level, A1-B2</li>
         <li>Hover</li>
         <li>Dictionary and Word Board</li>
-        <li>Streaks</li>
-        <li>Daily Tasks</li>
-        <li>Assignments Page</li>
+        <li>Recent conversations</li>
+        <li>Conversation completion</li>
       </ul>
       </motion.div>
 
@@ -133,7 +132,7 @@ function Student() {
         <li>All Conversations</li>
         <li>Audio for conversations</li>
         <li>Color customization</li>
-        <li>Challenges</li>
+        <li>Saved vocabulary and conversation completion</li>
       </ul>
       </motion.div>
 

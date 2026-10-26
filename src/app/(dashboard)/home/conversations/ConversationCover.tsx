@@ -12,6 +12,7 @@ import { useUserStore } from "@/data/useUserStore";
 import { Badge } from "@/components/ui/badge";
 import { Send, LoaderCircle, Check, Sparkles } from "lucide-react";
 import Assign from "./Assign";
+import { legacyWorkflowsEnabled } from "@/lib/product";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { getConversationFromDB, isConversationAssignedToStudent } from "@/data/appwrite";
@@ -61,7 +62,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
     if (isPro && !isSubscribed && !isTeacher) {
       const assigned = await isConversationAssignedToStudent(user.$id, conversationId);
       if (!assigned) {
-        toast("This is a Pro conversation. It must be assigned by your tutor or you need a subscription.");
+        toast("This conversation requires a Plus subscription.");
         return;
       }
     }
@@ -72,7 +73,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
       conversationId,
     });
 
-    router.push(`conversations/${conversationId}`);
+    router.push(`/home/conversations/${conversationId}`);
 
   } catch (err) {
     console.error("Error fetching or updating conversation:", err);
@@ -85,12 +86,17 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
 
 
     <motion.div
-      className=""
+      role="button"
+      tabIndex={isLoading ? -1 : 0}
+      aria-label={`Open ${conversationTitle}`}
+      aria-busy={isLoading}
+      onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); if (!isLoading) void handleClick(); } }}
+      className="h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.1 }}
-       onClick={() => {handleClick();}}
+       onClick={() => { if (!isLoading) void handleClick(); }}
     >
-    <Card className="w-full lg:w-full lg:h-60 bg-background cursor-pointer">
+    <Card className="w-full h-full min-h-52 bg-background cursor-pointer shadow-none rounded-xl hover:border-foreground/30 transition-colors">
       <CardHeader>
         <CardTitle className="flex flex-row justify-between items-center border-b py-1">
           <div className="flex flex-row items-center gap-1">
@@ -98,7 +104,7 @@ function ConversationCover({ conversationTitle, conversationDescription, convers
           </div>
 
         <div className="flex flex-col gap-1">
-          {isTeacher && <Assign
+          {legacyWorkflowsEnabled && isTeacher && <Assign
                 conversationId={conversationId}
                 trigger={
                   <Badge variant="outline"

@@ -1,3 +1,4 @@
+import { legacyWorkflowsEnabled } from "@/lib/product";
 import { create } from "zustand";
 import {
   account,
@@ -207,8 +208,8 @@ fetchUser: async () => {
       activeStudents,
     });
 
-    // background fetch (non-blocking)
-    get()
+    // Social workflows are dormant in the conversation library.
+    if (legacyWorkflowsEnabled) get()
       .fetchFriends()
       .catch((err) =>
         console.warn("Background friends fetch failed:", err)

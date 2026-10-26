@@ -11,8 +11,8 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Synomilo — ESL Conversation Lessons & Tutor Tools",
-  description: "Ready-made ESL conversation lessons that save tutors prep time. Assign, track progress, and give students real speaking practice.",
+  title: "Synomilo — Conversations, ready to teach",
+  description: "A library of English conversations organized by level and topic. Here's the content. Teach it your way.",
   icons: [
     {
       rel: "icon",
@@ -41,7 +41,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} bg-accent antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >

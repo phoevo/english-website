@@ -131,7 +131,7 @@ return (
     </Badge>
 
         <h1 className="w-full text-start text-5xl font-semibold md:w-2/3 lg:w-xl lg:text-7xl">
-        Ready-made conversation material for English tutors.
+        Here&apos;s the content. Teach it your way.
       </h1>
 
       <p

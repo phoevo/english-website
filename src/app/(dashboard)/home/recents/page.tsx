@@ -102,7 +102,7 @@ function RecentsPage() {
             >
               <Card className="bg-background flex flex-row justify-between items-center px-4">
                 <Link
-                  href={`conversations/${conversation.$id}`}
+                  href={`/home/conversations/${conversation.$id}`}
                   className="flex flex-col flex-1 border-r"
                 >
                   <div className="flex flex-row items-center mb-2">

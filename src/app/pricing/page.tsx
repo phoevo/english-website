@@ -1,4 +1,5 @@
 "use client"
+import { legacyWorkflowsEnabled } from "@/lib/product";
 // import { useState } from 'react'
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import React, { useEffect } from 'react'
@@ -88,7 +89,7 @@ type FAQItem = {
   answer: React.ReactNode;
 };
 
-const faqs: FAQItem[] = [
+const legacyFaqs: FAQItem[] = [
   {
     question: "Why shouldn't a Tutor just screenshare if they have access to all the conversations anyway?",
     answer: (
@@ -223,6 +224,12 @@ function renderTier(tier: Tier, idx: number) {
 
 
 
+const faqs: FAQItem[] = legacyWorkflowsEnabled ? legacyFaqs : [
+  { question: "Can I teach the conversations my own way?", answer: "Yes. Choose a conversation by level or topic and adapt it to your lesson. Teaching guides are optional." },
+  { question: "Can I keep my vocabulary and progress?", answer: "Log in to save words to your dictionary, revisit recent conversations, and mark conversations complete." },
+  { question: "How do I manage my subscription?", answer: <Link href="/profile" className="underline">Open your account and billing settings.</Link> },
+];
+
 function SubscribePage() {
   const { user, fetchUser } = useUserStore();
 
@@ -272,7 +279,7 @@ function SubscribePage() {
     <div className='flex flex-col justify-center items-center gap-2 lg:mb-0 p-4 md:p-0'>
 
     <div className="flex flex-col md:flex-col gap-2 items-center justify-center rounded-lg w-full h-auto ">
-      <h1 className='text-3xl md:text-6xl font-medium text-center'>Plans for Tutors & Students</h1>
+      <h1 className='text-3xl md:text-6xl font-medium text-center'>Choose your library access</h1>
       <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -315,14 +322,14 @@ function SubscribePage() {
 </div>
 
 
-<Card className='h-auto w-full lg:w-2/3 mb-5 bg-background/50 shadow-md'>
+{legacyWorkflowsEnabled && <Card className='h-auto w-full lg:w-2/3 mb-5 bg-background/50 shadow-md'>
   <CardHeader>
     <CardTitle className='text-lg md:text-2xl'>More about Pricing and Subscriptions</CardTitle>
     <CardDescription className='text-sm md:text-base'>How Students and Tutors interact depends on who owns a subscription</CardDescription>
   </CardHeader>
 
   {tiers.map(renderTier)}
-</Card>
+</Card>}
 
 
 </div>
@@ -331,7 +338,7 @@ function SubscribePage() {
   <Card className='h-auto w-full lg:w-2/3 mb-5 bg-background/50 shadow-md'>
   <CardHeader>
     <CardTitle className='text-xl md:text-2xl'>FAQ</CardTitle>
-    <CardDescription className='text-sm md:text-base'>Potential questions concerning how Student and Tutor plans work together</CardDescription>
+    <CardDescription className='text-sm md:text-base'>Using the conversation library</CardDescription>
   </CardHeader>
 
    <Accordion type="single" collapsible className="self-center w-full md:w-2/3 p-2">

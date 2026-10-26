@@ -122,8 +122,8 @@ function Tutor() {
       transition={{ duration: 0.3, delay: 0 }}>
       <ul className='text-sm lg:text-base text-muted-foreground list-disc marker:text-pink-500 px-5 justify-start space-y-1'>
         <li>All conversations A1-B2 in read-only</li>
-        <li>Assignments page: Track and manage your students</li>
-        <li>Assign feature: Assign conversations to your students. Students view assigned conversations with Plus features, even they have a free accounts</li>
+        <li>Conversation audio for your lessons</li>
+        <li>Save vocabulary and mark conversations complete</li>
       </ul>
 
 

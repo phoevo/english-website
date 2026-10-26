@@ -1,3 +1,4 @@
+import { legacyWorkflowsEnabled } from "@/lib/product";
 import React from "react";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -362,7 +363,7 @@ React.useEffect(() => {
     </div>
 
     <div className="flex flex-row items-center gap-1">
-    {assignedForThisConvo && (
+    {legacyWorkflowsEnabled && assignedForThisConvo && (
       <Badge
       variant="secondary"
       className="bg-pink-100 text-pink-700 border-pink-200"
@@ -371,7 +372,7 @@ React.useEffect(() => {
       </Badge>
     )}
 
-  {assignedForThisConvo && (
+  {legacyWorkflowsEnabled && assignedForThisConvo && (
     <p className="text-sm text-muted-foreground">
       Plus features enabled for this conversation
     </p>
@@ -512,7 +513,7 @@ React.useEffect(() => {
     ) : assignmentChecking ? (
         <Skeleton className="w-40 h-5" />
     ) : (
-        <span className="text-zinc-500">Subscription or assignment required</span>
+        <span className="text-zinc-500">Plus subscription required</span>
     )
   ) : (
       <span className="text-zinc-500">No audio found? <Link href="/home/feedback" className="underline">Let us know</Link></span>
