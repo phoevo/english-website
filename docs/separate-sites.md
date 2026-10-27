@@ -19,7 +19,20 @@ Both URLs are separate from production domains. The exact platform preview hostn
 
 The GitHub connector returned HTTP 403 when creating a draft PR. Open https://github.com/phoevo/english-website/compare/early-access...codex/separate-web-platform?expand=1 to create it manually; select Draft and retain `early-access` as the base. Review the preceding library/landing changes included in this comparison.
 
-Local validation passed: both optimized production builds (including lint/types), three routing tests, production-server HTTP smoke checks, and byte comparisons for core preserved auth/application/data files. Hosted acceptance results are recorded below when verified. Real-account auth, persistent completion/dictionary and sandbox billing checks remain a release gate.
+Local validation passed: both optimized production builds (including lint/types), three routing tests, production-server HTTP smoke checks, and byte comparisons for core preserved auth/application/data files. Hosted acceptance status is recorded below. Real-account auth, persistent completion/dictionary and sandbox billing checks remain a release gate.
+
+## Hosted acceptance status at handoff
+
+Application code commit: `b5a477b`. Latest hosted deployment IDs:
+
+- web: `6ae0750a8231ffa22514`
+- platform: `6ae0750bf267b5b305e6`
+
+Both Appwrite logs report successful Next.js compilation, lint/type validation, static generation, SSR bundling and packaging. Both deployment records still report `building` after packaging; neither has reached a verified ready state. The paired hosted smoke test fails on web `/` with HTTP 503. Treat both preview URLs as pending, not accepted deployments. Check their deployment status/logs in Appwrite Console; once ready, rerun the paired smoke command and browser/account/payment acceptance checks below. Do not move domains while this condition persists.
+
+A local browser successfully navigated from marketing to platform and loaded eight existing conversations from the unchanged Appwrite database. Its final marketing navigation URLs point directly to platform. Authenticated continuity, Google/recovery flows and sandbox payments have not been verified with a test account.
+
+The existing production Site was rechecked after deployment setup: branch `early-access`, root `./`, build `npm run build`, and pinned deployment `6a9eee7b94725ab58086` remain unchanged. Documentation-only changes do not rebuild the new Sites because each uses its app path filter.
 
 ## App boundaries
 
@@ -47,6 +60,7 @@ Use two new Sites initially, leaving the existing domain-pinned Site intact for 
 | Build | `npm run build` | `npm run build` |
 | Output | `./.next` | `./.next` |
 | Start command | leave empty | leave empty |
+| Git path filter | `apps/web/**` | `apps/platform/**` |
 | `NEXT_PUBLIC_PLATFORM_URL` | platform preview origin, later `https://app.synomilo.com` | unnecessary |
 | `NEXT_PUBLIC_WEB_URL` | unnecessary | web preview origin, later `https://synomilo.com` |
 | `SITE_INDEXABLE` | `false` in previews; `true` at cutover | unnecessary |
