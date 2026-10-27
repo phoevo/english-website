@@ -52,29 +52,29 @@
     radial-gradient(
       var(--gradient-size) circle at 0% 0%,
       oklch(62.02% 0.30332 316.44 / var(--gradient-opacity)) 0%,
-      transparent 55%
+      transparent 65%
     ),
     radial-gradient(
       var(--gradient-size) circle at 110% 1%,
       oklch(66.463% 0.27897 346.883 / var(--gradient-opacity)) 0%,
-      transparent 70%
+      transparent 60%
     ),
     radial-gradient(
       1000px circle at 20% 100%,
       oklch(46.28% 0.30597 264.201 / var(--gradient-opacity)) 0%,
-      transparent 65%
+      transparent 55%
     ),
     radial-gradient(
       var(--gradient-size) circle at 75% 80%,
       oklch(76.084% 0.14392 225.484 / var(--gradient-opacity)) 0%,
-      transparent 65%
+      transparent 55%
     ),
     linear-gradient(
       180deg,
       oklch(0.995 0 0),
       oklch(0.975 0 0)
     );
-    --gradient-opacity: 0.30;
+    --gradient-opacity: 0.10;
     --gradient-size: 1200px;
 
 }
@@ -220,7 +220,8 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground overflow-hidden;
+    @apply bg-background text-foreground;
+    overflow-x: clip;
 
     .bg-dots {
       --dot-color: oklch(0.353 0.013 260);
