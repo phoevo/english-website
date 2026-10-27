@@ -1,3 +1,4 @@
+import { platformUrl } from "@/lib/site-urls";
 import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
@@ -555,7 +556,7 @@ export default function PostPage() {
             requires a Plus account.
           </p>
 
-          <Link href="/home/conversations/68ce638012a4e95d0cfe"
+          <Link href={platformUrl("/home/conversations/68ce638012a4e95d0cfe")}
           target="blank">
             <Button className="mt-6 cursor-pointer bg-pink-500 text-background hover:bg-pink-500/85">
               Open the conversation

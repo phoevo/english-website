@@ -1,4 +1,5 @@
-'use client'
+'use client';
+import { webUrl } from "@/lib/site-urls";
 
 import Link from 'next/link'
 import { z } from 'zod'
@@ -241,9 +242,9 @@ export default function Register() {
               <div className="flex flex-row items-center justify-center my-2 space-x-3">
                 <FormLabel className="flex text-sm font-normal">
                   By signing up, you agree to the
-                  <Link href="/ToS" className="underline">Terms of Service</Link>
+                  <Link href={webUrl("/ToS")}  className="underline">Terms of Service</Link>
                   and
-                  <Link href="/privacy" className="underline">Privacy Policy</Link>
+                  <Link href={webUrl("/privacy")}  className="underline">Privacy Policy</Link>
                 </FormLabel>
               </div>
 

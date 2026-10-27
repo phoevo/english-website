@@ -1,3 +1,4 @@
+import { platformUrl } from "@/lib/site-urls";
 import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
@@ -571,7 +572,7 @@ export default function PostPage() {
             student audio requires a Plus account.
           </p>
 
-          <Link href="/home/conversations/69a3093fb5ff6367494c"
+          <Link href={platformUrl("/home/conversations/69a3093fb5ff6367494c")}
           target="blank">
             <Button className="mt-6 cursor-pointer bg-pink-500 text-background hover:bg-pink-500/85">
               Open the conversation

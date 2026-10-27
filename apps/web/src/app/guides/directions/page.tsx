@@ -1,3 +1,4 @@
+import { platformUrl } from "@/lib/site-urls";
 import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
@@ -529,7 +530,7 @@ export default function PostPage() {
             confidence with everyday English.
           </p>
 
-          <Link href="/home/conversations/68f1112fe34924c519ad">
+          <Link href={platformUrl("/home/conversations/68f1112fe34924c519ad")} >
             <Button
               className="mt-6 cursor-pointer bg-pink-500 text-background hover:bg-pink-500/85"
             >

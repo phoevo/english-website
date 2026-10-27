@@ -1,4 +1,5 @@
 "use client";
+import { platformUrl } from "@/lib/site-urls";
 
 import { useRef, useState } from "react";
 import Link from "next/link";
@@ -67,8 +68,8 @@ export default function LandingPage() {
       <nav aria-label="Main navigation" className={styles.nav}>
         <Link href="#conversations" className={styles.desktopLink}>The conversations</Link>
         <Link href="/pricing" className={styles.desktopLink}>Pricing</Link>
-        <Link href="/login">Log in</Link>
-        <Link href="/home/conversations" className={styles.navCta}>Open the library <ArrowUpRight size={17} /></Link>
+        <Link href={platformUrl("/login")} >Log in</Link>
+        <Link href={platformUrl("/home/conversations")}  className={styles.navCta}>Open the library <ArrowUpRight size={17} /></Link>
       </nav>
     </header>
 
@@ -83,7 +84,7 @@ export default function LandingPage() {
           </h1>
           <div className={styles.heroBottom} data-hero-detail>
             <p>Good conversations leave room for you.<br />Find one. Open it. See where the lesson goes.</p>
-            <Link href="/home/conversations" className={styles.primaryCta}>Find a conversation <ArrowUpRight size={21} /></Link>
+            <Link href={platformUrl("/home/conversations")}  className={styles.primaryCta}>Find a conversation <ArrowUpRight size={21} /></Link>
           </div>
         </div>
         <div className={styles.heroArt} data-paper>
@@ -114,7 +115,7 @@ export default function LandingPage() {
         <div className={styles.libraryBody} data-reveal>
           <div className={styles.topicList} role="group" aria-label="Preview a conversation topic">
             {topics.map((item, index) => <button key={item.name} type="button" aria-pressed={topicIndex === index} aria-controls="conversation-preview" onClick={() => chooseTopic(index)} className={`${styles.topicButton} ${topicIndex === index ? styles.topicActive : ""}`}><span className={styles.topicNumber}>0{index + 1}</span>{item.name}<ArrowUpRight size={22} /></button>)}
-            <Link href="/home/conversations" className={styles.textLink}>Browse by level and category <ArrowRight size={17} /></Link>
+            <Link href={platformUrl("/home/conversations")}  className={styles.textLink}>Browse by level and category <ArrowRight size={17} /></Link>
           </div>
           <div id="conversation-preview" className={styles.preview} ref={preview}>
             <div className={styles.previewMeta}><span>{topic.level}</span><span>Sample conversation</span></div>
@@ -146,8 +147,8 @@ export default function LandingPage() {
 
       <section className={styles.closing}>
         <p className={styles.eyebrow} data-reveal>Your next lesson starts here.</p>
-        <Link href="/home/conversations" className={styles.closingLink} data-reveal>Let&apos;s talk.<ArrowUpRight aria-hidden="true" /></Link>
-        <div className={styles.closingBottom}><span>Open the library. Find something good.</span><Link href="/register">Create a free account <ArrowRight size={17} /></Link></div>
+        <Link href={platformUrl("/home/conversations")}  className={styles.closingLink} data-reveal>Let&apos;s talk.<ArrowUpRight aria-hidden="true" /></Link>
+        <div className={styles.closingBottom}><span>Open the library. Find something good.</span><Link href={platformUrl("/register")} >Create a free account <ArrowRight size={17} /></Link></div>
       </section>
     </main>
     <footer className={styles.footer}>

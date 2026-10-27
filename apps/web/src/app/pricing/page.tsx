@@ -1,3 +1,4 @@
+import { platformUrl } from "@/lib/site-urls";
 import type { Metadata } from "next";
 import Link from "next/link";
 export const metadata: Metadata = {
@@ -18,8 +19,8 @@ export default function Pricing() {
           <h2 className="text-2xl">{plan.title}</h2><p className="text-xl">{plan.price}</p><p>{plan.detail}</p>
         </section>)}
     </div>
-    <p><a className="underline" href="/login">Log in</a> or <a className="underline" href="/register">create an account</a> to start.</p>
+    <p><a className="underline" href={platformUrl("/login")} >Log in</a> or <a className="underline" href={platformUrl("/register")} >create an account</a> to start.</p>
     <a className="inline-block rounded-lg bg-foreground px-6 py-3 text-background" href={`${process.env.NEXT_PUBLIC_PLATFORM_URL || "http://localhost:3001"}/pricing`}>View plans and subscribe</a>
-    <p><a className="underline" href="/profile">Manage your subscription</a> · <Link className="underline" href="/refund">Refund policy</Link></p>
+    <p><a className="underline" href={platformUrl("/profile")} >Manage your subscription</a> · <Link className="underline" href="/refund">Refund policy</Link></p>
   </main>;
 }

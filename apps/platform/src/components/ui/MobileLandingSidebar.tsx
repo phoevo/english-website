@@ -1,4 +1,5 @@
 "use client";
+import { webUrl } from "@/lib/site-urls";
 
 import Link from "next/link";
 import { Menu } from "lucide-react";
@@ -29,7 +30,7 @@ export function MobileLandingSidebar() {
             <Link href="/pricing" className="rounded-md px-3 py-2 hover:bg-muted">
               Pricing
             </Link>
-            <Link href="/guides" className="rounded-md px-3 py-2 hover:bg-muted">
+            <Link href={webUrl("/guides")}  className="rounded-md px-3 py-2 hover:bg-muted">
               Guides
             </Link>
             <Link href="/login" className="rounded-md px-3 py-2 hover:bg-muted">

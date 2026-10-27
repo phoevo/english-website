@@ -8,12 +8,27 @@ The domain rules for `synomilo.com` and `www.synomilo.com` point at deployment `
 
 The split starts from `e9f3822` (`codex/synomilo-gsap-landing`), preserving newer library and landing work. `early-access` is its ancestor. A PR against `early-access` also includes the prior library/landing changes; review those before merging. This migration adds no database schema, data, permission, user or storage changes.
 
+## Preview resources created
+
+The pushed implementation branch is `codex/separate-web-platform` (initial split commit `057e3b3`). Two new Sites are connected to that branch with the build settings below:
+
+- `synomilo-web`: https://synomilo-web-preview.appwrite.network
+- `synomilo-platform`: https://synomilo-platform-preview.appwrite.network
+
+Both URLs are separate from production domains. The exact platform preview hostname has been registered in Appwrite Platforms. Nine web variables and twenty-two platform variables were copied/configured with server credentials marked secret; unused Stripe/Mailgun credentials were excluded. The existing Site, its domain rules, database, function settings and credentials were left unchanged.
+
+The GitHub connector returned HTTP 403 when creating a draft PR. Open https://github.com/phoevo/english-website/compare/early-access...codex/separate-web-platform?expand=1 to create it manually; select Draft and retain `early-access` as the base. Review the preceding library/landing changes included in this comparison.
+
+Local validation passed: both optimized production builds (including lint/types), three routing tests, production-server HTTP smoke checks, and byte comparisons for core preserved auth/application/data files. Hosted acceptance results are recorded below when verified. Real-account auth, persistent completion/dictionary and sandbox billing checks remain a release gate.
+
 ## App boundaries
 
 | Public web | Platform |
 | --- | --- |
 | `/`, `/about`, `/pricing`, `/guides/**`, `/privacy`, `/refund`, `/ToS` | `/home/**`, `/profile/**`, `/login`, `/register`, `/onboarding`, `/oauth-callback`, `/forgot-password`, `/reset-password` |
 | `/api/guides/publish`, `/sitemap.xml` | `/api/delete-account`, `/pricing`, `/pricing/success`, `/pricing/canceled` |
+
+New navigation links use the destination origin directly so Next.js does not prefetch across a legacy redirect. Old incoming links still use the redirects.
 
 Public pricing is an unauthenticated overview of the existing rates; the platform retains the original checkout, account detection and billing components. Existing application paths are unchanged on the new host. Web redirects legacy application URLs to platform with temporary method-preserving 307s. Next.js carries their query strings through, including recovery/OAuth secrets and Stripe session IDs. Platform redirects public guides/legal/about paths to web. Unknown URLs remain 404s.
 
