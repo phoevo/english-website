@@ -1,0 +1,64 @@
+import type { Metadata } from "next";
+import { Geist } from "next/font/google";
+import "./globals.css";
+import { ThemeProvider } from "@/components/ui/ThemeProvider";
+import { Toaster } from "@/components/ui/sonner";
+import CookieConsent from "@/components/CookieConsent";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+  title: "Synomilo — Conversations, ready to teach",
+  description: "A library of English conversations organized by level and topic. Here's the content. Teach it your way.",
+  icons: [
+    {
+      rel: "icon",
+      url: "/favicon-light.svg",
+      media: "(prefers-color-scheme: light)",
+    },
+    {
+      rel: "icon",
+      url: "/favicon-dark.svg",
+      media: "(prefers-color-scheme: dark)",
+    },
+    {
+      rel: "icon",
+      url: "/favicon.png",
+    },
+  ],
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geistSans.variable} bg-accent antialiased`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="flex min-h-screen flex-col">
+            <div className="bg-background">
+              {children}
+            </div>
+
+            <Toaster
+              richColors
+              position="bottom-right"
+            />
+            <CookieConsent />
+          </div>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+};

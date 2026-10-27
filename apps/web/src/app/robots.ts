@@ -4,8 +4,8 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: "/",
-      disallow: [
+      allow: process.env.SITE_INDEXABLE === "true" ? "/" : undefined,
+      disallow: process.env.SITE_INDEXABLE === "true" ? [
         "/home/",
         "/profile/",
         "/onboarding/",
@@ -13,7 +13,7 @@ export default function robots(): MetadataRoute.Robots {
         "/forgot-password/",
         "/reset-password/",
         "/api/",
-      ],
+      ] : ["/"],
     },
     sitemap: "https://synomilo.com/sitemap.xml",
   };
