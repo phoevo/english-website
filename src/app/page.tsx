@@ -48,30 +48,29 @@ const color = {
 function Cover({ cover, duplicate }: { cover: ConversationCover; duplicate: boolean }) {
   return (
     <Link href={cover.href} tabIndex={duplicate ? -1 : undefined}
-      className="block min-h-[260px] rounded-2xl border border-border bg-background p-5 text-foreground transition-colors hover:border-foreground/35 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground motion-reduce:transition-none">
-      <h2 className="border-b border-border pb-1.5 text-base font-semibold leading-snug">{cover.title}</h2>
-      <p className="mt-2 flex flex-wrap gap-x-2 text-xs"><span>{cover.level}</span><span className="text-muted-foreground">{cover.category}</span></p>
-      <p className="mt-7 text-sm leading-6 text-foreground/85">{cover.description}</p>
+      className="block min-h-[260px] rounded-2xl border border-border bg-background p-5 text-foreground transition-colors hover:border-foreground/35 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground motion-reduce:transition-none 2xl:min-h-[320px] 2xl:p-6">
+      <h2 className="border-b border-border pb-1.5 text-base font-semibold leading-snug 2xl:pb-2 2xl:text-lg">{cover.title}</h2>
+      <p className="mt-2 flex flex-wrap gap-x-2 text-xs 2xl:mt-3 2xl:text-sm"><span>{cover.level}</span><span className="text-muted-foreground">{cover.category}</span></p>
+      <p className="mt-7 text-sm leading-6 text-foreground/85 2xl:mt-9 2xl:text-base 2xl:leading-7">{cover.description}</p>
     </Link>
   );
 }
 
 function Guide() {
   return (
-    <article style={{ colorScheme: "light" }} className="h-full overflow-y-auto rounded-xl border border-white/20 bg-[#fafafa] p-6 text-black sm:p-8" aria-label="Job interview teaching guide preview">
+    <article style={{ colorScheme: "light" }} className="h-auto overflow-visible rounded-xl border border-white/20 bg-[#fafafa] p-6 text-black sm:p-8" aria-label="Job interview teaching guide preview">
       <div className="flex items-center gap-2 border-b border-black/10 pb-4 text-xs text-black/50"><BookOpen size={14} aria-hidden="true" />Teaching guide · B2</div>
-      <h3 className="mt-6 text-3xl font-medium tracking-tight">Job interview</h3>
-      <p className="mt-3 text-sm leading-6 text-black/60">Daniel interviews for a developer role. Use these questions alongside the conversation.</p>
-      <h4 className="mt-6 font-medium">Vocabulary</h4>
-      <dl className="mt-3 space-y-3 text-sm leading-6">
+      <h3 className="mt-4 text-3xl font-medium tracking-tight">Job interview</h3>
+      <p className="mt-1 text-sm leading-6 text-black/60">Daniel interviews for a developer role. Use these questions alongside the conversation.</p>
+      <h4 className="mt-4 font-medium">Vocabulary</h4>
+      <dl className="mt-1 space-y-3 text-sm leading-6">
         <div><dt className="font-medium">Candidate</dt><dd className="text-black/60">A person applying for a job.</dd></div>
         <div><dt className="font-medium">Under pressure</dt><dd className="text-black/60">Dealing with difficult demands or expectations.</dd></div>
       </dl>
-      <h4 className="mt-6 border-t border-black/10 pt-5 font-medium">Questions</h4>
-      <ul className="mt-3 list-disc space-y-2 pl-4 text-sm leading-6 text-black/60"><li>How many years of professional experience does Daniel have?</li><li>What is more important: qualifications, experience or personality?</li></ul>
-      <h4 className="mt-6 border-t border-black/10 pt-5 font-medium">Role-play</h4>
-      <p className="mt-3 text-sm leading-6 text-black/60">Work in pairs. One person is the interviewer and the other is the candidate. Choose a job and practise an interview, then switch roles.</p>
-      <Link href="/guides/job-interview" className="mt-6 inline-flex items-center gap-2 text-sm underline underline-offset-4">Read the full guide<ArrowUpRight size={14} /></Link>
+      <h4 className="mt-4 border-t border-black/10 pt-5 font-medium">Questions</h4>
+      <ul className="mt-1 list-disc space-y-2 pl-4 text-sm leading-6 text-black/60"><li>How many years of professional experience does Daniel have?</li><li>What is more important: qualifications, experience or personality?</li></ul>
+      <h4 className="mt-4 border-t border-black/10 pt-5 font-medium">Role-play</h4>
+      <p className="mt-1 text-sm leading-6 text-black/60">Work in pairs. One person is the interviewer and the other is the candidate. Choose a job and practise an interview, then switch roles.</p>
     </article>
   );
 }
@@ -134,9 +133,18 @@ export default function LandingPage() {
           trigger: story.current, start: "top top", end: () => `+=${window.innerHeight * (desktop ? 9 : 6)}`,
           pin: true, scrub: 0.65, invalidateOnRefresh: true,
           onUpdate: self => {
+            const pill = root.querySelector<HTMLElement>("[data-conversation-scroll-pill]");
+            // Every checkpoint uses the same thresholds as the content stages.
+            const conversationProgress = gsap.utils.clamp(0, 1, self.progress / (5 / 6));
+            if (pill) gsap.set(pill, {
+              left: desktop ? 0 : `${conversationProgress * 100}%`,
+              top: desktop ? `${conversationProgress * 100}%` : 0,
+              xPercent: desktop ? 0 : -100 * conversationProgress,
+              yPercent: desktop ? -100 * conversationProgress : 0,
+            });
             const progress = root.querySelector<HTMLElement>("[data-scroll-progress]");
             if (progress) { progress.style.transform = `scaleX(${self.progress})`; progress.parentElement?.setAttribute("aria-valuenow", String(Math.round(self.progress * 100))); }
-            const next = Math.min(5, Math.floor(self.progress * 6));
+            const next = Math.min(5, Math.floor(self.progress * 6 + 1e-7));
             if (lastStage.current !== next) { lastStage.current = next; setStage(next); setHovered(null); }
             setAutoSaved(self.progress >= 0.75 && self.progress < 5 / 6);
           },
@@ -154,6 +162,35 @@ export default function LandingPage() {
           .to(demoSide.current, { x: () => -distance(), duration: 0.8, ease: "power2.inOut" }, 5.25);
       } else timeline.to({}, { duration: 0.8 }, 5.25);
       timeline.to({}, { duration: 0.25 });
+
+      const library = root.querySelector<HTMLElement>("[data-library-cta]");
+      const scrollPrompt = root.querySelector<HTMLElement>("[data-scroll-prompt]");
+      if (library && scrollPrompt) {
+        // Start the real library link where the pinned prompt finishes.
+        const promptOffset = () => {
+          const button = library.getBoundingClientRect();
+          const prompt = scrollPrompt.getBoundingClientRect();
+          const indicator = scrollPrompt.parentElement!;
+          const bottom = parseFloat(getComputedStyle(indicator).bottom) || 20;
+          return {
+            x: prompt.left + prompt.width / 2 - (button.left + button.width / 2),
+            y: (timeline.scrollTrigger?.end ?? 0) + window.innerHeight - bottom - prompt.height / 2
+              - (button.top + window.scrollY + button.height / 2),
+          };
+        };
+        gsap.timeline({ scrollTrigger: {
+          trigger: library,
+          start: () => timeline.scrollTrigger?.end ?? 0,
+          end: () => `+=${Math.max(180, window.innerHeight * 0.35)}`,
+          scrub: true, invalidateOnRefresh: true,
+        } })
+          .to(scrollPrompt, { autoAlpha: 0, duration: 0.2, ease: "none" }, 0)
+          .fromTo(library, {
+            x: () => promptOffset().x, y: () => promptOffset().y,
+            scaleX: () => scrollPrompt.offsetWidth / library.offsetWidth,
+            borderRadius: "999px", autoAlpha: 0,
+          }, { x: 0, y: 0, scaleX: 1, borderRadius: "6px", autoAlpha: 1, duration: 1, ease: "none" }, 0);
+      }
     });
     return () => { media.revert(); marqueeTweens.current = []; storyTrigger.current = null; if (closeTimer.current) clearTimeout(closeTimer.current); };
   }, { scope: page });
@@ -172,10 +209,12 @@ export default function LandingPage() {
     }
     const previous = previousTextStage.current;
     previousTextStage.current = stage;
-    const wordOnly = stage >= 1 && stage <= 3 && previous >= 1 && previous <= 3;
-    gsap.fromTo(wordOnly ? "[data-word-type]" : "[data-story-copy]", { opacity: 0.4, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" });
+    gsap.fromTo("[data-story-copy]", { opacity: 0.4, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" });
     if (stage === 5 || previous === 5) {
       gsap.fromTo("[data-active-panel]", { opacity: 0.55 }, { opacity: 1, duration: 0.4 });
+      // The guide uses its full content height; keep the pin spacer in sync.
+      const refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+      return () => cancelAnimationFrame(refreshFrame);
     }
   }, { scope: page, dependencies: [stage], revertOnUpdate: true });
 
@@ -191,7 +230,7 @@ export default function LandingPage() {
   function chooseStage(index: number) {
     const trigger = storyTrigger.current;
     if (trigger) {
-      window.scrollTo({ top: trigger.start + (trigger.end - trigger.start) * (index === 5 ? 0.985 : (index + 0.4) / 6), behavior: "smooth" });
+      window.scrollTo({ top: trigger.start + (trigger.end - trigger.start) * (index === 5 ? 0.985 : index / 6 + 0.0001), behavior: "smooth" });
       return;
     }
     setStage(index); setHovered(null); setAutoSaved(false);
@@ -252,17 +291,17 @@ export default function LandingPage() {
       <nav aria-label="Main navigation" className="flex items-center gap-6 text-sm"><Link href="/guides" className="hidden hover:underline sm:block">Guides</Link><Link href="/pricing" className="hover:underline">Pricing</Link><Link href="/login" className="hover:underline">Log in</Link><ModeToggle /></nav>
     </header>
     <main id="main">
-      <section aria-labelledby="hero-title" className="mx-auto grid max-w-[1440px] items-center gap-12 overflow-hidden px-6 pt-12 pb-14 lg:min-h-[min(640px,calc(100svh-140px))] lg:grid-cols-[0.95fr_1.3fr] lg:gap-10 lg:px-12 lg:py-7">
-        <div data-hero-copy className="max-w-xl">
-          <h1 id="hero-title" className="text-[clamp(2rem,3vw,2.8rem)] font-medium leading-[1.08] tracking-[-.055em]"><span className="lg:whitespace-nowrap">Raw English conversations.</span><br /><span className="text-muted-foreground">No fixed lesson plan.</span></h1>
-          <Link href="/home/conversations" className="mt-9 inline-flex items-center gap-2 rounded-md bg-primary px-2 py-2 text-sm text-primary-foreground hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground">Browse conversations<ArrowUpRight size={17} aria-hidden="true" /></Link>
+      <section aria-labelledby="hero-title" className="mx-auto grid max-w-[1440px] items-center gap-12 overflow-hidden px-6 pt-12 pb-14 lg:min-h-[min(640px,calc(100svh-140px))] lg:grid-cols-[0.95fr_1.3fr] lg:gap-10 lg:px-12 lg:py-7 2xl:max-w-[1760px] 2xl:min-h-[min(900px,calc(100svh-140px))] 2xl:gap-16 2xl:py-12">
+        <div data-hero-copy className="max-w-xl 2xl:max-w-none">
+          <h1 id="hero-title" className="text-[clamp(2rem,3vw,2.8rem)] font-medium leading-[1.08] tracking-[-.055em] 2xl:text-[clamp(2.8rem,3vw,3.8rem)]"><span className="lg:whitespace-nowrap">Raw English conversations.</span><br /><span className="text-muted-foreground">No lesson plans, no boundaries</span></h1>
+          <Link href="/home/conversations" className="mt-9 inline-flex items-center gap-2 rounded-md bg-primary px-2 py-2 text-sm text-primary-foreground hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground 2xl:mt-12 2xl:min-h-12 2xl:gap-3 2xl:px-5 2xl:py-3 2xl:text-base [&_svg]:2xl:size-5">Browse conversations<ArrowUpRight size={17} aria-hidden="true" /></Link>
         </div>
         <div onMouseEnter={() => { marqueeInteraction.current.pointer = true; syncMarquee(); }} onMouseLeave={() => { marqueeInteraction.current.pointer = false; syncMarquee(); }} onFocusCapture={() => { marqueeInteraction.current.focus = true; syncMarquee(); }} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) { marqueeInteraction.current.focus = false; syncMarquee(); } }}>
-          <div className="relative hidden h-[min(530px,calc(100svh-220px))] min-h-[360px] grid-cols-3 gap-3 overflow-hidden [mask-image:linear-gradient(transparent,black_5%,black_95%,transparent)] lg:grid" aria-label="Conversation library previews">
+          <div className="relative hidden h-[min(530px,calc(100svh-220px))] min-h-[360px] grid-cols-3 gap-3 overflow-hidden [mask-image:linear-gradient(transparent,black_5%,black_95%,transparent)] lg:grid 2xl:h-[min(760px,calc(100svh-270px))] 2xl:min-h-[530px] 2xl:gap-4" aria-label="Conversation library previews">
             {[0, 1, 2].map(column => {
               const items = [covers[column]!, covers[column + 3]!, covers[(column + 6) % covers.length]!];
               return <div key={column} data-cover-track className="flex h-max flex-col will-change-transform">
-                {[0, 1].map(copy => <div key={copy} aria-hidden={copy === 1 ? "true" : undefined} className="flex flex-col gap-3 pb-3">{items.map(cover => <Cover key={cover.title} cover={cover} duplicate={copy === 1} />)}</div>)}
+                {[0, 1].map(copy => <div key={copy} aria-hidden={copy === 1 ? "true" : undefined} className="flex flex-col gap-3 pb-3 2xl:gap-4 2xl:pb-4">{items.map(cover => <Cover key={cover.title} cover={cover} duplicate={copy === 1} />)}</div>)}
               </div>;
             })}
           </div>
@@ -274,20 +313,45 @@ export default function LandingPage() {
       </section>
 
       <section ref={story} style={{ colorScheme: "dark" }} aria-label="Explore the conversation tools" className="relative flex min-h-svh items-center bg-black px-6 pt-4 pb-24 text-white lg:px-12 lg:pt-12 lg:pb-28">
-        <div data-story-grid className="mx-auto grid w-full max-w-[1344px] grid-cols-1 items-center gap-5 min-[900px]:grid-cols-2 min-[900px]:gap-20">
+        <div data-story-grid className="relative mx-auto grid w-full max-w-[1344px] grid-cols-1 items-center gap-5 min-[900px]:grid-cols-2 min-[900px]:gap-20">
           <div ref={textSide} className={`relative min-w-0 ${guideStage ? "motion-reduce:min-[900px]:order-2" : ""}`}>
             <div data-story-copy className="min-h-[130px] min-[900px]:min-h-[280px]" aria-live="polite">
               <p className="mb-5 text-xs text-white/40">{String(stage + 1).padStart(2, "0")} / 06</p>
               {stage === 0 && <><h2 className="text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.08] tracking-[-.045em]">Original English dialogues.</h2><p className="mt-5 max-w-sm text-sm leading-7 text-white/55 [@media(max-height:740px)_and_(max-width:899px)]:hidden">Read the conversation as it is, then decide what to discuss.</p></>}
-              {[1, 2, 3].includes(stage) && <><h2 className="text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.08] tracking-[-.045em]">Discuss <span data-word-type style={{ display: "inline-block" }} className={stage === 1 ? "text-pink-500" : stage === 2 ? "text-red-500" : "text-indigo-500"}>{stage === 1 ? "nouns" : stage === 2 ? "verbs" : "idioms"}</span>.</h2><p className="mt-5 max-w-sm text-sm leading-7 text-white/55 [@media(max-height:740px)_and_(max-width:899px)]:hidden">Use the language in the dialogue as a starting point for discussion.</p></>}
+              {[1, 2, 3].includes(stage) && <>
+                <h2 className="text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.08] tracking-[-.045em]">
+                  {stage === 1 ? "Explore " : stage === 2 ? "Find alternatives to " : "Create sentences with "}
+                  <span data-word-type style={{ display: "inline-block" }} className={stage === 1 ? "text-pink-500" : stage === 2 ? "text-red-500" : "text-indigo-500"}>{stage === 1 ? "nouns" : stage === 2 ? "verbs" : "idioms"}</span>.
+                </h2>
+                <p className="mt-5 max-w-sm text-sm leading-7 text-white/55 [@media(max-height:740px)_and_(max-width:899px)]:hidden">
+                  {stage === 1 ? "Describe what they refer to, find related words, or ask students for examples from their own lives."
+                    : stage === 2 ? "Replace “led” with “managed” or “guided”. Does the sentence still mean the same thing?"
+                    : "What situations put you “under pressure”? Use the phrase in a sentence about your own experience."}
+                </p>
+              </>}
               {stage === 4 && <><h2 className="text-[clamp(1.75rem,3.3vw,3.5rem)] font-medium leading-[1.1] tracking-[-.045em]">Hover over words and save them to your dictionary.</h2><p className="mt-5 max-w-sm text-sm leading-7 text-white/55 [@media(max-height:740px)_and_(max-width:899px)]:hidden">Move over a word to see its meaning. Click to save it. On a touchscreen, tap a word.</p></>}
               {stage === 5 && <><h2 className="text-[clamp(1.75rem,3.5vw,3.75rem)] font-medium leading-[1.1] tracking-[-.045em]">Optional guides for vocabulary, questions and activities.</h2><p className="mt-5 max-w-sm text-sm leading-7 text-white/55 [@media(max-height:740px)_and_(max-width:899px)]:hidden">Use a guide for some direction, or work directly from the conversation.</p><Link href="/guides" className="mt-6 inline-flex items-center gap-2 text-sm underline">Browse guides<ArrowUpRight size={15} /></Link></>}
             </div>
-            <nav aria-label="Preview stages" className="mt-4 flex flex-wrap gap-x-4 gap-y-2 min-[900px]:mt-10">{labels.map((label, index) => <button key={label} type="button" onClick={() => chooseStage(index)} aria-pressed={stage === index} className={`border-b py-1 text-xs transition-colors ${stage === index ? "border-white text-white" : "border-transparent text-white/40 hover:text-white"}`}>{label}</button>)}</nav>
+
           </div>
 
-          <div ref={demoSide} className={`relative min-w-0 ${guideStage ? "motion-reduce:min-[900px]:order-1" : ""}`}>
-            <div data-active-panel className="h-[min(42svh,400px)] min-h-[260px] min-[900px]:h-[min(62svh,550px)]">
+          <div ref={demoSide} className={`relative min-w-0 min-[900px]:pl-24 ${guideStage ? "motion-reduce:min-[900px]:order-1" : ""}`}>
+            <nav aria-label="Preview stages" className={`relative mx-5 mb-6 h-10 min-[900px]:absolute min-[900px]:inset-y-0 min-[900px]:left-0 min-[900px]:m-0 min-[900px]:h-[min(62svh,550px)] min-[900px]:min-h-[260px] min-[900px]:w-20 ${guideStage ? "invisible motion-reduce:visible" : ""}`}>
+              <div className="absolute inset-x-0 top-0 h-1.5 rounded-full bg-white/10 min-[900px]:inset-x-auto min-[900px]:inset-y-0 min-[900px]:right-0 min-[900px]:h-auto min-[900px]:w-1.5">
+                <span data-conversation-scroll-pill className="pointer-events-none absolute top-0 left-0 h-full w-5 rounded-full bg-white/80 motion-reduce:hidden min-[900px]:h-5 min-[900px]:w-full" />
+                {labels.map((label, index) => {
+                  const position = `calc(${index * 20}% + ${10 - index * 4}px)`;
+                  const activeColor = index === 1 ? "text-pink-500" : index === 2 ? "text-red-500" : index === 3 ? "text-indigo-500" : "text-white";
+                  return <button key={label} type="button" onClick={() => chooseStage(index)} aria-current={stage === index ? "step" : undefined}
+                    style={{ "--checkpoint-position": position } as React.CSSProperties}
+                    className={`absolute top-0 left-[var(--checkpoint-position)] flex min-h-10 -translate-x-1/2 flex-col items-center gap-2 text-[10px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white min-[900px]:top-[var(--checkpoint-position)] min-[900px]:right-0 min-[900px]:left-auto min-[900px]:min-h-8 min-[900px]:w-20 min-[900px]:translate-x-0 min-[900px]:-translate-y-1/2 min-[900px]:flex-row-reverse min-[900px]:gap-2 min-[900px]:text-xs ${stage === index ? activeColor : "text-white/45 hover:text-white"}`}>
+                    <span aria-hidden="true" className={`h-1.5 w-1.5 shrink-0 rounded-full ${stage === index ? "bg-current" : "bg-white/35"}`} />
+                    <span>{label}</span>
+                  </button>;
+                })}
+              </div>
+            </nav>
+            <div data-active-panel className={`relative ${guideStage ? "h-auto" : "h-[min(42svh,400px)] min-h-[260px] min-[900px]:h-[min(62svh,550px)]"}`}>
               {guideStage ? <Guide /> : <article data-dialogue-card aria-labelledby="demo-title" className="relative flex h-full flex-col rounded-xl border border-white/20 bg-[#0d0d0d] p-5 sm:p-7">
                 <header className="flex items-baseline justify-between gap-4 border-b border-white/15 pb-4"><h3 id="demo-title" className="text-xl font-medium tracking-tight">Job interview</h3><p className="shrink-0 text-xs text-white/45">B2 · Work</p></header>
                 <div data-dialogue-body className="min-h-0 flex-1 overflow-y-auto py-5 pr-1 text-[13px] leading-[1.9] sm:text-sm">{lines.map(([speaker, text], index) => <p key={index} className="mb-4 grid grid-cols-[5rem_minmax(0,1fr)] gap-4 sm:grid-cols-[5.75rem_minmax(0,1fr)] sm:gap-5 last:mb-0"><span className="border-r border-white/35 pr-3 text-sm font-semibold leading-[1.9] text-inherit sm:pr-4 sm:text-base">{speaker}</span><span>{renderWords(text, index)}</span></p>)}</div>
@@ -314,7 +378,7 @@ export default function LandingPage() {
   data-pinned-scroll-indicator
   className="pointer-events-none absolute inset-x-0 bottom-5 z-20 flex justify-center px-5 motion-reduce:hidden lg:bottom-7"
 >
-  <div className="flex flex-col items-center gap-2 rounded-full border border-white/25 bg-black/90 px-5 py-3 text-center text-white">
+  <div data-scroll-prompt className="flex flex-col items-center gap-2 rounded-full border border-white/25 bg-black/90 px-5 py-3 text-center text-white">
     <p className="text-sm font-medium">
       {stage === 5
         ? "Scroll to continue to the library"
@@ -338,13 +402,8 @@ export default function LandingPage() {
   aria-label="Browse conversations"
   className="flex justify-center px-6 py-16 lg:py-24"
 >
-  <Link
-    href="/home/conversations"
-    className="inline-flex min-h-12 items-center gap-6 rounded-md bg-primary px-6 py-3 text-sm text-primary-foreground hover:bg-primary/90"
-  >
-    Browse conversations
-    <ArrowRight size={17} aria-hidden="true" />
-  </Link>
+<Link href="/home/conversations" className="mt-9 inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-md text-primary-foreground hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground">Browse conversations<ArrowUpRight size={17} aria-hidden="true" /></Link>
+
 </section>
     </main>
     <footer className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-6 border-t border-border px-6 py-8 lg:px-12"><Link href="/" className="text-xl font-medium tracking-tight">synomilo</Link><nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-3 text-xs text-muted-foreground">{([["Guides", "/guides"], ["Pricing", "/pricing"], ["About", "/about"], ["Privacy", "/privacy"], ["Terms", "/ToS"], ["Refund policy", "/refund"]] as const).map(([label, href]) => <Link key={href} href={href} className="hover:text-foreground hover:underline">{label}</Link>)}</nav></footer>
