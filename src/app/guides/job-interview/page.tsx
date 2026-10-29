@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button";
+import GuideArticle from "@/components/guides/GuideArticle";
+import styles from "@/components/guides/guide-article.module.css";
 import {
   ArrowLeft,
   ArrowRight,
@@ -7,9 +8,7 @@ import {
   Lightbulb,
 } from "lucide-react";
 import Link from "next/link";
-import { Geist } from "next/font/google";
 
-const geist = Geist({ subsets: ["latin"] });
 
 /* eslint react/no-unescaped-entities: 0 */
 
@@ -232,75 +231,37 @@ const relatedGuides: relatedGuides[] = [
 
 export default function PostPage() {
   return (
-    <div className={`flex flex-col lg:flex-row ${geist.className}`}>
-      <aside className="self-start p-5 pt-10 lg:sticky lg:top-8 lg:w-80">
-        <Link
-          href="/guides"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
-        >
-          <ArrowLeft size={16} />
-          Back to all guides
-        </Link>
-
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
-            Related Conversation Guides
-          </h2>
-
-          <div className="flex flex-col gap-3">
-            {relatedGuides.map((guide) => (
-              <Link
-                key={guide.href}
-                href={guide.href}
-                className="group rounded-md border bg-card p-4 transition hover:shadow-sm"
-              >
-                <strong className="font-semibold group-hover:underline">
-                  {guide.title}
-                </strong>
-
-                <span className="mt-3 flex items-center gap-1 text-sm text-muted-foreground">
-                  Read guide
-                  <ArrowRight size={14} />
-                </span>
-              </Link>
-            ))}
-          </div>
-        </section>
-      </aside>
-
-      <article
-        className={`m-2 space-y-16 rounded-lg bg-background p-5 lg:w-2/3 h-screen overflow-y-auto ${geist.className}`}
-      >
-        <header className="space-y-5">
-          <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
-            <Link href="/guides" className="hover:text-foreground hover:underline">Guides</Link>
-            <span className="px-2">/</span>
+    <GuideArticle relatedGuides={relatedGuides}>
+        <header >
+          <nav aria-label="Breadcrumb" className={styles.breadcrumb}>
+            <Link href="/guides" >Guides</Link>
+            <span className={styles.separator}>/</span>
             <span>Job Interview ESL Lesson</span>
           </nav>
 
-          <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-            <span className="rounded-full border bg-card px-3 py-1">
+          <div className={styles.meta}>
+            <span className={styles.tag}>
               B2
             </span>
 
-            <span className="rounded-full border bg-card px-3 py-1">
+            <span className={styles.tag}>
               Business English
             </span>
 
-            <span className="rounded-full border bg-card px-3 py-1">
+            <span className={styles.tag}>
               Speaking Lesson
             </span>
 
-            <span className="rounded-full border bg-card px-3 py-1">
+            <span className={styles.tag}>
               Job Interviews
             </span>
           </div>
 
-          <h1 className="border-b pb-3 text-4xl leading-tight">
+          <h1 >
             Job Interview English: B2 ESL Lesson
           </h1>
 
-          <p className="max-w-3xl text-lg text-muted-foreground">
+          <p className={styles.muted}>
             A ready-to-use B2 Business English lesson about job interviews,
             including vocabulary, comprehension questions, discussion prompts,
             a mock interview role-play, and homework. Students practise giving
@@ -309,8 +270,8 @@ export default function PostPage() {
         </header>
 
         {/* Lesson introduction */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             About This Job Interview Lesson
           </h2>
 
@@ -335,45 +296,45 @@ export default function PostPage() {
             examples instead of relying on short, memorized responses.
           </p>
 
-          <div className="rounded-md border bg-card p-5">
-            <strong className="block text-lg">Lesson focus</strong>
+          <div className={styles.card}>
+            <strong className={styles.largeLabel}>Lesson focus</strong>
 
-            <ul className="mt-3 space-y-2">
-              <li className="flex items-start gap-2">
+            <ul className={styles.checkList + " " + styles.spaced}>
+              <li className={styles.checkItem}>
                 <Check
-                  className="mt-0.5 flex-shrink-0 text-green-500"
+                  className={styles.icon}
                   size={18}
                 />
                 Answering common English job interview questions
               </li>
 
-              <li className="flex items-start gap-2">
+              <li className={styles.checkItem}>
                 <Check
-                  className="mt-0.5 flex-shrink-0 text-green-500"
+                  className={styles.icon}
                   size={18}
                 />
                 Describing professional experience and responsibilities
               </li>
 
-              <li className="flex items-start gap-2">
+              <li className={styles.checkItem}>
                 <Check
-                  className="mt-0.5 flex-shrink-0 text-green-500"
+                  className={styles.icon}
                   size={18}
                 />
                 Discussing strengths and weaknesses professionally
               </li>
 
-              <li className="flex items-start gap-2">
+              <li className={styles.checkItem}>
                 <Check
-                  className="mt-0.5 flex-shrink-0 text-green-500"
+                  className={styles.icon}
                   size={18}
                 />
                 Using workplace idioms and natural business expressions
               </li>
 
-              <li className="flex items-start gap-2">
+              <li className={styles.checkItem}>
                 <Check
-                  className="mt-0.5 flex-shrink-0 text-green-500"
+                  className={styles.icon}
                   size={18}
                 />
                 Supporting answers with clear reasons and examples
@@ -383,8 +344,8 @@ export default function PostPage() {
         </section>
 
         {/* Before reading */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Before the Conversation
           </h2>
 
@@ -394,33 +355,33 @@ export default function PostPage() {
             interview would make them feel most nervous?
           </p>
 
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-md border bg-card p-4">
-              <strong className="border-b border-pink-500">
+          <div className={styles.gridThree}>
+            <div className={styles.card}>
+              <strong className={styles.option}>
                 Option A
               </strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Introducing yourself and discussing your experience
               </p>
             </div>
 
-            <div className="rounded-md border bg-card p-4">
-              <strong className="border-b border-blue-500">
+            <div className={styles.card}>
+              <strong className={styles.option}>
                 Option B
               </strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Talking about your weaknesses and previous mistakes
               </p>
             </div>
 
-            <div className="rounded-md border bg-card p-4">
-              <strong className="border-b border-yellow-500">
+            <div className={styles.card}>
+              <strong className={styles.option}>
                 Option C
               </strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Asking the interviewer questions at the end
               </p>
             </div>
@@ -431,7 +392,7 @@ export default function PostPage() {
             prompts include:
           </p>
 
-          <ul className="list-disc space-y-2 pl-6">
+          <ul >
             <li>
               Have you ever attended a job interview in English?
             </li>
@@ -452,13 +413,13 @@ export default function PostPage() {
         </section>
 
         {/* Vocabulary */}
-        <section className="space-y-5">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Key Job Interview Vocabulary
           </h2>
 
-          <div className="overflow-hidden rounded-md border">
-            <div className="grid grid-cols-[minmax(120px,0.8fr)_2fr] bg-muted px-4 py-3 font-semibold">
+          <div className={styles.vocabulary}>
+            <div className={styles.vocabularyHeader}>
               <span>Word or phrase</span>
               <span>Meaning</span>
             </div>
@@ -466,11 +427,11 @@ export default function PostPage() {
             {keyVocabulary.map((item) => (
               <div
                 key={item.term}
-                className="grid grid-cols-[minmax(120px,0.8fr)_2fr] gap-4 border-t px-4 py-3"
+                className={styles.vocabularyRow}
               >
                 <strong>{item.term}</strong>
 
-                <span className="text-muted-foreground">
+                <span className={styles.muted}>
                   {item.meaning}
                 </span>
               </div>
@@ -479,8 +440,8 @@ export default function PostPage() {
         </section>
 
         {/* Expressions */}
-        <section className="space-y-5">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Useful Expressions From the Conversation
           </h2>
 
@@ -489,15 +450,15 @@ export default function PostPage() {
             English and give more detailed, confident interview answers.
           </p>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className={styles.gridTwo}>
             {usefulExpressions.map((item) => (
               <div
                 key={item.expression}
-                className="rounded-md border bg-card p-4"
+                className={styles.card}
               >
                 <strong>{item.expression}</strong>
 
-                <p className="mt-2 text-sm text-muted-foreground">
+                <p className={styles.smallText + " " + styles.spaced}>
                   {item.meaning}
                 </p>
               </div>
@@ -506,14 +467,14 @@ export default function PostPage() {
         </section>
 
         {/* Conversation preview */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">Job Interview Conversation Preview</h2>
+        <section >
+          <h2 >Job Interview Conversation Preview</h2>
           <p>
             In the full conversation, Miranda interviews Daniel for a front-end
             developer role. This extract shows how Daniel supports his answers
             with reasons and examples.
           </p>
-          <div className="space-y-4 rounded-md border bg-card p-5">
+          <div className={styles.card}>
             <p><strong>Miranda:</strong> Can you tell me a bit about yourself?</p>
             <p><strong>Daniel:</strong> I'm a front-end developer with about five years of experience. In my last role, I led a small team and focused on improving performance and user experience.</p>
             <p><strong>Miranda:</strong> What would you say your strengths are?</p>
@@ -522,8 +483,8 @@ export default function PostPage() {
         </section>
 
         {/* Comprehension */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Job Interview Comprehension Questions
           </h2>
 
@@ -532,7 +493,7 @@ export default function PostPage() {
             listening to the conversation.
           </p>
 
-          <ol className="list-decimal space-y-3 pl-6">
+          <ol >
             {comprehensionQuestions.map((question) => (
               <li key={question}>{question}</li>
             ))}
@@ -540,8 +501,8 @@ export default function PostPage() {
         </section>
 
         {/* Discussion */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Job Interview Discussion Questions
           </h2>
 
@@ -550,7 +511,7 @@ export default function PostPage() {
             discussion about interviews, careers, and recruitment.
           </p>
 
-          <ol className="list-decimal space-y-3 pl-6">
+          <ol >
             {discussionQuestions.map((question) => (
               <li key={question}>{question}</li>
             ))}
@@ -558,32 +519,32 @@ export default function PostPage() {
         </section>
 
         {/* CTA to app */}
-        <section className="rounded-md bg-accent p-8 text-center">
-          <BookOpen className="mx-auto mb-4" size={30} />
+        <section className={styles.conversationCta}>
+          <BookOpen  size={30} />
 
-          <h2 className="text-2xl font-semibold">
+          <h2 >
             Open in Synomilo
           </h2>
 
-          <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+          <p className={styles.muted + " " + styles.spaced}>
             Read the full dialogue, highlight useful vocabulary, and save
             expressions to a personal dictionary. Reading tools are free;
             student audio requires a Plus account.
           </p>
 
           <Link href="/home/conversations/69a3093fb5ff6367494c"
-          target="blank">
-            <Button className="mt-6 cursor-pointer bg-pink-500 text-background hover:bg-pink-500/85">
+          target="_blank" rel="noopener noreferrer">
+            <span className={styles.button}>
               Open the conversation
-              <ArrowRight className="ml-2" size={17} />
-            </Button>
+              <ArrowRight className={styles.iconInline} size={17} />
+            </span>
           </Link>
         </section>
 
 
         {/* Language task */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Language Focus: Building Strong Interview Answers
           </h2>
 
@@ -593,20 +554,20 @@ export default function PostPage() {
             a reason, and a relevant example.
           </p>
 
-          <div className="rounded-md border bg-card p-5">
-            <strong className="block">
+          <div className={styles.card}>
+            <strong className={styles.block}>
               Basic answer
             </strong>
 
-            <p className="mt-2 text-muted-foreground">
+            <p className={styles.muted + " " + styles.spaced}>
               "I'm organized."
             </p>
 
-            <strong className="mt-5 block">
+            <strong className={styles.block + " " + styles.spaced}>
               Developed answer
             </strong>
 
-            <p className="mt-2 text-muted-foreground">
+            <p className={styles.muted + " " + styles.spaced}>
               "I'd say I'm organized because I plan my workload carefully
               and decide which tasks are most urgent. In my previous role,
               this helped my team meet tight deadlines without lowering
@@ -619,22 +580,22 @@ export default function PostPage() {
             following questions:
           </p>
 
-          <ol className="list-decimal space-y-3 pl-6">
+          <ol >
             {interviewQuestions.map((question) => (
               <li key={question}>{question}</li>
             ))}
           </ol>
 
-          <div className="flex items-start gap-3 rounded-md border bg-card p-4">
+          <div className={styles.callout}>
             <Lightbulb
-              className="mt-0.5 flex-shrink-0 text-yellow-500"
+              className={styles.icon}
               size={20}
             />
 
             <div>
               <strong>Useful answer structure</strong>
 
-              <p className="mt-2 text-muted-foreground">
+              <p className={styles.muted + " " + styles.spaced}>
                 Statement · Reason · Example · Connection to the role
               </p>
             </div>
@@ -642,8 +603,8 @@ export default function PostPage() {
         </section>
 
         {/* Speaking activity */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Speaking Activity: Conduct a Mock Interview
           </h2>
 
@@ -653,13 +614,13 @@ export default function PostPage() {
             a job and prepare their roles.
           </p>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-md border bg-card p-5">
-              <strong className="text-lg">
+          <div className={styles.gridTwo}>
+            <div className={styles.card}>
+              <strong className={styles.largeLabel}>
                 Student A: Interviewer
               </strong>
 
-              <ul className="mt-3 list-disc space-y-2 pl-5 text-muted-foreground">
+              <ul className={styles.spaced}>
                 <li>Introduce yourself and the company.</li>
                 <li>Ask at least five interview questions.</li>
                 <li>Ask two unexpected follow-up questions.</li>
@@ -668,12 +629,12 @@ export default function PostPage() {
               </ul>
             </div>
 
-            <div className="rounded-md border bg-card p-5">
-              <strong className="text-lg">
+            <div className={styles.card}>
+              <strong className={styles.largeLabel}>
                 Student B: Candidate
               </strong>
 
-              <ul className="mt-3 list-disc space-y-2 pl-5 text-muted-foreground">
+              <ul className={styles.spaced}>
                 <li>Introduce your professional background.</li>
                 <li>Give developed answers with examples.</li>
                 <li>Use at least three expressions from the lesson.</li>
@@ -690,43 +651,43 @@ export default function PostPage() {
         </section>
 
         {/* Common mistakes */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Common Job Interview Mistakes
           </h2>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-md border bg-card p-4">
+          <div className={styles.gridTwo}>
+            <div className={styles.card}>
               <strong>Giving very short answers</strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Candidates should explain their answer and provide a
                 relevant example.
               </p>
             </div>
 
-            <div className="rounded-md border bg-card p-4">
+            <div className={styles.card}>
               <strong>Speaking negatively about a previous employer</strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Keep the answer professional and focus on growth or new
                 opportunities.
               </p>
             </div>
 
-            <div className="rounded-md border bg-card p-4">
+            <div className={styles.card}>
               <strong>Claiming to have no weaknesses</strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Choose a genuine weakness and explain the steps being
                 taken to improve it.
               </p>
             </div>
 
-            <div className="rounded-md border bg-card p-4">
+            <div className={styles.card}>
               <strong>Having no questions for the interviewer</strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Prepare thoughtful questions about the role, team, or
                 company expectations.
               </p>
@@ -735,8 +696,8 @@ export default function PostPage() {
         </section>
 
         {/* Homework */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Homework Idea
           </h2>
 
@@ -746,7 +707,7 @@ export default function PostPage() {
             answers to the following questions:
           </p>
 
-          <ul className="list-disc space-y-2 pl-6">
+          <ul >
             <li>Why are you interested in this position?</li>
             <li>Which of your skills match the job description?</li>
             <li>What relevant experience can you describe?</li>
@@ -764,14 +725,14 @@ export default function PostPage() {
         </section>
 
         {/* Teaching tip */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Teaching Tip
           </h2>
 
-          <div className="flex items-start gap-3 rounded-md bg-muted p-5">
+          <div className={styles.callout}>
             <Lightbulb
-              className="mt-0.5 flex-shrink-0 text-yellow-500"
+              className={styles.icon}
               size={22}
             />
 
@@ -784,13 +745,12 @@ export default function PostPage() {
             </p>
           </div>
         </section>
-        <footer className="border-t pt-8">
-          <Link href="/guides" className="inline-flex items-center gap-2 font-medium text-pink-500 hover:underline">
+        <footer >
+          <Link href="/guides" >
             <ArrowLeft size={16} />
             Back to all Synomilo articles
           </Link>
         </footer>
-      </article>
-    </div>
+          </GuideArticle>
   );
-};
+}

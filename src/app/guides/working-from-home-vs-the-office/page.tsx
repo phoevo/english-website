@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button";
+import GuideArticle from "@/components/guides/GuideArticle";
+import styles from "@/components/guides/guide-article.module.css";
 import {
   ArrowLeft,
   ArrowRight,
@@ -7,9 +8,7 @@ import {
   Lightbulb,
 } from "lucide-react";
 import Link from "next/link";
-import { Geist } from "next/font/google";
 
-const geist = Geist({ subsets: ["latin"] });
 
 
 /* eslint react/no-unescaped-entities: 0 */
@@ -129,65 +128,29 @@ const relatedGuides: RelatedLesson[] = [
 
 export default function PostPage() {
   return (
-    <div className={`flex flex-col lg:flex-row ${geist.className}`}>
-    <aside className="self-start p-5 pt-10 lg:sticky lg:top-8 lg:w-80">
-        <Link
-          href="/guides"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
-        >
-          <ArrowLeft size={16} />
-          Back to all guides
-        </Link>
-
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
-            Related Conversation Guides
-          </h2>
-
-          <div className="flex flex-col gap-3">
-            {relatedGuides.map((guide) => (
-              <Link
-                key={guide.href}
-                href={guide.href}
-                className="group rounded-md border bg-card p-4 transition hover:shadow-sm"
-              >
-                <strong className="font-semibold group-hover:underline">
-                  {guide.title}
-                </strong>
-
-                <span className="mt-3 flex items-center gap-1 text-sm text-muted-foreground">
-                  Read guide
-                  <ArrowRight size={14} />
-                </span>
-              </Link>
-            ))}
-          </div>
-        </section>
-      </aside>
-
-    <article className={`m-2 space-y-16 rounded-lg bg-background p-5 lg:w-2/3 h-screen overflow-y-auto ${geist.className}`}>
-      <header className="space-y-5">
-        <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
-          <Link href="/guides" className="hover:text-foreground hover:underline">Guides</Link>
-          <span className="px-2">/</span>
+    <GuideArticle relatedGuides={relatedGuides}>
+      <header >
+        <nav aria-label="Breadcrumb" className={styles.breadcrumb}>
+          <Link href="/guides" >Guides</Link>
+          <span className={styles.separator}>/</span>
           <span>Remote Work ESL Lesson</span>
         </nav>
 
-        <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-          <span className="rounded-full border bg-card px-3 py-1">B2</span>
-          <span className="rounded-full border bg-card px-3 py-1">
+        <div className={styles.meta}>
+          <span className={styles.tag}>B2</span>
+          <span className={styles.tag}>
             Business English
           </span>
-          <span className="rounded-full border bg-card px-3 py-1">
+          <span className={styles.tag}>
             Speaking Lesson
           </span>
         </div>
 
-        <h1 className="border-b pb-3 text-4xl leading-tight">
+        <h1 >
           Remote Work vs Office Work: B2 ESL Lesson
         </h1>
 
-        <p className="max-w-3xl text-lg text-muted-foreground">
+        <p className={styles.muted}>
           A ready-to-use B2 Business English lesson about remote and office
           work, including vocabulary, comprehension questions, discussion
           prompts, polite disagreement practice, and homework.
@@ -195,8 +158,8 @@ export default function PostPage() {
       </header>
 
       {/* Lesson introduction */}
-      <section className="space-y-4">
-        <h2 className="border-b pb-2 text-2xl">
+      <section >
+        <h2 >
           About This Remote Work Lesson
         </h2>
 
@@ -214,24 +177,24 @@ export default function PostPage() {
           gradually moves towards a compromise.
         </p>
 
-        <div className="rounded-md border bg-card p-5">
-          <strong className="block text-lg">Lesson focus</strong>
+        <div className={styles.card}>
+          <strong className={styles.largeLabel}>Lesson focus</strong>
 
-          <ul className="mt-3 space-y-2">
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 text-green-500" size={18} />
+          <ul className={styles.checkList + " " + styles.spaced}>
+            <li className={styles.checkItem}>
+              <Check className={styles.icon} size={18} />
               Discussing the advantages and disadvantages of remote work
             </li>
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 text-green-500" size={18} />
+            <li className={styles.checkItem}>
+              <Check className={styles.icon} size={18} />
               Expressing agreement and disagreement politely
             </li>
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 text-green-500" size={18} />
+            <li className={styles.checkItem}>
+              <Check className={styles.icon} size={18} />
               Using workplace idioms and conversational expressions
             </li>
-            <li className="flex items-start gap-2">
-              <Check className="mt-0.5 text-green-500" size={18} />
+            <li className={styles.checkItem}>
+              <Check className={styles.icon} size={18} />
               Supporting opinions with reasons and examples
             </li>
           </ul>
@@ -239,8 +202,8 @@ export default function PostPage() {
       </section>
 
       {/* Before reading */}
-      <section className="space-y-4">
-        <h2 className="border-b pb-2 text-2xl">
+      <section >
+        <h2 >
           Before the Conversation
         </h2>
 
@@ -249,24 +212,24 @@ export default function PostPage() {
           below and explain their answer.
         </p>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-md border bg-card p-4">
-            <strong className="border-b border-pink-500">Option A</strong>
-            <p className="mt-2 text-sm text-muted-foreground">
+        <div className={styles.gridThree}>
+          <div className={styles.card}>
+            <strong className={styles.option}>Option A</strong>
+            <p className={styles.smallText + " " + styles.spaced}>
               Work from home full-time
             </p>
           </div>
 
-          <div className="rounded-md border bg-card p-4">
-            <strong className="border-b border-blue-500">Option B</strong>
-            <p className="mt-2 text-sm text-muted-foreground">
+          <div className={styles.card}>
+            <strong className={styles.option}>Option B</strong>
+            <p className={styles.smallText + " " + styles.spaced}>
               Work in the office full-time
             </p>
           </div>
 
-          <div className="rounded-md border bg-card p-4">
-            <strong className="border-b border-yellow-500">Option C</strong>
-            <p className="mt-2 text-sm text-muted-foreground">
+          <div className={styles.card}>
+            <strong className={styles.option}>Option C</strong>
+            <p className={styles.smallText + " " + styles.spaced}>
               Follow a hybrid schedule
             </p>
           </div>
@@ -277,7 +240,7 @@ export default function PostPage() {
           Useful follow-up prompts include:
         </p>
 
-        <ul className="list-disc space-y-2 pl-6">
+        <ul >
           <li>How long is your ideal commute?</li>
           <li>Do you find it easy to concentrate at home?</li>
           <li>How important is face-to-face communication?</li>
@@ -285,13 +248,13 @@ export default function PostPage() {
       </section>
 
       {/* Vocabulary */}
-      <section className="space-y-5">
-        <h2 className="border-b pb-2 text-2xl">
+      <section >
+        <h2 >
           Key Remote Work Vocabulary
         </h2>
 
-        <div className="overflow-hidden rounded-md border">
-          <div className="grid grid-cols-[minmax(120px,0.8fr)_2fr] bg-muted px-4 py-3 font-semibold">
+        <div className={styles.vocabulary}>
+          <div className={styles.vocabularyHeader}>
             <span>Word or phrase</span>
             <span>Meaning</span>
           </div>
@@ -299,18 +262,18 @@ export default function PostPage() {
           {keyVocabulary.map((item) => (
             <div
               key={item.term}
-              className="grid grid-cols-[minmax(120px,0.8fr)_2fr] gap-4 border-t px-4 py-3"
+              className={styles.vocabularyRow}
             >
               <strong>{item.term}</strong>
-              <span className="text-muted-foreground">{item.meaning}</span>
+              <span className={styles.muted}>{item.meaning}</span>
             </div>
           ))}
         </div>
       </section>
 
       {/* Expressions */}
-      <section className="space-y-5">
-        <h2 className="border-b pb-2 text-2xl">
+      <section >
+        <h2 >
           Useful Expressions From the Conversation
         </h2>
 
@@ -319,11 +282,11 @@ export default function PostPage() {
           disagreement without sounding too direct.
         </p>
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className={styles.gridTwo}>
           {usefulExpressions.map((item) => (
-            <div key={item.expression} className="rounded-md border bg-card p-4">
+            <div key={item.expression} className={styles.card}>
               <strong>{item.expression}</strong>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 {item.meaning}
               </p>
             </div>
@@ -332,28 +295,28 @@ export default function PostPage() {
       </section>
 
       {/* Conversation preview */}
-      <section className="space-y-4">
-        <h2 className="border-b pb-2 text-2xl">Remote Work Conversation Preview</h2>
+      <section >
+        <h2 >Remote Work Conversation Preview</h2>
         <p>
           The full conversation follows two colleagues with different views on
           remote work. One values flexibility and avoiding the commute, while
           the other prefers face-to-face collaboration and office culture.
         </p>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="rounded-md border bg-card p-5">
+        <div className={styles.gridTwo}>
+          <div className={styles.card}>
             <strong>Working from home</strong>
-            <p className="mt-2 text-sm text-muted-foreground">Flexibility, fewer interruptions, no commute, and improved work-life balance.</p>
+            <p className={styles.smallText + " " + styles.spaced}>Flexibility, fewer interruptions, no commute, and improved work-life balance.</p>
           </div>
-          <div className="rounded-md border bg-card p-5">
+          <div className={styles.card}>
             <strong>Working in the office</strong>
-            <p className="mt-2 text-sm text-muted-foreground">Faster communication, easier collaboration, stronger team relationships, and a clearer work routine.</p>
+            <p className={styles.smallText + " " + styles.spaced}>Faster communication, easier collaboration, stronger team relationships, and a clearer work routine.</p>
           </div>
         </div>
       </section>
 
       {/* Comprehension */}
-      <section className="space-y-4">
-        <h2 className="border-b pb-2 text-2xl">
+      <section >
+        <h2 >
           Comprehension Questions
         </h2>
 
@@ -362,7 +325,7 @@ export default function PostPage() {
           the conversation.
         </p>
 
-        <ol className="list-decimal space-y-3 pl-6">
+        <ol >
           {comprehensionQuestions.map((question) => (
             <li key={question}>{question}</li>
           ))}
@@ -370,8 +333,8 @@ export default function PostPage() {
       </section>
 
       {/* Discussion */}
-      <section className="space-y-4">
-        <h2 className="border-b pb-2 text-2xl">
+      <section >
+        <h2 >
           Remote Work Discussion Questions
         </h2>
 
@@ -380,7 +343,7 @@ export default function PostPage() {
           opinion-based discussion.
         </p>
 
-        <ol className="list-decimal space-y-3 pl-6">
+        <ol >
           {discussionQuestions.map((question) => (
             <li key={question}>{question}</li>
           ))}
@@ -389,34 +352,34 @@ export default function PostPage() {
 
 
       {/* CTA to app */}
-      <section className="rounded-md bg-accent p-8 text-center">
-        <BookOpen className="mx-auto mb-4" size={30} />
+      <section className={styles.conversationCta}>
+        <BookOpen  size={30} />
 
-        <h2 className="text-2xl font-semibold">
+        <h2 >
           Open in Synomilo
         </h2>
 
-        <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+        <p className={styles.muted + " " + styles.spaced}>
           Read the full dialogue, highlight useful vocabulary, and save
           expressions to a personal dictionary. Reading tools are free;
           student audio requires a Plus account.
         </p>
 
         <Link href="/home/conversations/6a1c68581f9bbab1c1d9"
-          target="blank">
-          <Button
-            className="mt-6 cursor-pointer bg-pink-500 text-background hover:bg-pink-500/85"
+          target="_blank" rel="noopener noreferrer">
+          <span
+            className={styles.button}
           >
             Open the conversation
-            <ArrowRight className="ml-2" size={17} />
-          </Button>
+            <ArrowRight className={styles.iconInline} size={17} />
+          </span>
         </Link>
       </section>
 
 
       {/* Language task */}
-      <section className="space-y-4">
-        <h2 className="border-b pb-2 text-2xl">
+      <section >
+        <h2 >
           Language Focus: Polite Disagreement
         </h2>
 
@@ -425,22 +388,22 @@ export default function PostPage() {
           "no."
         </p>
 
-        <ul className="list-disc space-y-3 pl-6">
+        <ul >
           <li>Everyone is more productive in the office.</li>
           <li>Remote workers do less work.</li>
           <li>Video calls are as effective as face-to-face meetings.</li>
           <li>Companies should completely remove their offices.</li>
         </ul>
 
-        <div className="flex items-start gap-3 rounded-md border bg-card p-4">
+        <div className={styles.callout}>
           <Lightbulb
-            className="mt-0.5 flex-shrink-0 text-yellow-500"
+            className={styles.icon}
             size={20}
           />
 
           <div>
             <strong>Useful sentence starters</strong>
-            <p className="mt-2 text-muted-foreground">
+            <p className={styles.muted + " " + styles.spaced}>
               "I see your point, but..." · "That may be true in some cases,
               however..." · "I get where you're coming from, although..."
             </p>
@@ -449,15 +412,15 @@ export default function PostPage() {
       </section>
 
       {/* Homework */}
-      <section className="space-y-4">
-        <h2 className="border-b pb-2 text-2xl">Homework Idea</h2>
+      <section >
+        <h2 >Homework Idea</h2>
 
         <p>
           Ask the student to interview someone who has experience with remote or
           hybrid work. They should ask:
         </p>
 
-        <ul className="list-disc space-y-2 pl-6">
+        <ul >
           <li>What do you like most about your working arrangement?</li>
           <li>What is the biggest disadvantage?</li>
           <li>How does it affect your productivity?</li>
@@ -471,12 +434,12 @@ export default function PostPage() {
       </section>
 
       {/* Teaching tip */}
-      <section className="space-y-4">
-        <h2 className="border-b pb-2 text-2xl">Teaching Tip</h2>
+      <section >
+        <h2 >Teaching Tip</h2>
 
-        <div className="flex items-start gap-3 rounded-md bg-muted p-5">
+        <div className={styles.callout}>
           <Lightbulb
-            className="mt-0.5 flex-shrink-0 text-yellow-500"
+            className={styles.icon}
             size={22}
           />
 
@@ -489,14 +452,12 @@ export default function PostPage() {
       </section>
 
 
-      <footer className="border-t pt-8">
-        <Link href="/guides" className="inline-flex items-center gap-2 font-medium text-pink-500 hover:underline">
+      <footer >
+        <Link href="/guides" >
           <ArrowLeft size={16} />
           Back to all Synomilo articles
         </Link>
       </footer>
-    </article>
-    </div>
+        </GuideArticle>
   );
-
 }

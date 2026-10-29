@@ -70,6 +70,7 @@ const items = [
 
 
 
+
 ]
 
 export function AppSidebar() {
@@ -231,26 +232,9 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent >
         </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Classroom</SidebarGroupLabel>
-          <SidebarGroupContent className={`${geist.className}`}>
-            <SidebarMenu>
 
-              <SidebarMenuItem key="Classroom">
-                  <SidebarMenuButton asChild closeOnSelectMobile>
-                    <Link href="/home/assignments" className="cursor-pointer">
-                      <ClipboardCheck />
-                      <span>Assignments</span>
-                      <Badge variant={"outline"} className="items-right">New</Badge>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Early Access</SidebarGroupLabel>
+          <SidebarGroupLabel>Other</SidebarGroupLabel>
           <SidebarGroupContent className={`${geist.className}`}>
             <SidebarMenu>
               <SidebarMenuItem key="Classroom">
@@ -265,66 +249,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {!loading && !isTeacher && (
-  <SidebarFooter>
-    <SidebarGroupLabel>Other</SidebarGroupLabel>
-
-    <div className="flex-col hidden md:flex lg:flex items-start md:gap-2 lg:gap-2">
-      <div className="flex flex-col items-center sm:items-start gap-2 md:gap-2 text-sm md:text-sm">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <DailyTasks>
-              <Button
-                variant="secondary"
-                aria-label="Daily Tasks"
-                className="flex items-center justify-center cursor-pointer w-full shadow-sm md:rounded-full md:h-6 md:p-2 lg:rounded-sm lg:p-2 lg:h-auto lg:w-auto group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:rounded-md"
-              >
-                <Sword className="rotate-45" />
-                <span className="group-data-[collapsible=icon]:hidden">
-                  Daily Tasks: {taskCount}
-                </span>
-              </Button>
-            </DailyTasks>
-          </TooltipTrigger>
-
-          <TooltipContent
-            side="right"
-            align="center"
-            className={geist.className}
-          >
-            Daily Tasks
-          </TooltipContent>
-        </Tooltip>
-
-        {isSubscribed && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Challenges>
-                <Button
-                  aria-label="Challenges"
-                  className="flex items-center justify-center cursor-pointer w-full md:rounded-full md:h-6 md:py-1 lg:rounded-sm lg:p-2 lg:h-auto lg:w-auto group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:rounded-md"
-                >
-                  <Swords />
-                  <span className="group-data-[collapsible=icon]:hidden">
-                    Challenges: {challengeCount.length}
-                  </span>
-                </Button>
-              </Challenges>
-            </TooltipTrigger>
-
-            <TooltipContent
-              side="right"
-              align="center"
-              className={geist.className}
-            >
-              Challenges
-            </TooltipContent>
-          </Tooltip>
-        )}
-      </div>
-    </div>
-  </SidebarFooter>
-)}
       </SidebarContent>
     </Sidebar>
   )

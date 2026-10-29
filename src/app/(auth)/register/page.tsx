@@ -12,13 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Button } from '@/components/ui/button'
-import {
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/PasswordInput'
 import { account } from '@/data/appwrite'
@@ -30,6 +24,9 @@ import { useRouter } from 'next/navigation'
 import { useUserStore } from '@/data/useUserStore'
 import { sendWelcomeEmail } from '@/services/emailService'
 import Image from 'next/image'
+import AuthPanel from '@/components/auth/AuthPanel'
+import AuthLoading from '@/components/auth/AuthLoading'
+import styles from '@/components/auth/auth.module.css'
 
 
 const formSchema = z
@@ -66,10 +63,14 @@ export default function Register() {
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false);
+  const pending = isLoading;
 
-  const handleGoogleSignup = () => {
+  const handleGoogleSignup = async () => {
+    if (pending) return;
+
+    setError(null);
     try {
-      account.createOAuth2Token(
+      await account.createOAuth2Token(
         OAuthProvider.Google,
         `${window.location.origin}/oauth-callback`,
         `${window.location.origin}/register`
@@ -77,11 +78,13 @@ export default function Register() {
     } catch (e: unknown) {
       console.error('Google signup error:', e);
       setError('Failed to authenticate with Google.');
+
     }
 
   };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  if (pending) return;
   setIsLoading(true);
   setError(null);
 
@@ -138,133 +141,31 @@ export default function Register() {
 
 
 
-  return (
-    <div className="flex flex-col w-full lg:full gap-10">
-      <CardHeader>
-        <CardTitle className="text-2xl">Sign up</CardTitle>
-        <CardDescription>
-          Sign up with Google or create a new account by filling out the form below.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-
-        <Button onClick={handleGoogleSignup} variant="outline" type="button" className="flex w-full cursor-pointer" disabled={isLoading}>
-          <Image alt="Google logo" src='google-logo.svg' width={20} height={20}/>
-          Continue with Google
-        </Button>
-
-        <div className='flex justify-center my-5 text-muted-foreground'>
-          <p>or</p>
-        </div>
-
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="grid gap-4">
-
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem className="grid gap-2">
-                    <FormLabel htmlFor="username">Username</FormLabel>
-                    <FormControl>
-                      <Input id="username" placeholder="Username" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className="grid gap-2">
-                    <FormLabel htmlFor="email">Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="email"
-                        placeholder="user@mail.com"
-                        type="email"
-                        autoComplete="email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem className="grid gap-2">
-                    <FormLabel htmlFor="password">Password</FormLabel>
-                    <FormControl>
-                      <PasswordInput
-                        id="password"
-                        placeholder="*********"
-                        autoComplete="new-password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem className="grid gap-2">
-                    <FormLabel htmlFor="confirmPassword">
-                      Confirm Password
-                    </FormLabel>
-                    <FormControl>
-                      <PasswordInput
-                        id="confirmPassword"
-                        placeholder="*********"
-                        autoComplete="new-password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-
-              <div className="flex flex-row items-center justify-center my-2 space-x-3">
-                <FormLabel className="flex text-sm font-normal">
-                  By signing up, you agree to the
-                  <Link href="/ToS" className="underline">Terms of Service</Link>
-                  and
-                  <Link href="/privacy" className="underline">Privacy Policy</Link>
-                </FormLabel>
-              </div>
-
-              <div className='flex flex-col gap-2 items-center justify-center'>
-              <Button type="submit" className="w-full cursor-pointer" disabled={isLoading}>
-                {isLoading ? 'Signing Up...' : 'Sign Up'}
-              </Button>
-
-
-              </div>
-            </div>
-          </form>
-        </Form>
-
-        <div className="mt-5 text-center text-sm">
-          Already have an account?{' '}
-          <Link href="/login" className="underline">
-            Login
-          </Link>
-        </div>
-      </CardContent>
-    </div>
-  )
+  return <AuthPanel title="Create an account." description="Sign up with Google or use your email." footer={<>Already have an account? <Link href="/login">Log in</Link></>}>
+    {error && <p role="alert" className={styles.error}>{error}</p>}
+    <button type="button" onClick={handleGoogleSignup} disabled={pending} className={styles.googleButton}>
+      <Image src="/google-logo.svg" alt="" width={18} height={18} />Continue with Google
+    </button>
+    <div className={styles.divider}>or use email</div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} aria-busy={pending} className={styles.form}>
+        <fieldset disabled={pending} className={styles.fields}>
+          <FormField control={form.control} name="username" render={({ field }) => <FormItem className={styles.field}>
+            <FormLabel>Username</FormLabel><FormControl><Input placeholder="Your username" autoComplete="username" {...field} /></FormControl><FormMessage />
+          </FormItem>} />
+          <FormField control={form.control} name="email" render={({ field }) => <FormItem className={styles.field}>
+            <FormLabel>Email</FormLabel><FormControl><Input type="email" placeholder="you@example.com" autoComplete="email" {...field} /></FormControl><FormMessage />
+          </FormItem>} />
+          <FormField control={form.control} name="password" render={({ field }) => <FormItem className={styles.field}>
+            <FormLabel>Password</FormLabel><FormControl><PasswordInput placeholder="Create a password" autoComplete="new-password" {...field} /></FormControl><FormMessage />
+          </FormItem>} />
+          <FormField control={form.control} name="confirmPassword" render={({ field }) => <FormItem className={styles.field}>
+            <FormLabel>Confirm password</FormLabel><FormControl><PasswordInput placeholder="Repeat your password" autoComplete="new-password" {...field} /></FormControl><FormMessage />
+          </FormItem>} />
+          <p className={styles.terms}>By signing up, you agree to the <Link href="/ToS">Terms of Service</Link> and <Link href="/privacy">Privacy Policy</Link>.</p>
+          <button type="submit" disabled={pending} aria-label={isLoading ? "loading" : undefined} aria-busy={isLoading} className={styles.button}>{isLoading ? <AuthLoading /> : "Create account"}</button>
+        </fieldset>
+      </form>
+    </Form>
+  </AuthPanel>;
 }

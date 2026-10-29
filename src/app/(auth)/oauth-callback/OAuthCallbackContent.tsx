@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { account } from '@/data/appwrite'
 import { ensureUserDocument } from '@/data/getData'
-import { LoaderCircle } from 'lucide-react'
+import AuthLoading from "@/components/auth/AuthLoading"
 import { sendWelcomeEmail } from '@/services/emailService'
 
 export default function OAuthCallback() {
@@ -73,8 +73,7 @@ try {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <p>Signing in...</p>
-      <LoaderCircle className="animate-spin" size={25}/>
+      <AuthLoading />
 
     </div>
   )

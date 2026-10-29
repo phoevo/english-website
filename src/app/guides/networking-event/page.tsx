@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button";
+import GuideArticle from "@/components/guides/GuideArticle";
+import styles from "@/components/guides/guide-article.module.css";
 import {
   ArrowLeft,
   ArrowRight,
@@ -7,9 +8,7 @@ import {
   Lightbulb,
 } from "lucide-react";
 import Link from "next/link";
-import { Geist } from "next/font/google";
 
-const geist = Geist({ subsets: ["latin"] });
 
 /* eslint react/no-unescaped-entities: 0 */
 
@@ -180,49 +179,13 @@ const relatedGuides: RelatedGuide[] = [
 
 export default function PostPage() {
   return (
-    <div className={`flex flex-col lg:flex-row ${geist.className}`}>
-      <aside className="self-start p-5 pt-10 lg:sticky lg:top-8 lg:w-80">
-        <Link
-          href="/guides"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
-        >
-          <ArrowLeft size={16} />
-          Back to all guides
-        </Link>
-
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
-            Related Conversation Guides
-          </h2>
-
-          <div className="flex flex-col gap-3">
-            {relatedGuides.map((guide) => (
-              <Link
-                key={guide.href}
-                href={guide.href}
-                className="group rounded-md border bg-card p-4 transition hover:shadow-sm"
-              >
-                <strong className="font-semibold group-hover:underline">
-                  {guide.title}
-                </strong>
-
-                <span className="mt-3 flex items-center gap-1 text-sm text-muted-foreground">
-                  Read guide
-                  <ArrowRight size={14} />
-                </span>
-              </Link>
-            ))}
-          </div>
-        </section>
-      </aside>
-
-      <article className="m-2 space-y-16 rounded-lg bg-background p-5 lg:w-2/3 h-screen overflow-y-auto">
-        <header className="space-y-5">
+    <GuideArticle relatedGuides={relatedGuides}>
+        <header >
           <nav
             aria-label="Breadcrumb"
-            className="flex items-center gap-2 text-sm text-muted-foreground"
+            className={styles.breadcrumb}
           >
-            <Link href="/guides" className="hover:text-foreground hover:underline">
+            <Link href="/guides" >
               Guides
             </Link>
 
@@ -231,27 +194,27 @@ export default function PostPage() {
             <span>Networking Event</span>
           </nav>
 
-          <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-            <span className="rounded-full border bg-card px-3 py-1">B1</span>
+          <div className={styles.meta}>
+            <span className={styles.tag}>B1</span>
 
-            <span className="rounded-full border bg-card px-3 py-1">
+            <span className={styles.tag}>
               Business English
             </span>
 
-            <span className="rounded-full border bg-card px-3 py-1">
+            <span className={styles.tag}>
               Conversation Guide
             </span>
 
-            <span className="rounded-full border bg-card px-3 py-1">
+            <span className={styles.tag}>
               Networking
             </span>
           </div>
 
-          <h1 className="border-b pb-3 text-4xl leading-tight">
+          <h1 >
             Networking Event: B1 English Conversation Guide
           </h1>
 
-          <p className="max-w-3xl text-lg text-muted-foreground">
+          <p className={styles.muted}>
             A practical B1 English guide for starting conversations at
             networking events. Learn how to introduce yourself, discuss your
             career, ask natural follow-up questions, and leave a professional
@@ -260,8 +223,8 @@ export default function PostPage() {
         </header>
 
         {/* Guide introduction */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             About This Networking Guide
           </h2>
 
@@ -284,45 +247,45 @@ export default function PostPage() {
             can develop into a relaxed and meaningful conversation.
           </p>
 
-          <div className="rounded-md border bg-card p-5">
-            <strong className="block text-lg">What you'll practise</strong>
+          <div className={styles.card}>
+            <strong className={styles.largeLabel}>What you'll practise</strong>
 
-            <ul className="mt-3 space-y-2">
-              <li className="flex items-start gap-2">
+            <ul className={styles.checkList + " " + styles.spaced}>
+              <li className={styles.checkItem}>
                 <Check
-                  className="mt-0.5 flex-shrink-0 text-green-500"
+                  className={styles.icon}
                   size={18}
                 />
                 Introducing yourself naturally at a professional event
               </li>
 
-              <li className="flex items-start gap-2">
+              <li className={styles.checkItem}>
                 <Check
-                  className="mt-0.5 flex-shrink-0 text-green-500"
+                  className={styles.icon}
                   size={18}
                 />
                 Asking someone about their job and career plans
               </li>
 
-              <li className="flex items-start gap-2">
+              <li className={styles.checkItem}>
                 <Check
-                  className="mt-0.5 flex-shrink-0 text-green-500"
+                  className={styles.icon}
                   size={18}
                 />
                 Keeping a conversation going with follow-up questions
               </li>
 
-              <li className="flex items-start gap-2">
+              <li className={styles.checkItem}>
                 <Check
-                  className="mt-0.5 flex-shrink-0 text-green-500"
+                  className={styles.icon}
                   size={18}
                 />
                 Using natural workplace expressions and idioms
               </li>
 
-              <li className="flex items-start gap-2">
+              <li className={styles.checkItem}>
                 <Check
-                  className="mt-0.5 flex-shrink-0 text-green-500"
+                  className={styles.icon}
                   size={18}
                 />
                 Ending a conversation politely
@@ -332,8 +295,8 @@ export default function PostPage() {
         </section>
 
         {/* Before starting */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">Before You Start</h2>
+        <section >
+          <h2 >Before You Start</h2>
 
           <p>
             Ask learners to imagine that they have just arrived at a networking
@@ -341,27 +304,27 @@ export default function PostPage() {
             most comfortable using?
           </p>
 
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-md border bg-card p-4">
-              <strong className="border-b border-pink-500">Option A</strong>
+          <div className={styles.gridThree}>
+            <div className={styles.card}>
+              <strong className={styles.option}>Option A</strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Walk up to someone and introduce yourself directly
               </p>
             </div>
 
-            <div className="rounded-md border bg-card p-4">
-              <strong className="border-b border-blue-500">Option B</strong>
+            <div className={styles.card}>
+              <strong className={styles.option}>Option B</strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Wait for someone else to begin the conversation
               </p>
             </div>
 
-            <div className="rounded-md border bg-card p-4">
-              <strong className="border-b border-yellow-500">Option C</strong>
+            <div className={styles.card}>
+              <strong className={styles.option}>Option C</strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Join a group that is already talking
               </p>
             </div>
@@ -369,23 +332,23 @@ export default function PostPage() {
 
           <p>Use these warm-up questions:</p>
 
-          <ul className="list-disc space-y-2 pl-6">
+          <ul >
             <li>Have you ever attended a networking event?</li>
             <li>Do you enjoy talking to strangers?</li>
             <li>What makes a good professional introduction?</li>
             <li>What would you want someone to remember about you?</li>
           </ul>
 
-          <div className="flex items-start gap-3 rounded-md border bg-card p-4">
+          <div className={styles.callout}>
             <Lightbulb
-              className="mt-0.5 flex-shrink-0 text-yellow-500"
+              className={styles.icon}
               size={20}
             />
 
             <div>
               <strong>Warm-up challenge</strong>
 
-              <p className="mt-2 text-muted-foreground">
+              <p className={styles.muted + " " + styles.spaced}>
                 Ask learners to introduce themselves and explain what they do
                 in no more than 30 seconds.
               </p>
@@ -394,13 +357,13 @@ export default function PostPage() {
         </section>
 
         {/* Vocabulary */}
-        <section className="space-y-5">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Key Networking Vocabulary
           </h2>
 
-          <div className="overflow-hidden rounded-md border">
-            <div className="grid grid-cols-[minmax(120px,0.8fr)_2fr] bg-muted px-4 py-3 font-semibold">
+          <div className={styles.vocabulary}>
+            <div className={styles.vocabularyHeader}>
               <span>Word or phrase</span>
               <span>Meaning</span>
             </div>
@@ -408,11 +371,11 @@ export default function PostPage() {
             {keyVocabulary.map((item) => (
               <div
                 key={item.term}
-                className="grid grid-cols-[minmax(120px,0.8fr)_2fr] gap-4 border-t px-4 py-3"
+                className={styles.vocabularyRow}
               >
                 <strong>{item.term}</strong>
 
-                <span className="text-muted-foreground">
+                <span className={styles.muted}>
                   {item.meaning}
                 </span>
               </div>
@@ -421,8 +384,8 @@ export default function PostPage() {
         </section>
 
         {/* Expressions */}
-        <section className="space-y-5">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Useful Expressions From the Conversation
           </h2>
 
@@ -432,15 +395,15 @@ export default function PostPage() {
             experiences.
           </p>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className={styles.gridTwo}>
             {usefulExpressions.map((item) => (
               <div
                 key={item.expression}
-                className="rounded-md border bg-card p-4"
+                className={styles.card}
               >
                 <strong>{item.expression}</strong>
 
-                <p className="mt-2 text-sm text-muted-foreground">
+                <p className={styles.smallText + " " + styles.spaced}>
                   {item.meaning}
                 </p>
               </div>
@@ -449,8 +412,8 @@ export default function PostPage() {
         </section>
 
         {/* Conversation preview */}
-        <section className="space-y-5">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Networking Conversation Preview
           </h2>
 
@@ -459,22 +422,22 @@ export default function PostPage() {
             standing alone at the event.
           </p>
 
-          <div className="space-y-4 rounded-md border bg-card p-5">
+          <div className={styles.card}>
             <div>
               <strong>Anna:</strong>
-              <p className="mt-1 text-muted-foreground">
+              <p className={styles.muted + " " + styles.spaced}>
                 Excuse me, hello.
               </p>
             </div>
 
             <div>
               <strong>David:</strong>
-              <p className="mt-1 text-muted-foreground">Oh, hey.</p>
+              <p className={styles.muted + " " + styles.spaced}>Oh, hey.</p>
             </div>
 
             <div>
               <strong>Anna:</strong>
-              <p className="mt-1 text-muted-foreground">
+              <p className={styles.muted + " " + styles.spaced}>
                 Hi, my name is Anna. I promised myself I would talk to people
                 here. Do you mind if I join you for a moment?
               </p>
@@ -482,7 +445,7 @@ export default function PostPage() {
 
             <div>
               <strong>David:</strong>
-              <p className="mt-1 text-muted-foreground">
+              <p className={styles.muted + " " + styles.spaced}>
                 No, not at all. Please, have a seat. I promised myself the same
                 thing. I just couldn't find it within me to actually do it.
               </p>
@@ -490,14 +453,14 @@ export default function PostPage() {
 
             <div>
               <strong>Anna:</strong>
-              <p className="mt-1 text-muted-foreground">
+              <p className={styles.muted + " " + styles.spaced}>
                 Nice to meet you. So, what brings you to the event? What do you
                 do?
               </p>
             </div>
           </div>
 
-          <p className="text-sm text-muted-foreground">
+          <p className={styles.smallText + " " + styles.spaced}>
             The full conversation continues with Anna and David discussing
             their current jobs, career goals, and experiences working for
             different types of companies.
@@ -505,8 +468,8 @@ export default function PostPage() {
         </section>
 
         {/* Comprehension */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Networking Conversation Comprehension Questions
           </h2>
 
@@ -515,7 +478,7 @@ export default function PostPage() {
             to the complete conversation.
           </p>
 
-          <ol className="list-decimal space-y-3 pl-6">
+          <ol >
             {comprehensionQuestions.map((question) => (
               <li key={question}>{question}</li>
             ))}
@@ -523,8 +486,8 @@ export default function PostPage() {
         </section>
 
         {/* Discussion */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Networking Discussion Questions
           </h2>
 
@@ -533,7 +496,7 @@ export default function PostPage() {
             about professional relationships and career development.
           </p>
 
-          <ol className="list-decimal space-y-3 pl-6">
+          <ol >
             {discussionQuestions.map((question) => (
               <li key={question}>{question}</li>
             ))}
@@ -541,14 +504,14 @@ export default function PostPage() {
         </section>
 
         {/* CTA */}
-        <section className="rounded-md bg-accent p-8 text-center">
-          <BookOpen className="mx-auto mb-4" size={30} />
+        <section className={styles.conversationCta}>
+          <BookOpen  size={30} />
 
-          <h2 className="text-2xl font-semibold">
+          <h2 >
             Open in Synomilo
           </h2>
 
-          <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+          <p className={styles.muted + " " + styles.spaced}>
             Open the complete conversation in Synomilo to read the full
             dialogue, explore highlighted expressions, save useful vocabulary,
             and practise professional English in context. Student audio
@@ -556,17 +519,17 @@ export default function PostPage() {
           </p>
 
           <Link href="/home/conversations/68ce638012a4e95d0cfe"
-          target="blank">
-            <Button className="mt-6 cursor-pointer bg-pink-500 text-background hover:bg-pink-500/85">
+          target="_blank" rel="noopener noreferrer">
+            <span className={styles.button}>
               Open the conversation
-              <ArrowRight className="ml-2" size={17} />
-            </Button>
+              <ArrowRight className={styles.iconInline} size={17} />
+            </span>
           </Link>
         </section>
 
         {/* Language focus */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Language Focus: Starting a Networking Conversation
           </h2>
 
@@ -575,19 +538,19 @@ export default function PostPage() {
             introduction followed by an open question.
           </p>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-md border bg-card p-5">
-              <strong className="block">Less effective</strong>
+          <div className={styles.gridTwo}>
+            <div className={styles.card}>
+              <strong className={styles.block}>Less effective</strong>
 
-              <p className="mt-3 text-muted-foreground">
+              <p className={styles.muted + " " + styles.spaced}>
                 "Hi. What do you do?"
               </p>
             </div>
 
-            <div className="rounded-md border bg-card p-5">
-              <strong className="block">More natural</strong>
+            <div className={styles.card}>
+              <strong className={styles.block}>More natural</strong>
 
-              <p className="mt-3 text-muted-foreground">
+              <p className={styles.muted + " " + styles.spaced}>
                 "Hi, I'm Anna. Do you mind if I join you? What brings you to
                 the event?"
               </p>
@@ -600,16 +563,16 @@ export default function PostPage() {
             a longer answer.
           </p>
 
-          <div className="flex items-start gap-3 rounded-md border bg-card p-4">
+          <div className={styles.callout}>
             <Lightbulb
-              className="mt-0.5 flex-shrink-0 text-yellow-500"
+              className={styles.icon}
               size={20}
             />
 
             <div>
               <strong>Useful conversation structure</strong>
 
-              <p className="mt-2 text-muted-foreground">
+              <p className={styles.muted + " " + styles.spaced}>
                 Introduction · Open question · Follow-up question · Shared
                 experience · Polite ending
               </p>
@@ -618,8 +581,8 @@ export default function PostPage() {
         </section>
 
         {/* Speaking activity */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Speaking Activity: Networking Role-Play
           </h2>
 
@@ -629,11 +592,11 @@ export default function PostPage() {
             professional identity.
           </p>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-md border bg-card p-5">
-              <strong className="text-lg">Person A</strong>
+          <div className={styles.gridTwo}>
+            <div className={styles.card}>
+              <strong className={styles.largeLabel}>Person A</strong>
 
-              <ul className="mt-3 list-disc space-y-2 pl-5 text-muted-foreground">
+              <ul className={styles.spaced}>
                 <li>You work in marketing.</li>
                 <li>You want a more creative position.</li>
                 <li>You currently work for a small company.</li>
@@ -641,10 +604,10 @@ export default function PostPage() {
               </ul>
             </div>
 
-            <div className="rounded-md border bg-card p-5">
-              <strong className="text-lg">Person B</strong>
+            <div className={styles.card}>
+              <strong className={styles.largeLabel}>Person B</strong>
 
-              <ul className="mt-3 list-disc space-y-2 pl-5 text-muted-foreground">
+              <ul className={styles.spaced}>
                 <li>You work in IT support.</li>
                 <li>You want to move into project management.</li>
                 <li>You have worked at your company for three years.</li>
@@ -658,7 +621,7 @@ export default function PostPage() {
             conversation:
           </p>
 
-          <ol className="list-decimal space-y-3 pl-6">
+          <ol >
             {networkingPrompts.map((prompt) => (
               <li key={prompt}>{prompt}</li>
             ))}
@@ -671,43 +634,43 @@ export default function PostPage() {
         </section>
 
         {/* Common mistakes */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">
+        <section >
+          <h2 >
             Common Networking Mistakes
           </h2>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-md border bg-card p-4">
+          <div className={styles.gridTwo}>
+            <div className={styles.card}>
               <strong>Talking only about yourself</strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Ask follow-up questions and show genuine interest in the other
                 person's experience.
               </p>
             </div>
 
-            <div className="rounded-md border bg-card p-4">
+            <div className={styles.card}>
               <strong>Giving one-word answers</strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Add a reason, example, or detail that gives the other person
                 something to respond to.
               </p>
             </div>
 
-            <div className="rounded-md border bg-card p-4">
+            <div className={styles.card}>
               <strong>Making the conversation too formal</strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Professional conversations can still be relaxed, warm, and
                 conversational.
               </p>
             </div>
 
-            <div className="rounded-md border bg-card p-4">
+            <div className={styles.card}>
               <strong>Leaving abruptly</strong>
 
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className={styles.smallText + " " + styles.spaced}>
                 Give a brief reason for leaving and end with a friendly phrase
                 such as "It was great meeting you."
               </p>
@@ -716,15 +679,15 @@ export default function PostPage() {
         </section>
 
         {/* Homework */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">Independent Practice</h2>
+        <section >
+          <h2 >Independent Practice</h2>
 
           <p>
             Ask learners to prepare a short professional introduction that
             could be used at a real networking event.
           </p>
 
-          <ul className="list-disc space-y-2 pl-6">
+          <ul >
             <li>Your name and current role</li>
             <li>What your company or industry does</li>
             <li>One thing you enjoy about your work</li>
@@ -740,12 +703,12 @@ export default function PostPage() {
         </section>
 
         {/* Tutor tip */}
-        <section className="space-y-4">
-          <h2 className="border-b pb-2 text-2xl">Tutor Tip</h2>
+        <section >
+          <h2 >Tutor Tip</h2>
 
-          <div className="flex items-start gap-3 rounded-md bg-muted p-5">
+          <div className={styles.callout}>
             <Lightbulb
-              className="mt-0.5 flex-shrink-0 text-yellow-500"
+              className={styles.icon}
               size={22}
             />
 
@@ -759,16 +722,15 @@ export default function PostPage() {
           </div>
         </section>
 
-        <footer className="border-t pt-8">
+        <footer >
           <Link
             href="/guides"
-            className="inline-flex items-center gap-2 text-muted-foreground transition hover:text-foreground"
+            className={styles.muted}
           >
             <ArrowLeft size={16} />
             Back to all conversation guides
           </Link>
         </footer>
-      </article>
-    </div>
+          </GuideArticle>
   );
 }

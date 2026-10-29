@@ -1,5 +1,7 @@
 "use client"
 
+import AuthLoading from "@/components/auth/AuthLoading";
+
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { z } from 'zod'
@@ -60,7 +62,7 @@ export function ResetPasswordClient() {
   }
 
   return (
-    <div className="flex flex-col w-100 gap-10">
+    <div className="flex w-full max-w-[420px] flex-col gap-8">
       <CardHeader>
         <CardTitle className="text-2xl">Reset Password</CardTitle>
         <CardDescription>Enter a new password for your account.</CardDescription>
@@ -108,7 +110,7 @@ export function ResetPasswordClient() {
                 )}
               />
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Resetting...' : 'Reset Password'}
+                {isLoading ? <AuthLoading /> : 'Reset Password'}
               </Button>
             </form>
           </Form>

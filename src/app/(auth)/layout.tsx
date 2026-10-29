@@ -1,45 +1,19 @@
-"use client"
-
-import ModeToggle from "@/components/ui/ModeToggle";
+import type { ReactNode } from "react";
 import Link from "next/link";
-import { Geist } from "next/font/google";
+import ModeToggle from "@/components/ui/ModeToggle";
 import LeftSide from "./LeftSide";
+import styles from "@/components/auth/auth.module.css";
 
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-
-
-export default function AuthLayout({ children }: { children: React.ReactNode }){
-
-  return(
-    <div className={`flex w-screen h-screen ${geistSans.className}`}>
-      <div className="absolute top-5 right-5 z-1">
-        <div className="flex gap-3 items-center">
-        <Link className="underline underline-offset-5 hover:underline-offset-10 transition-all duration-300" href={"/home"}>Home</Link>
-        <ModeToggle/>
-        </div>
-      </div>
-
-
-      <div className="flex hidden lg:block justify-center items-center w-1/2 h-screen">
-        <LeftSide/>
-      </div>
-
-      <div className="flex justify-center items-center w-full lg:w-1/2 h-screen bg-gradient">
-
-        <div className="flex justify-center items-center border-none lg:border-1 rounded-lg w-full lg:w-2/3 h-3/4">
-
-          {children}
-
-
-        </div>
-
-      </div>
-
+export default function AuthLayout({ children }: { children: ReactNode }) {
+  return <div className={styles.shell}>
+    <a href="#auth-main" className={styles.skipLink}>Skip to content</a>
+    <aside className={styles.leftArtwork} aria-hidden="true"><LeftSide /></aside>
+    <div className={styles.rightSide}>
+      <header className={styles.siteHeader}>
+        <Link href="/" className={styles.brand} aria-label="Synomilo home">synomilo</Link>
+        <nav aria-label="Main navigation"><Link href="/guides">Guides</Link><Link href="/pricing">Pricing</Link><ModeToggle /></nav>
+      </header>
+      <main id="auth-main" className={styles.formColumn}>{children}</main>
     </div>
-  );
+  </div>;
 }

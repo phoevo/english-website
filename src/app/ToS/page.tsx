@@ -1,10 +1,6 @@
-import React from "react";
+import InfoPage from "@/components/content/InfoPage";
 import type { Metadata } from "next";
-import { DM_Sans, Geist } from "next/font/google";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
-const geist = Geist({ subsets: ["latin"] });
-const dmSans = DM_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -17,54 +13,37 @@ export default function TermsPage() {
   const contactEmail: string = "synomiloteam@gmail.com";
 
   return (
-    <main
-      className={`pt-10 max-w-4xl mx-auto prose prose-neutral ${geist.className} text-foreground`}
-    >
-      <ScrollArea className="h-screen overflow-y-auto px-2">
-        <h1
-          className={`text-4xl sm:text-5xl md:text-6xl font-normal mb-3 text-foreground ${dmSans.className}`}
-        >
-          Terms of Service
-        </h1>
-
-        <p className="mb-2 text-muted-foreground">
-          Effective date: {effectiveDate}
-        </p>
-
-        <p className="mb-6 text-muted-foreground">
+    <InfoPage title="Terms of Service" effectiveDate={effectiveDate} intro={<>
           These Terms of Service (“Terms”) govern your use of {companyName} (“we”,
           “us”, or “our”). By creating an account or using our Service, you
           agree to these Terms. If you do not agree, you may not use the
           Service.
-        </p>
-
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+        </>}>
+<section>
+          <h2>
             Eligibility
           </h2>
-          <p className="text-muted-foreground">
+          <p>
             You must be at least 13 years old (or the minimum age required by
             your local law) to use the Service. By using the Service, you
             confirm that you meet this requirement.
           </p>
         </section>
-
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+<section>
+          <h2>
             Account registration
           </h2>
-          <p className="text-muted-foreground">
+          <p>
             To use the Service, you must provide a username and email address.
             You are responsible for maintaining the security of your account
             and password, and for all activity that occurs under your account.
           </p>
         </section>
-
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+<section>
+          <h2>
             Intellectual property
           </h2>
-          <p className="text-muted-foreground">
+          <p>
             The Service, including its software, design, branding, text,
             conversations, graphics, and other materials, belongs to{" "}
             {companyName} or its licensors. You may not copy, resell,
@@ -72,47 +51,44 @@ export default function TermsPage() {
             permission.
           </p>
         </section>
-
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+<section>
+          <h2>
             Subscriptions and payments
           </h2>
-          <p className="text-muted-foreground">
+          <p>
             Some features of the Service may require a paid subscription.
             Payments are processed by Stripe. We do not store your payment card
             details.
           </p>
-          <p className="mt-2 text-muted-foreground">
+          <p>
             Subscriptions renew automatically unless cancelled before the next
             billing date. You may cancel your subscription at any time.
             Cancellation stops future renewals, but you will keep access until
             the end of your current paid billing period.
           </p>
         </section>
-
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+<section>
+          <h2>
             Refunds and digital access
           </h2>
-          <p className="text-muted-foreground">
+          <p>
             Because the Service provides immediate access to digital content
             and subscription features, refunds are generally not provided once
             access has been granted, except where required by applicable law or
             where there has been an error, duplicate charge, or incorrect
             billing.
           </p>
-          <p className="mt-2 text-muted-foreground">
+          <p>
             Where required by law, you may be asked before purchase to
             expressly request immediate access and acknowledge that you lose
             your statutory right of withdrawal once access begins.
           </p>
         </section>
-
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+<section>
+          <h2>
             Acceptable use
           </h2>
-          <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+          <ul>
             <li>
               You may not use the Service for unlawful purposes or to violate
               any laws.
@@ -124,100 +100,91 @@ export default function TermsPage() {
             </li>
           </ul>
         </section>
-
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+<section>
+          <h2>
             Account termination
           </h2>
-          <p className="text-muted-foreground">
+          <p>
             You may delete your account at any time in your account settings.
             Account deletion removes your access to the Service and deletes
             your account data in accordance with our Privacy Policy.
           </p>
-          <p className="mt-2 text-muted-foreground">
+          <p>
             We may suspend or terminate your account if you violate these
             Terms, misuse the Service, or use the Service in a way that may
             harm us, other users, or the platform.
           </p>
         </section>
-
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+<section>
+          <h2>
             Disclaimer of warranties
           </h2>
-          <p className="text-muted-foreground">
+          <p>
             The Service is provided “as is” and “as available.” We make no
             guarantees about uptime, reliability, or suitability for your
             purposes, especially while in early access.
           </p>
         </section>
-
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+<section>
+          <h2>
             Limitation of liability
           </h2>
-          <p className="text-muted-foreground">
+          <p>
             To the maximum extent permitted by law, {companyName} shall not be
             liable for any indirect, incidental, special, or consequential
             damages arising out of or relating to your use of the Service.
           </p>
         </section>
-
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+<section>
+          <h2>
             Changes to the Service
           </h2>
-          <p className="text-muted-foreground">
+          <p>
             We may modify, suspend, or discontinue parts of the Service at any
             time, especially while the Service is in early access. We will try
             to avoid unnecessary disruption, but we do not guarantee that all
             features will remain available permanently.
           </p>
         </section>
-
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+<section>
+          <h2>
             Consumer rights
           </h2>
-          <p className="text-muted-foreground">
+          <p>
             Nothing in these Terms limits any mandatory consumer rights that
             you may have under applicable law.
           </p>
         </section>
-
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+<section>
+          <h2>
             Governing law
           </h2>
-          <p className="text-muted-foreground">
+          <p>
             These Terms are governed by the laws of Greece, without limiting
             any mandatory consumer protection rights available to you under
             applicable law.
           </p>
         </section>
-
-        <section className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+<section>
+          <h2>
             Changes to these Terms
           </h2>
-          <p className="text-muted-foreground">
+          <p>
             We may update these Terms from time to time. We will post the
             updated version with a new effective date. If changes are material,
             we will provide additional notice where required by law. Your
             continued use of the Service means you accept the updated Terms.
           </p>
         </section>
-
-        <section className="mb-15">
-          <h2 className="text-2xl font-semibold mb-2 text-foreground">
+<section>
+          <h2>
             Contact us
           </h2>
-          <p className="text-muted-foreground">
+          <p>
             If you have questions about these Terms, contact us at{" "}
             {contactEmail}.
           </p>
         </section>
-      </ScrollArea>
-    </main>
+    </InfoPage>
   );
 }
