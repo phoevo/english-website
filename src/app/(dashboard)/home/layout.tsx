@@ -11,11 +11,11 @@ const geist = Geist({ subsets: ['latin'] });
 
 function homeLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`flex h-screen w-full overflow-hidden${geist.className}`}>
+    <div className={`flex h-[calc(100dvh-1rem)] min-h-0 w-full overflow-hidden ${geist.className}`}>
       <div className="flex h-full shrink-0">
         <SidebarProvider
           defaultOpen={true}
-          className="md:[--app-sidebar-width:10rem] lg:[--app-sidebar-width:16rem]"
+          className="h-full min-h-0 md:[--app-sidebar-width:10rem] lg:[--app-sidebar-width:16rem]"
           style={{ "--sidebar-width": "var(--app-sidebar-width, 16rem)" } as React.CSSProperties}
         >
           <AppSidebar />
@@ -25,7 +25,7 @@ function homeLayout({ children }: { children: React.ReactNode }) {
         </SidebarProvider>
       </div>
 
-      <div className="flex flex-1 min-w-0 h-[calc(100vh-1rem)] min-h-0 mb-4 bg-background border rounded-lg relative overflow-hidden">
+      <div className="flex flex-1 min-w-0 h-full min-h-0 bg-background border rounded-lg relative overflow-hidden">
         <ChallengeWatcher />
         {children}
       </div>

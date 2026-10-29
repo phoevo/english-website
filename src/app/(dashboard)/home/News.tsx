@@ -1,116 +1,61 @@
 "use client";
 
-import React, { useEffect, useState } from 'react'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Badge } from '@/components/ui/badge'
-import {
-  BadgePlus,
-  BookOpen,
-  BugOff,
-  CircleArrowUp,
-  Newspaper
-} from 'lucide-react'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { listNewsDocuments, type NewsDocument } from '@/data/appwrite'
+import { useEffect, useState } from "react";
+import { BadgePlus, BookOpen, BugOff, CircleArrowUp, Newspaper, type LucideIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import AuthLoading from "@/components/auth/AuthLoading";
+import { listNewsDocuments, type NewsDocument } from "@/data/appwrite";
+import styles from "./home.module.css";
 
+const TAGS: Record<string, { label: string; className: string; Icon: LucideIcon }> = {
+  news: { label: "News", className: "bg-blue-500 text-white", Icon: Newspaper },
+  updates: { label: "Updates", className: "bg-green-500 text-white", Icon: CircleArrowUp },
+  conversations: { label: "Conversations", className: "bg-orange-500 text-white", Icon: BookOpen },
+  bugfixes: { label: "Bug Fixes", className: "bg-foreground text-background", Icon: BugOff },
+  features: { label: "Features", className: "bg-pink-500 text-white", Icon: BadgePlus },
+};
 
-const TAGS: Record<string, { label: string; colorClass: string; icon: React.ReactNode }> = {
-  news: { label: 'News', colorClass: 'bg-blue-500',   icon: <Newspaper /> },
-  updates: { label: 'Updates', colorClass: 'bg-green-500', icon: <CircleArrowUp /> },
-  conversations: { label: 'Conversations', colorClass: 'bg-orange-500', icon: <BookOpen /> },
-  bugfixes: { label: 'Bug Fixes', colorClass: 'bg-foreground', icon: <BugOff /> },
-  features:{ label: 'Features', colorClass: 'bg-pink-500', icon: <BadgePlus /> },
-}
-
-function resolveTagConfig(tagRaw?: string) {
-  const key = (tagRaw || '').toLowerCase().replace(/[^a-z0-9]/g, '').trim()
-  return TAGS[key] || { label: tagRaw || 'News', colorClass: 'bg-blue-500', icon: <Newspaper /> }
+function resolveTag(tag?: string) {
+  const key = (tag || "").toLowerCase().replace(/[^a-z0-9]/g, "").trim();
+  return TAGS[key] || { label: tag || "News", className: "bg-blue-500 text-white", Icon: Newspaper };
 }
 
 function formatDate(iso?: string) {
-  if (!iso) return ''
-  try {
-    const d = new Date(iso)
-    return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
-  } catch {
-    return ''
-  }
+  if (!iso) return "";
+  const date = new Date(iso);
+  return Number.isNaN(date.getTime()) ? "" : date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
 }
 
-function News() {
-  const [loading, setLoading] = useState(true)
-  const [items, setItems] = useState<NewsDocument[]>([])
+export default function News() {
+  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState<NewsDocument[]>([]);
 
   useEffect(() => {
-    let mounted = true
+    let mounted = true;
     const run = async () => {
-      setLoading(true)
-      const docs = await listNewsDocuments()
-      if (mounted) setItems(docs)
-      setLoading(false)
-    }
-    run()
-    return () => { mounted = false }
-  }, [])
+      try {
+        const docs = await listNewsDocuments();
+        if (mounted) setItems(docs);
+      } catch {
+        if (mounted) setItems([]);
+      } finally { if (mounted) setLoading(false); }
+    };
+    void run();
+    return () => { mounted = false; };
+  }, []);
 
-  return (
-    <div className="h-full">
-      <Card className="h-full bg-background overflow-y-auto">
-        <CardHeader>
-          <CardTitle className="text-xl">News and Updates</CardTitle>
-          <CardDescription>
-            News about updates, bug fixes, new features and content
-          </CardDescription>
-        </CardHeader>
-
-        <ScrollArea className="flex flex-col m-0 max-h-[440px]">
-          {loading ? (
-            <CardContent className="py-2">
-              <div className="border rounded-md p-3 text-sm text-muted-foreground">Loading news...</div>
-            </CardContent>
-          ) : items.length === 0 ? (
-            <CardContent className="py-2">
-              <div className="border rounded-md p-3 text-sm text-muted-foreground">No news yet.</div>
-            </CardContent>
-          ) : (
-            items.map((doc) => {
-              const cfg = resolveTagConfig(doc.tag)
-              const date = formatDate(doc.$createdAt)
-              const titleText = doc.title
-              return (
-                <CardContent key={doc.$id} className="py-2">
-                  <div className="border rounded-md p-1">
-                    <div className='flex flex-row items-center m-1'>
-                      <Badge className={`relative text-background ${cfg.colorClass}`}>
-                        {cfg.icon} {cfg.label}
-                      </Badge>
-                      {date && (
-                        <span className="ml-2 text-muted-foreground text-xs underline">{date}</span>
-                      )}
-                    </div>
-                    <div className="flex flex-col gap-1 mt-2 p-2 rounded-sm bg-muted text-sm">
-                      {titleText && (
-                        <p className="font-semibold">{titleText}</p>
-                      )}
-                      {doc.content && (
-                        <p className="text-muted-foreground">{doc.content}</p>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              )
-            })
-          )}
-        </ScrollArea>
-      </Card>
-    </div>
-  )
+  return <section className={`${styles.card} ${styles.newsCard}`} aria-labelledby="news-heading" aria-busy={loading}>
+    <header className={styles.newsHeader}><h2 id="news-heading">News and updates</h2><p>New conversations, features and changes to Synomilo.</p></header>
+    {loading ? <div className={styles.newsPending}><AuthLoading /></div>
+      : items.length === 0 ? <p className={styles.newsEmpty}>No updates yet.</p>
+      : <div className={styles.newsList} role="region" aria-label="News items" tabIndex={0}>{items.map(doc => {
+        const tag = resolveTag(doc.tag);
+        const date = formatDate(doc.$createdAt);
+        return <article key={doc.$id} className={styles.newsItem}>
+          <div className={styles.newsMeta}><Badge className={`${tag.className} border-transparent px-2 py-0.5 text-[10px] font-medium [&_svg]:size-3`}><tag.Icon size={12} aria-hidden="true" />{tag.label}</Badge>{date && <time dateTime={doc.$createdAt}>{date}</time>}</div>
+          {doc.title && <h3>{doc.title}</h3>}
+          {doc.content && <p>{doc.content}</p>}
+        </article>;
+      })}</div>}
+  </section>;
 }
-
-export default News;

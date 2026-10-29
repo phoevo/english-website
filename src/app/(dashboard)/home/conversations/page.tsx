@@ -1,182 +1,129 @@
 "use client";
-import React, { useState } from "react";
+
+import { useEffect, useRef, useState } from "react";
+import { Search, X } from "lucide-react";
 import { useConversations } from "@/hooks/useConversations";
-import { Label } from "@/components/ui/label";
-import ConversationCover from "./ConversationCover";
-import { Geist } from "next/font/google";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useUserStore } from "@/data/useUserStore";
+import { matchesConversationSearch } from "@/lib/conversationSearch";
+import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogTrigger, AlertDialogCancel, AlertDialogFooter } from "@/components/ui/alert-dialog";
+import AuthLoading from "@/components/auth/AuthLoading";
+import DashboardPage from "@/components/dashboard/DashboardPage";
+import { dashboardStyles } from "@/components/dashboard/styles";
 import GuideTour, { type GuideStep } from "../../GuideTour";
-import { CardContent } from "@/components/ui/card";
 import PlacementTest from "../placementTest";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogTrigger,
-  AlertDialogCancel,
-  AlertDialogFooter,
-} from "@/components/ui/alert-dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import ConversationCover from "./ConversationCover";
 
-
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
-
+const levels = [["A1", "A1 — Beginner"], ["A2", "A2 — Basic"], ["B1", "B1 — Intermediate"], ["B2", "B2 — Independent"]] as const;
+const categories = [
+  ["Everyday", "Everyday/Casual"], ["Directions", "Directions/Travel"], ["Business", "Business/Work"],
+  ["School", "School/Study"], ["Shopping", "Shopping/Services"], ["Health", "Health/Emergencies"],
+  ["Lifestyle", "Lifestyle/Daily Life"], ["Society", "Society/Culture"], ["Emotional", "Emotional/Personal Topics"],
+  ["Advanced", "Advanced/Abstract Topics"],
+] as const;
 const convoGuideSteps: GuideStep[] = [
-  { target: "convo-title", title: "Conversations", description: "Browse all available conversations organized by level and category." },
-  { target: "convo-filters", title: "Filters", description: "Use these filters to narrow conversations by difficulty level and topic." },
-  { target: "convo-grid", title: "Conversation Cards", description: "Click a conversation to start reading. The pink sparkle indicates Plus content, the green check indicates completion. Every word is interactive, so you can hover for definitions and save them to your dictionary."}
+  { target: "convo-title", title: "Conversations", description: "Browse the conversation library by level and topic." },
+  { target: "convo-filters", title: "Search and filters", description: "Search by title, description, topic or level, then narrow the results with the filters." },
+  { target: "convo-grid", title: "Conversation cards", description: "Open a conversation to start reading. The pink sparkle indicates Plus content and the green check indicates completion. Hover over words for definitions and save them to your dictionary." },
 ];
+type CoverConversation = { $id: string; title: string; description?: string; level: string; audioFileId: string; isPro: boolean; category: string };
 
-
-function ConversationsPage() {
+export default function ConversationsPage() {
   const { conversations, loading: conversationsLoading, error } = useConversations();
-  const [selectedLevel, setSelectedLevel] = useState<string | undefined>();
-  const [category, setCategory] = useState<string | undefined>();
+  const { loading: userLoading, user, isTeacher } = useUserStore();
+  const [search, setSearch] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState("All");
+  const [category, setCategory] = useState("All");
   const [test, setTest] = useState(false);
-
-  const {loading: userLoading, user, isTeacher} = useUserStore();
-
-
-  if (conversationsLoading || userLoading) {
-    return <div className="p-10 text-center">Loading conversations...</div>;
-  }
-
-  if (error) {
-    return <div className="p-10 text-center text-red-500">{error}</div>;
-  }
-
-  type CoverConvo = { $id: string; title: string; description?: string; level: string; audioFileId: string; isPro: boolean; category: string; };
-  const list = Array.isArray(conversations) ? (conversations as unknown as CoverConvo[]) : [];
-  const filtered = list.filter((conv) => {
-    const levelMatches = !selectedLevel || selectedLevel === "All" || conv.level === selectedLevel;
-    const categoryMatches = !category || category === "All" || conv.category === category;
-    const isProConversation = !!conv.isPro;
-    const userCanAccess = isTeacher || !isProConversation || !!user?.isSubscribed;
-    return levelMatches && categoryMatches && userCanAccess;
+  const results = useRef<HTMLDivElement>(null);
+  const searchInput = useRef<HTMLInputElement>(null);
+  const loading = conversationsLoading || userLoading;
+  const hasFilters = Boolean(search.trim()) || selectedLevel !== "All" || category !== "All";
+  const list = Array.isArray(conversations) ? conversations as unknown as CoverConversation[] : [];
+  const filtered = list.filter(conversation => {
+    const levelMatches = selectedLevel === "All" || conversation.level === selectedLevel;
+    const categoryMatches = category === "All" || conversation.category === category;
+    const userCanAccess = isTeacher || !conversation.isPro || Boolean(user?.isSubscribed);
+    return levelMatches && categoryMatches && userCanAccess && matchesConversationSearch(conversation, search);
   });
 
+  useEffect(() => { results.current?.scrollTo({ top: 0 }); }, [search, selectedLevel, category]);
 
-
-  function showTest(){
-    setTest(prevValue =>(!prevValue));
+  function clearFilters() {
+    setSearch(""); setSelectedLevel("All"); setCategory("All");
   }
 
-  return (
-    <div className="flex flex-col m-5 lg:m-10 h-svh space-y-3 lg:space-y-5">
+  return <DashboardPage ready={!loading && !error}>
+    {user && !loading && !error && <GuideTour id="conversations-page" steps={convoGuideSteps} />}
+    <header data-guide="convo-title" data-dashboard-intro className="shrink-0">
+      <h1 className={dashboardStyles.heading}>Conversations</h1>
+      <p className={dashboardStyles.description}>Find a conversation by topic or level.</p>
+    </header>
 
-      <GuideTour id="conversations-page" steps={convoGuideSteps} />
-      <div data-guide="convo-title">
-        <h1 className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Conversations</h1>
-      </div>
-
-
-
-      <p className="text-sm lg:text-base text-muted-foreground">Conversation material from all levels</p>
-      <div data-guide="convo-filters" className="mt-2 flex flex-row items-center justify-between lg:justify-start gap-5 lg:gap-20">
-
-        <div className="flex flex-col gap-1">
-
-          <Label htmlFor="Select" className="text-sm lg:text-base font-semibold">Level</Label>
-
-        <div className="flex w-full flex-row items-start lg:items-center gap-1">
-        <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-            <SelectTrigger className=" w-[110px] lg:w-[165px]">
-              <SelectValue placeholder="All" />
-            </SelectTrigger>
-            <SelectContent className={geist.className}>
-              <SelectItem value="All">All</SelectItem>
-              <SelectItem value="A1">A1 - Beginner</SelectItem>
-              <SelectItem value="A2">A2 - Basic</SelectItem>
-              <SelectItem value="B1">B1 - Intermediate</SelectItem>
-              <SelectItem value="B2">B2 - Independent</SelectItem>
-              {/* <SelectItem value="C1">C1 - Advanced</SelectItem>
-              <SelectItem value="C2">C2 - Mastery</SelectItem> */}
-            </SelectContent>
-        </Select>
-
-      {!isTeacher && <AlertDialog open={test} onOpenChange={setTest}>
-              <AlertDialogTrigger asChild>
-                <div onClick={showTest} className="text-xs md:text-sm font-light md:font-medium underline cursor-pointer ml-1">Not sure?</div>
-              </AlertDialogTrigger>
-              <AlertDialogContent className={`lg:max-w-xl bg-background ${geist.className}`}>
-                <AlertDialogHeader>
-                  <AlertDialogTitle className="text-2xl">Quick Placement Test</AlertDialogTitle>
-                  <AlertDialogDescription>
-                Not sure where to begin? Take this quick test to get a better idea of which conversations match your current level.
-              </AlertDialogDescription>
-              <div className="text-red-500 mt-2 text-sm">
-                <p>This is not an official exam and is intended only as a general guide.</p>
-                <p>Your score will not be stored.</p>
-              </div>
-                </AlertDialogHeader>
-                <CardContent>
-                  <PlacementTest />
-                </CardContent>
-                <AlertDialogFooter>
-              <AlertDialogCancel className="cursor-pointer">Back</AlertDialogCancel>
-              </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>}
+    {loading ? <div className="flex min-h-0 flex-1 items-center justify-center"><AuthLoading /></div>
+      : error ? <div role="alert" className="mt-6 rounded-xl border border-red-500/25 bg-red-500/5 p-5 text-sm leading-7 text-red-500">{error}</div>
+      : <>
+        <div data-guide="convo-filters" data-dashboard-entry className="mt-5 grid shrink-0 grid-cols-2 gap-3 lg:flex lg:items-end">
+          <div className="col-span-2 min-w-0 lg:flex-1">
+            <Label htmlFor="conversation-search" className="sr-only">Search conversations</Label>
+            <div className="relative">
+              <Search size={17} aria-hidden="true" className="pointer-events-none absolute top-1/2 left-3 z-10 -translate-y-1/2 text-muted-foreground" />
+              <Input ref={searchInput} id="conversation-search" type="search" placeholder="Search conversations" value={search} onChange={event => setSearch(event.target.value)} autoComplete="off" spellCheck={false}
+                className={cn(dashboardStyles.field, "pl-10 pr-10 [&::-webkit-search-cancel-button]:appearance-none")} />
+              {search && <button type="button" aria-label="Clear search" onClick={() => { setSearch(""); searchInput.current?.focus(); }} className="absolute top-1/2 right-2 inline-flex size-7 -translate-y-1/2 items-center justify-center rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"><X size={15} aria-hidden="true" /></button>}
+            </div>
+          </div>
+          <div className="min-w-0 lg:w-44">
+            <Label htmlFor="conversation-level" className="mb-2 block text-xs font-medium">Level</Label>
+            <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+              <SelectTrigger id="conversation-level" className={cn(dashboardStyles.field, "w-full data-[size=default]:h-11")}><SelectValue /></SelectTrigger>
+              <SelectContent><SelectItem value="All">All levels</SelectItem>{levels.map(([value, label]) => <SelectItem key={value} value={value}>{label}</SelectItem>)}</SelectContent>
+            </Select>
+          </div>
+          <div className="min-w-0 lg:w-56">
+            <Label htmlFor="conversation-category" className="mb-2 block text-xs font-medium">Category</Label>
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger id="conversation-category" className={cn(dashboardStyles.field, "w-full data-[size=default]:h-11")}><SelectValue /></SelectTrigger>
+              <SelectContent><SelectItem value="All">All categories</SelectItem>{categories.map(([value, label]) => <SelectItem key={value} value={value}>{label}</SelectItem>)}</SelectContent>
+            </Select>
+          </div>
         </div>
 
+        <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3.5">
+          <div className="flex flex-wrap items-center gap-3">
+            <p role="status" aria-live="polite" aria-atomic="true" className="text-xs text-muted-foreground">{filtered.length} {filtered.length === 1 ? "conversation" : "conversations"}</p>
+            {hasFilters && <button type="button" onClick={clearFilters} className={dashboardStyles.textLink}>Clear filters</button>}
+          </div>
+          {!isTeacher && <AlertDialog open={test} onOpenChange={setTest}>
+            <AlertDialogTrigger asChild><button type="button" className={dashboardStyles.textLink}>Not sure of your level?</button></AlertDialogTrigger>
+            <AlertDialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-xl border-border bg-background sm:max-w-xl">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-2xl font-medium tracking-[-.035em]">Quick placement test</AlertDialogTitle>
+                <AlertDialogDescription className="leading-7">Not sure where to begin? Take this quick test to get a better idea of which conversations match your current level.</AlertDialogDescription>
+                <p className="text-xs leading-6 text-muted-foreground">This is not an official exam and is intended only as a general guide. Your score will not be stored.</p>
+              </AlertDialogHeader>
+              <PlacementTest />
+              <AlertDialogFooter><AlertDialogCancel className="cursor-pointer">Back</AlertDialogCancel></AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>}
         </div>
 
-          <div className="flex flex-col gap-1">
-
-           <Label htmlFor="Select" className="text-sm lg:text-base font-semibold">Categories</Label>
-
-        <Select value={category} onValueChange={setCategory}>
-          <SelectTrigger className="w-[110px] lg:w-[180px]">
-            <SelectValue placeholder="All" />
-          </SelectTrigger>
-          <SelectContent className={geist.className}>
-            <SelectItem value="All">All</SelectItem>
-            <SelectItem value="Everyday">Everyday/Casual</SelectItem>
-            <SelectItem value="Directions">Directions/Travel</SelectItem>
-            <SelectItem value="Business">Business/Work</SelectItem>
-            <SelectItem value="School">School/Study</SelectItem>
-            <SelectItem value="Shopping">Shopping/Services</SelectItem>
-            <SelectItem value="Health">Health/Emergencies</SelectItem>
-            <SelectItem value="Lifestyle">Lifestyle/Daily Life</SelectItem>
-            <SelectItem value="Society">Society/Culture</SelectItem>
-            <SelectItem value="Emotional">Emotional/Personal Topics</SelectItem>
-            <SelectItem value="Advanced">Advanced/Abstract Topics</SelectItem>
-
-          </SelectContent>
-        </Select>
-
+        <div ref={results} role="region" aria-label="Conversation results" tabIndex={0} className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-1 pt-1 pb-4 [scrollbar-gutter:stable] focus-visible:rounded-md focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-foreground">
+          <ul data-guide="convo-grid" className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 min-[1800px]:grid-cols-4">
+            {filtered.map(conversation => <li key={conversation.$id} className="min-w-0">
+              <ConversationCover conversationTitle={conversation.title} conversationDescription={conversation.description || ""} level={conversation.level} conversationId={conversation.$id} audioFileId={conversation.audioFileId} category={conversation.category} isPro={conversation.isPro} />
+            </li>)}
+          </ul>
+          {!filtered.length && <div className="flex min-h-48 flex-col items-center justify-center rounded-xl border border-dashed border-border p-6 text-center">
+            <Search size={22} strokeWidth={1.5} aria-hidden="true" className="mb-4 text-muted-foreground" />
+            <h2 className="text-lg font-medium tracking-[-.02em]">{hasFilters ? "No conversations found." : "No conversations available yet."}</h2>
+            <p className="mt-2 max-w-sm text-sm leading-7 text-muted-foreground">{hasFilters ? "Try a different search or clear your filters." : "Check back soon for more conversation material."}</p>
+            {hasFilters && <button type="button" onClick={clearFilters} className="mt-4 rounded-md border border-border px-4 py-2 text-sm hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground">Clear search and filters</button>}
+          </div>}
         </div>
-
-
-      </div>
-
-    <ScrollArea className="h-2/3">
-      <div data-guide="convo-grid" className="grid p-1 grid-cols-1 gap-4 m-0 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filtered.map(conv => (
-          <ConversationCover
-            key={conv.$id}
-            conversationTitle={conv.title}
-            conversationDescription={conv.description || ""}
-            level={conv.level}
-            conversationId={conv.$id}
-            audioFileId={conv.audioFileId}
-            category={conv.category}
-            isPro={conv.isPro}
-          />
-        ))}
-      </div>
-    </ScrollArea>
-    </div>
-  );
+      </>}
+  </DashboardPage>;
 }
-
-export default ConversationsPage;
