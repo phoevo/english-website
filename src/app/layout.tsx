@@ -11,8 +11,8 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Synomilo — ESL Conversation Lessons & Tutor Tools",
-  description: "Ready-made ESL conversation lessons that save tutors prep time. Assign, track progress, and give students real speaking practice.",
+  title: "Synomilo — English Conversations",
+  description: "Read English conversations, highlight vocabulary, and save words to your dictionary. Optional guides offer questions and activities.",
   icons: [
     {
       rel: "icon",

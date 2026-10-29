@@ -42,13 +42,13 @@ export default function HomePage() {
 
   return <div ref={root} className={styles.page} aria-busy={loading}>
     {loading ? <div className={styles.inner}>
-      <div className={styles.loadingHeader}><AuthLoading /><Skeleton className="mt-5 h-9 w-64 max-w-full" /><Skeleton className="mt-3 h-4 w-80 max-w-full" /></div>
+      <div className={styles.loadingHeader}><Skeleton className="mt-5 h-9 w-64 max-w-full" /><Skeleton className="mt-3 h-4 w-80 max-w-full" /></div>
       <div className={styles.grid}><div className={styles.mainColumn}><Skeleton className="h-full min-h-0 w-full rounded-xl" /><Skeleton className="h-full min-h-0 w-full rounded-xl" /></div><Skeleton className="h-full min-h-0 w-full rounded-xl" /></div>
     </div> : <div className={styles.inner}>
       {user && <GuideTour id="home-page" steps={homeGuideSteps} />}
       <header data-guide="home-welcome" className={styles.welcome}>
         <div data-home-intro>
-          <h1>{user ? `Welcome back, ${user.name}` : "Welcome to Synomilo"}<span className={styles.accent}>.</span></h1>
+          <h1>{user ? `Welcome back, ${user.name}` : "Welcome to Synomilo"}</h1>
           {user ? <p>Your recent conversations, saved words and updates.</p> : <p><Link href="/login">Log in</Link> or <Link href="/register">create an account</Link> to keep your conversations and vocabulary in one place.</p>}
         </div>
       </header>

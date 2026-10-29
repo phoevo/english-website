@@ -1,4 +1,5 @@
 import React from "react";
+import { getMyAudioAccess, updateMyProfile } from "@/data/accountActions";
 import { Switch } from "@/components/ui/switch";
 import {
   HoverCard,
@@ -16,7 +17,7 @@ import {
 import { Check, Plus } from "lucide-react";
 import { WordTypeSettings } from "@/components/ui/WordTypeSettings";
 import { Button } from "@/components/ui/button";
-import { databases, storage, isConversationAssignedToStudent } from "@/data/appwrite";
+import { storage, isConversationAssignedToStudent } from "@/data/appwrite";
 import { useUserStore } from "@/data/useUserStore";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -24,6 +25,7 @@ import { audioBucketId } from "@/data/appwrite";
 import { AudioPlayer } from "./AudioPlayer";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { legacyAccountFeaturesEnabled } from "@/lib/accountFeatures";
 import { backgroundColors, hoverBackgroundColors } from "@/data/color";
 import {
   Drawer,
@@ -40,8 +42,8 @@ import {
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
 
-const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
-const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
+
+
 
 interface Word {
   text: string;
@@ -120,35 +122,68 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   const isComplete = completeConversations.includes(conversation.$id);
   const [audioUrl, setAudioUrl] = React.useState<string | null>(null);
   const [audioLoading, setAudioLoading] = React.useState(true);
+  const [audioError, setAudioError] = React.useState<string | null>(null);
+  const [audioAttempt, setAudioAttempt] = React.useState(0);
+  const audioAccess = React.useRef<{ url: string; expiresAt: string } | null>(null);
   const [assignedForThisConvo, setAssignedForThisConvo] = React.useState<boolean>(false);
   const [assignmentChecking, setAssignmentChecking] = React.useState<boolean>(false);
   const [fontSize, setFontSize] = React.useState(16)
 
-    React.useEffect(() => {
-  const fetchAudioUrl = async () => {
-    if (!conversation || !conversation.audioFileId) {
+  // Audio is the only reader feature that requires a subscription.
+  // Stored tutor roles and previous assignments no longer grant audio access.
+  const canUseAudio = Boolean(user && (
+    isSubscribed || (legacyAccountFeaturesEnabled && (user.isTeacher || assignedForThisConvo))
+  ));
+
+  React.useEffect(() => {
+    let cancelled = false;
+    setAudioUrl(null);
+    setAudioError(null);
+    audioAccess.current = null;
+
+    if (!canUseAudio || !conversation.audioFileId) {
       setAudioLoading(false);
       return;
     }
 
-    try {
-      const result = await storage.getFileView(audioBucketId, conversation.audioFileId);
+    setAudioLoading(true);
 
-      setAudioUrl(result);
-    } catch {
-      setAudioUrl(null);
-    } finally {
-      setAudioLoading(false);
+    const fetchAudioUrl = async () => {
+      try {
+        if (legacyAccountFeaturesEnabled) {
+          const url = await storage.getFileView(audioBucketId, conversation.audioFileId);
+          if (!cancelled) setAudioUrl(url);
+        } else {
+          const access = await getMyAudioAccess(conversation.$id);
+          if (!cancelled) { audioAccess.current = access; setAudioUrl(access.url); }
+        }
+      } catch (error) {
+        if (!cancelled) { setAudioUrl(null); setAudioError(error instanceof Error ? error.message : "Audio could not be loaded."); }
+      } finally {
+        if (!cancelled) setAudioLoading(false);
+      }
+    };
+
+    void fetchAudioUrl();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [canUseAudio, conversation.audioFileId, conversation.$id, user?.$id, audioAttempt]);
+
+  async function refreshAudioSource() {
+    if (legacyAccountFeaturesEnabled && audioUrl) return audioUrl;
+    if (!audioAccess.current || Date.parse(audioAccess.current.expiresAt) < Date.now() + 30000) {
+      audioAccess.current = await getMyAudioAccess(conversation.$id);
     }
-  };
-
-  fetchAudioUrl();
-}, [conversation]);
+    return audioAccess.current.url;
+  }
 
 // Check assignment for any conversation: a Plus tutor's assignment grants Plus features
 React.useEffect(() => {
   const run = async () => {
-    if (!user || isSubscribed || user.isTeacher || !conversation?.$id) {
+    if (!legacyAccountFeaturesEnabled || !user || isSubscribed || user.isTeacher || !conversation?.$id) {
+      setAssignmentChecking(false);
       setAssignedForThisConvo(false);
       return;
     }
@@ -200,7 +235,7 @@ React.useEffect(() => {
       if (val) {
         // Ensure the color key exists on backgroundColors before assigning
         if (val in backgroundColors) {
-          updated[key].colorKey = val as BackgroundColorKey;
+          updated[key] = { ...updated[key], colorKey: val as BackgroundColorKey };
         }
       }
     });
@@ -237,15 +272,16 @@ React.useEffect(() => {
       ? (word.type as WordTypeKey)
       : undefined;
     const wordType = maybeKey ? wordTypes[maybeKey] : undefined;
-    if (!word?.text || !wordType) return null;
+    if (!word?.text) return null;
 
     const displayText = word.text.replace(/\/.*?\//g, "");
-    const colorKey = wordType.colorKey;
-    const baseClass = backgroundColors[colorKey];
-    const hoverClass = hoverBackgroundColors[colorKey];
-    const isEnabled = wordType.enabled;
+    const colorKey = wordType?.colorKey;
+    const baseClass = colorKey ? backgroundColors[colorKey] : "";
+    const hoverClass = colorKey ? hoverBackgroundColors[colorKey] : "";
+    const isEnabled = wordType?.enabled ?? false;
     const appliedColor = isEnabled ? baseClass : "";
-    const wordString = `${cleanWord(word.text)}::${word.definition}`;
+    const definition = word.definition?.trim() ?? "";
+    const wordString = `${cleanWord(word.text)}::${definition}`;
     const alreadySaved = savedWords.includes(wordString);
 
     const showHoverColor = hoverEnabled || (isMobile && isOpen);
@@ -259,16 +295,17 @@ React.useEffect(() => {
         return;
       }
 
+      if (!definition) {
+        toast.error("No definition available for this word.");
+        return;
+      }
+
       if (savedWords.includes(wordString)) return;
 
-      const updatedWords = [...savedWords, wordString];
-      setDictionaryWords(updatedWords);
-      toast.success(`Added "${wordString.split("::")[0]}" to your dictionary`);
-
       try {
-        await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
-          dictionaryWords: updatedWords,
-        });
+        const profile = await updateMyProfile({ kind: "dictionary.add", entry: wordString });
+        setDictionaryWords(profile.dictionaryWords);
+        toast.success(`Added "${wordString.split("::")[0]}" to your dictionary`);
       } catch (err) {
         console.error("Error saving word:", err);
         toast.error("Something went wrong. Word might not be saved.");
@@ -293,7 +330,7 @@ React.useEffect(() => {
             </span>
           </HoverCardTrigger>
 
-          {(hoverEnabled || isMobile) && word.definition && (
+          {(hoverEnabled || isMobile) && definition && (
             <HoverCardContent className={`flex flex-col text-sm ${geist.className}`}>
               <div className="flex flex-col items-center justify-center gap-1">
                 <span className="font-bold">{word.type}</span>
@@ -302,7 +339,7 @@ React.useEffect(() => {
                   variant="outline"
                   onClick={() =>
                     !alreadySaved &&
-                    addDictionary(`${cleanWord(word.text)}::${word.definition}`)
+                    addDictionary(wordString)
                   }
                   className="w-4 h-5 rounded-sm cursor-pointer"
                   disabled={alreadySaved}
@@ -348,7 +385,7 @@ React.useEffect(() => {
 
   return (
 
-    <div className="grid grid-rows-[auto_1fr] h-full w-full bg-background text-foreground rounded-lg">
+    <div className="grid grid-rows-[auto_minmax(0,1fr)_auto] h-full min-h-0 w-full bg-background text-foreground rounded-lg">
 
   <div className="border-b px-2 lg:px-10 py-4">
   <div className="flex flex-col xl:flex-row xl:items-center gap-1 lg:gap-3">
@@ -362,7 +399,7 @@ React.useEffect(() => {
     </div>
 
     <div className="flex flex-row items-center gap-1">
-    {assignedForThisConvo && (
+    {legacyAccountFeaturesEnabled && assignedForThisConvo && (
       <Badge
       variant="secondary"
       className="bg-pink-100 text-pink-700 border-pink-200"
@@ -371,7 +408,7 @@ React.useEffect(() => {
       </Badge>
     )}
 
-  {assignedForThisConvo && (
+  {legacyAccountFeaturesEnabled && assignedForThisConvo && (
     <p className="text-sm text-muted-foreground">
       Plus features enabled for this conversation
     </p>
@@ -500,20 +537,18 @@ React.useEffect(() => {
         </div>
 
       </div>
-  {audioLoading ? (
-    <Skeleton className="" />
-  ) : audioUrl ? (
-    // Allow audio if:
-    // - Teacher, or
-    // - Subscribed, or
-    // - Assigned by a Plus tutor (Plus tutor's assignment grants Plus features)
-    (user?.isTeacher || isSubscribed || assignedForThisConvo) ? (
-        <AudioPlayer src={audioUrl} />
-    ) : assignmentChecking ? (
-        <Skeleton className="w-40 h-5" />
+  {!canUseAudio ? (
+    legacyAccountFeaturesEnabled && assignmentChecking ? (
+      <Skeleton className="w-40 h-5" />
     ) : (
-        <span className="text-zinc-500">Subscription or assignment required</span>
+      <span className="text-sm text-muted-foreground">Audio is available with Plus.</span>
     )
+  ) : audioLoading ? (
+    <Skeleton className="w-40 h-5" />
+  ) : audioError ? (
+    <span role="alert" className="text-sm text-muted-foreground">{audioError} <button type="button" className="underline underline-offset-4" onClick={() => setAudioAttempt(value => value + 1)}>Try again</button></span>
+  ) : audioUrl ? (
+    <AudioPlayer src={audioUrl} refreshSource={refreshAudioSource} />
   ) : (
       <span className="text-zinc-500">No audio found? <Link href="/home/feedback" className="underline">Let us know</Link></span>
   )}

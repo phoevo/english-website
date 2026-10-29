@@ -1,4 +1,7 @@
 import { create } from "zustand";
+import { updateMyProfile } from "@/data/accountActions";
+import { ensureUserDocument } from "@/data/getData";
+import { legacyAccountFeaturesEnabled } from "@/lib/accountFeatures";
 import {
   account,
   databases,
@@ -126,17 +129,9 @@ fetchUser: async () => {
   try {
     const res = await account.get();
 
-    let userDoc: UserDoc | null = null;
-
-    try {
-      userDoc = (await databases.getDocument(
-        databaseId,
-        usersCollectionId,
-        res.$id
-      )) as UserDoc;
-    } catch{
-      console.log("User not found")
-    }
+    // Repair a missing profile through the same bootstrap used by email and OAuth signup.
+    const { document } = await ensureUserDocument(res);
+    const userDoc = document as UserDoc;
 
     // ---- Safe defaults ----
     const isSubscribed = !!userDoc?.isSubscribed;
@@ -148,7 +143,9 @@ fetchUser: async () => {
     const taskCount = userDoc?.taskCount ?? 0;
     const lastActive = userDoc?.lastActive ?? null;
     const streak = userDoc?.streak ?? 0;
-    const isTeacher = !!userDoc?.isTeacher;
+    // Existing persisted roles are retained. The active app exposes one account,
+    // using the tutor-compatible flag expected by the unchanged billing flow.
+    const isTeacher = legacyAccountFeaturesEnabled ? !!userDoc?.isTeacher : true;
     const friendsList = userDoc?.friendsList ?? [];
     const activeStudents = userDoc?.activeStudents ?? [];
 
@@ -207,12 +204,12 @@ fetchUser: async () => {
       activeStudents,
     });
 
-    // background fetch (non-blocking)
-    get()
-      .fetchFriends()
-      .catch((err) =>
-        console.warn("Background friends fetch failed:", err)
-      );
+    // Connections and assignments remain available only in the legacy implementation.
+    if (legacyAccountFeaturesEnabled) {
+      get()
+        .fetchFriends()
+        .catch((err) => console.warn("Background friends fetch failed:", err));
+    }
   } catch (error) {
     console.error("Failed to fetch user or conversations:", error);
 
@@ -243,27 +240,8 @@ fetchUser: async () => {
     if (!user) return;
 
     try {
-      const userDoc = await databases.getDocument(
-        databaseId,
-        usersCollectionId,
-        user.$id
-      );
-
-      const currentCompleted: string[] = Array.isArray(userDoc.completeConversations)
-        ? userDoc.completeConversations
-        : [];
-
-      if (currentCompleted.includes(conversationId)) return;
-
-      const updated = [...currentCompleted, conversationId];
-
-      await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
-        completeConversations: updated,
-      });
-
-      set((state) => ({
-        completeConversations: [...state.completeConversations, conversationId],
-      }));
+      const profile = await updateMyProfile({ kind: "conversation.complete", conversationId });
+      set({ completeConversations: profile.completeConversations });
     } catch (err) {
       console.error("Failed to mark conversation as complete:", err);
     }
@@ -299,14 +277,9 @@ fetchUser: async () => {
     const { user, challengeCount } = get();
     if (!user || challengeCount.includes(challenge)) return;
 
-    const updatedCount = [...challengeCount, challenge];
-
     try {
-      await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
-        challengeCount: updatedCount,
-      });
-
-      set({ challengeCount: updatedCount });
+      const profile = await updateMyProfile({ kind: "challenge.complete", challengeId: challenge });
+      set({ challengeCount: profile.challengeCount });
     } catch (err) {
       console.error("Failed to update challenge count:", err);
     }
@@ -315,30 +288,24 @@ fetchUser: async () => {
   setTaskCount: (count: number) => set({ taskCount: count }),
 
   incrementTaskCount: async () => {
-    const { user, taskCount } = get();
+    const { user } = get();
     if (!user) return;
-
-    const newCount = taskCount + 1;
-
     try {
-      await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
-        taskCount: newCount,
-      });
-
-      set({ taskCount: newCount });
+      const profile = await updateMyProfile({ kind: "task.complete" });
+      set({ taskCount: profile.taskCount });
     } catch (err) {
       console.error("Failed to increment task count:", err);
     }
   },
 
   setUser: (user) => set({
-    user,
-    isTeacher: user.isTeacher,
+    isTeacher: legacyAccountFeaturesEnabled ? user.isTeacher : true,
+    user: { ...user, isTeacher: legacyAccountFeaturesEnabled ? user.isTeacher : true },
   }),
 
   setIsTeacher: (val) => set((state) => ({
-    isTeacher: val,
-    user: state.user ? { ...state.user, isTeacher: val } : null,
+    isTeacher: legacyAccountFeaturesEnabled ? val : Boolean(state.user),
+    user: state.user ? { ...state.user, isTeacher: legacyAccountFeaturesEnabled ? val : true } : null,
   })),
 
   setActiveStudents: async () => {

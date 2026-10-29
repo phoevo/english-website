@@ -14,6 +14,8 @@ import { useUserStore } from "@/data/useUserStore";
 import { isConversationAssignedToStudent } from "@/data/appwrite";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { legacyAccountFeaturesEnabled } from "@/lib/accountFeatures";
+
 
 export default function ConversationPage() {
   const params = useParams();
@@ -72,7 +74,7 @@ export default function ConversationPage() {
          * Authorization checks below only apply to
          * authenticated users.
          */
-        if (user) {
+        if (legacyAccountFeaturesEnabled && user) {
           const requiresProAccess =
             fetchedConversation.isPro &&
             !user.isSubscribed &&
@@ -158,7 +160,7 @@ export default function ConversationPage() {
     )}
 
     <div className="min-h-0 flex-1">
-      {!user || isTeacher ? (
+      {!user || (legacyAccountFeaturesEnabled && isTeacher) ? (
         <TeacherContentDisplay conversation={conversation} />
       ) : (
         <ContentDisplay conversation={conversation} />

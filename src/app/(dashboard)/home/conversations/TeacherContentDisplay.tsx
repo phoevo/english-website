@@ -2,11 +2,7 @@ import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { useUserStore } from "@/data/useUserStore";
-import {
-  databases,
-  databaseId,
-  usersCollectionId,
-} from "@/data/appwrite";
+import { updateMyProfile } from "@/data/accountActions";
 import {
   HoverCard,
   HoverCardContent,
@@ -104,19 +100,9 @@ export default function TeacherContentDisplay({
       return;
     }
 
-    const updatedWords = [...dictionaryWords, wordString];
-
     try {
-      await databases.updateDocument(
-        databaseId,
-        usersCollectionId,
-        user.$id,
-        {
-          dictionaryWords: updatedWords,
-        }
-      );
-
-      setDictionaryWords(updatedWords);
+      const profile = await updateMyProfile({ kind: "dictionary.add", entry: wordString });
+      setDictionaryWords(profile.dictionaryWords);
 
       toast.success(`Added "${cleanedText}" to your dictionary`);
     } catch (error) {

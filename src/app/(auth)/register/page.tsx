@@ -118,7 +118,11 @@ export default function Register() {
 
   try {
     await ensureUserDocument();
-  } catch {
+  } catch (err) {
+    console.error('Account setup failed:', err);
+    setError('Your account was created, but setup could not finish. Please log in to try again.');
+    setIsLoading(false);
+    return;
   }
 
 
@@ -130,12 +134,13 @@ export default function Register() {
 
   try {
     await fetchUser()
+    if (!useUserStore.getState().user) throw new Error('User could not be loaded');
   } catch {
     setError('Something went wrong. Please try logging in again.');
     setIsLoading(false);
     return;
   }
-  router.push('/onboarding');
+  router.replace('/home');
 };
 
 

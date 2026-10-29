@@ -1,6 +1,7 @@
 import { toast } from "sonner";
+import { getMyProfile } from "./accountActions";
 import { account, conversationsCollectionId, databaseId, databases, usersCollectionId, functions as appwriteFunctions } from "./appwrite";
-import { Client, Functions } from "appwrite";
+import { Client, Functions, Models, Query } from "appwrite";
 
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!;
@@ -11,34 +12,16 @@ const CONVERSATIONS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_CONVERSATIO
 const STRIPE_FUNCTION = process.env.NEXT_PUBLIC_APPWRITE_STRIPE_FUNCTION!;
 
 
-export async function ensureUserDocument(): Promise<{ created: boolean }> {
-  const user = await account.get();
-  const userId = user.$id;
+type ProfileAccount = { $id: string; email: string; name?: string };
 
-  try {
-    // Try to get the user document by ID
-    await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID, userId);
-    return { created: false };
-  } catch (err: unknown) {
-    const code = (typeof err === 'object' && err && 'code' in err && typeof (err as { code?: unknown }).code === 'number')
-      ? (err as { code: number }).code
-      : undefined;
-    if (code === 404) {
-      // If not found, create it
-      await databases.createDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
-        userId: userId,
-        email: user.email,
-        name: user.name ?? "",
-        recentConversations: [],
-        onboardingComplete: false,
-      });
-      return { created: true };
-    } else {
-      throw err; // throw other unexpected errors
-    }
+// Compatibility wrapper: the server always obtains identity from the verified session.
+export async function ensureUserDocument(authenticatedUser?: ProfileAccount) {
+  const result = await getMyProfile();
+  if (authenticatedUser && authenticatedUser.$id !== result.document.$id) {
+    throw new Error("Your account changed. Please try again.");
   }
+  return result;
 }
-
 
 export async function subscribeUser(documentId: string) {
   try {
@@ -158,8 +141,23 @@ export async function unsubscribeUser(documentId: string) {
 
 export async function fetchConversations() {
   try {
-    const res = await databases.listDocuments(DATABASE_ID, CONVERSATIONS_COLLECTION_ID);
-    return res.documents;
+    const conversations: Models.Document[] = [];
+    let cursor: string | undefined;
+
+    while (true) {
+      const queries = [Query.limit(100)];
+      if (cursor) queries.push(Query.cursorAfter(cursor));
+
+      const response = await databases.listDocuments(DATABASE_ID, CONVERSATIONS_COLLECTION_ID, queries);
+      conversations.push(...response.documents);
+
+      if (response.documents.length === 0 || conversations.length >= response.total) break;
+      const nextCursor = response.documents[response.documents.length - 1].$id;
+      if (nextCursor === cursor) throw new Error("Conversation pagination did not advance.");
+      cursor = nextCursor;
+    }
+
+    return conversations;
   } catch (error) {
     console.error("Failed to fetch conversations:", error);
     throw error;
@@ -254,7 +252,7 @@ export async function deleteAccountServer(userId: string): Promise<void> {
   // No function cold start, no timeout issues
   const resp = await fetch('/api/delete-account', {
     method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json', authorization: 'Bearer ' + (await account.createJWT()).jwt },
     body: JSON.stringify({ userId }),
   });
 

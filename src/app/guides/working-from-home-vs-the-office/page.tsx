@@ -362,7 +362,7 @@ export default function PostPage() {
         <p className={styles.muted + " " + styles.spaced}>
           Read the full dialogue, highlight useful vocabulary, and save
           expressions to a personal dictionary. Reading tools are free;
-          student audio requires a Plus account.
+          audio requires a Plus account.
         </p>
 
         <Link href="/home/conversations/6a1c68581f9bbab1c1d9"

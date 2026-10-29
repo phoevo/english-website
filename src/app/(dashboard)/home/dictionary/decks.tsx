@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { Query } from "appwrite";
 import { useUserStore } from "@/data/useUserStore";
-import { databases, databaseId, decksCollectionId, account } from "@/data/appwrite";
+import { createMyDeck, deleteMyDeck, getMyDecks } from "@/data/accountActions";
 import { Create } from "./create";
 import {
   Card,
@@ -21,21 +20,7 @@ interface DeckCreateInput {
 }
 
 export async function createDeck({ name, type, words }: DeckCreateInput) {
-  const user = await account.get();
-
-  const newDeck = {
-  title: name.trim(),
-  type,
-  words,
-  userID: user.$id,
-};
-
-  return await databases.createDocument(
-    databaseId,
-    decksCollectionId,
-    'unique()',
-    newDeck
-  );
+  return createMyDeck({ name, type, words });
 }
 
 
@@ -62,10 +47,7 @@ export function MyDecks({ onSelectDeck }: MyDecksProps) {
     const fetchDecks = async () => {
       setLoading(true);
       try {
-        const res = await databases.listDocuments(databaseId, decksCollectionId, [
-          Query.equal("userID", user.$id),
-        ]);
-        setDecks(res.documents as unknown as Deck[]);
+        setDecks(await getMyDecks());
       } catch (error) {
         console.error("Failed to fetch decks:", error);
       } finally {
@@ -88,11 +70,7 @@ export function MyDecks({ onSelectDeck }: MyDecksProps) {
 
   try {
 
-    await databases.deleteDocument(
-      databaseId,
-      decksCollectionId,
-      deckId
-    );
+    await deleteMyDeck(deckId);
 
     // Optionally update local state to remove the deleted deck
     setDecks(prev => prev.filter(deck => deck.$id !== deckId));

@@ -19,7 +19,7 @@ const billingOptions = {
 } as const;
 
 // Student.tsx and Tutor.tsx retain the original pricing implementations.
-// This page displays only the tutor offering, named Free and Plus.
+// Checkout still uses the original tutor plan identifiers for Free and Plus.
 export default function PricingPage() {
   const page = useRef<HTMLDivElement>(null);
   const [billing, setBilling] = useState<keyof typeof billingOptions>("monthly");
@@ -76,10 +76,10 @@ export default function PricingPage() {
         </nav>
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 pt-12 pb-20 sm:pt-20 lg:pb-28">
+      <main className="mx-auto max-w-5xl px-6 pt-12 pb-20 sm:pt-5 lg:pb-28">
         <div data-pricing-intro className="mb-10 text-center sm:mb-12">
           <h1 className="text-3xl font-medium leading-tight tracking-[-.045em] sm:text-5xl">Free and Plus.</h1>
-          <p className="mx-auto mt-4 max-w-lg text-base leading-7 text-muted-foreground">Try eight conversations for free, or choose Plus for access to all teaching materials.</p>
+          <p className="mx-auto mt-4 max-w-lg text-base leading-7 text-muted-foreground">Read every conversation for free. Choose Plus to listen to the audio too.</p>
           <div role="group" aria-label="Plus billing period" className="mt-7 inline-flex rounded-full border border-border p-1">
             {(["monthly", "yearly"] as const).map(option => (
               <button key={option} type="button" aria-pressed={billing === option} disabled={pending} onClick={() => setBilling(option)} className={`rounded-full px-5 py-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground disabled:opacity-50 ${billing === option ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"}`}>
@@ -92,11 +92,13 @@ export default function PricingPage() {
         <div className="grid gap-5 md:grid-cols-2 sm:gap-6">
           <article data-plan aria-labelledby="free-plan" className="flex flex-col rounded-2xl border border-border bg-background p-7 sm:p-9">
             <h2 id="free-plan" className="text-2xl font-medium tracking-tight">Free</h2>
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">Try Synomilo in your lessons.</p>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">Read and work with every conversation.</p>
             <p className="mt-7 text-3xl font-medium tracking-[-.04em]">€0</p>
             <p className="mt-2 text-xs text-muted-foreground">No subscription required.</p>
             <ul className="mt-8 mb-10 space-y-4 border-t border-border pt-6 text-sm leading-6">
-              <Feature>8 conversations across levels A1–B2</Feature>
+              <Feature>Access to all conversations</Feature>
+              <Feature>All word types and highlight colors</Feature>
+              <Feature>Save vocabulary to your dictionary</Feature>
             </ul>
             <div className="mt-auto">
               <Link href={user ? "/home/conversations" : "/register"} className={`${buttonClass} border border-border bg-accent hover:bg-muted/`}>{user ? "Browse conversations" : "Start free"}<ArrowUpRight size={16} aria-hidden="true" /></Link>
@@ -104,12 +106,13 @@ export default function PricingPage() {
           </article>
 
           <article data-plan aria-labelledby="plus-plan" className="flex flex-col rounded-2xl border border-foreground/35 bg-background p-7 sm:p-9">
-            <h2 id="plus-plan" className="text-2xl font-medium tracking-tight">Plus<span aria-hidden="true" className="text-pink-500">.</span></h2>
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">Use the full library in your lessons.</p>
+            <h2 id="plus-plan" className="text-2xl font-medium tracking-tight">Plus</h2>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">Everything in Free, with conversation audio.</p>
             <p aria-live="polite" aria-atomic="true" className="mt-7 text-3xl font-medium tracking-[-.04em]">€{selected.price}<span className="ml-1 text-base font-normal tracking-normal text-muted-foreground">/{selected.interval}</span></p>
             <p className="mt-2 text-xs text-muted-foreground">{billing === "yearly" ? "Billed yearly. " : "Billed monthly. "}Plus applicable taxes.</p>
             <ul className="mt-8 mb-10 space-y-4 border-t border-border pt-6 text-sm leading-6">
-              <Feature>Full access to all conversations and teaching materials</Feature>
+              <Feature>Everything in Free</Feature>
+              <Feature>Listen to conversation audio</Feature>
 
             </ul>
             <div className="mt-auto">

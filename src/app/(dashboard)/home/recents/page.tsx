@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { IterationCcw, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUserStore } from "@/data/useUserStore";
-import { databaseId, databases, usersCollectionId } from "@/data/appwrite";
+import { updateMyProfile } from "@/data/accountActions";
 import GuideTour, { type GuideStep } from "../../GuideTour";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -37,22 +37,12 @@ function RecentsPage() {
 
     setDeletingId(conversationId);
 
-    const updatedList = recentConversations.filter((c) => c.$id !== conversationId);
-    setRecentConversations(updatedList);
-    setDeletingId(null);
-
     try {
-      await databases.updateDocument(
-        databaseId,
-        usersCollectionId,
-        user.$id,
-        {
-          recentConversations: updatedList.map((c) => c.$id),
-        }
-      );
+      const profile = await updateMyProfile({ kind: "conversation.remove", conversationId });
+      setRecentConversations(recentConversations.filter(item => profile.recentConversations.includes(item.$id)));
     } catch (error) {
       console.error("Failed to update recent conversations:", error);
-    }
+    } finally { setDeletingId(null); }
   };
 
   if (loading) {

@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { databases } from "@/data/appwrite"
+import { updateMyProfile } from "@/data/accountActions"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import {
@@ -20,9 +20,10 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { useUserStore } from "@/data/useUserStore"
 import { backgroundColors } from "@/data/color"
 import Link from "next/link"
+import { legacyAccountFeaturesEnabled } from "@/lib/accountFeatures"
 
-const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!
-const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!
+
+
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" })
 
@@ -57,6 +58,8 @@ function isBgKey(key: string): key is BackgroundColorKey {
 }
 
 export default function CustomColors({ userId }: { userId: string }) {
+  // Kept for existing callers; the backend derives ownership from the session.
+  void userId;
   const { isSubscribed, customColors, setCustomColors } = useUserStore()
   const [openPickerIndex, setOpenPickerIndex] = useState<number | null>(null)
 
@@ -93,9 +96,8 @@ export default function CustomColors({ userId }: { userId: string }) {
         ? customColors
         : effectiveColorKeys)
 
-      await databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
-        customColors: toSave,
-      })
+      const profile = await updateMyProfile({ kind: "colors.save", colors: toSave })
+      setCustomColors(profile.customColors)
 
       toast.success("Preferences saved!")
     } catch (err) {
@@ -163,7 +165,7 @@ export default function CustomColors({ userId }: { userId: string }) {
       )}
 
       <div className="flex gap-4 mt-4 justify-center">
-        {isSubscribed ? (
+        {(!legacyAccountFeaturesEnabled || isSubscribed) ? (
         <Button className="cursor-pointer" onClick={savePreferences}>Save Preferences</Button>)
         :
 

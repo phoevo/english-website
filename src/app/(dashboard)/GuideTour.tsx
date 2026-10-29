@@ -5,12 +5,7 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Geist } from "next/font/google";
-import {
-  account,
-  databases,
-  databaseId,
-  usersCollectionId,
-} from "@/data/appwrite";
+import { getMyProfile, updateMyProfile } from "@/data/accountActions";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -48,13 +43,7 @@ export default function GuideTour({ id, steps }: GuideTourProps) {
       if (localStorage.getItem(localKey) === "true") return;
 
       try {
-        const authUser = await account.get();
-
-        const userDoc = await databases.getDocument(
-          databaseId,
-          usersCollectionId,
-          authUser.$id
-        );
+        const { document: userDoc } = await getMyProfile();
 
         if (cancelled) return;
 
@@ -123,26 +112,7 @@ export default function GuideTour({ id, steps }: GuideTourProps) {
     localStorage.setItem(localKey, "true");
 
     try {
-      const authUser = await account.get();
-
-      const userDoc = await databases.getDocument(
-        databaseId,
-        usersCollectionId,
-        authUser.$id
-      );
-
-      const completedGuides = userDoc.guideTour ?? [];
-
-      if (!completedGuides.includes(id)) {
-        await databases.updateDocument(
-          databaseId,
-          usersCollectionId,
-          authUser.$id,
-          {
-            guideTour: [...completedGuides, id],
-          }
-        );
-      }
+      await updateMyProfile({ kind: "guide.complete", guideId: id });
     } catch (error) {
       console.error("Failed to save guide progress:", error);
     }

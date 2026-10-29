@@ -1,10 +1,9 @@
 "use client"
 import * as React from "react"
-import { BookOpen, BookMarked, IterationCcw, ClipboardCheck, MessageCirclePlus, HomeIcon, User, Swords, Sword, LogOut, UserRound, LogIn, Sparkle, SunIcon, MoonIcon, Sparkles } from "lucide-react"
+import { BookOpen, BookMarked, IterationCcw, MessageCirclePlus, HomeIcon, User, LogOut, UserRound, LogIn, Sparkle, SunIcon, MoonIcon, Sparkles } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -18,9 +17,6 @@ import { Geist } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/data/useUserStore";
 import { account } from "@/data/appwrite";
-import DailyTasks from "@/app/(dashboard)/home/dailyTasks";
-import { Button } from "./button";
-import Challenges from "@/app/(dashboard)/home/Challenges";
 import { Badge } from "./badge";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./hover-card";
 import { useTheme } from "next-themes";
@@ -30,7 +26,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Separator } from "./separator"
 
 
@@ -75,7 +70,7 @@ const items = [
 
 export function AppSidebar() {
 
-  const { user, loading, isSubscribed, isTeacher, challengeCount, taskCount, streak } = useUserStore();
+  const { user, isSubscribed, streak } = useUserStore();
   const router = useRouter();
 
   const { theme, systemTheme, setTheme } = useTheme();

@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { BadgePlus, Bug, Lightbulb, MessageCircle, Check } from "lucide-react";
 import { useUserStore } from "@/data/useUserStore";
-import { databaseId, databases, feedbackCollectionId } from "@/data/appwrite";
+import { sendMyFeedback } from "@/data/accountActions";
 import GuideTour, { type GuideStep } from "../../GuideTour";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -19,7 +19,6 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Geist } from "next/font/google";
-import { ID } from "appwrite";
 
 
 const geist = Geist({ subsets: ['latin'] });
@@ -58,17 +57,7 @@ function FeedbackPage() {
     }
     setSubmitting(true);
     try {
-      await databases.createDocument(
-        databaseId,
-        feedbackCollectionId,
-        ID.unique(),
-        {
-          tag: selectedTag!,
-          feedback: message.trim(),
-          name: name.trim() || undefined,
-          email: email.trim() || undefined,
-        }
-      );
+      await sendMyFeedback({ tag: selectedTag, feedback: message.trim(), name: name.trim(), email: email.trim() });
       // Reset
       setMessage("");
       setName("");
@@ -181,6 +170,7 @@ function FeedbackPage() {
               <Label htmlFor="message">Your feedback</Label>
               <textarea
                 id="message"
+                maxLength={1000}
                 value={message}
                 onChange={(e) => { setMessage(e.target.value); if (submitted) setSubmitted(false); }}
                 aria-invalid={!!error && !message.trim()}
@@ -217,7 +207,7 @@ function FeedbackPage() {
             <div className="pt-2">
              <Button
                 type="submit"
-                disabled={submitted || submitted}
+                disabled={submitting || submitted}
                 className="cursor-pointer transition-all duration-500 inline-flex items-center justify-center"
 
               >

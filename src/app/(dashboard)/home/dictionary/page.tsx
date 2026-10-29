@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { databases} from "@/data/appwrite";
+import { updateMyProfile } from "@/data/accountActions";
 import { vocabIndex } from "@/data/vocab/vocabIndex";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -59,20 +59,12 @@ function DictionaryPage() {
     // Find the full entry (e.g., "apple::a fruit")
     const fullEntry = dictionaryWords.find((entry) => entry.startsWith(wordToDelete + "::")) || wordToDelete;
 
-    const updatedWords = dictionaryWords.filter((word) => word !== fullEntry);
-    setDictionaryWords(updatedWords);
-    setDeletingWord(null);
-
     try {
-      await databases.updateDocument(
-        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-        process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!,
-        user.$id,
-        { dictionaryWords: updatedWords }
-      );
+      const profile = await updateMyProfile({ kind: "dictionary.remove", entry: fullEntry });
+      setDictionaryWords(profile.dictionaryWords);
     } catch (error) {
       console.error("Failed to delete word:", error);
-    }
+    } finally { setDeletingWord(null); }
   };
 
 

@@ -6,6 +6,7 @@ import { useConversations } from "@/hooks/useConversations";
 import { useUserStore } from "@/data/useUserStore";
 import { matchesConversationSearch } from "@/lib/conversationSearch";
 import { cn } from "@/lib/utils";
+import { legacyAccountFeaturesEnabled } from "@/lib/accountFeatures";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -27,7 +28,7 @@ const categories = [
 const convoGuideSteps: GuideStep[] = [
   { target: "convo-title", title: "Conversations", description: "Browse the conversation library by level and topic." },
   { target: "convo-filters", title: "Search and filters", description: "Search by title, description, topic or level, then narrow the results with the filters." },
-  { target: "convo-grid", title: "Conversation cards", description: "Open a conversation to start reading. The pink sparkle indicates Plus content and the green check indicates completion. Hover over words for definitions and save them to your dictionary." },
+  { target: "convo-grid", title: "Conversation cards", description: "Open a conversation to start reading. The green check indicates completion. Hover over words for definitions and save them to your dictionary." },
 ];
 type CoverConversation = { $id: string; title: string; description?: string; level: string; audioFileId: string; isPro: boolean; category: string };
 
@@ -46,7 +47,7 @@ export default function ConversationsPage() {
   const filtered = list.filter(conversation => {
     const levelMatches = selectedLevel === "All" || conversation.level === selectedLevel;
     const categoryMatches = category === "All" || conversation.category === category;
-    const userCanAccess = isTeacher || !conversation.isPro || Boolean(user?.isSubscribed);
+    const userCanAccess = !legacyAccountFeaturesEnabled || isTeacher || !conversation.isPro || Boolean(user?.isSubscribed);
     return levelMatches && categoryMatches && userCanAccess && matchesConversationSearch(conversation, search);
   });
 
@@ -97,7 +98,7 @@ export default function ConversationsPage() {
             <p role="status" aria-live="polite" aria-atomic="true" className="text-xs text-muted-foreground">{filtered.length} {filtered.length === 1 ? "conversation" : "conversations"}</p>
             {hasFilters && <button type="button" onClick={clearFilters} className={dashboardStyles.textLink}>Clear filters</button>}
           </div>
-          {!isTeacher && <AlertDialog open={test} onOpenChange={setTest}>
+          {(!legacyAccountFeaturesEnabled || !isTeacher) && <AlertDialog open={test} onOpenChange={setTest}>
             <AlertDialogTrigger asChild><button type="button" className={dashboardStyles.textLink}>Not sure of your level?</button></AlertDialogTrigger>
             <AlertDialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-xl border-border bg-background sm:max-w-xl">
               <AlertDialogHeader>

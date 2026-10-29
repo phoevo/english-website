@@ -514,7 +514,7 @@ export default function PostPage() {
           <p className={styles.muted + " " + styles.spaced}>
             Open the complete conversation in Synomilo to read the full
             dialogue, explore highlighted expressions, save useful vocabulary,
-            and practise professional English in context. Student audio
+            and practise professional English in context. Audio
             requires a Plus account.
           </p>
 

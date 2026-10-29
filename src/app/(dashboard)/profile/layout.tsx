@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { account, databases, databaseId, usersCollectionId, decksCollectionId, friendRequestsId, assignmentsId } from '@/data/appwrite'
+import { account, databases, databaseId, usersCollectionId } from '@/data/appwrite'
 import { useUserStore } from '@/data/useUserStore'
 
 import { Button } from '@/components/ui/button'
@@ -28,7 +28,7 @@ import { unsubscribeUser2, deleteAccountServer } from '@/data/getData'
 import { Geist } from 'next/font/google'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Query } from 'appwrite'
+import { updateMyProfile } from '@/data/accountActions'
 
 const geist = Geist({ subsets: ['latin'] });
 
@@ -102,7 +102,7 @@ export default function ProfileLayout() {
         values.username === user!.name &&
         !values.newPassword) {
         toast('No changes detected', {
-          description: 'Please update your username, role, or password before saving.',
+          description: 'Please update your username or password before saving.',
         });
         setIsSaving(false);
         return;
@@ -111,10 +111,8 @@ export default function ProfileLayout() {
       if (values.username !== user!.name) {
         // Update Appwrite auth account name
         await account.updateName(values.username);
-        // Mirror the change into the Users collection so all pages (e.g., Assignments) see the same name
-        await databases.updateDocument(databaseId, usersCollectionId, user!.$id, {
-          name: values.username,
-        });
+        // Mirror the change into the Users collection so the name stays consistent across the app
+        await updateMyProfile({ kind: "profile.syncName" });
         toast('Username updated', {
           description: `Your username is now ${values.username}`,
         });
@@ -198,24 +196,6 @@ const handleUnsubscribe = async () => {
 
     const userId = user.$id;
 
-    const safeDeleteDocs = async (
-      collectionId: string,
-      queries: string[]
-    ) => {
-      try {
-        const res = await databases.listDocuments(databaseId, collectionId, queries);
-        for (const doc of (res.documents as Array<{ $id: string }>)) {
-          try {
-            await databases.deleteDocument(databaseId, collectionId, doc.$id);
-          } catch (e) {
-            console.warn(`Failed to delete doc ${doc.$id} in ${collectionId}:`, e);
-          }
-        }
-      } catch (e) {
-        console.warn(`Failed to list documents in ${collectionId}:`, e);
-      }
-    };
-
     try {
       // Only call unsubscribe if user is actually subscribed
       if (isSubscribed) {
@@ -226,26 +206,9 @@ const handleUnsubscribe = async () => {
         }
       }
 
-      // Clean up user-owned documents (client-side, fast direct DB access)
-      await safeDeleteDocs(decksCollectionId, [Query.equal('userID', userId)]);
-      await safeDeleteDocs(friendRequestsId, [Query.equal('fromUserId', userId)]);
-      await safeDeleteDocs(friendRequestsId, [Query.equal('toUserId', userId)]);
-      await safeDeleteDocs(assignmentsId, [Query.equal('studentId', userId)]);
-      await safeDeleteDocs(assignmentsId, [Query.equal('teacherId', userId)]);
-
-      // Delete user document from DB
-      try {
-        await databases.deleteDocument(databaseId, usersCollectionId, userId);
-      } catch (e) {
-        console.warn('Failed to delete user document:', e);
-      }
-
-      // Delete auth user via Appwrite function (only thing that needs admin key)
-      try {
-        await deleteAccountServer(userId);
-      } catch (e) {
-        console.warn('Failed to delete Appwrite auth user:', e);
-      }
+      // The authenticated server verifies ownership and removes the account data.
+      // Never report success if privileged deletion fails.
+      await deleteAccountServer(userId);
 
       try {
         await account.deleteSessions();
@@ -454,7 +417,7 @@ const handleUnsubscribe = async () => {
                 <Label className="font-medium mb-2"> Highlight Color Customization
                   </Label>
 
-                  {isSubscribed && user ?(
+                  {user ?(
                   <>
                   <p className='text-sm text-muted-foreground'>Select a word type and select it&apos;s color. Save when you&apos;re done. <span className='text-red-500 font-normal m-0 text-sm'>
                     Certain background and text color combinations could affect visibility.</span>
@@ -463,7 +426,7 @@ const handleUnsubscribe = async () => {
                   <CustomColors userId={user.$id} />
 
                   </>):
-                    <p className='text-muted-foreground text-sm'>Requires Plus</p>
+                    <p className='text-muted-foreground text-sm'>Log in to customize your highlight colors.</p>
                   }
                 </div>
             </CardContent>
