@@ -32,6 +32,12 @@ export type ConversationContent = ConversationCatalogItem & {
   audioFileId: string | null;
 };
 
+export type PublicConversationPreview = ConversationContent & {
+  previewOnly: boolean;
+  previewLineCount: number;
+  totalLineCount: number;
+};
+
 export type ProfileOperation =
   | { kind: "dictionary.add" | "dictionary.remove"; entry: string }
   | { kind: "colors.save"; colors: string[] }

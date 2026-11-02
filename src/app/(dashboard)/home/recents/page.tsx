@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -10,19 +10,12 @@ import { useUserStore } from "@/data/useUserStore";
 import { updateMyProfile } from "@/data/accountActions";
 import GuideTour, { type GuideStep } from "../../GuideTour";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardDescription,
-  CardTitle,
-} from "@/components/ui/card"
-import { Geist } from "next/font/google";
-
-
-const geist = Geist({ subsets: ['latin'] });
+import DashboardPage from "@/components/dashboard/DashboardPage";
+import { dashboardStyles } from "@/components/dashboard/styles";
 
 const recentsGuideSteps: GuideStep[] = [
   { target: "recents-title", title: "Recent Conversations", description: "Conversations you interact with are saved here for quick access." },
-  { target: "recents-list", title: "Your Recents", description: "Click a conversation to resume reading, or use the red button to remove it from your list." },
+  { target: "recents-list", title: "Your recents", description: "Open a conversation to continue reading, or remove it from your list." },
 ];
 
 
@@ -46,68 +39,58 @@ function RecentsPage() {
   };
 
   if (loading) {
-    return <div role="status" aria-busy="true" aria-label="Loading recent conversations" className="m-5 space-y-3 lg:m-10 lg:space-y-5">
+    return <DashboardPage ready={false}><div role="status" aria-busy="true" aria-label="Loading recent conversations" className="space-y-5">
       <span className="sr-only">Loading...</span>
       <div aria-hidden="true" className="space-y-3">
-        <Skeleton className="h-8 w-64 max-w-full" />
+        <Skeleton className="h-9 w-64 max-w-full" />
         <Skeleton className="h-4 w-80 max-w-full" />
       </div>
       <div aria-hidden="true" className="mt-9 space-y-3">
-        {["", "opacity-80", "opacity-60", "opacity-40", "opacity-20"].map((fade, index) => <div key={index} className={`flex min-h-[82px] items-center justify-between rounded-xl border border-border bg-background px-4 py-4 ${fade}`}>
+        {["", "opacity-70", "opacity-40", "opacity-20", "opacity-10"].map((fade, index) => <div key={index} className={`flex min-h-[82px] items-center justify-between rounded-xl border border-border bg-background px-4 py-4 ${fade}`}>
           <div className="flex-1 space-y-3 border-r border-border pr-4"><Skeleton className="h-5 w-2/3" /><Skeleton className="h-4 w-16" /></div>
           <Skeleton className="ml-4 size-6 shrink-0 rounded-md" />
         </div>)}
       </div>
-    </div>;
+    </div></DashboardPage>;
   }
 
   if (!user) {
-    return (
-      <div className="m-10">
-        <p>
-          Please <Link href="/login" className="underline">log in</Link> or{" "}
-          <Link href="/register" className="underline">create an account</Link> to view your recent conversations.
-        </p>
-      </div>
-    );
+    return <DashboardPage><header data-dashboard-intro><h1 className={dashboardStyles.heading}>Recent conversations</h1><p className={dashboardStyles.description}>Conversations you have opened recently.</p></header><p data-dashboard-entry className="mt-8 text-sm leading-7 text-muted-foreground">Please <Link href="/login" className="text-foreground underline underline-offset-4">log in</Link> or <Link href="/register" className="text-foreground underline underline-offset-4">create an account</Link> to view your recent conversations.</p></DashboardPage>;
   }
 
   return (
-    <div className="h-full space-y-3 lg:space-y-5 m-5 lg:m-10">
+    <DashboardPage ready={!loading}>
       <GuideTour id="recents-page" steps={recentsGuideSteps} />
-      <div data-guide="recents-title">
-          <h1 className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Recent Conversations</h1>
-      </div>
+      <header data-guide="recents-title" data-dashboard-intro className="shrink-0">
+        <h1 className={dashboardStyles.heading}>Recent conversations</h1>
+        <p className={dashboardStyles.description}>Conversations you have opened recently.</p>
+      </header>
 
-          <p className="text-sm lg:text-base text-muted-foreground">Conversations you&apos;ve interacted with. For quick access.</p>
-
-
-    <div data-guide="recents-list" className="mt-9">
+    <div data-guide="recents-list" className="mt-6 min-h-0 flex-1 overflow-y-auto pr-1">
       {recentConversations.length > 0 ? (
-        <div className="space-y-3">
+        <div className="max-w-3xl space-y-3">
           <AnimatePresence>
             {recentConversations.map((conversation) => (
               <motion.div
               key={conversation.$id}
+              data-dashboard-entry
               layout
-              whileHover={{ scale: 1.01 }}
-              exit={{ opacity: 0, scale: 1.0 }}
-              transition={{ duration: 0.1, ease: "easeOut" }}
+              whileHover={{ scale: 1.005 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.16, ease: "easeOut" }}
             >
-              <Card className="bg-background flex flex-row justify-between items-center px-4">
+              <div className={dashboardStyles.card + " flex min-h-20 items-center justify-between gap-4 p-4 sm:px-5"}>
                 <Link
                   href={`conversations/${conversation.$id}`}
-                  className="flex flex-col flex-1 border-r"
+                  className="flex min-w-0 flex-1 flex-col border-r border-border pr-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground"
                 >
-                  <div className="flex flex-row items-center mb-2">
-                    <CardTitle>{conversation.title}</CardTitle>
+                  <div className="mb-2 flex flex-wrap items-center gap-3">
+                    <h2 className="text-base font-medium leading-snug tracking-[-.02em]">{conversation.title}</h2>
                     {completeConversations.includes(conversation.$id) && (
-                      <div className="ml-4">
-                        <Badge variant="secondary" className="bg-green-500">Complete</Badge>
-                      </div>
+                      <Badge variant="secondary" className="bg-green-500 text-white">Complete</Badge>
                     )}
                   </div>
-                  <CardDescription>{conversation.level}</CardDescription>
+                  <span className="text-xs text-muted-foreground">{conversation.level}{conversation.category ? ` · ${conversation.category}` : ""}</span>
                 </Link>
 
 
@@ -119,40 +102,39 @@ function RecentsPage() {
                     e.preventDefault();
                     handleDelete(conversation.$id);
                   }}
-                  className="cursor-pointer h-5 w-5 self-center"
+                  aria-label={`Remove ${conversation.title} from recent conversations`}
+                  className="h-5 w-5 shrink-0 self-center cursor-pointer"
                 >
                   <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
-                    <X className="h-4 w-4" />
+                    <X className="size-4" />
                   </motion.div>
                 </Button>
-              </Card>
-            </motion.div>
+              </div>
+              </motion.div>
 
             ))}
           </AnimatePresence>
         </div>
       ) : (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div data-dashboard-entry className={dashboardStyles.card + " flex min-h-64 flex-col items-center justify-center p-8 text-center"}>
               <IterationCcw
                 className="text-muted-foreground mb-3"
                 size={32}
               />
 
-              <p className="font-medium">
-                No recent conversations yet
+              <p className="font-medium tracking-[-.02em]">
+                No recent conversations yet.
               </p>
 
-              <p className="text-sm text-muted-foreground">
-                Interact with a conversation to see it here for quick access.
+              <p className="mt-2 max-w-sm text-sm leading-7 text-muted-foreground">
+                Open a conversation from the library and it will appear here for quick access.
               </p>
+              <Link href="/home/conversations" className={dashboardStyles.textLink + " mt-4"}>Browse conversations</Link>
             </div>
       )}
 
-      </div>
-
-
-
     </div>
+    </DashboardPage>
 
   );
 }

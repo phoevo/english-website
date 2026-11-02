@@ -21,6 +21,7 @@ interface ConversationCoverProps {
 export default function ConversationCover({ conversationTitle, conversationDescription, conversationId, level, category, isPro }: ConversationCoverProps) {
   const completeConversations = useUserStore(state => state.completeConversations);
   const user = useUserStore(state => state.user);
+  const isSubscribed = useUserStore(state => state.isSubscribed);
   const isComplete = completeConversations.includes(conversationId);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -28,15 +29,15 @@ export default function ConversationCover({ conversationTitle, conversationDescr
 
   async function handleClick() {
     if (opening.current) return;
-    if (!user) {
-      toast.error("No user detected. Please sign in to view this conversation.");
+    if (isPro && !isSubscribed) {
+      router.push("/pricing");
       return;
     }
     opening.current = true;
     setIsLoading(true);
     let navigating = false;
     try {
-      await updateRecentConversations({ userId: user.$id, conversationId });
+      if (user) await updateRecentConversations({ userId: user.$id, conversationId });
       router.push(`/home/conversations/${conversationId}`);
       navigating = true;
     } catch (error) {

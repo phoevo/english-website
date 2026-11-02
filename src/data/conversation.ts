@@ -1,4 +1,4 @@
-import { getMyConversation } from "./accountActions";
+import { getMyConversation, getPublicConversationPreview } from "./accountActions";
 import { vocabIndex } from "./vocab/vocabIndex";
 
 export interface Word {
@@ -23,6 +23,9 @@ export interface Conversation {
   content: string | DialogueLine[];
   isPro: boolean;
   category: string;
+  previewOnly?: boolean;
+  previewLineCount?: number;
+  totalLineCount?: number;
 }
 
 export const parseDialogue = (
@@ -66,6 +69,15 @@ export const parseDialogue = (
 
 export const loadConversation = async (documentId: string): Promise<Conversation> => {
   const doc = await getMyConversation(documentId);
+  return parseConversationDocument(doc);
+};
+
+export const loadPublicConversationPreview = async (documentId: string): Promise<Conversation> => {
+  const doc = await getPublicConversationPreview(documentId);
+  return parseConversationDocument(doc);
+};
+
+function parseConversationDocument(doc: { $id: string; title: string; description?: string; level: string; category: string; isPro: boolean; content: string; audioFileId: string | null; previewOnly?: boolean; previewLineCount?: number; totalLineCount?: number; }): Conversation {
 
   const vocab = vocabIndex[doc.level] ?? {};
   if (!vocab){
@@ -92,5 +104,8 @@ export const loadConversation = async (documentId: string): Promise<Conversation
     audioFileId: doc.audioFileId ?? "",
     isPro: doc.isPro,
     category: doc.category,
+    previewOnly: doc.previewOnly,
+    previewLineCount: doc.previewLineCount,
+    totalLineCount: doc.totalLineCount,
   };
-};
+}

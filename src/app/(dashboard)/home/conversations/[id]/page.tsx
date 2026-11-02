@@ -7,10 +7,11 @@ import Link from "next/link";
 import ContentDisplay from "../ContentDisplay";
 import TeacherContentDisplay from "../TeacherContentDisplay";
 
-import { Conversation, loadConversation } from "@/data/conversation";
+import { Conversation, loadConversation, loadPublicConversationPreview } from "@/data/conversation";
 import { useUserStore } from "@/data/useUserStore";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 
 
 export default function ConversationPage() {
@@ -50,8 +51,9 @@ export default function ConversationPage() {
         setRequiresPlus(false);
         setConversation(null);
 
-        const fetchedConversation =
-          await loadConversation(conversationId);
+        const fetchedConversation = user
+          ? await loadConversation(conversationId)
+          : await loadPublicConversationPreview(conversationId);
 
         if (cancelled) {
           return;
@@ -129,8 +131,13 @@ export default function ConversationPage() {
   return (
   <div className="flex h-full w-full flex-col">
     {!user && (
-      <div className="border-b border-red-500 bg-red-300 dark:border-red-100 dark:bg-red-400 px-4 py-2 text-sm text-foreground">
-        No user is logged in. Displaying limited features.
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-muted/50 px-4 py-3 text-sm">
+        <p className="text-muted-foreground text-xs md:text-sm">{conversation.previewOnly
+          ? `Previewing ${conversation.previewLineCount ?? 0} of ${conversation.totalLineCount ?? 0} lines. Create an account to continue.`
+          : "Read this conversation for free. Create an account to save words, use word type highlighting and save progress."}</p>
+        <Link href="/register">
+        <Button className="" size={"sm"}>Sign up</Button>
+        </Link>
       </div>
     )}
 

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import { useUserStore } from "@/data/useUserStore";
@@ -10,9 +11,19 @@ import {
 } from "@/components/ui/hover-card";
 import { Button } from "@/components/ui/button";
 import { Check, Plus } from "lucide-react";
+import { backgroundColors, hoverBackgroundColors } from "@/data/color";
 import { Geist } from "next/font/google";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
+
+const previewWordColors = {
+  noun: "pink500", verb: "red500", adjective: "green500", pronoun: "blue500",
+  adverb: "yellow500", idiom: "purple500", phrase: "purple400", preposition: "orange500",
+  article: "cyan700", conjunction: "yellow500", interjection: "lime500", determiner: "violet500",
+  contraction: "purple500",
+} as const satisfies Record<string, keyof typeof backgroundColors>;
+
+type PreviewWordType = keyof typeof previewWordColors;
 
 
 interface Word {
@@ -33,6 +44,9 @@ interface ConversationProps {
           speaker: string;
           words: Word[];
         }[];
+    previewOnly?: boolean;
+    previewLineCount?: number;
+    totalLineCount?: number;
   };
 }
 
@@ -74,14 +88,9 @@ export default function TeacherContentDisplay({
 
   const wordString = `${cleanedText}::${definition}`;
   const alreadySaved = dictionaryWords.includes(wordString);
-
-  if (!user) {
-    return (
-      <span style={{ fontSize }}>
-        {displayText}
-      </span>
-    );
-  }
+  const wordType = word.type in previewWordColors ? word.type as PreviewWordType : null;
+  const colorKey = wordType ? previewWordColors[wordType] : null;
+  const hoverHighlight = colorKey ? hoverBackgroundColors[colorKey] : "hover:bg-zinc-300 dark:hover:bg-zinc-500";
 
   async function addDictionary() {
     if (!user) {
@@ -125,7 +134,7 @@ export default function TeacherContentDisplay({
               setIsOpen((current) => !current);
             }
           }}
-          className="cursor-pointer rounded transition-colors hover:bg-zinc-300 dark:hover:bg-zinc-500"
+          className={`cursor-pointer rounded transition-colors ${hoverHighlight}`}
           style={{ fontSize }}
         >
           {displayText}
@@ -137,7 +146,7 @@ export default function TeacherContentDisplay({
                       <div className="flex flex-col items-center justify-center gap-1">
                         <span className="font-bold">{word.type}</span>
                         <span>{word.definition}</span>
-                        <Button
+                        {user ? <Button
                           variant="outline"
                           onClick={addDictionary}
                           disabled={alreadySaved}
@@ -145,7 +154,7 @@ export default function TeacherContentDisplay({
                           title={alreadySaved ? "Already saved" : "Add"}
                         >
                           {alreadySaved ? tickIcon : addIcon}
-                        </Button>
+                        </Button> : <Link href="/register" className="mt-2 text-xs underline underline-offset-4">Create an account to save</Link>}
                       </div>
                     </HoverCardContent>
       )}
@@ -189,8 +198,9 @@ export default function TeacherContentDisplay({
 
           <div className="flex flex-col p-5">
             <div className="text-base italic text-zinc-500">
-              End of {conversation.title} — Level:{" "}
-              {conversation.level}
+              {conversation.previewOnly
+                ? `Preview: ${conversation.previewLineCount ?? 0} of ${conversation.totalLineCount ?? 0} lines`
+                : `End of ${conversation.title} — Level: ${conversation.level}`}
             </div>
           </div>
         </div>

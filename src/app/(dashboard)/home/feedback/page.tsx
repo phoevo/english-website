@@ -8,7 +8,6 @@ import { BadgePlus, Bug, Lightbulb, MessageCircle, Check } from "lucide-react";
 import { useUserStore } from "@/data/useUserStore";
 import { sendMyFeedback } from "@/data/accountActions";
 import GuideTour, { type GuideStep } from "../../GuideTour";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -18,10 +17,9 @@ import {
   CardHeader,
   CardContent,
 } from "@/components/ui/card";
-import { Geist } from "next/font/google";
-
-
-const geist = Geist({ subsets: ['latin'] });
+import DashboardPage from "@/components/dashboard/DashboardPage";
+import { dashboardStyles } from "@/components/dashboard/styles";
+import { Badge } from "@/components/ui/badge";
 
 const feedbackGuideSteps: GuideStep[] = [
   { target: "feedback-title", title: "Feedback", description: "Help us improve Synomilo by sharing what you liked, disliked, or think is missing." },
@@ -73,7 +71,7 @@ function FeedbackPage() {
   }
 
   if (loading) {
-    return <div role="status" aria-busy="true" aria-label="Loading feedback page" className="m-5 w-full space-y-5 lg:m-10">
+    return <DashboardPage ready={false} className="overflow-y-auto"><div role="status" aria-busy="true" aria-label="Loading feedback page" className="space-y-5">
       <span className="sr-only">Loading...</span>
       <div aria-hidden="true" className="space-y-3"><Skeleton className="h-8 w-48 max-w-full" /><Skeleton className="h-4 w-3/4 max-w-2xl" /></div>
       <div aria-hidden="true" className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -91,34 +89,25 @@ function FeedbackPage() {
           <div className="space-y-3 p-6">{[0, 1, 2].map(index => <div key={index} className={`space-y-2 rounded-lg border border-border p-3 ${index === 2 ? "opacity-50" : ""}`}><Skeleton className="h-4 w-2/5" /><Skeleton className="h-3 w-full" /><Skeleton className="h-3 w-4/5" /></div>)}</div>
         </section>
       </div>
-    </div>;
+    </div></DashboardPage>;
   }
 
   if (!user) {
-    return (
-      <div className="m-10">
-        <p>
-          Please <Link href="/login" className="underline">log in</Link> or{" "}
-          <Link href="/register" className="underline">create an account</Link> to provide feeback.
-        </p>
-      </div>
-    );
+    return <DashboardPage className="overflow-y-auto"><header data-dashboard-intro><h1 className={dashboardStyles.heading}>Feedback</h1><p className={dashboardStyles.description}>Share what works well and what could be improved.</p></header><p data-dashboard-entry className="mt-8 text-sm leading-7 text-muted-foreground">Please <Link href="/login" className="text-foreground underline underline-offset-4">log in</Link> or <Link href="/register" className="text-foreground underline underline-offset-4">create an account</Link> to send feedback.</p></DashboardPage>;
   }
 
   return (
-    <div className="h-full w-full space-y-3 lg:space-y-5 m-5 lg:m-10">
-      <div>
+    <DashboardPage className="overflow-y-auto">
+      <header data-dashboard-intro>
         <GuideTour id="feedback-page" steps={feedbackGuideSteps} />
-        <h1 data-guide="feedback-title" className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Feedback</h1>
-        </div>
+        <h1 data-guide="feedback-title" className={dashboardStyles.heading}>Feedback</h1>
+        <p className={dashboardStyles.description}>Share what works well, what could be clearer, or what is missing.</p>
+      </header>
 
-          <p className="text-sm lg:text-base text-muted-foreground">Feedback from our users is crucial at this stage of launch.
-          </p>
-
-      <div className="flex flex-col lg:flex-row w-full gap-10">
+      <div className="mt-6 flex w-full flex-col gap-4 lg:flex-row">
 
       {/* Feedback form */}
-      <Card data-guide="feedback-form" className="bg-background w-full lg:w-1/2">
+      <Card data-guide="feedback-form" data-dashboard-entry className={dashboardStyles.card + " w-full lg:w-1/2"}>
         <CardHeader>
           <CardTitle>Send feedback</CardTitle>
           <CardDescription>
@@ -128,7 +117,7 @@ function FeedbackPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="tag">Tag</Label>
+              <Label htmlFor="tag">Feedback type</Label>
               <div className="flex flex-wrap gap-2">
                 <Badge
                   role="button"
@@ -179,7 +168,7 @@ function FeedbackPage() {
                 onChange={(e) => { setMessage(e.target.value); if (submitted) setSubmitted(false); }}
                 aria-invalid={!!error && !message.trim()}
                 placeholder="Tell us what’s on your mind..."
-                className="border-input placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex min-h-28 w-full rounded-md border bg-transparent px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+                className="min-h-40 w-full resize-y rounded-md border border-border bg-background px-3 py-2 text-sm leading-6 placeholder:text-muted-foreground outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
               />
               {error && !message.trim() && (
                 <p className="text-xs text-destructive">{error}</p>
@@ -193,7 +182,7 @@ function FeedbackPage() {
                   id="name"
                   value={name}
                   onChange={(e) => { setName(e.target.value); if (submitted) setSubmitted(false); }}
-                  placeholder="Your name"
+                  placeholder="Name"
                 />
               </div>
               <div className="space-y-2">
@@ -203,7 +192,7 @@ function FeedbackPage() {
                   type="email"
                   value={email}
                   onChange={(e) => { setEmail(e.target.value); if (submitted) setSubmitted(false); }}
-                  placeholder="you@example.com"
+                  placeholder="Email address"
                 />
               </div>
             </div>
@@ -212,7 +201,7 @@ function FeedbackPage() {
              <Button
                 type="submit"
                 disabled={submitting || submitted}
-                className="cursor-pointer transition-all duration-500 inline-flex items-center justify-center"
+                className="inline-flex cursor-pointer items-center justify-center transition-colors"
 
               >
                 {submitting ? (
@@ -233,7 +222,7 @@ function FeedbackPage() {
       </Card>
 
 
-      <Card className="bg-background w-full lg:w-1/2">
+      <Card data-dashboard-entry className={dashboardStyles.card + " w-full lg:w-1/2"}>
   <CardHeader>
     <CardTitle>Need ideas?</CardTitle>
     <CardDescription>
@@ -279,14 +268,11 @@ function FeedbackPage() {
           Did anything feel slow, awkward, repetitive, or difficult to use?
         </p>
       </div>
-
     </div>
   </CardContent>
 </Card>
-
       </div>
-
-    </div>
+    </DashboardPage>
 
   );
 }

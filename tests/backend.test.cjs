@@ -91,6 +91,27 @@ test('unauthenticated and forged tokens cannot construct a privileged client or 
   }
 });
 
+test('public conversation catalog exposes no Plus dialogue while free conversations remain previewable', async () => {
+  const f = fixture();
+  const catalog = await f.actions.publicConversationCatalogAction();
+  assert.equal(catalog.ok, true);
+  assert.equal(catalog.data.length, 3);
+  assert.equal('content' in catalog.data.find(item => item.$id === 'paid-1'), false);
+  assert.equal('audioFileId' in catalog.data.find(item => item.$id === 'paid-1'), false);
+
+  const paid = f.state.rows.get('conversations/paid-1');
+  paid.content = 'Interviewer: First question.\nCandidate: First answer.\nInterviewer: Second question.\nCandidate: Second answer.\nInterviewer: Hidden question.';
+  const preview = await f.actions.publicConversationPreviewAction('paid-1');
+  assert.equal(preview.ok, false);
+  assert.equal(preview.status, 403);
+
+  const free = await f.actions.publicConversationPreviewAction('conversation-1');
+  assert.equal(free.ok, true);
+  assert.equal(free.data.previewOnly, false);
+  assert.equal(free.data.content, 'A free dialogue.');
+  assert.equal(free.data.audioFileId, null);
+});
+
 test('disabled users and authentication service failures fail closed', async () => {
   const f = fixture(); f.users['user-a'].status = false;
   assert.equal((await f.actions.getProfileAction('jwt-a')).status, 401);

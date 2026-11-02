@@ -18,9 +18,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import WordBoard from "./wordBoard";
-import { Geist } from "next/font/google";
-
-const geist = Geist({ subsets: ['latin'] });
+import DashboardPage from "@/components/dashboard/DashboardPage";
+import { dashboardStyles } from "@/components/dashboard/styles";
 
 const dictGuideSteps: GuideStep[] = [
   { target: "dict-title", title: "Your Dictionary", description: "Save unfamiliar words from conversations to review later." },
@@ -70,7 +69,7 @@ function DictionaryPage() {
 
 
   if (loading) {
-    return <div role="status" aria-busy="true" aria-label="Loading dictionary" className="m-5 space-y-6 lg:m-10">
+    return <DashboardPage ready={false}><div role="status" aria-busy="true" aria-label="Loading dictionary" className="space-y-6">
       <span className="sr-only">Loading...</span>
       <div aria-hidden="true" className="space-y-3"><Skeleton className="h-8 w-56 max-w-full" /><Skeleton className="h-4 w-2/3 max-w-xl" /></div>
       <div aria-hidden="true" className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -83,38 +82,24 @@ function DictionaryPage() {
           <div className="mt-6 flex min-h-48 flex-col items-center justify-center gap-3 rounded-lg border border-border p-6 opacity-60"><Skeleton className="h-6 w-1/3" /><Skeleton className="h-4 w-2/3" /></div>
         </section>
       </div>
-    </div>;
+    </div></DashboardPage>;
   }
 
   if (!user) {
-    return (
-      <div className="m-10">
-        <p>
-          Please <Link href="/login" className="underline">log in</Link> or{' '}
-          <Link href="/register" className="underline">create an account</Link> to view your dictionary.
-        </p>
-      </div>
-    )
+    return <DashboardPage><header data-dashboard-intro><h1 className={dashboardStyles.heading}>Dictionary</h1><p className={dashboardStyles.description}>Words you have saved from conversations.</p></header><p data-dashboard-entry className="mt-8 text-sm leading-7 text-muted-foreground">Please <Link href="/login" className="text-foreground underline underline-offset-4">log in</Link> or <Link href="/register" className="text-foreground underline underline-offset-4">create an account</Link> to view your dictionary.</p></DashboardPage>;
   }
 
   return (
-  <div className="w-full h-auto m-5 lg:m-10">
+  <DashboardPage>
+    <GuideTour id="dictionary-page" steps={dictGuideSteps} />
+    <header data-guide="dict-title" data-dashboard-intro className="shrink-0">
+      <h1 className={dashboardStyles.heading}>Dictionary</h1>
+      <p className={dashboardStyles.description}>Words you have saved from conversations, with their word types and definitions.</p>
+    </header>
 
-    <div className="flex flex-col h-1/6">
-      <div className="flex flex-col lg:w-2/3 space-y-3 lg:space-y-6 h-full">
-        <GuideTour id="dictionary-page" steps={dictGuideSteps} />
-        <h1 data-guide="dict-title" className={`text-2xl lg:text-3xl font-normal ${geist.className}`}>Dictionary</h1>
-
-        <div className="text-sm lg:text-base text-muted-foreground">
-          Words you&apos;ve saved will appear here, along with word classes and definitions.
-        </div>
-      </div>
-    </div>
-
-
-    <div className="flex flex-col lg:flex-row gap-4 h-full lg:h-5/6">
+    <div className="mt-6 flex min-h-0 flex-1 flex-col gap-4 lg:flex-row">
       {/* Dictionary Word List */}
-      <div data-guide="dict-words" className="flex flex-col lg:w-1/2 h-full space-y-5 border-1 rounded-2xl shadow-sm">
+      <div data-guide="dict-words" data-dashboard-entry className={dashboardStyles.card + " flex min-h-64 min-w-0 flex-col overflow-hidden lg:h-full lg:w-1/2"}>
         {dictionaryWords.length > 0 ? (
           <ScrollArea className="h-full mx-1">
             <div className="grid gap-4 p-3 pb-4 m-1 rounded-md">
@@ -131,78 +116,79 @@ function DictionaryPage() {
                     <motion.div
                       key={wordText}
                       layout
-                      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.2, delay: index * 0.03, ease: "easeOut" }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
                     >
-                      <div className="border-b h-min-15 rounded flex flex-row justify-between items-center text-md lg:px-5">
+                      <div className="flex min-h-16 flex-row items-center justify-between rounded border-b border-border px-2 text-sm sm:px-4 lg:px-5">
                         <div className="flex flex-row flex-1 items-center">
                           <Accordion type="single" collapsible>
                             <AccordionItem value={`item-${index}`}>
                               <AccordionTrigger className="justify-between w-full cursor-pointer">
-                                <div className="flex flex-col text-xs lg:text-sm">
-                                  <div className="flex flex-row items-center gap-2">
-                                    <div className="font-semibold text-base">{displayText}</div>
-                                    <div className="italic text-muted-foreground">{details?.type}</div>
+                                <div className="flex min-w-0 flex-col text-sm">
+                                  <div className="flex flex-row flex-wrap items-center gap-x-2 gap-y-1">
+                                    <span className="font-medium tracking-[-.02em]">{displayText}</span>
+                                    <span className="text-xs text-muted-foreground">{details?.type}</span>
                                   </div>
-                                  <div className="text-muted-foreground">{details?.definition}</div>
+                                  <span className="mt-1 text-xs leading-5 text-muted-foreground">{details?.definition}</span>
                                 </div>
                               </AccordionTrigger>
 
                               {details?.context && (
                                 <AccordionContent>
-                                  <div className="text-xs lg:text-sm">{details.context}</div>
+                                  <div className="text-sm leading-6 text-muted-foreground">{details.context}</div>
                                 </AccordionContent>
                               )}
                               {!details && (
-                                <div className="italic text-sm text-muted-foreground">No additional info found.</div>
+                                <div className="text-sm italic text-muted-foreground">No additional information found.</div>
                               )}
                             </AccordionItem>
                           </Accordion>
                         </div>
 
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          onClick={() => handleDelete(wordText)}
-                          className="ml-4 cursor-pointer h-5 w-5 self-center"
-                        >
-                          <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
-                            <X className="h-4 w-4" />
-                          </motion.div>
-                        </Button>
+                       <Button
+                  variant="destructive"
+                  size="icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    handleDelete(wordText);
+                  }}
+                  className="h-5 w-5 shrink-0 self-center cursor-pointer"
+                >
+                  <motion.div whileHover={{ rotate: 90 }} transition={{ duration: 0.1 }}>
+                    <X className="size-4" />
+                  </motion.div>
+                </Button>
                       </div>
                     </motion.div>
                   );
                 })}
               </AnimatePresence>
-              <div className="flex justify-center text-muted-foreground">end</div>
             </div>
           </ScrollArea>
         ) : (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
+          <div className="flex flex-1 flex-col items-center justify-center p-8 text-center">
               <BookMarked
                 className="text-muted-foreground mb-3"
                 size={32}
               />
 
               <p className="font-medium">
-                No words saved yet
+                No saved words yet.
               </p>
 
-              <p className="text-sm text-muted-foreground">
-                Hover over words in a conversation and click the add button to save them in your dictionary.
+              <p className="mt-2 max-w-sm text-sm leading-7 text-muted-foreground">
+                Hover over a word in a conversation and select the plus icon to save it here.
               </p>
             </div>
         )}
       </div>
 
-      <div data-guide="dict-flashcards" className="lg:w-2/3 lg:h-full">
+      <div data-guide="dict-flashcards" data-dashboard-entry className="min-h-0 min-w-0 lg:h-full lg:w-2/3">
         <WordBoard />
       </div>
     </div>
-  </div>
+  </DashboardPage>
 );
 
 }

@@ -2,7 +2,7 @@ import "server-only";
 import { ID, Models, Permission, Query, Role } from "node-appwrite";
 import { z } from "zod";
 import { backgroundColors } from "@/data/color";
-import type { ConversationCatalogItem, ConversationContent, PersonalDeck, UserProfile } from "@/lib/profileTypes";
+import type { ConversationCatalogItem, ConversationContent, PersonalDeck, PublicConversationPreview, UserProfile } from "@/lib/profileTypes";
 import { AccessError, errorCode, type UserContext } from "./appwrite";
 
 const id = z.string().regex(/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,35}$/, "Invalid identifier.");
@@ -40,7 +40,7 @@ function conversationCatalogItem(document: Models.DefaultDocument): Conversation
   };
 }
 
-export async function listConversationCatalog(context: UserContext): Promise<ConversationCatalogItem[]> {
+export async function listConversationCatalog(context: Pick<UserContext, "config" | "databases">): Promise<ConversationCatalogItem[]> {
   const documents: Models.DefaultDocument[] = [];
   let cursor: string | undefined;
   while (true) {
@@ -56,6 +56,40 @@ export async function listConversationCatalog(context: UserContext): Promise<Con
     cursor = next;
   }
   return documents.map(conversationCatalogItem);
+}
+
+export async function listPublicConversationCatalog(context: Pick<UserContext, "config" | "databases">): Promise<ConversationCatalogItem[]> {
+  return listConversationCatalog(context);
+}
+
+function dialogueLineCount(content: string): number {
+  try {
+    const parsed: unknown = JSON.parse(content);
+    if (Array.isArray(parsed)) return parsed.length;
+  } catch { /* Plain dialogue is stored as newline-separated lines. */ }
+  return content.split(/\r?\n/).filter(line => line.trim().length > 0).length;
+}
+
+export async function getPublicConversationPreview(context: Pick<UserContext, "config" | "databases">, input: unknown): Promise<PublicConversationPreview> {
+  const conversationId = parse(id, input);
+  let document: Models.DefaultDocument;
+  try {
+    document = await context.databases.getDocument({ databaseId: context.config.databaseId, collectionId: context.config.conversationsId, documentId: conversationId });
+  } catch (error) {
+    if (errorCode(error) === 404) throw new AccessError("Conversation not found.", 404);
+    throw error;
+  }
+  const item = conversationCatalogItem(document);
+  if (item.isPro) throw new AccessError("This conversation is part of Plus. Subscribe to unlock it.", 403);
+  const fullContent = typeof document.content === "string" ? document.content : "";
+  return {
+    ...item,
+    content: fullContent,
+    audioFileId: null,
+    previewOnly: false,
+    previewLineCount: dialogueLineCount(fullContent),
+    totalLineCount: dialogueLineCount(fullContent),
+  };
 }
 
 export async function listConversationSummaries(context: UserContext, input: unknown): Promise<ConversationCatalogItem[]> {

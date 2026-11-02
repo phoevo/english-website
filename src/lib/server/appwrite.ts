@@ -48,6 +48,15 @@ export async function getUserContext(jwt: string) {
   return { user, config, databases: new Databases(admin), users: new Users(admin), tokens: new Tokens(admin) };
 }
 
+export async function getPublicReadContext() {
+  const config = getServerConfig();
+  const key = process.env.APPWRITE_API_KEY;
+  if (!key) throw new AccessError("Server data access is not configured.", 503);
+  const admin = new Client().setEndpoint(config.endpoint).setProject(config.projectId).setKey(key);
+  return { config, databases: new Databases(admin) };
+}
+
+export type PublicReadContext = Awaited<ReturnType<typeof getPublicReadContext>>;
 export type UserContext = Awaited<ReturnType<typeof getUserContext>>;
 export function errorCode(error: unknown): number | undefined {
   return typeof error === "object" && error !== null && "code" in error && typeof error.code === "number" ? error.code : undefined;
