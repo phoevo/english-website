@@ -17,15 +17,12 @@ import {
 import { Check, Plus } from "lucide-react";
 import { WordTypeSettings } from "@/components/ui/WordTypeSettings";
 import { Button } from "@/components/ui/button";
-import { storage, isConversationAssignedToStudent } from "@/data/appwrite";
 import { useUserStore } from "@/data/useUserStore";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { audioBucketId } from "@/data/appwrite";
 import { AudioPlayer } from "./AudioPlayer";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import { legacyAccountFeaturesEnabled } from "@/lib/accountFeatures";
 import { backgroundColors, hoverBackgroundColors } from "@/data/color";
 import {
   Drawer,
@@ -125,15 +122,9 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   const [audioError, setAudioError] = React.useState<string | null>(null);
   const [audioAttempt, setAudioAttempt] = React.useState(0);
   const audioAccess = React.useRef<{ url: string; expiresAt: string } | null>(null);
-  const [assignedForThisConvo, setAssignedForThisConvo] = React.useState<boolean>(false);
-  const [assignmentChecking, setAssignmentChecking] = React.useState<boolean>(false);
   const [fontSize, setFontSize] = React.useState(16)
 
-  // Audio is the only reader feature that requires a subscription.
-  // Stored tutor roles and previous assignments no longer grant audio access.
-  const canUseAudio = Boolean(user && (
-    isSubscribed || (legacyAccountFeaturesEnabled && (user.isTeacher || assignedForThisConvo))
-  ));
+  const canUseAudio = Boolean(user && isSubscribed);
 
   React.useEffect(() => {
     let cancelled = false;
@@ -150,13 +141,8 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
 
     const fetchAudioUrl = async () => {
       try {
-        if (legacyAccountFeaturesEnabled) {
-          const url = await storage.getFileView(audioBucketId, conversation.audioFileId);
-          if (!cancelled) setAudioUrl(url);
-        } else {
-          const access = await getMyAudioAccess(conversation.$id);
-          if (!cancelled) { audioAccess.current = access; setAudioUrl(access.url); }
-        }
+        const access = await getMyAudioAccess(conversation.$id);
+        if (!cancelled) { audioAccess.current = access; setAudioUrl(access.url); }
       } catch (error) {
         if (!cancelled) { setAudioUrl(null); setAudioError(error instanceof Error ? error.message : "Audio could not be loaded."); }
       } finally {
@@ -172,34 +158,11 @@ export default function ContentDisplay({ conversation }: ConversationProps) {
   }, [canUseAudio, conversation.audioFileId, conversation.$id, user?.$id, audioAttempt]);
 
   async function refreshAudioSource() {
-    if (legacyAccountFeaturesEnabled && audioUrl) return audioUrl;
     if (!audioAccess.current || Date.parse(audioAccess.current.expiresAt) < Date.now() + 30000) {
       audioAccess.current = await getMyAudioAccess(conversation.$id);
     }
     return audioAccess.current.url;
   }
-
-// Check assignment for any conversation: a Plus tutor's assignment grants Plus features
-React.useEffect(() => {
-  const run = async () => {
-    if (!legacyAccountFeaturesEnabled || !user || isSubscribed || user.isTeacher || !conversation?.$id) {
-      setAssignmentChecking(false);
-      setAssignedForThisConvo(false);
-      return;
-    }
-    setAssignmentChecking(true);
-    try {
-      const ok = await isConversationAssignedToStudent(user.$id, conversation.$id);
-      setAssignedForThisConvo(ok);
-    } catch {
-      setAssignedForThisConvo(false);
-    } finally {
-      setAssignmentChecking(false);
-    }
-  };
-  run();
-}, [user, isSubscribed, conversation?.$id]);
-
 
 const [wordTypes, setWordTypes] = React.useState<Record<WordTypeKey, WordTypeData>>({
   noun: { colorKey: "pink500", enabled: false },
@@ -399,20 +362,6 @@ React.useEffect(() => {
     </div>
 
     <div className="flex flex-row items-center gap-1">
-    {legacyAccountFeaturesEnabled && assignedForThisConvo && (
-      <Badge
-      variant="secondary"
-      className="bg-pink-100 text-pink-700 border-pink-200"
-      >
-        Assigned
-      </Badge>
-    )}
-
-  {legacyAccountFeaturesEnabled && assignedForThisConvo && (
-    <p className="text-sm text-muted-foreground">
-      Plus features enabled for this conversation
-    </p>
-  )}
   </div>
 
   </div>
@@ -538,11 +487,7 @@ React.useEffect(() => {
 
       </div>
   {!canUseAudio ? (
-    legacyAccountFeaturesEnabled && assignmentChecking ? (
-      <Skeleton className="w-40 h-5" />
-    ) : (
-      <span className="text-sm text-muted-foreground">Audio is available with Plus.</span>
-    )
+    <span className="text-sm text-muted-foreground">Audio is available with Plus.</span>
   ) : audioLoading ? (
     <Skeleton className="w-40 h-5" />
   ) : audioError ? (

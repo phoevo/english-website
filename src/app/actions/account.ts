@@ -2,7 +2,7 @@
 
 import type { ActionResult } from "@/lib/profileTypes";
 import { AccessError, getUserContext } from "@/lib/server/appwrite";
-import { createAudioAccess, createDeck, deleteDeck, ensureProfile, listDecks, mutateProfile, profileView, submitFeedback } from "@/lib/server/profiles";
+import { createAudioAccess, createDeck, deleteDeck, ensureProfile, getAccessibleConversation, listConversationCatalog, listConversationSummaries, listDecks, mutateProfile, profileView, submitFeedback } from "@/lib/server/profiles";
 
 async function run<T>(jwt: string, operation: (context: Awaited<ReturnType<typeof getUserContext>>) => Promise<T>): Promise<ActionResult<T>> {
   try { return { ok: true, data: await operation(await getUserContext(jwt)) }; }
@@ -16,6 +16,9 @@ async function run<T>(jwt: string, operation: (context: Awaited<ReturnType<typeo
 export async function getProfileAction(jwt: string) {
   return run(jwt, async context => { const result = await ensureProfile(context); return { created: result.created, document: profileView(context, result.document) }; });
 }
+export async function conversationCatalogAction(jwt: string) { return run(jwt, listConversationCatalog); }
+export async function conversationSummariesAction(jwt: string, ids: string[]) { return run(jwt, context => listConversationSummaries(context, ids)); }
+export async function getConversationAction(jwt: string, conversationId: string) { return run(jwt, context => getAccessibleConversation(context, conversationId)); }
 export async function updateProfileAction(jwt: string, input: unknown) { return run(jwt, context => mutateProfile(context, input)); }
 export async function listDecksAction(jwt: string) { return run(jwt, listDecks); }
 export async function createDeckAction(jwt: string, input: unknown) { return run(jwt, context => createDeck(context, input)); }

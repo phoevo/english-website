@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { BadgePlus, BookOpen, BugOff, CircleArrowUp, Newspaper, type LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import AuthLoading from "@/components/auth/AuthLoading";
+import { Skeleton } from "@/components/ui/skeleton";
 import { listNewsDocuments, type NewsDocument } from "@/data/appwrite";
 import styles from "./home.module.css";
 
@@ -46,7 +46,12 @@ export default function News() {
 
   return <section className={`${styles.card} ${styles.newsCard}`} aria-labelledby="news-heading" aria-busy={loading}>
     <header className={styles.newsHeader}><h2 id="news-heading">News and updates</h2><p>New conversations, features and changes to Synomilo.</p></header>
-    {loading ? <div className={styles.newsPending}><AuthLoading /></div>
+    {loading ? <div className={`${styles.newsList} ${styles.newsSkeleton}`} aria-hidden="true">{["", "opacity-60", "opacity-30"].map((fade, index) => <article key={index} className={`${styles.newsItem} ${fade}`}>
+      <div className={styles.newsMeta}><Skeleton className="h-5 w-[78px] rounded-full" /><Skeleton className="h-3 w-24" /></div>
+      <Skeleton className="mt-3 h-4 w-3/4" />
+      <Skeleton className="mt-2 h-3 w-full" />
+      <Skeleton className="mt-1.5 h-3 w-5/6" />
+    </article>)}</div>
       : items.length === 0 ? <p className={styles.newsEmpty}>No updates yet.</p>
       : <div className={styles.newsList} role="region" aria-label="News items" tabIndex={0}>{items.map(doc => {
         const tag = resolveTag(doc.tag);

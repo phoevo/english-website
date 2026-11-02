@@ -18,7 +18,9 @@ function fixture() {
   const seed = (collection, id, data) => { const doc = { $id: id, ...data }; state.rows.set(collection + '/' + id, doc); return doc; };
   const base = { name: 'Alice', isTeacher: false, isSubscribed: false, dictionaryWords: ['coffee::A hot drink.'], recentConversations: [], completeConversations: [], customColors: [], taskCount: 0, streak: 0, guideTour: [], stripeCustomerId: 'private-customer-id' };
   seed('users', 'user-a', { ...base }); seed('users', 'user-b', { ...base, name: 'Bob', dictionaryWords: ['other::Private word.'] });
-  seed('conversations', 'conversation-1', { audioFileId: 'audio-1' });
+  seed('conversations', 'conversation-1', { title: 'Free dialogue', description: 'A free sample.', level: 'A2', category: 'Everyday', isPro: false, content: 'A free dialogue.', audioFileId: 'audio-1' });
+  seed('conversations', 'paid-1', { title: 'Plus dialogue', description: 'A paid sample.', level: 'B2', category: 'Work', isPro: true, content: 'Paid dialogue secret.', audioFileId: 'audio-2' });
+  seed('conversations', 'missing-tier', { title: 'Unmarked dialogue', content: 'Must fail closed.', audioFileId: 'audio-3' });
   const databases = {
     async getDocument(input) {
       state.reads.push(plain(input));
@@ -187,13 +189,31 @@ test('deck listing is owner-scoped, paginated, and foreign deletion is rejected'
   assert.equal((await f.actions.createDeckAction('jwt-a',{name:'Invalid',type:'flashcards',words:['not-saved::Other.']})).status,400);
 });
 
-test('Free users cannot mint audio access, even with a tutor flag; Plus uses trusted file ID and expiration', async () => {
+test('free conversations are readable without Plus, but all audio requires Plus', async () => {
   const f = fixture(); f.state.rows.get('users/user-a').isTeacher=true;
-  assert.equal((await f.actions.audioAccessAction('jwt-a','conversation-1')).status,403); assert.equal(f.state.tokens.length,0);
+  assert.equal((await f.actions.getConversationAction('jwt-a','conversation-1')).data.content,'A free dialogue.');
+  assert.equal((await f.actions.getConversationAction('jwt-a','paid-1')).status,403);
+  assert.equal((await f.actions.getConversationAction('jwt-a','missing-tier')).status,403);
+  assert.equal((await f.actions.audioAccessAction('jwt-a','conversation-1')).status,403);
+  assert.equal((await f.actions.audioAccessAction('jwt-a','paid-1')).status,403);
+  assert.equal((await f.actions.audioAccessAction('jwt-a','missing-tier')).status,403);
+  assert.equal(f.state.tokens.length,0);
+  const catalog = await f.actions.conversationCatalogAction('jwt-a');
+  assert.equal(catalog.ok,true);
+  assert.deepEqual(plain(catalog.data.map(({ $id, isPro }) => ({ $id, isPro }))), [
+    { $id: 'conversation-1', isPro: false }, { $id: 'missing-tier', isPro: true }, { $id: 'paid-1', isPro: true },
+  ]);
+  assert.equal('content' in catalog.data[0],false); assert.equal('audioFileId' in catalog.data[0],false);
+  assert.ok(!JSON.stringify(catalog).includes('Paid dialogue secret.'));
+
   f.state.rows.get('users/user-a').isSubscribed=true;
-  const result = await f.actions.audioAccessAction('jwt-a','conversation-1');
-  assert.equal(result.ok,true); assert.equal(f.state.tokens[0].fileId,'audio-1');
-  const expires = Date.parse(f.state.tokens[0].expire); assert.ok(expires>Date.now() && expires<=Date.now()+600001);
+  const paidContent = await f.actions.getConversationAction('jwt-a','paid-1');
+  assert.equal(paidContent.ok,true); assert.equal(paidContent.data.content,'Paid dialogue secret.');
+  const freeAudio = await f.actions.audioAccessAction('jwt-a','conversation-1');
+  assert.equal(freeAudio.ok,true); assert.equal(f.state.tokens[0].fileId,'audio-1');
+  const result = await f.actions.audioAccessAction('jwt-a','paid-1');
+  assert.equal(result.ok,true); assert.equal(f.state.tokens[1].fileId,'audio-2');
+  const expires = Date.parse(f.state.tokens[1].expire); assert.ok(expires>Date.now() && expires<=Date.now()+600001);
   const url = new URL(result.data.url); assert.equal(url.searchParams.get('token'),'temporary-file-secret');
   assert.equal((await f.actions.audioAccessAction('jwt-a','https://attacker.test')).status,400);
 });

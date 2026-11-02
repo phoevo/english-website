@@ -17,6 +17,21 @@ export type UserProfile = {
   lastActive: string | null;
 };
 
+export type ConversationCatalogItem = {
+  $id: string;
+  title: string;
+  description: string;
+  level: string;
+  category: string;
+  isPro: boolean;
+  hasAudio: boolean;
+};
+
+export type ConversationContent = ConversationCatalogItem & {
+  content: string;
+  audioFileId: string | null;
+};
+
 export type ProfileOperation =
   | { kind: "dictionary.add" | "dictionary.remove"; entry: string }
   | { kind: "colors.save"; colors: string[] }

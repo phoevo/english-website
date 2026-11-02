@@ -2,7 +2,7 @@ import "server-only";
 import { ID, Models, Permission, Query, Role } from "node-appwrite";
 import { z } from "zod";
 import { backgroundColors } from "@/data/color";
-import type { PersonalDeck, UserProfile } from "@/lib/profileTypes";
+import type { ConversationCatalogItem, ConversationContent, PersonalDeck, UserProfile } from "@/lib/profileTypes";
 import { AccessError, errorCode, type UserContext } from "./appwrite";
 
 const id = z.string().regex(/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,35}$/, "Invalid identifier.");
@@ -26,6 +26,71 @@ const operationSchema = z.discriminatedUnion("kind", [
 
 const strings = (value: unknown): string[] => Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : [];
 const count = (value: unknown) => typeof value === "number" && Number.isFinite(value) ? Math.max(0, Math.trunc(value)) : 0;
+
+function conversationCatalogItem(document: Models.DefaultDocument): ConversationCatalogItem {
+  return {
+    $id: document.$id,
+    title: typeof document.title === "string" ? document.title : "Untitled conversation",
+    description: typeof document.description === "string" ? document.description : "",
+    level: typeof document.level === "string" ? document.level : "",
+    category: typeof document.category === "string" ? document.category : "",
+    // Missing or invalid flags fail closed; new content defaults to paid.
+    isPro: document.isPro !== false,
+    hasAudio: typeof document.audioFileId === "string" && document.audioFileId.length > 0,
+  };
+}
+
+export async function listConversationCatalog(context: UserContext): Promise<ConversationCatalogItem[]> {
+  const documents: Models.DefaultDocument[] = [];
+  let cursor: string | undefined;
+  while (true) {
+    const page = await context.databases.listDocuments({
+      databaseId: context.config.databaseId,
+      collectionId: context.config.conversationsId,
+      queries: [Query.orderAsc("$createdAt"), Query.limit(100), ...(cursor ? [Query.cursorAfter(cursor)] : [])],
+    });
+    documents.push(...page.documents);
+    if (page.documents.length < 100) break;
+    const next = page.documents.at(-1)?.$id;
+    if (!next || next === cursor) throw new AccessError("Unable to load conversations.", 503);
+    cursor = next;
+  }
+  return documents.map(conversationCatalogItem);
+}
+
+export async function listConversationSummaries(context: UserContext, input: unknown): Promise<ConversationCatalogItem[]> {
+  const ids = parse(z.array(id).max(5), input);
+  const documents = await Promise.all(ids.map(async conversationId => {
+    try {
+      return await context.databases.getDocument({ databaseId: context.config.databaseId, collectionId: context.config.conversationsId, documentId: conversationId });
+    } catch (error) {
+      if (errorCode(error) === 404) return null;
+      throw error;
+    }
+  }));
+  return documents.filter((document): document is Models.DefaultDocument => document !== null).map(conversationCatalogItem);
+}
+
+export async function getAccessibleConversation(context: UserContext, input: unknown): Promise<ConversationContent> {
+  const conversationId = parse(id, input);
+  let document: Models.DefaultDocument;
+  try {
+    document = await context.databases.getDocument({ databaseId: context.config.databaseId, collectionId: context.config.conversationsId, documentId: conversationId });
+  } catch (error) {
+    if (errorCode(error) === 404) throw new AccessError("Conversation not found.", 404);
+    throw error;
+  }
+  const profile = await ensureProfile(context);
+  if (document.isPro !== false && profile.document.isSubscribed !== true) {
+    throw new AccessError("This conversation is part of Plus. Subscribe to unlock it.", 403);
+  }
+  const item = conversationCatalogItem(document);
+  return {
+    ...item,
+    content: typeof document.content === "string" ? document.content : "",
+    audioFileId: typeof document.audioFileId === "string" ? document.audioFileId : null,
+  };
+}
 
 export function profileView(context: UserContext, doc: Models.DefaultDocument): UserProfile {
   // Return only the fields used by the UI, never Stripe IDs or permission metadata.
@@ -153,9 +218,9 @@ export async function submitFeedback(context: UserContext, input: unknown) {
 
 export async function createAudioAccess(context: UserContext, input: unknown) {
   const conversationId = parse(id, input);
+  const conversation = await context.databases.getDocument({ databaseId: context.config.databaseId, collectionId: context.config.conversationsId, documentId: conversationId });
   const { document } = await ensureProfile(context);
   if (document.isSubscribed !== true) throw new AccessError("Audio is available with Plus.", 403);
-  const conversation = await context.databases.getDocument({ databaseId: context.config.databaseId, collectionId: context.config.conversationsId, documentId: conversationId });
   if (!conversation.audioFileId) throw new AccessError("No audio is available for this conversation.", 404);
   const bucketId = context.config.audioBucketId;
   if (!bucketId) throw new AccessError("Audio storage is not configured.", 503);

@@ -2,29 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 
 import ContentDisplay from "../ContentDisplay";
 import TeacherContentDisplay from "../TeacherContentDisplay";
 
-import {
-  Conversation,
-  loadConversation,
-} from "@/data/conversation";
+import { Conversation, loadConversation } from "@/data/conversation";
 import { useUserStore } from "@/data/useUserStore";
-import { isConversationAssignedToStudent } from "@/data/appwrite";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { legacyAccountFeaturesEnabled } from "@/lib/accountFeatures";
 
 
 export default function ConversationPage() {
   const params = useParams();
 
-  const {
-    isTeacher,
-    user,
-    loading: userLoading,
-  } = useUserStore();
+  const { user, loading: userLoading } = useUserStore();
 
   const conversationId = Array.isArray(params.id)
     ? params.id[0]
@@ -34,6 +26,7 @@ export default function ConversationPage() {
     useState<Conversation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [requiresPlus, setRequiresPlus] = useState(false);
 
   useEffect(() => {
     // Wait until authentication has finished loading.
@@ -54,6 +47,7 @@ export default function ConversationPage() {
       try {
         setLoading(true);
         setError(null);
+        setRequiresPlus(false);
         setConversation(null);
 
         const fetchedConversation =
@@ -68,38 +62,6 @@ export default function ConversationPage() {
           return;
         }
 
-        /*
-         * Anonymous users can view the limited version.
-         *
-         * Authorization checks below only apply to
-         * authenticated users.
-         */
-        if (legacyAccountFeaturesEnabled && user) {
-          const requiresProAccess =
-            fetchedConversation.isPro &&
-            !user.isSubscribed &&
-            !isTeacher;
-
-          if (requiresProAccess) {
-            const assigned =
-              await isConversationAssignedToStudent(
-                user.$id,
-                conversationId
-              );
-
-            if (cancelled) {
-              return;
-            }
-
-            if (!assigned) {
-              setError(
-                "This is a Pro conversation. It must be assigned by your tutor or you need a subscription to access."
-              );
-              return;
-            }
-          }
-        }
-
         setConversation(fetchedConversation);
       } catch (err) {
         if (cancelled) {
@@ -111,7 +73,8 @@ export default function ConversationPage() {
           err
         );
 
-        setError("Failed to load conversation.");
+        if ((err as { status?: number })?.status === 403) setRequiresPlus(true);
+        else setError(err instanceof Error ? err.message : "Failed to load conversation.");
       } finally {
         if (!cancelled) {
           setLoading(false);
@@ -127,7 +90,6 @@ export default function ConversationPage() {
   }, [
     conversationId,
     user,
-    isTeacher,
     userLoading,
   ]);
 
@@ -141,6 +103,19 @@ export default function ConversationPage() {
         {error}
       </div>
     );
+  }
+
+  if (requiresPlus) {
+    return <main className="flex h-full items-center justify-center bg-background px-6 text-foreground">
+      <div className="max-w-md text-center">
+        <h1 className="text-2xl font-medium tracking-tight">This conversation is part of Plus.</h1>
+        <p className="mt-3 text-sm leading-7 text-muted-foreground">Subscribe to unlock this conversation and the rest of the paid library.</p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link href="/pricing" className="inline-flex min-h-11 items-center rounded-md bg-foreground px-5 text-sm text-background">View plans</Link>
+          <Link href="/home/conversations" className="inline-flex min-h-11 items-center rounded-md border border-border px-5 text-sm">Back to conversations</Link>
+        </div>
+      </div>
+    </main>;
   }
 
   if (!conversation) {
@@ -160,7 +135,7 @@ export default function ConversationPage() {
     )}
 
     <div className="min-h-0 flex-1">
-      {!user || (legacyAccountFeaturesEnabled && isTeacher) ? (
+      {!user ? (
         <TeacherContentDisplay conversation={conversation} />
       ) : (
         <ContentDisplay conversation={conversation} />

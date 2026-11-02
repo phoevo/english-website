@@ -1,4 +1,4 @@
-import { getConversationFromDB } from "./appwrite";
+import { getMyConversation } from "./accountActions";
 import { vocabIndex } from "./vocab/vocabIndex";
 
 export interface Word {
@@ -65,10 +65,7 @@ export const parseDialogue = (
 };
 
 export const loadConversation = async (documentId: string): Promise<Conversation> => {
-  const doc = await getConversationFromDB(documentId);
-  if (!doc) {
-    throw new Error("Conversation not found");
-  }
+  const doc = await getMyConversation(documentId);
 
   const vocab = vocabIndex[doc.level] ?? {};
   if (!vocab){
@@ -92,7 +89,7 @@ export const loadConversation = async (documentId: string): Promise<Conversation
     description: doc.description,
     content: parsedContent,
     level: doc.level,
-    audioFileId: doc.audioFileId,
+    audioFileId: doc.audioFileId ?? "",
     isPro: doc.isPro,
     category: doc.category,
   };

@@ -168,7 +168,7 @@ export default function Register() {
             <FormLabel>Confirm password</FormLabel><FormControl><PasswordInput placeholder="Repeat your password" autoComplete="new-password" {...field} /></FormControl><FormMessage />
           </FormItem>} />
           <p className={styles.terms}>By signing up, you agree to the <Link href="/ToS">Terms of Service</Link> and <Link href="/privacy">Privacy Policy</Link>.</p>
-          <button type="submit" disabled={pending} aria-label={isLoading ? "loading" : undefined} aria-busy={isLoading} className={styles.button}>{isLoading ? <AuthLoading /> : "Create account"}</button>
+          <button type="submit" disabled={pending} aria-label={isLoading ? "loading" : undefined} aria-busy={isLoading} className={styles.button}>{isLoading ? <AuthLoading inline /> : "Create account"}</button>
         </fieldset>
       </form>
     </Form>

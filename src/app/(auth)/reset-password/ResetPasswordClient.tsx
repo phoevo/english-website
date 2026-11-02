@@ -110,7 +110,7 @@ export function ResetPasswordClient() {
                 )}
               />
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? <AuthLoading /> : 'Reset Password'}
+                {isLoading ? <AuthLoading inline /> : 'Reset Password'}
               </Button>
             </form>
           </Form>

@@ -1,14 +1,13 @@
 import { toast } from "sonner";
-import { getMyProfile } from "./accountActions";
-import { account, conversationsCollectionId, databaseId, databases, usersCollectionId, functions as appwriteFunctions } from "./appwrite";
-import { Client, Functions, Models, Query } from "appwrite";
+import { getMyConversationCatalog, getMyProfile } from "./accountActions";
+import { account, databaseId, databases, usersCollectionId, functions as appwriteFunctions } from "./appwrite";
+import { Client, Functions } from "appwrite";
 
 
 const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!;
 const PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
 const USERS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID!;
-const CONVERSATIONS_COLLECTION_ID = process.env.NEXT_PUBLIC_APPWRITE_CONVERSATIONS_COLLECTION_ID!;
 const STRIPE_FUNCTION = process.env.NEXT_PUBLIC_APPWRITE_STRIPE_FUNCTION!;
 
 
@@ -140,28 +139,7 @@ export async function unsubscribeUser(documentId: string) {
 }
 
 export async function fetchConversations() {
-  try {
-    const conversations: Models.Document[] = [];
-    let cursor: string | undefined;
-
-    while (true) {
-      const queries = [Query.limit(100)];
-      if (cursor) queries.push(Query.cursorAfter(cursor));
-
-      const response = await databases.listDocuments(DATABASE_ID, CONVERSATIONS_COLLECTION_ID, queries);
-      conversations.push(...response.documents);
-
-      if (response.documents.length === 0 || conversations.length >= response.total) break;
-      const nextCursor = response.documents[response.documents.length - 1].$id;
-      if (nextCursor === cursor) throw new Error("Conversation pagination did not advance.");
-      cursor = nextCursor;
-    }
-
-    return conversations;
-  } catch (error) {
-    console.error("Failed to fetch conversations:", error);
-    throw error;
-  }
+  return getMyConversationCatalog();
 }
 
 
@@ -181,18 +159,7 @@ export async function getUserCount() {
 }
 
 export async function getConversationCount() {
-  try {
-    const response = await databases.listDocuments(
-      databaseId,
-      conversationsCollectionId,
-    );
-
-    const totalConvos = response.total;
-    return totalConvos;
-  } catch (err) {
-    console.error("Error fetching convo count:", err);
-    return 0;
-  }
+  return (await getMyConversationCatalog()).length;
 }
 
 export async function getUserPlan(): Promise<"free" | "pro"> {

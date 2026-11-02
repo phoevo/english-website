@@ -6,7 +6,6 @@ import { ArrowRight, ArrowUpRight, BookOpen, Bookmark } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useUserStore } from "@/data/useUserStore";
-import AuthLoading from "@/components/auth/AuthLoading";
 import { Skeleton } from "@/components/ui/skeleton";
 import GuideTour, { type GuideStep } from "../GuideTour";
 import News from "./News";
@@ -41,9 +40,16 @@ export default function HomePage() {
   }, { scope: root, dependencies: [loading, Boolean(user)], revertOnUpdate: true });
 
   return <div ref={root} className={styles.page} aria-busy={loading}>
-    {loading ? <div className={styles.inner}>
-      <div className={styles.loadingHeader}><Skeleton className="mt-5 h-9 w-64 max-w-full" /><Skeleton className="mt-3 h-4 w-80 max-w-full" /></div>
-      <div className={styles.grid}><div className={styles.mainColumn}><Skeleton className="h-full min-h-0 w-full rounded-xl" /><Skeleton className="h-full min-h-0 w-full rounded-xl" /></div><Skeleton className="h-full min-h-0 w-full rounded-xl" /></div>
+    {loading ? <div role="status" aria-busy="true" aria-label="Loading home page" className={styles.inner}>
+      <span className="sr-only">Loading...</span>
+      <header className={styles.welcome} aria-hidden="true"><div className="w-full space-y-3"><Skeleton className="h-9 w-64 max-w-full" /><Skeleton className="h-4 w-80 max-w-full" /></div></header>
+      <div className={styles.grid} aria-hidden="true">
+        <div className={styles.mainColumn}>
+          <section className={`${styles.card} opacity-100`}><header className={styles.cardHeader}><Skeleton className="h-5 w-48" /><Skeleton className="h-4 w-20" /></header><div className="space-y-4 p-5"><Skeleton className="h-3 w-24" /><Skeleton className="h-6 w-3/4" /><Skeleton className="h-4 w-full" /><Skeleton className="h-4 w-5/6" /></div></section>
+          <section className={`${styles.card} opacity-60`}><header className={styles.cardHeader}><Skeleton className="h-5 w-44" /><Skeleton className="h-4 w-24" /></header><div className="space-y-5 p-5"><Skeleton className="h-4 w-2/3" /><Skeleton className="h-4 w-3/5" /><Skeleton className="h-4 w-1/2" /></div></section>
+        </div>
+        <aside className={styles.newsColumn}><section className={`${styles.card} ${styles.newsCard} opacity-30`}><header className={styles.newsHeader}><Skeleton className="h-5 w-40" /><Skeleton className="mt-2 h-3 w-56 max-w-full" /></header><div className={styles.newsList}><div className={styles.newsItem}><Skeleton className="h-5 w-20 rounded-full" /><Skeleton className="mt-3 h-4 w-3/4" /><Skeleton className="mt-2 h-3 w-full" /><Skeleton className="mt-1.5 h-3 w-5/6" /></div></div></section></aside>
+      </div>
     </div> : <div className={styles.inner}>
       {user && <GuideTour id="home-page" steps={homeGuideSteps} />}
       <header data-guide="home-welcome" className={styles.welcome}>

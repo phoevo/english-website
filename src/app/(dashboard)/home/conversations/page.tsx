@@ -6,14 +6,14 @@ import { useConversations } from "@/hooks/useConversations";
 import { useUserStore } from "@/data/useUserStore";
 import { matchesConversationSearch } from "@/lib/conversationSearch";
 import { cn } from "@/lib/utils";
-import { legacyAccountFeaturesEnabled } from "@/lib/accountFeatures";
+import type { ConversationCatalogItem } from "@/lib/profileTypes";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogTrigger, AlertDialogCancel, AlertDialogFooter } from "@/components/ui/alert-dialog";
-import AuthLoading from "@/components/auth/AuthLoading";
 import DashboardPage from "@/components/dashboard/DashboardPage";
 import { dashboardStyles } from "@/components/dashboard/styles";
+import { Skeleton } from "@/components/ui/skeleton";
 import GuideTour, { type GuideStep } from "../../GuideTour";
 import PlacementTest from "../placementTest";
 import ConversationCover from "./ConversationCover";
@@ -30,11 +30,9 @@ const convoGuideSteps: GuideStep[] = [
   { target: "convo-filters", title: "Search and filters", description: "Search by title, description, topic or level, then narrow the results with the filters." },
   { target: "convo-grid", title: "Conversation cards", description: "Open a conversation to start reading. The green check indicates completion. Hover over words for definitions and save them to your dictionary." },
 ];
-type CoverConversation = { $id: string; title: string; description?: string; level: string; audioFileId: string; isPro: boolean; category: string };
-
 export default function ConversationsPage() {
   const { conversations, loading: conversationsLoading, error } = useConversations();
-  const { loading: userLoading, user, isTeacher } = useUserStore();
+  const { loading: userLoading, user } = useUserStore();
   const [search, setSearch] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("All");
   const [category, setCategory] = useState("All");
@@ -43,12 +41,11 @@ export default function ConversationsPage() {
   const searchInput = useRef<HTMLInputElement>(null);
   const loading = conversationsLoading || userLoading;
   const hasFilters = Boolean(search.trim()) || selectedLevel !== "All" || category !== "All";
-  const list = Array.isArray(conversations) ? conversations as unknown as CoverConversation[] : [];
+  const list = Array.isArray(conversations) ? conversations as ConversationCatalogItem[] : [];
   const filtered = list.filter(conversation => {
     const levelMatches = selectedLevel === "All" || conversation.level === selectedLevel;
     const categoryMatches = category === "All" || conversation.category === category;
-    const userCanAccess = !legacyAccountFeaturesEnabled || isTeacher || !conversation.isPro || Boolean(user?.isSubscribed);
-    return levelMatches && categoryMatches && userCanAccess && matchesConversationSearch(conversation, search);
+    return levelMatches && categoryMatches && matchesConversationSearch(conversation, search);
   });
 
   useEffect(() => { results.current?.scrollTo({ top: 0 }); }, [search, selectedLevel, category]);
@@ -60,11 +57,28 @@ export default function ConversationsPage() {
   return <DashboardPage ready={!loading && !error}>
     {user && !loading && !error && <GuideTour id="conversations-page" steps={convoGuideSteps} />}
     <header data-guide="convo-title" data-dashboard-intro className="shrink-0">
-      <h1 className={dashboardStyles.heading}>Conversations</h1>
-      <p className={dashboardStyles.description}>Find a conversation by topic or level.</p>
+      {loading ? <div role="status" aria-live="polite" aria-busy="true" aria-label="Loading conversations" aria-hidden="false" className="space-y-3"><span className="sr-only">Loading...</span><div aria-hidden="true"><Skeleton className="h-9 w-64 max-w-full" /><Skeleton className="mt-3 h-4 w-80 max-w-full" /></div></div> : <><h1 className={dashboardStyles.heading}>Conversations</h1><p className={dashboardStyles.description}>Find a conversation by topic or level.</p></>}
     </header>
 
-    {loading ? <div className="flex min-h-0 flex-1 items-center justify-center"><AuthLoading /></div>
+    {loading ? <div aria-busy="true" aria-label="Loading conversation library" className="flex min-h-0 flex-1 flex-col">
+        <div aria-hidden="true" className="mt-5 grid shrink-0 grid-cols-2 gap-3 lg:flex lg:items-end">
+          <Skeleton className="col-span-2 h-11 w-full lg:flex-1" />
+          <div className="space-y-2 lg:w-44"><Skeleton className="h-3 w-12" /><Skeleton className="h-11 w-full" /></div>
+          <div className="space-y-2 lg:w-56"><Skeleton className="h-3 w-16" /><Skeleton className="h-11 w-full" /></div>
+        </div>
+        <div aria-hidden="true" className="flex shrink-0 items-center justify-between py-3.5"><Skeleton className="h-3 w-28" /><Skeleton className="h-3 w-36" /></div>
+        <div aria-hidden="true" className="min-h-0 flex-1 overflow-y-auto px-1 pt-1 pb-4">
+          <ul className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {["", "opacity-60", "opacity-30"].map((fade, index) => <li key={index} className={`rounded-xl border border-border p-5 ${fade}`}>
+            <Skeleton className={`h-5 ${index === 1 ? "w-2/3" : "w-3/4"}`} />
+            <Skeleton className="mt-4 h-px w-full" />
+            <Skeleton className="mt-4 h-3 w-1/3" />
+            <Skeleton className="mt-7 h-4 w-full" />
+            <Skeleton className="mt-2 h-4 w-5/6" />
+          </li>)}
+          </ul>
+        </div>
+      </div>
       : error ? <div role="alert" className="mt-6 rounded-xl border border-red-500/25 bg-red-500/5 p-5 text-sm leading-7 text-red-500">{error}</div>
       : <>
         <div data-guide="convo-filters" data-dashboard-entry className="mt-5 grid shrink-0 grid-cols-2 gap-3 lg:flex lg:items-end">
@@ -98,7 +112,7 @@ export default function ConversationsPage() {
             <p role="status" aria-live="polite" aria-atomic="true" className="text-xs text-muted-foreground">{filtered.length} {filtered.length === 1 ? "conversation" : "conversations"}</p>
             {hasFilters && <button type="button" onClick={clearFilters} className={dashboardStyles.textLink}>Clear filters</button>}
           </div>
-          {(!legacyAccountFeaturesEnabled || !isTeacher) && <AlertDialog open={test} onOpenChange={setTest}>
+          <AlertDialog open={test} onOpenChange={setTest}>
             <AlertDialogTrigger asChild><button type="button" className={dashboardStyles.textLink}>Not sure of your level?</button></AlertDialogTrigger>
             <AlertDialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-xl border-border bg-background sm:max-w-xl">
               <AlertDialogHeader>
@@ -109,13 +123,13 @@ export default function ConversationsPage() {
               <PlacementTest />
               <AlertDialogFooter><AlertDialogCancel className="cursor-pointer">Back</AlertDialogCancel></AlertDialogFooter>
             </AlertDialogContent>
-          </AlertDialog>}
+          </AlertDialog>
         </div>
 
         <div ref={results} role="region" aria-label="Conversation results" tabIndex={0} className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-1 pt-1 pb-4 [scrollbar-gutter:stable] focus-visible:rounded-md focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-foreground">
           <ul data-guide="convo-grid" className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 min-[1800px]:grid-cols-4">
             {filtered.map(conversation => <li key={conversation.$id} className="min-w-0">
-              <ConversationCover conversationTitle={conversation.title} conversationDescription={conversation.description || ""} level={conversation.level} conversationId={conversation.$id} audioFileId={conversation.audioFileId} category={conversation.category} isPro={conversation.isPro} />
+              <ConversationCover conversationTitle={conversation.title} conversationDescription={conversation.description || ""} level={conversation.level} conversationId={conversation.$id} category={conversation.category} isPro={conversation.isPro} />
             </li>)}
           </ul>
           {!filtered.length && <div className="flex min-h-48 flex-col items-center justify-center rounded-xl border border-dashed border-border p-6 text-center">

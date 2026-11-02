@@ -1,11 +1,10 @@
 import { create } from "zustand";
-import { updateMyProfile } from "@/data/accountActions";
+import { getMyConversationSummaries, updateMyProfile } from "@/data/accountActions";
 import { ensureUserDocument } from "@/data/getData";
 import { legacyAccountFeaturesEnabled } from "@/lib/accountFeatures";
 import {
   account,
   databases,
-  getConversationFromDB,
   usersCollectionId,
   databaseId,
   getUserById,
@@ -153,24 +152,8 @@ fetchUser: async () => {
     const conversations: Conversation[] = [];
 
     if (conversationIds.length > 0) {
-      const fetched = await Promise.all(
-        conversationIds.map((id) =>
-          getConversationFromDB(id).catch(() => null)
-        )
-      );
-
-      fetched.forEach((convo) => {
-        if (convo) {
-          conversations.push({
-            $id: convo.$id,
-            title: convo.title,
-            description: convo.description,
-            level: convo.level,
-            category: convo.category,
-            isPro: convo.isPro,
-          });
-        }
-      });
+      const fetched = await getMyConversationSummaries(conversationIds).catch(() => []);
+      conversations.push(...fetched);
     }
 
     // ---- Set state ----

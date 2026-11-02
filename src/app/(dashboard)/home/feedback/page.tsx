@@ -73,21 +73,25 @@ function FeedbackPage() {
   }
 
   if (loading) {
-    return (
-      <div className="flex flex-col w-full">
-
-      <div className="m-10 space-y-8">
-        <Skeleton className="w-[300px] h-[32px]" />
-        <Skeleton className="w-[400px] h-[15px]" />
+    return <div role="status" aria-busy="true" aria-label="Loading feedback page" className="m-5 w-full space-y-5 lg:m-10">
+      <span className="sr-only">Loading...</span>
+      <div aria-hidden="true" className="space-y-3"><Skeleton className="h-8 w-48 max-w-full" /><Skeleton className="h-4 w-3/4 max-w-2xl" /></div>
+      <div aria-hidden="true" className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <section className="rounded-xl border border-border opacity-100">
+          <div className="space-y-2 border-b border-border p-6"><Skeleton className="h-5 w-36" /><Skeleton className="h-4 w-64 max-w-full" /></div>
+          <div className="space-y-5 p-6">
+            <div className="space-y-3"><Skeleton className="h-4 w-12" /><div className="flex flex-wrap gap-2"><Skeleton className="h-7 w-16 rounded-full" /><Skeleton className="h-7 w-24 rounded-full" /><Skeleton className="h-7 w-28 rounded-full" /><Skeleton className="h-7 w-28 rounded-full" /></div></div>
+            <div className="space-y-2"><Skeleton className="h-4 w-28" /><Skeleton className="h-28 w-full rounded-md" /></div>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2"><div className="space-y-2"><Skeleton className="h-4 w-28" /><Skeleton className="h-10 w-full" /></div><div className="space-y-2"><Skeleton className="h-4 w-32" /><Skeleton className="h-10 w-full" /></div></div>
+            <Skeleton className="h-10 w-24 rounded-md" />
+          </div>
+        </section>
+        <section className="rounded-xl border border-border opacity-60">
+          <div className="space-y-2 border-b border-border p-6"><Skeleton className="h-5 w-28" /><Skeleton className="h-4 w-56 max-w-full" /></div>
+          <div className="space-y-3 p-6">{[0, 1, 2].map(index => <div key={index} className={`space-y-2 rounded-lg border border-border p-3 ${index === 2 ? "opacity-50" : ""}`}><Skeleton className="h-4 w-2/5" /><Skeleton className="h-3 w-full" /><Skeleton className="h-3 w-4/5" /></div>)}</div>
+        </section>
       </div>
-
-        <div className="flex flex-row mx-10 gap-10">
-          <Skeleton className="w-1/2 h-100" />
-          <Skeleton className="w-1/2 h-100" />
-        </div>
-
-      </div>
-    );
+    </div>;
   }
 
   if (!user) {

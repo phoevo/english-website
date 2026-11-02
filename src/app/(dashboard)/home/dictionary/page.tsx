@@ -70,18 +70,20 @@ function DictionaryPage() {
 
 
   if (loading) {
-    return (
-      <div className="m-10 h-192 space-y-6">
-      <Skeleton className="w-[150px] h-[32px]" />
-      <Skeleton className="w-[570px] h-[14px]" />
-      <div className="border-t-1 border-x-1 flex flex-col justify-center rounded-md gap-4 p-3">
-        <Skeleton className="w-[536px] h-[49px]" />
-      <Skeleton className="w-[536px] h-[49px] opacity-25" />
-      <Skeleton className="w-[536px] h-[49px] opacity-15" />
-      <div className="w-[537px] h-107 opacity-0" />
-    </div>
-    </div>
-    );
+    return <div role="status" aria-busy="true" aria-label="Loading dictionary" className="m-5 space-y-6 lg:m-10">
+      <span className="sr-only">Loading...</span>
+      <div aria-hidden="true" className="space-y-3"><Skeleton className="h-8 w-56 max-w-full" /><Skeleton className="h-4 w-2/3 max-w-xl" /></div>
+      <div aria-hidden="true" className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <section className="min-h-72 space-y-4 rounded-2xl border border-border p-4 opacity-100">
+          {[0, 1, 2, 3, 4].map(index => <div key={index} className={`flex items-center justify-between gap-4 border-b border-border py-4 ${index > 2 ? "opacity-50" : ""}`}><div className="flex-1 space-y-2"><Skeleton className="h-4 w-1/3" /><Skeleton className="h-3 w-3/4" /></div><Skeleton className="size-6 shrink-0 rounded-md" /></div>)}
+        </section>
+        <section className="min-h-72 rounded-xl border border-border p-5 opacity-70">
+          <Skeleton className="h-6 w-40" /><Skeleton className="mt-2 h-4 w-56 max-w-full" />
+          <div className="mt-4 flex gap-2"><Skeleton className="h-6 w-16 rounded-full" /><Skeleton className="h-6 w-24 rounded-full" /><Skeleton className="h-6 w-20 rounded-full" /></div>
+          <div className="mt-6 flex min-h-48 flex-col items-center justify-center gap-3 rounded-lg border border-border p-6 opacity-60"><Skeleton className="h-6 w-1/3" /><Skeleton className="h-4 w-2/3" /></div>
+        </section>
+      </div>
+    </div>;
   }
 
   if (!user) {

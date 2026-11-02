@@ -37,16 +37,6 @@ export const newsCollectionId = NEWS_COLLECTION_ID
 export const notesCollectionId = NOTES_COLLECTION_ID
 
 
-export const getConversationFromDB = async (documentId: string) => {
-  try {
-    const response = await databases.getDocument(databaseId, conversationsCollectionId, documentId)
-    return response
-  } catch {
-    console.warn(`Conversation ${documentId} could not be fetched. It may have been deleted.`)
-    return null
-  }
-};
-
 export const getAudioFileUrl = (fileId: string) => {
   return storage.getFileView(audioBucketId, fileId);
 };

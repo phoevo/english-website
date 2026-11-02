@@ -46,9 +46,9 @@
 .newsMeta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; color: var(--muted-foreground); font-size: 11px; line-height: 1.6; }
 .newsItem h3 { margin-top: 8px; font-size: 14px; font-weight: 500; line-height: 1.6; letter-spacing: -.01em; }
 .newsItem p { margin-top: 4px; white-space: pre-line; color: var(--muted-foreground); font-size: 13px; line-height: 1.8; }
-.newsPending, .newsEmpty { padding: 0 20px 20px; }
+.newsEmpty { padding: 0 20px 20px; }
+.newsSkeleton { overflow: hidden; }
 .newsEmpty { color: var(--muted-foreground); font-size: 13px; line-height: 1.8; }
-.loadingHeader { flex: 0 0 auto; margin-bottom: 24px; }
 @media (min-width: 1100px) {
   .grid { grid-template-columns: minmax(0, 1.65fr) minmax(280px, 1fr); grid-template-rows: minmax(0, 1fr); }
   .mainColumn { grid-template-columns: minmax(0, 1fr); grid-template-rows: repeat(2, minmax(0, 1fr)); }

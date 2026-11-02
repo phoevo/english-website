@@ -46,15 +46,19 @@ function RecentsPage() {
   };
 
   if (loading) {
-    return (
-      <div className="m-10 space-y-8">
-        <Skeleton className="w-[300px] h-[32px]" />
-        <Skeleton className="w-[400px] h-[15px]" />
-        <Skeleton className="w-[392px] h-[82px] opacity-50 mt-5" />
-        <Skeleton className="w-[392px] h-[82px] opacity-25" />
-        <Skeleton className="w-[392px] h-[82px] opacity-15" />
+    return <div role="status" aria-busy="true" aria-label="Loading recent conversations" className="m-5 space-y-3 lg:m-10 lg:space-y-5">
+      <span className="sr-only">Loading...</span>
+      <div aria-hidden="true" className="space-y-3">
+        <Skeleton className="h-8 w-64 max-w-full" />
+        <Skeleton className="h-4 w-80 max-w-full" />
       </div>
-    );
+      <div aria-hidden="true" className="mt-9 space-y-3">
+        {["", "opacity-80", "opacity-60", "opacity-40", "opacity-20"].map((fade, index) => <div key={index} className={`flex min-h-[82px] items-center justify-between rounded-xl border border-border bg-background px-4 py-4 ${fade}`}>
+          <div className="flex-1 space-y-3 border-r border-border pr-4"><Skeleton className="h-5 w-2/3" /><Skeleton className="h-4 w-16" /></div>
+          <Skeleton className="ml-4 size-6 shrink-0 rounded-md" />
+        </div>)}
+      </div>
+    </div>;
   }
 
   if (!user) {

@@ -1,5 +1,5 @@
 import { account } from "@/data/appwrite";
-import { audioAccessAction, createDeckAction, deleteDeckAction, feedbackAction, getProfileAction, listDecksAction, updateProfileAction } from "@/app/actions/account";
+import { audioAccessAction, conversationCatalogAction, conversationSummariesAction, createDeckAction, deleteDeckAction, feedbackAction, getConversationAction, getProfileAction, listDecksAction, updateProfileAction } from "@/app/actions/account";
 import type { ActionResult, ProfileOperation } from "@/lib/profileTypes";
 
 type Credential = { userId: string; jwt: string; expiresAt: number };
@@ -37,7 +37,11 @@ export async function withAccount<T>(action: (jwt: string) => Promise<ActionResu
     result = await action(current.jwt);
   }
   assertOwner();
-  if (!result.ok) throw new Error(result.error);
+  if (!result.ok) {
+    const error = new Error(result.error) as Error & { status: number };
+    error.status = result.status;
+    throw error;
+  }
   return result.data;
 }
 
@@ -58,6 +62,9 @@ export function updateMyProfile(operation: ProfileOperation) {
   return request;
 }
 export const getMyProfile = () => withAccount(getProfileAction);
+export const getMyConversationCatalog = () => withAccount(conversationCatalogAction);
+export const getMyConversationSummaries = (ids: string[]) => withAccount(jwt => conversationSummariesAction(jwt, ids));
+export const getMyConversation = (id: string) => withAccount(jwt => getConversationAction(jwt, id));
 export const getMyDecks = () => withAccount(listDecksAction);
 export const createMyDeck = (input: { name: string; type: string; words: string[] }) => withAccount(jwt => createDeckAction(jwt, input));
 export const deleteMyDeck = (id: string) => withAccount(jwt => deleteDeckAction(jwt, id));

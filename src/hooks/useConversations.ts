@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { fetchConversations } from "@/data/getData";
+import type { ConversationCatalogItem } from "@/lib/profileTypes";
 export function useConversations() {
-  const [conversations, setConversations] = useState<unknown[]>([]);
+  const [conversations, setConversations] = useState<ConversationCatalogItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
 

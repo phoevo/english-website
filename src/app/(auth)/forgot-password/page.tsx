@@ -48,7 +48,7 @@ export default function ForgotPassword() {
             <FormField control={form.control} name="email" render={({ field }) => <FormItem className={styles.field}>
               <FormLabel>Email</FormLabel><FormControl><Input type="email" placeholder="you@example.com" autoComplete="email" {...field} /></FormControl><FormMessage />
             </FormItem>} />
-            <button type="submit" disabled={isLoading} aria-label={isLoading ? "loading" : undefined} aria-busy={isLoading} className={styles.button}>{isLoading ? <AuthLoading /> : "Send reset link"}</button>
+            <button type="submit" disabled={isLoading} aria-label={isLoading ? "loading" : undefined} aria-busy={isLoading} className={styles.button}>{isLoading ? <AuthLoading inline /> : "Send reset link"}</button>
           </fieldset>
         </form>
       </Form>
