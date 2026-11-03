@@ -1,4 +1,4 @@
-const { Databases, Client } = require("node-appwrite");
+const { Databases } = require("node-appwrite");
 
 module.exports = async function provision({ plan, userId, adminClient }) {
   const databases = new Databases(adminClient);

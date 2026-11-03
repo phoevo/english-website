@@ -14,8 +14,8 @@ import { subscribeUser2 } from "@/data/getData";
 gsap.registerPlugin(useGSAP);
 
 const billingOptions = {
-  monthly: { price: "9.99", interval: "month", checkoutPlan: "Tutor Monthly" },
-  yearly: { price: "89.99", interval: "year", checkoutPlan: "Tutor Yearly" },
+  monthly: { price: "9.99", interval: "month", checkoutPlan: "Synomilo Monthly" },
+  yearly: { price: "89.99", interval: "year", checkoutPlan: "Synomilo Yearly" },
 } as const;
 
 // Student.tsx and Tutor.tsx retain the original pricing implementations.

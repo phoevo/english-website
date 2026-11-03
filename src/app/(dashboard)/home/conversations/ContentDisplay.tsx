@@ -487,7 +487,7 @@ React.useEffect(() => {
 
       </div>
   {!canUseAudio ? (
-    <span className="text-sm text-muted-foreground">Audio is available with Plus.</span>
+    <span className="text-sm text-muted-foreground">Audio is available with <Link className="underline" href={"/pricing"}>Plus</Link>.</span>
   ) : audioLoading ? (
     <Skeleton className="w-40 h-5" />
   ) : audioError ? (

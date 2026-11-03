@@ -1,5 +1,13 @@
 const sdk = require("node-appwrite");
 
+const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => ({
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;",
+}[character]));
+
 module.exports = async function handleSendEmail({ req, res, client, adminClient }) {
   try {
     const { type, userEmail, userName } = req.bodyJson;
@@ -13,116 +21,68 @@ module.exports = async function handleSendEmail({ req, res, client, adminClient 
 
     // Initialize messaging with admin client
     const messaging = new sdk.Messaging(adminClient);
-
+    const safeName = escapeHtml(userName);
 
     let subject, content;
 
     switch (type) {
       case 'welcome':
-        subject = 'Welcome to Synomilo!';
+        subject = 'Welcome to Synomilo';
         content = `
-          <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to Synomilo</title>
-  </head>
-
-  <body style="margin:0; padding:0; background:#f6f7fb; font-family:Arial, Helvetica, sans-serif; color:#111111;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f6f7fb; padding:32px 16px;">
-      <tr>
-        <td align="center">
-          <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; background:#ffffff; border-radius:16px; overflow:hidden; border:1px solid #e5e7eb;">
-
-            <tr>
-              <td style="padding:40px 28px 28px; text-align:center; background:#1e1e1e;">
-
-                <h1 style="margin:0; color:#ffffff; font-size:30px; line-height:1.2; font-weight:700;">
-                  Welcome to Synomilo
-                </h1>
-              </td>
-            </tr>
-
-            <tr>
-              <td style="padding:32px 28px; background:#ffffff;">
-                <h2 style="margin:0 0 16px; font-size:22px; line-height:1.3; color:#111111;">
-                  Hi ${userName},
-                </h2>
-
-                <p style="margin:0 0 20px; font-size:16px; line-height:1.6; color:#333333;">
-                  Thanks for signing up to Synomilo. I'm excited to have you join during early access.
-                </p>
-
-                <div style="text-align:center; margin:28px 0;">
-                  <a
-                    href="https://synomilo.com/home"
-                    style="background:#1e1e1e; color:#ffffff; text-decoration:none; padding:14px 24px; border-radius:10px; display:inline-block; font-size:15px; font-weight:bold;"
-                  >
-                    Go to Synomilo
-                  </a>
-                </div>
-
-                <h2 style="margin:32px 0 12px; font-size:24px; line-height:1.3; color:#111111;">
-                  What you can do next
-                </h2>
-
-                <h3 style="margin:20px 0 8px; font-size:18px; color:#111111;">
-                  Students
-                </h3>
-
-                <ul style="margin:0; padding-left:20px; font-size:15px; line-height:1.7; color:#333333;">
-                  <li>Start your first conversation</li>
-                  <li>Add a word to your Dictionary</li>
-                  <li>Add your tutor on the Assignments page</li>
-                  <li>Build and maintain your learning streak</li>
-                  <li>Send feedback on what was good, bad, or needs to change for student users. I'm actively shaping Synomilo around early users.</li>
-                </ul>
-
-                <h3 style="margin:24px 0 8px; font-size:18px; color:#111111;">
-                  Tutors
-                </h3>
-
-                <ul style="margin:0; padding-left:20px; font-size:15px; line-height:1.7; color:#333333;">
-                  <li>Add your students on the Assignments page</li>
-                  <li>Browse the learning materials</li>
-                  <li>Use Synomilo during one of your lessons</li>
-                  <li>Send feedback on what was good, bad, or needs to change for tutors. I want Synomilo to be as useful as possible for your lessons.</li>
-                </ul>
-
-                <h2 style="margin:32px 0 12px; font-size:24px; line-height:1.3; color:#111111;">
-                  Coming soon
-                </h2>
-
-                <ul style="margin:0; padding-left:20px; font-size:15px; line-height:1.7; color:#333333;">
-                  <li>New link sharing, so tutors can share a conversation with a student without requiring an account.</li>
-                  <li>More progress tracking for tutors and students</li>
-                  <li>More features shaped by user feedback</li>
-                </ul>
-
-                <p style="margin:28px 0 0; font-size:16px; line-height:1.6; color:#333333;">
-                  Thanks again for joining early.
-                </p>
-
-                <p style="margin:18px 0 0; font-size:16px; color:#111111;">
-                  <strong>The Synomilo Team</strong>
-                </p>
-              </td>
-            </tr>
-
-            <tr>
-              <td style="padding:18px 28px; text-align:center; background:#f9fafb; color:#6b7280; font-size:12px; line-height:1.5;">
-                This email was sent because you signed up for Synomilo.
-                If you didn’t sign up, you can ignore this email.
-              </td>
-            </tr>
-
-          </table>
-        </td>
-      </tr>
-    </table>
-  </body>
-</html>
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="UTF-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+              <title>Welcome to Synomilo</title>
+            </head>
+            <body style="margin:0;padding:0;background:#f3f3f3;color:#111;font-family:Arial,Helvetica,sans-serif;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f3f3;padding:32px 16px;">
+                <tr>
+                  <td align="center">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#fff;border:1px solid #dedede;border-radius:12px;overflow:hidden;">
+                      <tr>
+                        <td style="padding:24px 28px;background:#111;color:#fff;font-size:20px;font-weight:600;letter-spacing:-.4px;">
+                          synomilo
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:32px 28px 36px;">
+                          <h1 style="margin:0 0 22px;font-size:28px;line-height:1.2;font-weight:600;letter-spacing:-.8px;color:#111;">
+                            English conversations. No fixed lesson plan.
+                          </h1>
+                          <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#222;">Hi ${safeName},</p>
+                          <p style="margin:0 0 22px;font-size:15px;line-height:1.7;color:#444;">
+                            Your account is ready. Browse conversations, highlight useful language, and save words to your dictionary. Use the material your way.
+                          </p>
+                          <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
+                            <tr>
+                              <td style="border-radius:6px;background:#111;">
+                                <a href="https://synomilo.com/home/conversations" style="display:inline-block;padding:13px 20px;color:#fff;text-decoration:none;font-size:14px;font-weight:600;">
+                                  Browse conversations
+                                </a>
+                              </td>
+                            </tr>
+                          </table>
+                          <div style="border-top:1px solid #e5e5e5;padding-top:20px;">
+                            <p style="margin:0 0 10px;font-size:14px;line-height:1.6;color:#222;"><strong>Free</strong> includes every conversation, highlighting, and your dictionary.</p>
+                            <p style="margin:0;font-size:14px;line-height:1.6;color:#666;"><strong style="color:#222;">Plus</strong> includes conversation audio.</p>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:18px 28px;background:#f7f7f7;border-top:1px solid #e5e5e5;color:#777;font-size:12px;line-height:1.6;">
+                          This email was sent because you created a Synomilo account. If you didn’t sign up, you can ignore it.
+                          <br /><a href="https://synomilo.com/privacy" style="color:#555;">Privacy</a>
+                          &nbsp;·&nbsp;<a href="https://synomilo.com/ToS" style="color:#555;">Terms</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </body>
+          </html>
         `;
         break;
 

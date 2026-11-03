@@ -1,19 +1,12 @@
 const { Databases, Account } = require("node-appwrite");
-const Stripe = require("stripe");
+const { getStripeConfig } = require("./utils/stripe-config.js");
 
 const serverPlans = [
-  "Student Monthly",
-  "Student Yearly",
-  "Tutor Monthly",
-  "Tutor Yearly",
+
+  "Synomilo Monthly",
+  "Synomilo Yearly",
 ];
 
-const priceMap = {
-  "Student Monthly": "price_1TpZBNL2R3rDklxBncRgUey9",
-  "Student Yearly": "price_1TdZPSL2R3rDklxBhKtzSVX0",
-  "Tutor Monthly": "price_1TpZLxL2R3rDklxB0dwVxVU2",
-  "Tutor Yearly": "price_1TdZRFL2R3rDklxBcfkm5QxD",
-};
 
 module.exports = async function handlePayments({
   req,
@@ -43,9 +36,7 @@ module.exports = async function handlePayments({
       return res.json({ error: "Invalid plan" }, 400);
     }
 
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: "2023-08-16",
-    });
+    const { stripe, priceIds } = getStripeConfig();
 
       const dbId =
         process.env.APPWRITE_DATABASE_ID ||
@@ -98,11 +89,14 @@ module.exports = async function handlePayments({
 
     const session = await stripe.checkout.sessions.create({
   customer: stripeCustomerId,
+  client_reference_id: user.$id,
+  metadata: { appwriteUserId: user.$id },
+  subscription_data: { metadata: { appwriteUserId: user.$id } },
   mode: "subscription",
 
   line_items: [
     {
-      price: priceMap[plan],
+      price: priceIds[plan],
       quantity: 1,
     },
   ],
@@ -126,7 +120,7 @@ module.exports = async function handlePayments({
     enabled: true,
   },
 
-  success_url: `${baseUrl}/pricing/success`,
+  success_url: `${baseUrl}/pricing/success?checkout_id={CHECKOUT_SESSION_ID}`,
   cancel_url: `${baseUrl}/pricing/canceled`,
 });
 

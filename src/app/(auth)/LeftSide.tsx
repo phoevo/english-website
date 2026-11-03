@@ -24,14 +24,28 @@ export default function LeftSide() {
   const NUM_ROWS = 8;
   const RECT_PER_ROW = 10;
 
-  const generateRect = () => ({
-    w: 200 + Math.floor(Math.random() * 1000),
-    h: 40,
-    color: tailwindColors[Math.floor(Math.random() * tailwindColors.length)],
-  });
+  // Keep the server-rendered artwork identical to the first client render.
+  // A deterministic hash gives the blocks a varied look without render-time randomness.
+  const randomForRect = (rowIndex: number, rectIndex: number, salt: number) => {
+    let value =
+      Math.imul(rowIndex + 1, 0x9e3779b1) ^
+      Math.imul(rectIndex + 1, 0x85ebca6b) ^
+      Math.imul(salt + 1, 0xc2b2ae35);
+    value = Math.imul(value ^ (value >>> 16), 0x7feb352d);
+    value = Math.imul(value ^ (value >>> 15), 0x846ca68b);
+    value ^= value >>> 16;
+    return (value >>> 0) / 4294967296;
+  };
 
-  const rowData = Array.from({ length: NUM_ROWS }, () =>
-    Array.from({ length: RECT_PER_ROW }, generateRect)
+  const rowData = Array.from({ length: NUM_ROWS }, (_, rowIndex) =>
+    Array.from({ length: RECT_PER_ROW }, (_, rectIndex) => ({
+      w: 200 + Math.floor(randomForRect(rowIndex, rectIndex, 0) * 1000),
+      h: 40,
+      color:
+        tailwindColors[
+          Math.floor(randomForRect(rowIndex, rectIndex, 1) * tailwindColors.length)
+        ],
+    }))
   );
 
   // Subtle wiggle using CSS variables so it composes with repulsion

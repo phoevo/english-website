@@ -1,120 +1,58 @@
-const { Databases, Client, Query } = require("node-appwrite");
-const Stripe = require("stripe");
+const { Account, Databases } = require("node-appwrite");
+const { getStripeConfig } = require("./utils/stripe-config.js");
 const provision = require("./utils/provision.js");
 
-module.exports = async function handleCheckPayment({
-  req,
-  res,
-  adminClient,
-}) {
-  const checkoutId = req.query.checkout_id;
-
+module.exports = async function handleCheckPayment({ req, res, adminClient, client }) {
+  const checkoutId = req.query?.checkout_id || req.bodyJson?.checkout_id;
   if (!checkoutId) {
     return res.json({ error: "Checkout ID is required" }, 400);
   }
 
-  const databases = new Databases(adminClient);
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: "2023-08-16",
-  });
-
   try {
+    const account = new Account(client);
+    const user = await account.get();
+    const databases = new Databases(adminClient);
+    const { stripe, priceToPlan } = getStripeConfig();
     const checkoutSession = await stripe.checkout.sessions.retrieve(checkoutId);
 
-    const subscriptions = await stripe.subscriptions.list({
-      customer: checkoutSession.customer,
-      limit: 1,
-      status: "all",
-    });
+    if (checkoutSession.mode !== "subscription" || checkoutSession.status !== "complete") {
+      return res.json({ success: false, pending: true }, 202);
+    }
+
+    if (!checkoutSession.customer || checkoutSession.client_reference_id && checkoutSession.client_reference_id !== user.$id) {
+      return res.json({ error: "Checkout session does not belong to this account" }, 403);
+    }
 
     const dbId = process.env.APPWRITE_DATABASE_ID || process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
     const usersCollectionId = process.env.APPWRITE_USERS_COLLECTION_ID || process.env.NEXT_PUBLIC_APPWRITE_USERS_COLLECTION_ID;
+    const userDoc = await databases.getDocument(dbId, usersCollectionId, user.$id);
 
-    const usersByCustomer = await databases.listDocuments(
-      dbId,
-      usersCollectionId,
-      [Query.equal("stripeCustomerId", checkoutSession.customer)]
-    );
-
-    let userId;
-    if (usersByCustomer.total > 0) {
-      userId = usersByCustomer.documents[0].$id;
-    } else {
-      // Fallback: resolve by the checkout session email, then backfill.
-      let email = checkoutSession.customer_email || checkoutSession.customer_details?.email;
-      if (!email && checkoutSession.customer) {
-        try {
-          const cust = await stripe.customers.retrieve(checkoutSession.customer);
-          email = cust?.email;
-        } catch {}
-      }
-
-      if (!email) {
-        return res.json({ error: "No subscriber found for this checkout." }, 404);
-      }
-
-      const users = await databases.listDocuments(dbId, usersCollectionId, [
-        Query.equal("email", email),
-      ]);
-
-      if (users.total === 0) {
-        return res.json({ error: "No subscriber found for this checkout." }, 404);
-      }
-
-      userId = users.documents[0].$id;
-
-      try {
-        await databases.updateDocument(dbId, usersCollectionId, userId, {
-          stripeCustomerId: checkoutSession.customer,
-        });
-      } catch (err) {
-        console.error("Failed to backfill stripeCustomerId on user:", err);
-      }
+    if (userDoc.stripeCustomerId !== checkoutSession.customer) {
+      return res.json({ error: "Checkout session does not belong to this account" }, 403);
     }
 
-    if (subscriptions.data.length === 0) {
-      await provision({
-        plan: "free",
-        userId,
-        adminClient,
-      });
-
-      return res.redirect(process.env.FRONTEND_URL);
+    const subscriptionId = typeof checkoutSession.subscription === "string"
+      ? checkoutSession.subscription
+      : checkoutSession.subscription?.id;
+    if (!subscriptionId) {
+      return res.json({ success: false, pending: true }, 202);
     }
 
-    const priceId = subscriptions.data[0].items.data[0].price.id;
-
-    let plan;
-
-    switch (priceId) {
-      case "price_1TpZBNL2R3rDklxBncRgUey9":
-        plan = "Student Monthly";
-        break;
-      case "price_1TdZPSL2R3rDklxBhKtzSVX0":
-        plan = "Student Yearly";
-        break;
-      case "price_1TpZLxL2R3rDklxB0dwVxVU2":
-        plan = "Tutor Monthly";
-        break;
-      case "price_1TdZRFL2R3rDklxBcfkm5QxD":
-        plan = "Tutor Yearly";
-        break;
-      default:
-        plan = "free";
-        break;
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    if (subscription.customer !== checkoutSession.customer || !["active", "trialing"].includes(subscription.status)) {
+      return res.json({ success: false, pending: true }, 202);
     }
 
+    const priceId = subscription.items.data[0]?.price?.id;
+    const plan = priceToPlan[priceId];
+    if (!plan) {
+      return res.json({ error: "The subscription price is not recognized" }, 409);
+    }
 
-
-    await provision({
-      plan,
-      userId,
-      adminClient,
-    });
-
-    return res.redirect(process.env.FRONTEND_URL || "http://localhost:3000");
+    await provision({ plan, userId: user.$id, adminClient });
+    return res.json({ success: true, isSubscribed: true, plan });
   } catch (err) {
-    console.error("Error during payment check:", err);
-    return res.json({ error: "Unexpected error", details: err.message }, 500);
+    console.error("Checkout confirmation failed:", err);
+    return res.json({ error: "Unable to confirm checkout" }, 500);
   }
-}
+};

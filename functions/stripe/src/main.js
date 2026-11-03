@@ -15,12 +15,10 @@ const handleDeleteAccount = require("./delete-account.js");
 module.exports = async function main({ req, res, log, error }) {
   log("Function started with path:", req.path);
   log("Request method:", req.method);
-  log("Request headers:", JSON.stringify(req.headers));
 
   let bodyJson = {};
   try {
     bodyJson = req.bodyJson ?? {};
-    log("Parsed request body:", bodyJson);
   } catch (err) {
     log("No valid JSON body (this is normal for GET requests):", err.message);
   }
@@ -51,7 +49,7 @@ module.exports = async function main({ req, res, log, error }) {
     .setJWT(incomingJwt);
 
   // Allow unauthenticated for specific routes that use adminClient + userId from body
-  const isPublicRoute = ["/webhook", "/send-reset-notice", "/delete-account", "/unsubscribe"].includes(req.path);
+  const isPublicRoute = ["/webhook", "/send-reset-notice"].includes(req.path);
   if (!isPublicRoute && !incomingJwt) {
     error("No JWT token provided");
     return res.json({ error: "Authentication required" }, 401);
@@ -78,7 +76,7 @@ module.exports = async function main({ req, res, log, error }) {
 
       case "/unsubscribe":
         log("Calling unsubscribe handler");
-        return await handleUnsubscribe({ req, res, client, adminClient, log, error });
+        return await handleUnsubscribe({ res, client, adminClient, log, error });
 
       case "/check-subscription":
         log("Calling check-subscription handler");
@@ -98,7 +96,7 @@ module.exports = async function main({ req, res, log, error }) {
 
       case "/delete-account":
         log("Calling delete-account handler");
-        return await handleDeleteAccount({ req, res, client, adminClient, log, error });
+        return await handleDeleteAccount({ res, client, adminClient, log, error });
 
       default:
         error("Invalid path provided:", req.path);

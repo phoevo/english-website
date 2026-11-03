@@ -1,18 +1,20 @@
-const { Databases } = require("node-appwrite");
-const Stripe = require("stripe");
+const { Account, Databases } = require("node-appwrite");
+const { getStripeConfig } = require("./utils/stripe-config.js");
 
 module.exports = async function handleUnsubscribe({
-  req,
   res,
+  client,
   adminClient,
   log,
   error,
 }) {
   try {
-    const { userId } = req.bodyJson || {};
-
-    if (!userId) {
-      return res.json({ error: "Missing userId" }, 400);
+    // Only ever cancel the signed-in caller's own subscription.
+    let userId;
+    try {
+      userId = (await new Account(client).get()).$id;
+    } catch {
+      return res.json({ error: "Authentication required" }, 401);
     }
 
     const databases = new Databases(adminClient);
@@ -29,9 +31,7 @@ module.exports = async function handleUnsubscribe({
       throw new Error("Missing DB or Collection env vars");
     }
 
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: "2023-08-16",
-    });
+    const { stripe } = getStripeConfig();
 
     // =========================
     // STEP 1: Get user doc

@@ -1,16 +1,14 @@
-const { Databases, Client, Query } = require("node-appwrite");
-const Stripe = require("stripe");
+const { Databases, Query } = require("node-appwrite");
+const { getStripeConfig } = require("./utils/stripe-config.js");
 const provision = require("./utils/provision.js");
 
 module.exports = async function handleWebhook({ req, res, adminClient }) {
   console.log("Webhook received. Event type:", req.method);
-  console.log("Headers:", JSON.stringify(req.headers, null, 2));
 
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: "2023-08-16",
-  });
-
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const { stripe, webhookSecret, priceToPlan } = getStripeConfig();
+  if (!webhookSecret) {
+    throw new Error("Missing Stripe webhook secret for the selected STRIPE_MODE");
+  }
   const signature = req.headers["stripe-signature"];
 
   // Ensure raw buffer
@@ -50,17 +48,39 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
     "payment_intent.canceled",
   ];
 
-  if (!allowedEvents.includes(event.type)) {
+  // Thin event destinations send "v1.<type>" with only a reference to the
+  // object, so strip the prefix and fetch the object from Stripe.
+  const isThin = event.object === "v2.core.event" || event.type.startsWith("v1.");
+  const eventType = isThin ? event.type.replace(/^v1\./, "") : event.type;
+
+  if (!allowedEvents.includes(eventType)) {
     console.log("Event type not allowed:", event.type);
     return res.json({ message: "ok" });
   }
 
   console.log("Processing event:", event.type);
-  console.log("Event data:", JSON.stringify(event.data, null, 2));
+
+  let eventObject = event.data?.object;
+  if (isThin) {
+    const objectId = event.related_object?.id;
+    if (!objectId) {
+      console.error("Thin event has no related object");
+      return res.json({ error: "No related object" }, 400);
+    }
+    if (eventType.startsWith("checkout.session.")) {
+      eventObject = await stripe.checkout.sessions.retrieve(objectId);
+    } else if (eventType.startsWith("customer.subscription.")) {
+      eventObject = await stripe.subscriptions.retrieve(objectId);
+    } else if (eventType.startsWith("invoice.")) {
+      eventObject = await stripe.invoices.retrieve(objectId);
+    } else if (eventType.startsWith("payment_intent.")) {
+      eventObject = await stripe.paymentIntents.retrieve(objectId);
+    }
+  }
 
   // Every handled event (checkout session, subscription, invoice, payment
   // intent) carries the Stripe customer id on its object.
-  const customerId = event.data.object.customer;
+  const customerId = eventObject?.customer;
 
   if (!customerId) {
     console.error("No customer ID found in event");
@@ -86,7 +106,7 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
     userId = usersByCustomer.documents[0].$id;
   } else {
     // Fallback: resolve by email, then backfill stripeCustomerId for future events.
-    let email = event.data.object?.customer_email;
+    let email = eventObject?.customer_email;
     if (!email) {
       try {
         const cust = await stripe.customers.retrieve(customerId);
@@ -127,12 +147,6 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
   // price, so keying off the price alone granted access even when the charge
   // never succeeded. A subscription only grants access while Stripe reports it
   // as "active" or "trialing".
-  const PRICE_TO_PLAN = {
-    price_1TpZBNL2R3rDklxBncRgUey9: "Student Monthly",
-    price_1TdZPSL2R3rDklxBhKtzSVX0: "Student Yearly",
-    price_1TpZLxL2R3rDklxB0dwVxVU2: "Tutor Monthly",
-    price_1TdZRFL2R3rDklxBcfkm5QxD: "Tutor Yearly",
-  };
   const GRANTING_STATUSES = ["active", "trialing"];
 
   let plan = "free";
@@ -147,7 +161,7 @@ module.exports = async function handleWebhook({ req, res, adminClient }) {
     );
     if (grantingSub) {
       const activePriceId = grantingSub.items.data[0].price.id;
-      plan = PRICE_TO_PLAN[activePriceId] || "free";
+      plan = priceToPlan[activePriceId] || "free";
     }
   } catch (err) {
     console.error("Failed to resolve subscription status for customer:", customerId, err);

@@ -9,6 +9,7 @@ import { useUserStore } from "@/data/useUserStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import GuideTour, { type GuideStep } from "../GuideTour";
 import News from "./News";
+import WelcomePlus from "./WelcomePlus";
 import styles from "./home.module.css";
 
 gsap.registerPlugin(useGSAP);
@@ -52,6 +53,7 @@ export default function HomePage() {
       </div>
     </div> : <div className={styles.inner}>
       {user && <GuideTour id="home-page" steps={homeGuideSteps} />}
+      {user && <WelcomePlus />}
       <header data-guide="home-welcome" className={styles.welcome}>
         <div data-home-intro>
           <h1>{user ? `Welcome back, ${user.name}` : "Welcome to Synomilo"}</h1>

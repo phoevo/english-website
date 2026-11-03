@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import { account } from "@/data/appwrite";
-import { checkSubscriptionStatus } from "@/data/getData";
+import { checkSubscriptionStatus, confirmCheckoutAndSync } from "@/data/getData";
 import { useUserStore } from "@/data/useUserStore";
 import { Button } from "@/components/ui/button";
 import { DM_Sans } from "next/font/google";
@@ -13,13 +13,14 @@ const dmSans = DM_Sans({ subsets: ['latin'] });
 
 
 export default function SubscribeSuccessPage() {
+  const router = useRouter();
+  const [signedOut, setSignedOut] = useState(false);
+
   useEffect(() => {
     let cancelled = false;
 
-    toast.success("Thanks for subscribing! Your Pro access is being activated.");
-
-    // Stripe provisions via the webhook asynchronously, so poll the user doc
-    // briefly and flip the local subscribed state once it lands.
+    // The webhook remains responsible for ongoing subscription changes. The
+    // authenticated session check also confirms access after the redirect.
     (async () => {
       // This route lives outside the dashboard group and is reached via a full
       // page load from Stripe, so the user store may not be hydrated yet.
@@ -29,29 +30,46 @@ export default function SubscribeSuccessPage() {
         try {
           uid = (await account.get()).$id;
         } catch {
+          setSignedOut(true);
           return;
         }
       }
 
-      for (let attempt = 0; attempt < 8 && !cancelled; attempt++) {
-        if (uid && (await checkSubscriptionStatus(uid))) {
+      const checkoutId = new URLSearchParams(window.location.search).get("checkout_id");
+      for (let attempt = 0; attempt < 10 && !cancelled; attempt++) {
+        let confirmed = false;
+        if (checkoutId) {
+          try {
+            confirmed = await confirmCheckoutAndSync(checkoutId);
+          } catch (error) {
+            console.error("Could not confirm the Checkout Session yet.", error);
+          }
+        }
+        if (!confirmed && uid) confirmed = await checkSubscriptionStatus(uid);
+        if (confirmed) {
           useUserStore.getState().setSubscribed(true);
-          break;
+          router.replace("/home?welcome=plus");
+          return;
         }
         await new Promise((resolve) => setTimeout(resolve, 2000));
       }
+      // Still not confirmed after ~20s: the webhook may be delayed, so let
+      // the user continue and explain on /home.
+      if (!cancelled) router.replace("/home?welcome=pending");
     })();
 
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [router]);
 
   return (
 <main className={`w-full h-screen flex flex-col items-center justify-center mx-auto p-6 space-y-4 ${dmSans.className}`}>
-  <h1 className="text-3xl font-semibold text-green-500">Payment successful!</h1>
-      <p className="text-muted-foreground text-center">
-        Thank you for subscribing to Plus! We really appreciate you choosing to support Synomilo. Your Plus access has been activated and is ready to use.
+  <h1 className="text-3xl font-semibold">{signedOut ? "Payment received." : "Activating Plus…"}</h1>
+      <p className="text-center text-muted-foreground">
+        {signedOut
+          ? "Log in to start using Plus."
+          : "This usually takes a few seconds. You’ll be taken to your home page."}
       </p>
       <div className="flex gap-3">
         <Link href="/pricing">

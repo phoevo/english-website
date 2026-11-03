@@ -1,8 +1,7 @@
 const { Account } = require("node-appwrite");
-const Stripe = require("stripe");
+const { getStripeConfig } = require("./utils/stripe-config.js");
 
 module.exports = async function handleCheckSubscription({
-  req,
   res,
   client,
 }) {
@@ -21,16 +20,7 @@ module.exports = async function handleCheckSubscription({
     }
 
     // Initialize Stripe with server-side secret
-    const stripeKey = process.env.STRIPE_SECRET_KEY;
-
-    if (!stripeKey) {
-      console.error("No Stripe secret key found in environment variables");
-      return res.json({ isSubscribed: false, error: "Missing Stripe key" }, 500);
-    }
-
-    const stripe = new Stripe(stripeKey, {
-      apiVersion: "2023-08-16",
-    });
+    const { stripe } = getStripeConfig();
 
     console.log("Stripe initialized successfully");
 

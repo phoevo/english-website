@@ -297,6 +297,21 @@ export async function deleteAccountServer(userId: string): Promise<void> {
 //   }
 // }
 
+export async function confirmCheckoutAndSync(checkoutId: string): Promise<boolean> {
+  const response = await appwriteFunctions.createExecution(
+    STRIPE_FUNCTION,
+    JSON.stringify({ checkout_id: checkoutId }),
+    false,
+    "/check",
+    "POST" as unknown as import("appwrite").ExecutionMethod,
+    { "content-type": "application/json" }
+  );
+
+  if (response.status !== "completed") return false;
+  const result = JSON.parse(response.responseBody || "{}");
+  return result.success === true && result.isSubscribed === true;
+}
+
 export async function checkSubscriptionStatus(userId: string): Promise<boolean> {
   try {
     // Just get the subscription status from the user document instead

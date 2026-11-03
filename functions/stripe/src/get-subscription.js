@@ -1,5 +1,5 @@
-const { Account, Client, Databases } = require("node-appwrite");
-const Stripe = require("stripe");
+const { Account, Databases } = require("node-appwrite");
+const { getStripeConfig } = require("./utils/stripe-config.js");
 
 module.exports = async function handleGetSubscription({
   req,
@@ -27,9 +27,7 @@ module.exports = async function handleGetSubscription({
     }
 
     // Initialize Stripe
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: "2023-08-16",
-    });
+    const { stripe, priceToPlan } = getStripeConfig();
 
     // Get Stripe customer ID directly from the user's document
     const dbId = process.env.APPWRITE_DATABASE_ID || process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
@@ -72,22 +70,7 @@ module.exports = async function handleGetSubscription({
     const activeSubscription = subscriptions.data[0];
     const priceId = activeSubscription.items.data[0].price.id;
 
-    // Map price IDs to plan names (same env vars + fallbacks as webhook.js)
-    const PRICE_STUDENT_MONTHLY = "price_1TpZBNL2R3rDklxBncRgUey9";
-    const PRICE_STUDENT_YEARLY = "price_1TdZPSL2R3rDklxBhKtzSVX0";
-    const PRICE_TUTOR_MONTHLY = "price_1TpZLxL2R3rDklxB0dwVxVU2";
-    const PRICE_TUTOR_YEARLY = "price_1TdZRFL2R3rDklxBcfkm5QxD";
-
-    let planName = "free";
-    if (priceId === PRICE_STUDENT_MONTHLY) {
-      planName = "Student Monthly";
-    } else if (priceId === PRICE_STUDENT_YEARLY) {
-      planName = "Student Yearly";
-    } else if (priceId === PRICE_TUTOR_MONTHLY) {
-      planName = "Tutor Monthly";
-    } else if (priceId === PRICE_TUTOR_YEARLY) {
-      planName = "Tutor Yearly";
-    }
+    const planName = priceToPlan[priceId] || "free";
 
     return res.json({
       plan: planName,
