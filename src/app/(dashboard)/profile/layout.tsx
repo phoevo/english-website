@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { account, databases, databaseId, usersCollectionId } from '@/data/appwrite'
+import { account } from '@/data/appwrite'
 import { useUserStore } from '@/data/useUserStore'
 
 import { Button } from '@/components/ui/button'
@@ -158,23 +158,17 @@ const handleUnsubscribe = async () => {
   const reassure2 = setTimeout(() => toast.loading('Almost done…', { id: toastId }), 4000);
 
   try {
-    // 1. Cancel Stripe subscription via Appwrite function
+    // 1. Cancel the Stripe subscription; the function also sets isSubscribed=false.
     try {
-      await unsubscribeUser2(user.$id);
+      const result = await unsubscribeUser2(user.$id);
+      if (!result?.success) throw new Error(result?.error || 'Unsubscribe failed');
     } catch (err) {
       console.error('Function unsubscribe error:', err);
+      toast.error('Could not cancel your subscription. Please try again.', { id: toastId });
+      return;
     }
 
-    // 2. Directly set isSubscribed=false in Appwrite DB as a guaranteed backup
-    try {
-      await databases.updateDocument(databaseId, usersCollectionId, user.$id, {
-        isSubscribed: false,
-      });
-    } catch (err) {
-      console.error('Direct DB update error:', err);
-    }
-
-    // 3. Force-update Zustand so the UI reflects immediately
+    // 2. Force-update Zustand so the UI reflects immediately
     useUserStore.setState((state) => ({
       isSubscribed: false,
       user: state.user ? { ...state.user, isSubscribed: false } : state.user,

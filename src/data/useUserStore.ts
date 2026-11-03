@@ -230,24 +230,13 @@ fetchUser: async () => {
     }
   },
 
+  // Local state only: isSubscribed is written server-side by the Stripe
+  // function, and users cannot update their own document.
   setSubscribed: (val: boolean) => {
-    // Update local state immediately for snappy UI
     set((state) => ({
       isSubscribed: val,
       user: state.user ? { ...state.user, isSubscribed: val } : state.user,
     }));
-
-    // Persist to Appwrite (fire-and-forget)
-    const currentUser = get().user;
-    if (currentUser) {
-      databases
-        .updateDocument(databaseId, usersCollectionId, currentUser.$id, {
-          isSubscribed: val,
-        })
-        .catch((err) => {
-          console.error("Failed to update subscription status:", err);
-        });
-    }
   },
   setRecentConversations: (conversations) => set({ recentConversations: conversations }),
   setDictionaryWords: (words) => set({ dictionaryWords: words }),
