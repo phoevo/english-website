@@ -10,6 +10,7 @@ const handleCheckSubscription = require("./check-subscription.js");
 const handleSendEmail = require("./send-email.js");
 const handleSendResetNotice = require("./send-reset-notice.js");
 const handleDeleteAccount = require("./delete-account.js");
+const handlePortal = require("./portal.js");
 
 // Main handler
 module.exports = async function main({ req, res, log, error }) {
@@ -77,6 +78,10 @@ module.exports = async function main({ req, res, log, error }) {
       case "/unsubscribe":
         log("Calling unsubscribe handler");
         return await handleUnsubscribe({ res, client, adminClient, log, error });
+
+      case "/portal":
+        log("Calling portal handler");
+        return await handlePortal({ req, res, client, adminClient });
 
       case "/check-subscription":
         log("Calling check-subscription handler");

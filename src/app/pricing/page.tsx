@@ -18,16 +18,15 @@ const billingOptions = {
   yearly: { price: "89.99", interval: "year", checkoutPlan: "Synomilo Yearly" },
 } as const;
 
-// Student.tsx and Tutor.tsx retain the original pricing implementations.
-// Checkout still uses the original tutor plan identifiers for Free and Plus.
+// One account type for everyone: Free, or Plus via the Synomilo plans.
 export default function PricingPage() {
   const page = useRef<HTMLDivElement>(null);
   const [billing, setBilling] = useState<keyof typeof billingOptions>("monthly");
   const [pending, setPending] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
-  const { user, fetchUser, isSubscribed, isTeacher } = useUserStore();
+  const { user, fetchUser, isSubscribed } = useUserStore();
   const selected = billingOptions[billing];
-  const subscribed = Boolean(user && isTeacher && isSubscribed);
+  const subscribed = Boolean(user && isSubscribed);
 
   useEffect(() => {
     let cancelled = false;
@@ -52,7 +51,7 @@ export default function PricingPage() {
   }, { scope: page });
 
   async function subscribe() {
-    if (!user || !isTeacher || isSubscribed || pending || checkingSession) return;
+    if (!user || isSubscribed || pending || checkingSession) return;
     setPending(true);
     toast.loading("Redirecting to payment…", { id: "subscription-loading" });
     try {
@@ -118,7 +117,7 @@ export default function PricingPage() {
             <div className="mt-auto">
               {checkingSession ? <button disabled className={`${buttonClass} bg-primary text-primary-foreground opacity-60`}>Checking account…</button>
                 : !user ? <Link href="/register" className={`${buttonClass} bg-primary text-primary-foreground hover:bg-primary/90`}>Get Plus<ArrowUpRight size={16} aria-hidden="true" /></Link>
-                : <button type="button" onClick={subscribe} disabled={pending || subscribed || !isTeacher} className={`${buttonClass} bg-primary text-primary-foreground hover:bg-primary/90 disabled:cursor-default disabled:opacity-60`}>{pending ? "Opening checkout…" : subscribed ? "Subscribed" : !isTeacher ? "Requires a tutor account" : "Get Plus"}</button>}
+                : <button type="button" onClick={subscribe} disabled={pending || subscribed} className={`${buttonClass} bg-primary text-primary-foreground hover:bg-primary/90 disabled:cursor-default disabled:opacity-60`}>{pending ? "Opening checkout…" : subscribed ? "Subscribed" : "Get Plus"}</button>}
             </div>
           </article>
         </div>

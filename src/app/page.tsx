@@ -116,6 +116,13 @@ export default function LandingPage() {
   const definitionMeaning = definitionType === "idiom" ? "facing difficult demands or expectations" : definitions[definitionWord || ""];
   const definitionSaved = (definitionWord !== null && saved.includes(definitionWord)) || (autoSaved && definitionWord === "pressure");
 
+  // The header turns into a compact floating bar once the page leaves the top.
+  const [navCompact, setNavCompact] = useState(false);
+  useGSAP(() => {
+    const trigger = ScrollTrigger.create({ start: 24, end: "max", onToggle: self => setNavCompact(self.isActive) });
+    return () => trigger.kill();
+  });
+
   // Smooth out touch scrolling for the pinned section (iOS Safari / Chrome Android).
   // If this causes any odd feel on your devices, remove this block.
   useGSAP(() => {
@@ -299,9 +306,11 @@ export default function LandingPage() {
 
   return <div ref={page} className="overflow-x-clip bg-background text-foreground [-webkit-text-size-adjust:100%] [font-family:var(--font-geist-sans,Arial),Arial,sans-serif] [&_a]:underline-offset-4 [&_button]:[-webkit-tap-highlight-color:transparent] motion-reduce:[&_*]:!transition-none">
     <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-background focus:text-foreground focus:p-3">Skip to content</a>
-    <header className="mx-auto flex min-h-20 max-w-[1440px] items-center justify-between gap-6 px-6 lg:px-12">
-      <Link href="/" className="text-2xl font-medium tracking-tight" aria-label="Synomilo home">synomilo</Link>
-      <nav aria-label="Main navigation" className="flex items-center gap-6 text-sm"><Link href="/guides" className="hidden hover:underline sm:block">Guides</Link><Link href="/pricing" className="hover:underline">Pricing</Link><Link href="/login" className="hover:underline">Log in</Link><ModeToggle /></nav>
+    <header className="pointer-events-none sticky top-0 z-40 flex min-h-20 items-center px-3">
+      <div className={`pointer-events-auto mx-auto flex w-full items-center justify-between gap-6 border transition-[max-width,padding,border-radius,background-color,border-color,box-shadow] duration-500 ease-out ${navCompact ? "max-w-[560px] rounded-full border-border bg-background/75 py-2 pr-3 pl-5 shadow-sm backdrop-blur-md" : "max-w-[1440px] rounded-none border-transparent bg-transparent px-3 lg:px-9"}`}>
+        <Link href="/" className={`font-medium tracking-tight transition-[font-size] duration-500 ease-out ${navCompact ? "text-xl" : "text-2xl"}`} aria-label="Synomilo home">synomilo</Link>
+        <nav aria-label="Main navigation" className="flex items-center gap-6 text-sm"><Link href="/guides" className="hidden hover:underline sm:block">Guides</Link><Link href="/pricing" className="hover:underline">Pricing</Link><Link href="/login" className="hover:underline">Log in</Link><ModeToggle /></nav>
+      </div>
     </header>
     <main id="main">
       <section aria-labelledby="hero-title" className="mx-auto grid max-w-[1440px] items-center gap-12 overflow-hidden px-6 pt-12 pb-14 max-[400px]:gap-8 max-[400px]:px-5 max-[400px]:pr-7 max-[400px]:pt-9 max-[400px]:pb-10 lg:min-h-[min(640px,calc(100svh-140px))] lg:grid-cols-[0.95fr_1.3fr] lg:gap-10 lg:px-12 lg:py-7 2xl:max-w-[1760px] 2xl:min-h-[min(900px,calc(100svh-140px))] 2xl:gap-16 2xl:py-12">

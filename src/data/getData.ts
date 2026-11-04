@@ -183,7 +183,7 @@ export async function getUserPlan(): Promise<"free" | "pro"> {
     const result = JSON.parse(response.responseBody || "{}");
 
     // List your paid plans here
-    const paidPlans = ["Student Monthly", "Student Yearly", "Tutor Monthly", "Tutor Yearly"];
+    const paidPlans = ["Synomilo Monthly", "Synomilo Yearly"];
 
     // Return 'pro' if user has one of these paid plans, otherwise 'free'
     return paidPlans.includes(result.plan) ? "pro" : "free";
@@ -296,6 +296,22 @@ export async function deleteAccountServer(userId: string): Promise<void> {
 //     console.error("Sync failed:", err);
 //   }
 // }
+
+export async function openBillingPortal(): Promise<string> {
+  const response = await appwriteFunctions.createExecution(
+    STRIPE_FUNCTION,
+    undefined,
+    false,
+    "/portal",
+    "POST" as unknown as import("appwrite").ExecutionMethod
+  );
+
+  const result = JSON.parse(response.responseBody || "{}");
+  if (response.status !== "completed" || !result.url) {
+    throw new Error(result.error || "Unable to open billing");
+  }
+  return result.url;
+}
 
 export async function confirmCheckoutAndSync(checkoutId: string): Promise<boolean> {
   const response = await appwriteFunctions.createExecution(

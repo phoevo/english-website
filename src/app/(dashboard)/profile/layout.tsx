@@ -24,7 +24,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { Label } from '@/components/ui/label'
 import CustomColors from './CustomColors'
 import { AlertDialogHeader, AlertDialogFooter, AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogDescription, AlertDialogTitle, AlertDialogCancel, AlertDialogAction } from '@/components/ui/alert-dialog'
-import { unsubscribeUser2, deleteAccountServer } from '@/data/getData'
+import { unsubscribeUser2, deleteAccountServer, openBillingPortal } from '@/data/getData'
 import { Geist } from 'next/font/google'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -147,37 +147,16 @@ export default function ProfileLayout() {
 
 
 
-const handleUnsubscribe = async () => {
+// Plan changes, card updates, invoices and cancellation happen in the Stripe
+// portal; the webhook syncs isSubscribed when the subscription ends.
+const handleManageBilling = async () => {
   if (!user) return;
   setIsLoading(true);
-
-  // Reassure the user while the (Stripe-bound) cancellation runs.
-  const toastId = 'unsubscribe';
-  toast.loading('Unsubscribing…', { id: toastId });
-  const reassure1 = setTimeout(() => toast.loading('Almost there…', { id: toastId }), 2000);
-  const reassure2 = setTimeout(() => toast.loading('Almost done…', { id: toastId }), 4000);
-
   try {
-    // 1. Cancel the Stripe subscription; the function also sets isSubscribed=false.
-    try {
-      const result = await unsubscribeUser2(user.$id);
-      if (!result?.success) throw new Error(result?.error || 'Unsubscribe failed');
-    } catch (err) {
-      console.error('Function unsubscribe error:', err);
-      toast.error('Could not cancel your subscription. Please try again.', { id: toastId });
-      return;
-    }
-
-    // 2. Force-update Zustand so the UI reflects immediately
-    useUserStore.setState((state) => ({
-      isSubscribed: false,
-      user: state.user ? { ...state.user, isSubscribed: false } : state.user,
-    }));
-
-    toast.success('You have successfully unsubscribed!', { id: toastId });
-  } finally {
-    clearTimeout(reassure1);
-    clearTimeout(reassure2);
+    window.location.href = await openBillingPortal();
+  } catch (err) {
+    console.error('Billing portal error:', err);
+    toast.error('Could not open billing. Please try again.');
     setIsLoading(false);
   }
 };
@@ -444,65 +423,28 @@ const handleUnsubscribe = async () => {
      <Card className="bg-background">
   <CardHeader>
     <CardTitle>Subscription</CardTitle>
-    <CardDescription>Manage your Subscription</CardDescription>
+    <CardDescription>Change your plan, update your card, download invoices or cancel.</CardDescription>
   </CardHeader>
   <CardContent>
-    <AlertDialog>
-      {isSubscribed ? (
-        <AlertDialogTrigger asChild>
-          <div className="flex items-center gap-2">
-           <Button variant="destructive" className="cursor-pointer" disabled={loading}>
-              {loading ? (
-                <>
-                  <LoaderCircle className="h-4 w-4 animate-spin" /> Unsubscribing
-                </>
-              ) : (
-                <>Unsubscribe</>
-              )}
-            </Button>
-
-          </div>
-        </AlertDialogTrigger>
-      ) : (
-        <div className="flex items-center gap-2">
-          <Button variant="destructive" disabled className="cursor-pointer">
-            Unsubscribe
-          </Button>
-
-          <Link className="underline cursor-pointer text-sm" href="/pricing">
-            Subscribe?
-          </Link>
-        </div>
-      )}
-
-      <AlertDialogContent className={geist.className}>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            You will lose access to all extra features and will be put on the free plan.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel className='cursor-pointer'>Go back</AlertDialogCancel>
-
-            <AlertDialogAction
-              variant="destructive"
-              disabled={loading}
-              className="cursor-pointer"
-              onClick={handleUnsubscribe}
-            >
-              {loading ? (
-                <>
-                  <LoaderCircle className="h-4 w-4 animate-spin" /> Unsubscribing
-                </>
-              ) : (
-                "Unsubscribe"
-              )}
-            </AlertDialogAction>
-
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    {isSubscribed ? (
+      <div className="flex items-center gap-2">
+        <Button variant="outline" className="cursor-pointer" disabled={loading} onClick={handleManageBilling}>
+          {loading ? (
+            <>
+              <LoaderCircle className="h-4 w-4 animate-spin" /> Opening billing
+            </>
+          ) : (
+            <>Manage billing</>
+          )}
+        </Button>
+      </div>
+    ) : (
+      <div className="flex items-center gap-2">
+        <Link className="underline cursor-pointer text-sm" href="/pricing">
+          Subscribe?
+        </Link>
+      </div>
+    )}
   </CardContent>
 </Card>
 
