@@ -1,12 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import ModeToggle from "@/components/ui/ModeToggle";
-import { ArrowUpRight, Check, Plus, BookOpen } from "lucide-react";
+import {ArrowUpRight, Check, Plus, BookOpen } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { Button } from "@/components/ui/button";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 // Ignore the mobile address bar showing/hiding so it doesn't trigger refreshes mid-scroll.
@@ -82,6 +84,7 @@ function Guide() {
 }
 
 export default function LandingPage() {
+  const router = useRouter();
   const page = useRef<HTMLDivElement>(null);
   const story = useRef<HTMLElement>(null);
   const textSide = useRef<HTMLDivElement>(null);
@@ -122,6 +125,114 @@ export default function LandingPage() {
     const trigger = ScrollTrigger.create({ start: 24, end: "max", onToggle: self => setNavCompact(self.isActive) });
     return () => trigger.kill();
   });
+
+  // Pull past the end of the page to open the library. A wheel/trackpad pull
+  // only counts a fresh swipe made once already at the end, and a touch pull
+  // only counts overscroll, so a hard fling from the top stops at the pill
+  // instead of opening the app.
+  useEffect(() => {
+    const root = page.current;
+    const wrap = root?.querySelector<HTMLElement>("[data-library-pull]");
+    const bar = root?.querySelector<HTMLElement>("[data-library-progress]");
+    if (!wrap || !bar || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const THRESHOLD = 240;  // px of resisted pull needed to open
+    const NEW_SWIPE_MS = 150; // a wheel gap this long starts a new gesture
+    const SETTLE_MS = 200;    // time at the end before a fresh swipe can count
+    let pull = 0, armed = false, opened = false, touchStartY: number | null = null;
+    let releaseTimer: ReturnType<typeof setTimeout> | undefined;
+    let lastWheelAt = 0, lastWheelDelta = 0, bottomSince: number | null = null;
+    const trackBottom = (now: number) => {
+      if (!atBottom()) bottomSince = null;
+      else if (bottomSince === null) bottomSince = now;
+    };
+
+    // "At the end" means the pill is fully on screen. Measuring against the
+    // visible viewport avoids mobile Chrome's toolbar making scrollHeight and
+    // innerHeight disagree, which kept the exact-bottom check from passing.
+    const atBottom = () => {
+      const rect = wrap.getBoundingClientRect();
+      const visible = window.visualViewport?.height ?? window.innerHeight;
+      return rect.top >= 0 && rect.bottom <= visible;
+    };
+    const render = (duration = 0.12) => {
+      const amount = Math.min(pull / THRESHOLD, 1);
+      gsap.to(bar, { scaleX: amount, duration, ease: "power2.out", overwrite: true });
+      gsap.to(wrap, { y: -amount * 24, duration, ease: "power2.out", overwrite: true });
+    };
+    const release = () => { if (!opened) { pull = 0; render(0.35); } };
+    const addPull = (amount: number) => {
+      if (opened) return;
+      pull = Math.max(0, pull + amount);
+      render();
+      if (pull >= THRESHOLD) { opened = true; router.push("/home/conversations"); }
+    };
+
+    // Wheel/trackpad: the swipe (and its momentum) that carried the page to
+    // the end never counts. Only a fresh swipe once the page has been at the
+    // end for SETTLE_MS does: one that starts after a short gap, or that speeds
+    // up (momentum only ever slows down) while the old momentum fades out.
+    const onWheel = (event: WheelEvent) => {
+      const now = performance.now();
+      const delta = Math.abs(event.deltaY);
+      const fresh = now - lastWheelAt > NEW_SWIPE_MS || delta > lastWheelDelta + 1;
+      lastWheelAt = now;
+      lastWheelDelta = delta;
+
+      trackBottom(now);
+      if (bottomSince === null || event.deltaY <= 0) { armed = false; if (pull) release(); return; }
+      const settled = now - bottomSince >= SETTLE_MS;
+      if (!armed && !(settled && fresh)) return;
+      armed = true;
+      addPull(event.deltaY * 0.5);
+      clearTimeout(releaseTimer);
+      releaseTimer = setTimeout(() => { armed = false; release(); }, 300);
+    };
+    // Page movement (other than during a pull) means the visitor is still
+    // scrolling, not pulling.
+    const onScroll = () => { if (!pull) armed = false; trackBottom(performance.now()); };
+    // Touch works like pull-to-refresh: only finger travel after the page has
+    // stopped scrolling counts. Momentum has no finger on screen, so a fling
+    // can't trigger it, and no resting period is needed (mobile Chrome keeps
+    // firing small scroll events, which would never let the rest finish).
+    let lastScrollY = 0;
+    const onTouchStart = (event: TouchEvent) => {
+      touchStartY = event.touches[0].clientY;
+      lastScrollY = window.scrollY;
+    };
+    const onTouchMove = (event: TouchEvent) => {
+      if (touchStartY === null || opened) return;
+      const y = event.touches[0].clientY;
+      // Still scrolling (or the pill isn't fully shown): move the starting
+      // point along with the finger so only the overscroll is measured.
+      if (Math.abs(window.scrollY - lastScrollY) > 1 || !atBottom()) {
+        touchStartY = y;
+        lastScrollY = window.scrollY;
+        if (pull) { pull = 0; render(); }
+        return;
+      }
+      pull = 0;
+      addPull(Math.max(0, touchStartY - y) * 0.6);
+    };
+    const onTouchEnd = () => { touchStartY = null; release(); };
+
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onTouchEnd);
+    window.addEventListener("touchcancel", onTouchEnd);
+    return () => {
+      clearTimeout(releaseTimer);
+      gsap.killTweensOf([bar, wrap]);
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, [router]);
 
   // Smooth out touch scrolling for the pinned section (iOS Safari / Chrome Android).
   // If this causes any odd feel on your devices, remove this block.
@@ -209,8 +320,8 @@ export default function LandingPage() {
           .fromTo(library, {
             x: () => promptOffset().x, y: () => promptOffset().y,
             scaleX: () => scrollPrompt.offsetWidth / library.offsetWidth,
-            borderRadius: "999px", autoAlpha: 0,
-          }, { x: 0, y: 0, scaleX: 1, borderRadius: "6px", autoAlpha: 1, duration: 1, ease: "none" }, 0);
+            autoAlpha: 0,
+          }, { x: 0, y: 0, scaleX: 1, autoAlpha: 1, duration: 1, ease: "none" }, 0);
       }
     });
     return () => { media.revert(); marqueeTweens.current = []; storyTrigger.current = null; if (closeTimer.current) clearTimeout(closeTimer.current); };
@@ -364,7 +475,12 @@ export default function LandingPage() {
   </span>
   icon to save them to your dictionary.
 </p></>}
-              {stage === 5 && <><h2 className="text-[clamp(1.75rem,3.5vw,3.75rem)] font-medium leading-[1.1] tracking-[-.045em]">Optional guides for vocabulary, questions and activities.</h2><p className="mt-5 max-w-sm text-sm leading-7 text-white/55 [@media(max-height:740px)_and_(max-width:899px)]:hidden">Use a guide for some direction, or work directly from the conversation.</p><Link href="/guides" className="mt-6 inline-flex touch-manipulation items-center gap-2 text-sm underline">Browse guides<ArrowUpRight size={15} /></Link></>}
+              {stage === 5 &&
+              <>
+              <h2 className="text-[clamp(1.75rem,3.5vw,3.75rem)] font-medium leading-[1.1] tracking-[-.045em]">Optional guides for vocabulary, questions and activities.</h2><p className="mt-5 max-w-sm text-sm leading-7 text-white/55 [@media(max-height:740px)_and_(max-width:899px)]:hidden">Use a guide for some direction, or work directly from the conversation.</p><Link href="/guides" className="mt-6 inline-flex touch-manipulation items-center gap-2 text-sm">
+              <Button variant="white" className="cursor-pointer" size={"sm"}> Browse guides<ArrowUpRight size={15} /> </Button>
+              </Link>
+              </>}
             </div>
 
           </div>
@@ -432,14 +548,16 @@ export default function LandingPage() {
 </div>
       </section>
 
-      <section
-  aria-label="Browse conversations"
-  className="flex justify-center px-6 py-16 lg:py-24"
->
-<Link data-library-cta href="/home/conversations" className="mt-9 inline-flex touch-manipulation items-center gap-2 rounded-md bg-primary px-4 py-2 text-md text-primary-foreground hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground">Browse conversations<ArrowUpRight size={17} aria-hidden="true" /></Link>
-
-</section>
     </main>
     <footer className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-6 border-t border-border px-6 py-8 lg:px-12"><Link href="/" className="text-xl font-medium tracking-tight">synomilo</Link><nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-3 text-xs text-muted-foreground">{([["Guides", "/guides"], ["Pricing", "/pricing"], ["About", "/about"], ["Privacy", "/privacy"], ["Terms", "/ToS"], ["Refund policy", "/refund"]] as const).map(([label, href]) => <Link key={href} href={href} className="hover:text-foreground hover:underline">{label}</Link>)}</nav></footer>
+    {/* Pulling past the end of the page opens the library; clicking the pill does too. */}
+    <section aria-label="Browse conversations" className="flex min-h-[50svh] items-center justify-center px-6 py-16">
+      <div data-library-pull className="flex justify-center">
+        <Link data-library-cta href="/home/conversations" className="inline-flex touch-manipulation flex-col items-center gap-3 rounded-full bg-primary px-6 py-3 text-primary-foreground hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground">
+          <span className="flex items-center gap-2 text-sm font-medium">Scroll to browse conversations</span>
+          <span aria-hidden="true" className="h-1 w-full overflow-hidden rounded-full bg-primary-foreground/20 motion-reduce:hidden"><span data-library-progress className="block h-full origin-left scale-x-0 rounded-full bg-primary-foreground" /></span>
+        </Link>
+      </div>
+    </section>
   </div>;
 }

@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useUserStore } from "@/data/useUserStore";
 import { updateMyProfile } from "@/data/accountActions";
 import GuideTour, { type GuideStep } from "../../GuideTour";
-import { Badge } from "@/components/ui/badge";
+import ConversationRow from "../conversations/ConversationRow";
 import DashboardPage from "@/components/dashboard/DashboardPage";
 import { dashboardStyles } from "@/components/dashboard/styles";
 
@@ -68,7 +68,7 @@ function RecentsPage() {
 
     <div data-guide="recents-list" className="mt-6 min-h-0 flex-1 overflow-y-auto pr-1">
       {recentConversations.length > 0 ? (
-        <div className="max-w-3xl space-y-3">
+        <div className="max-w-4xl space-y-2">
           <AnimatePresence>
             {recentConversations.map((conversation) => (
               <motion.div
@@ -79,18 +79,12 @@ function RecentsPage() {
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.16, ease: "easeOut" }}
             >
-              <div className={dashboardStyles.card + " flex min-h-20 items-center justify-between gap-4 p-4 sm:px-5"}>
+              <div className={dashboardStyles.card + " flex items-center justify-between gap-4 px-4 py-3.5 sm:px-5"}>
                 <Link
                   href={`conversations/${conversation.$id}`}
-                  className="flex min-w-0 flex-1 flex-col border-r border-border pr-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground"
+                  className="flex min-w-0 flex-1 border-r border-border pr-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground"
                 >
-                  <div className="mb-2 flex flex-wrap items-center gap-3">
-                    <h2 className="text-base font-medium leading-snug tracking-[-.02em]">{conversation.title}</h2>
-                    {completeConversations.includes(conversation.$id) && (
-                      <Badge variant="secondary" className="bg-green-500 text-white">Complete</Badge>
-                    )}
-                  </div>
-                  <span className="text-xs text-muted-foreground">{conversation.level}{conversation.category ? ` · ${conversation.category}` : ""}</span>
+                  <ConversationRow title={conversation.title} level={conversation.level} category={conversation.category} isComplete={completeConversations.includes(conversation.$id)} />
                 </Link>
 
 

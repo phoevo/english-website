@@ -28,7 +28,7 @@ const categories = [
 const convoGuideSteps: GuideStep[] = [
   { target: "convo-title", title: "Conversations", description: "Browse the conversation library by level and topic." },
   { target: "convo-filters", title: "Search and filters", description: "Search by title, description, topic or level, then narrow the results with the filters." },
-  { target: "convo-grid", title: "Conversation cards", description: "Open a conversation to start reading. The green check indicates completion. Hover over words for definitions and save them to your dictionary." },
+  { target: "convo-grid", title: "Conversation list", description: "Open a conversation to start reading. The green check indicates completion. Hover over words for definitions and save them to your dictionary." },
 ];
 export default function ConversationsPage() {
   const { conversations, loading: conversationsLoading, error } = useConversations();
@@ -68,13 +68,11 @@ export default function ConversationsPage() {
         </div>
         <div aria-hidden="true" className="flex shrink-0 items-center justify-between py-3.5"><Skeleton className="h-3 w-28" /><Skeleton className="h-3 w-36" /></div>
         <div aria-hidden="true" className="min-h-0 flex-1 overflow-y-auto px-1 pt-1 pb-4">
-          <ul className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {["", "opacity-60", "opacity-30"].map((fade, index) => <li key={index} className={`rounded-xl border border-border p-5 ${fade}`}>
-            <Skeleton className={`h-5 ${index === 1 ? "w-2/3" : "w-3/4"}`} />
-            <Skeleton className="mt-4 h-px w-full" />
-            <Skeleton className="mt-4 h-3 w-1/3" />
-            <Skeleton className="mt-7 h-4 w-full" />
-            <Skeleton className="mt-2 h-4 w-5/6" />
+          <ul className="space-y-2">
+          {["", "opacity-70", "opacity-40", "opacity-20"].map((fade, index) => <li key={index} className={`rounded-xl border border-border px-4 py-3.5 sm:px-5 ${fade}`}>
+            <Skeleton className={`h-5 ${index % 2 ? "w-1/3" : "w-2/5"}`} />
+            <Skeleton className="mt-2 h-3 w-24" />
+            <Skeleton className="mt-3 h-4 w-3/4" />
           </li>)}
           </ul>
         </div>
@@ -127,7 +125,7 @@ export default function ConversationsPage() {
         </div>
 
         <div ref={results} role="region" aria-label="Conversation results" tabIndex={0} className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-1 pt-1 pb-4 [scrollbar-gutter:stable] focus-visible:rounded-md focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-foreground">
-          <ul data-guide="convo-grid" className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 min-[1800px]:grid-cols-4">
+          <ul data-guide="convo-grid" className="space-y-2">
             {filtered.map(conversation => <li key={conversation.$id} className="min-w-0">
               <ConversationCover conversationTitle={conversation.title} conversationDescription={conversation.description || ""} level={conversation.level} conversationId={conversation.$id} category={conversation.category} isPro={conversation.isPro} />
             </li>)}
