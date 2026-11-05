@@ -64,7 +64,7 @@ const Assign = ({ conversationId, trigger }: AssignProps) => {
       return;
     }
     if (!isSubscribed) {
-      toast.info("Assigning requires a Pro account.");
+      toast.info("Assigning requires Plus.");
       setOpen(false);
       return;
     }

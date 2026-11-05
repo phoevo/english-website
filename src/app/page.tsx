@@ -320,7 +320,7 @@ export default function LandingPage() {
         <span className="2xl:whitespace-nowrap">English conversation material</span>
         <br />
         <span className="text-[clamp(1.25rem,2vw,2rem)] text-muted-foreground max-[400px]:text-[1.15rem]">
-          No lesson plans, use them your way.
+          No fixed lesson plans, use them your way.
         </span>
       </h1>
 <Link href="/home/conversations" className="mt-9 inline-flex touch-manipulation items-center gap-2 rounded-md bg-primary px-2 py-2 text-sm text-primary-foreground hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground 2xl:mt-12 2xl:min-h-12 2xl:gap-3 2xl:px-5 2xl:py-3 2xl:text-base [&_svg]:2xl:size-5">Browse conversations<ArrowUpRight size={17} aria-hidden="true" /></Link>

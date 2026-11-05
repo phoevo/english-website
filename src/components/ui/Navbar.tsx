@@ -111,7 +111,7 @@ const Navbar = () => {
 
                   <div className="flex flex-row">
                      <Badge className={`m-1 ${isSubscribed ? "bg-pink-500 text-foreground" : ""}`}>
-                    {isSubscribed ? "Pro" : "Free"}
+                    {isSubscribed ? "Plus" : "Free"}
                   </Badge>
                   {/* <Badge
                     onClick={() => setSubscribed(false)}

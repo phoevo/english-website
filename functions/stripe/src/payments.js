@@ -61,6 +61,18 @@ module.exports = async function handlePayments({
 
     let stripeCustomerId = userDoc.stripeCustomerId;
 
+    // A customer saved in the other Stripe mode (test vs live), or deleted in
+    // Stripe, can't be used; treat it as missing and create a new one.
+    if (stripeCustomerId) {
+      try {
+        const existing = await stripe.customers.retrieve(stripeCustomerId);
+        if (existing.deleted) stripeCustomerId = null;
+      } catch (err) {
+        if (err.code !== "resource_missing") throw err;
+        stripeCustomerId = null;
+      }
+    }
+
     // =========================
     // STEP 2: Create Stripe customer if missing
     // =========================
