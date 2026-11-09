@@ -108,8 +108,8 @@ export default function ConversationPage() {
   }
 
   if (requiresPlus) {
-    return <main className="flex h-full items-center justify-center bg-background px-6 text-foreground">
-      <div className="max-w-md text-center">
+    return <main className="flex h-full w-full items-center justify-center px-6 text-foreground">
+      <div className="max-w-md text-center ">
         <h1 className="text-2xl font-medium tracking-tight">This conversation is part of Plus.</h1>
         <p className="mt-3 text-sm leading-7 text-muted-foreground">Subscribe to unlock this conversation and the rest of the paid library.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">

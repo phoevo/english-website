@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { BookMarked, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUserStore } from "@/data/useUserStore";
-import { ScrollArea } from "@/components/ui/scroll-area"
 import GuideTour, { type GuideStep } from "../../GuideTour";
 import {
   Accordion,
@@ -101,7 +100,7 @@ function DictionaryPage() {
       {/* Dictionary Word List */}
       <div data-guide="dict-words" data-dashboard-entry className={dashboardStyles.card + " flex min-h-64 min-w-0 flex-col overflow-hidden lg:h-full lg:w-1/2"}>
         {dictionaryWords.length > 0 ? (
-          <ScrollArea className="h-full mx-1">
+          <div role="region" aria-label="Saved words" tabIndex={0} className="h-full mx-1 overflow-y-auto overscroll-contain [scrollbar-gutter:stable] [scrollbar-width:thin] [scrollbar-color:var(--border)_transparent] focus-visible:rounded-md focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-foreground">
             <div className="grid gap-4 p-3 pb-4 m-1 rounded-md">
 
               <AnimatePresence>
@@ -165,7 +164,7 @@ function DictionaryPage() {
                 })}
               </AnimatePresence>
             </div>
-          </ScrollArea>
+          </div>
         ) : (
           <div className="flex flex-1 flex-col items-center justify-center p-8 text-center">
               <BookMarked

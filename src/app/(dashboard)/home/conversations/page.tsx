@@ -67,7 +67,7 @@ export default function ConversationsPage() {
           <div className="space-y-2 lg:w-56"><Skeleton className="h-3 w-16" /><Skeleton className="h-11 w-full" /></div>
         </div>
         <div aria-hidden="true" className="flex shrink-0 items-center justify-between py-3.5"><Skeleton className="h-3 w-28" /><Skeleton className="h-3 w-36" /></div>
-        <div aria-hidden="true" className="min-h-0 flex-1 overflow-y-auto px-1 pt-1 pb-4">
+        <div aria-hidden="true" className="min-h-0 flex-1 overflow-y-auto px-1 pt-1 pb-4 [scrollbar-width:thin] [scrollbar-color:var(--border)_transparent]">
           <ul className="space-y-2">
           {["", "opacity-70", "opacity-40", "opacity-20"].map((fade, index) => <li key={index} className={`rounded-xl border border-border px-4 py-3.5 sm:px-5 ${fade}`}>
             <Skeleton className={`h-5 ${index % 2 ? "w-1/3" : "w-2/5"}`} />
@@ -124,7 +124,7 @@ export default function ConversationsPage() {
           </AlertDialog>
         </div>
 
-        <div ref={results} role="region" aria-label="Conversation results" tabIndex={0} className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-1 pt-1 pb-4 [scrollbar-gutter:stable] focus-visible:rounded-md focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-foreground">
+        <div ref={results} role="region" aria-label="Conversation results" tabIndex={0} className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-1 pt-1 pb-4 [scrollbar-gutter:stable] [scrollbar-width:thin] [scrollbar-color:var(--border)_transparent] focus-visible:rounded-md focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-foreground">
           <ul data-guide="convo-grid" className="space-y-2">
             {filtered.map(conversation => <li key={conversation.$id} className="min-w-0">
               <ConversationCover conversationTitle={conversation.title} conversationDescription={conversation.description || ""} level={conversation.level} conversationId={conversation.$id} category={conversation.category} isPro={conversation.isPro} />
