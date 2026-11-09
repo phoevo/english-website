@@ -17,22 +17,43 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, refreshSource }) 
   const [playbackError, setPlaybackError] = React.useState<string | null>(null);
   const [currentTime, setCurrentTime] = React.useState(0);
   const [duration, setDuration] = React.useState(0);
+  const knownDuration = React.useRef(0);
+  const probing = React.useRef(false);
 
   React.useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration);
+    // MP3s without a length header (e.g. exported with ffmpeg) report an
+    // Infinity duration, because storage streams them without a total size.
+    // Seeking past the end makes the browser fetch the end of the file and
+    // work out the real length; then go back to the start.
+    const updateDuration = () => {
+      const value = audio.duration;
+      if (Number.isFinite(value) && value > 0) {
+        knownDuration.current = value;
+        setDuration(value);
+        if (probing.current) {
+          probing.current = false;
+          if (audio.paused) audio.currentTime = 0;
+        }
+      } else if (value === Infinity && !knownDuration.current && !probing.current) {
+        probing.current = true;
+        audio.currentTime = 1e101;
+      }
+    };
 
     audio.addEventListener("timeupdate", updateTime);
     audio.addEventListener("loadedmetadata", updateDuration);
+    audio.addEventListener("durationchange", updateDuration);
     const ended = () => setIsPlaying(false);
     audio.addEventListener("ended", ended);
 
     return () => {
       audio.removeEventListener("timeupdate", updateTime);
       audio.removeEventListener("loadedmetadata", updateDuration);
+      audio.removeEventListener("durationchange", updateDuration);
       audio.removeEventListener("ended", ended);
     };
   }, []);
@@ -78,6 +99,7 @@ export const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, refreshSource }) 
 };
 
   const formatTime = (seconds: number) => {
+    if (!Number.isFinite(seconds)) return "--:--";
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
