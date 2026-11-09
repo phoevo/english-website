@@ -51,6 +51,16 @@ const posts = [
   topic: "Everyday & Travel English",
   date: "2026-08-22",
 },
+{
+  slug: "job-interview-nursing",
+  img:"https://images.unsplash.com/photo-1606318313647-137d1f3b4d3c?q=80&w=2354&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
+  title: "Job Interview: Nursing",
+  description:
+    "A B2 conversation in which a newly qualified nurse is interviewed for a ward job, with vocabulary, scenario questions and activities.",
+  level: "B2",
+  topic: "Work and Careers",
+  date: "2026-11-09",
+},
 
 
 

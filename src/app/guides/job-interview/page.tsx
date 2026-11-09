@@ -223,6 +223,10 @@ const relatedGuides: relatedGuides[] = [
     title: "Remote Work vs Office Work: B2 ESL Guide",
     href: "/guides/working-from-home-vs-the-office",
   },
+  {
+    title: "Nursing Job Interview: B2 ESL Guide",
+    href: "/guides/job-interview-nursing",
+  },
    {
     title: "English Networking Event: B1 ESL Guide",
     href: "/guides/networking-event",
