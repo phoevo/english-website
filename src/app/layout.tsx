@@ -11,6 +11,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://synomilo.com"),
   title: "Synomilo — English Conversations",
   description: "Read English conversations, highlight vocabulary, and save words to your dictionary. Optional guides offer questions and activities.",
   icons: [
