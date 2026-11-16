@@ -126,6 +126,10 @@ const relatedGuides: relatedGuides[] = [
     href: "/guides/job-interview",
   },
   {
+    title: "Care Worker Phone Interview: B1 English Conversation",
+    href: "/guides/job-interview-care-worker",
+  },
+  {
     title: "Remote Work vs Office Work: B2 ESL Guide",
     href: "/guides/working-from-home-vs-the-office",
   },

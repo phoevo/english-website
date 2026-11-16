@@ -61,6 +61,16 @@ const posts = [
   topic: "Work and Careers",
   date: "2026-11-09",
 },
+{
+  slug: "job-interview-care-worker",
+  img:"https://images.unsplash.com/photo-1765896387387-0538bc9f997e?q=80&w=2021&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
+  title: "Phone Interview: Care Worker",
+  description:
+    "A B1 conversation in which a care home manager phones someone about their job application, with vocabulary, phone phrases and activities.",
+  level: "B1",
+  topic: "Work and Careers",
+  date: "2026-11-16",
+},
 
 
 
