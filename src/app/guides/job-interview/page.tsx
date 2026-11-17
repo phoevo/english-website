@@ -160,6 +160,14 @@ export default function PostPage() {
             background, why he left his last job, his strengths and
             weaknesses, and where he sees himself in five years.
           </p>
+
+          <p>
+            Preparing for a specific job? Try the{" "}
+            <Link href="/guides/job-interview-nursing">nursing interview</Link>{" "}
+            (B2) or the{" "}
+            <Link href="/guides/job-interview-care-worker">care worker phone interview</Link>{" "}
+            (B1).
+          </p>
         </header>
 
         {/* Conversation first */}
