@@ -129,6 +129,10 @@ const relatedGuides: relatedGuides[] = [
     href: "/guides/job-interview-care-worker",
   },
   {
+    title: "Café Job Interview: A2 English Conversation",
+    href: "/guides/job-interview-cafe-worker",
+  },
+  {
     title: "Remote Work vs Office Work: B2 ESL Guide",
     href: "/guides/working-from-home-vs-the-office",
   },
@@ -161,13 +165,7 @@ export default function PostPage() {
             weaknesses, and where he sees himself in five years.
           </p>
 
-          <p>
-            Preparing for a specific job? Try the{" "}
-            <Link href="/guides/job-interview-nursing">nursing interview</Link>{" "}
-            (B2) or the{" "}
-            <Link href="/guides/job-interview-care-worker">care worker phone interview</Link>{" "}
-            (B1).
-          </p>
+
         </header>
 
         {/* Conversation first */}

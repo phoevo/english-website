@@ -1,12 +1,12 @@
 import GuideArticle from "@/components/guides/GuideArticle";
 import styles from "@/components/guides/guide-article.module.css";
-import { ArrowLeft, ArrowRight, Lightbulb } from "lucide-react";
+import { ArrowLeft, Lightbulb } from "lucide-react";
 import Link from "next/link";
+import GuidePlusCta from "@/components/guides/GuidePlusCta";
 
 
 /* eslint react/no-unescaped-entities: 0 */
 
-const conversationHref = "/home/conversations/6ae34e1061747e118e0c";
 
 export const metadata = {
   title:
@@ -130,6 +130,10 @@ const relatedGuides: relatedGuides[] = [
     href: "/guides/job-interview-care-worker",
   },
   {
+    title: "Café Job Interview: A2 English Conversation",
+    href: "/guides/job-interview-cafe-worker",
+  },
+  {
     title: "Remote Work vs Office Work: B2 ESL Guide",
     href: "/guides/working-from-home-vs-the-office",
   },
@@ -186,17 +190,7 @@ export default function PostPage() {
             hers.
           </p>
 
-          <p>
-            The full conversation is about 40 lines, with audio and
-            highlighted vocabulary. It is part of Plus.
-          </p>
-
-          <Link href={conversationHref} target="_blank" rel="noopener noreferrer">
-            <span className={styles.button}>
-              Open the conversation
-              <ArrowRight className={styles.iconInline} size={17} />
-            </span>
-          </Link>
+          <GuidePlusCta lineCount={40} />
         </section>
 
         {/* Vocabulary */}
@@ -256,8 +250,8 @@ export default function PostPage() {
           </ol>
 
           <p>
-            <Link href={conversationHref} target="_blank" rel="noopener noreferrer">
-              Open the conversation (Plus)
+            <Link href="/pricing">
+              Read the full conversation with Plus
             </Link>
           </p>
         </section>

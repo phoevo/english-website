@@ -1,6 +1,6 @@
 "use client"
 import * as React from "react"
-import { BookOpen, BookMarked, IterationCcw, MessageCirclePlus, HomeIcon, User, LogOut, UserRound, LogIn, Sparkle, SunIcon, MoonIcon, Sparkles } from "lucide-react"
+import { BookOpen, BookMarked, IterationCcw, MessageCirclePlus, HomeIcon, User, LogOut, UserRound, LogIn, Sparkle, SunIcon, MoonIcon, Sparkles, BookOpenCheck } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -167,6 +167,14 @@ export function AppSidebar() {
                   <Sparkle className="text-foreground"/> <p>Upgrade to Plus</p>
                   </span>
               )}
+            </DropdownMenuItem>
+            </Link>
+
+             <Link href={"/guides"}>
+            <DropdownMenuItem className="border-b rounded-none cursor-pointer">
+              <span className="flex flex-row space-x-2">
+                <BookOpenCheck className="text-foreground"/> <p>Guides</p>
+              </span>
             </DropdownMenuItem>
             </Link>
 

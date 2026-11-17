@@ -146,6 +146,10 @@ const relatedGuides: RelatedGuide[] = [
     title: "Job Interview English: B2 Conversation Guide",
     href: "/guides/job-interview",
   },
+  {
+    title: "Café Job Interview: A2 English Conversation",
+    href: "/guides/job-interview-cafe-worker",
+  },
 ];
 
 export default function PostPage() {

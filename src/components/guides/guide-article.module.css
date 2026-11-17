@@ -88,6 +88,24 @@
 .relatedCard:hover { border-color: var(--muted-foreground); }
 .relatedCard h3 { font-size: 17px; font-weight: 500; line-height: 1.5; }
 .relatedCard > span { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted-foreground); }
+/* Related guides: a sticky side column on wide screens, a jump link to the end cards otherwise. */
+.articleTop { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
+.jumpLink { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted-foreground); }
+.jumpLink:hover { color: var(--foreground); }
+.related { scroll-margin-top: 24px; }
+.rail { display: none; }
+.rail h2 { font-size: 13px; font-weight: 500; color: var(--muted-foreground); }
+.rail ul { margin-top: 12px; }
+.rail li a { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding-block: 12px; border-top: 1px solid var(--border); font-size: 14px; line-height: 1.5; }
+.rail li a:hover { text-decoration: underline; }
+.rail li a svg { flex-shrink: 0; margin-top: 3px; color: var(--muted-foreground); }
+@media (min-width: 1200px) {
+  .withRail { max-width: 1280px; display: grid; grid-template-columns: minmax(0, 1fr) 240px; column-gap: 64px; align-items: start; }
+  .withRail .articleTop { grid-column: 1 / -1; }
+  .withRail .jumpLink, .withRail .related { display: none; }
+  .withRail .content { grid-column: 1; grid-row: 2; }
+  .withRail .rail { display: block; grid-column: 2; grid-row: 2; position: sticky; top: 32px; margin-top: 40px; }
+}
 .index { max-width: 1200px; margin-inline: auto; padding: 48px 24px 0; }
 .indexIntro { max-width: 800px; margin-bottom: 48px; }
 .indexIntro h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 500; line-height: 1.1; letter-spacing: -.045em; text-wrap: balance; }

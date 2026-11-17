@@ -71,6 +71,16 @@ const posts = [
   topic: "Work and Careers",
   date: "2026-11-16",
 },
+{
+  slug: "job-interview-cafe-worker",
+  img: "https://images.unsplash.com/photo-1686771416537-bf4a4f263d88?q=80&w=2042&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D",
+  title: "Job Interview: Café Worker",
+  description:
+    "An A2 conversation in which a café owner interviews someone for a part-time job, with vocabulary, polite questions and activities.",
+  level: "A2",
+  topic: "Work and Careers",
+  date: "2026-11-17",
+},
 
 
 
