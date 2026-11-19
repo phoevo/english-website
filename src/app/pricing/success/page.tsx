@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { account } from "@/data/appwrite";
 import { checkSubscriptionStatus, confirmCheckoutAndSync } from "@/data/getData";
 import { useUserStore } from "@/data/useUserStore";
+import { trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import { DM_Sans } from "next/font/google";
 
@@ -47,6 +48,8 @@ export default function SubscribeSuccessPage() {
         }
         if (!confirmed && uid) confirmed = await checkSubscriptionStatus(uid);
         if (confirmed) {
+          // GA ignores repeat purchases with the same transaction_id (e.g. a reload).
+          trackEvent("purchase", { currency: "EUR", ...(checkoutId ? { transaction_id: checkoutId } : {}) });
           useUserStore.getState().setSubscribed(true);
           router.replace("/home?welcome=plus");
           return;

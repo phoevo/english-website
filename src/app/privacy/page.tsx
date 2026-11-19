@@ -5,11 +5,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "We only collect a username and email. We do use cookies for analytics. Local storage is used only for UI preferences.",
+    "We collect a username and email for your account. With your consent, we use Google Analytics to understand how the site is used. Local storage is used only for preferences.",
 };
 
 export default function PrivacyPage() {
-  const effectiveDate: string = "July 4th, 2026";
+  const effectiveDate: string = "November 19th, 2026";
   const companyName: string = "Synomilo";
   const contactEmail: string = "synomiloteam@gmail.com";
 
@@ -46,14 +46,18 @@ export default function PrivacyPage() {
               our payment provider.
             </li>
             <li>
-              <strong>Local storage:</strong>{" "}
-              non-sensitive UI preferences, such as whether you dismissed a
-              popup.
+              <strong>Usage information (only with your consent):</strong>{" "}
+              pages you visit and a few actions on the site, collected through
+              Google Analytics. See &quot;Analytics&quot; below.
             </li>
             <li>
-              <strong>Cookies:</strong> cookies
-              necessary for basic website functionality and simple visit
-              counting.
+              <strong>Local storage:</strong>{" "}
+              non-sensitive preferences, such as your cookie choice or whether
+              you dismissed a popup.
+            </li>
+            <li>
+              <strong>Cookies:</strong> cookies needed for the site to work
+              and, if you accept them, analytics cookies.
             </li>
           </ul>
         </section>
@@ -67,8 +71,13 @@ export default function PrivacyPage() {
               To provide access to the Service and paid subscription features.
             </li>
             <li>
-              To communicate with you about your account, billing, security, or
-              important Service updates.
+              To send a welcome email when you create an account, and password
+              reset emails when you ask for them. We do not send marketing
+              emails or newsletters. Payment receipts are sent by Stripe.
+            </li>
+            <li>
+              With your consent, to understand how the site is used and
+              improve it.
             </li>
             <li>To protect the security and integrity of the Service.</li>
             <li>
@@ -99,9 +108,9 @@ export default function PrivacyPage() {
               applicable law.
             </li>
             <li>
-              <strong>Consent:</strong> where
-              consent is required, such as for non-essential cookies or
-              marketing communications.
+              <strong>Consent:</strong> for analytics cookies and the usage
+              information collected through them. You can decline them, and
+              the rest of the site works the same.
             </li>
           </ul>
         </section>
@@ -110,24 +119,51 @@ export default function PrivacyPage() {
             Cookies and local storage
           </h2>
           <p>
-            <strong>Cookies:</strong> We use
-            cookies for basic website functionality and simple visit counting.
-            We do not use third-party advertising cookies.
+            <strong>Necessary cookies:</strong> used to keep you signed in and
+            for the site to work.
           </p>
           <p>
-            <strong>Local storage:</strong> We use
-            local storage only for non-sensitive UI preferences. This stays on
-            your device and is not used for advertising.
+            <strong>Analytics cookies:</strong> set by Google Analytics only if
+            you choose &quot;Accept&quot; on the cookie banner. If you choose
+            &quot;Decline&quot;, Google Analytics is not loaded and no
+            analytics cookies are set. To change your choice, clear this
+            site&apos;s data in your browser and the banner will appear again.
+          </p>
+          <p>
+            We do not use advertising cookies.
+          </p>
+          <p>
+            <strong>Local and session storage:</strong> used for non-sensitive
+            preferences, such as your cookie choice, and to remember the
+            previous page you viewed in the current tab, so analytics can
+            record where a visit came from. This stays on your device, is
+            cleared when you close the tab (session storage), and is only
+            used in analytics if you accepted analytics cookies.
           </p>
         </section>
 <section>
           <h2>
-            Analytics and tracking
+            Analytics
           </h2>
           <p>
-            We do not use third-party analytics tools, and we do not track your
-            clicks or page navigations across the site for advertising
-            purposes.
+            If you accept analytics cookies, we use Google Analytics, provided
+            by Google Ireland Limited, to understand how the site is used. It
+            records the pages you visit and these actions: viewing a guide,
+            opening a conversation, creating an account, viewing the pricing
+            page, starting checkout and completing a purchase.
+          </p>
+          <p>
+            We use this in aggregate, to see which parts of the site are
+            useful and where visitors stop. We do not send your name, email
+            or account details to Google Analytics, and we do not use it for
+            advertising.
+          </p>
+          <p>
+            Google may process this information outside the EU under its own
+            safeguards. See{" "}
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google&apos;s privacy policy</a>{" "}
+            and{" "}
+            <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">how Google uses information from sites that use its services</a>.
           </p>
         </section>
 <section>
@@ -146,8 +182,12 @@ export default function PrivacyPage() {
           </h2>
           <p>
             We use Appwrite Cloud as a backend service provider to host and
-            process account data and operate authentication and storage on our
-            behalf.
+            process account data, operate authentication and storage, and send
+            the welcome and password reset emails on our behalf.
+          </p>
+          <p>
+            We use Stripe for payments and, if you accept analytics cookies,
+            Google Analytics (see above).
           </p>
           <p>
             Your data is stored in Appwrite&apos;s Frankfurt region in the EU.

@@ -10,6 +10,7 @@ import ModeToggle from "@/components/ui/ModeToggle";
 import { useUserStore } from "@/data/useUserStore";
 import { account } from "@/data/appwrite";
 import { subscribeUser2 } from "@/data/getData";
+import { previousPageSource, trackEvent } from "@/lib/analytics";
 
 gsap.registerPlugin(useGSAP);
 
@@ -40,6 +41,14 @@ export default function PricingPage() {
     return () => { cancelled = true; };
   }, [user, fetchUser]);
 
+  // Record the visit once we know whether the visitor is signed in.
+  const trackedView = useRef(false);
+  useEffect(() => {
+    if (checkingSession || trackedView.current) return;
+    trackedView.current = true;
+    trackEvent("view_pricing", { signed_in: Boolean(user), source: previousPageSource() });
+  }, [checkingSession, user]);
+
   useGSAP(() => {
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
@@ -53,6 +62,7 @@ export default function PricingPage() {
   async function subscribe() {
     if (!user || isSubscribed || pending || checkingSession) return;
     setPending(true);
+    trackEvent("begin_checkout", { plan: billing, value: Number(selected.price), currency: "EUR" });
     toast.loading("Redirecting to payment…", { id: "subscription-loading" });
     try {
       await subscribeUser2(user.$id, selected.checkoutPlan);

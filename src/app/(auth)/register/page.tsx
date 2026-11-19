@@ -20,6 +20,7 @@ import { ID } from 'appwrite'
 import { OAuthProvider } from 'appwrite'
 import { useState } from 'react'
 import { ensureUserDocument } from '@/data/getData'
+import { trackEvent } from '@/lib/analytics'
 import { useRouter } from 'next/navigation'
 import { useUserStore } from '@/data/useUserStore'
 import { sendWelcomeEmail } from '@/services/emailService'
@@ -125,6 +126,8 @@ export default function Register() {
     return;
   }
 
+
+  trackEvent('sign_up', { method: 'email' });
 
   try {
     await sendWelcomeEmail({ userEmail: data.email, userName: data.username });

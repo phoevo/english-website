@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
@@ -9,6 +9,7 @@ import TeacherContentDisplay from "../TeacherContentDisplay";
 
 import { Conversation, loadConversation, loadPublicConversationPreview } from "@/data/conversation";
 import { useUserStore } from "@/data/useUserStore";
+import { previousPageSource, trackEvent } from "@/lib/analytics";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ export default function ConversationPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [requiresPlus, setRequiresPlus] = useState(false);
+  const trackedConversation = useRef<string | null>(null);
 
   useEffect(() => {
     // Wait until authentication has finished loading.
@@ -65,6 +67,17 @@ export default function ConversationPage() {
         }
 
         setConversation(fetchedConversation);
+        // The loader re-runs once the user is known; record each conversation once.
+        if (trackedConversation.current !== fetchedConversation.$id) {
+          trackedConversation.current = fetchedConversation.$id;
+          trackEvent("conversation_open", {
+            conversation_id: fetchedConversation.$id,
+            level: fetchedConversation.level,
+            plus: fetchedConversation.isPro,
+            signed_in: Boolean(user),
+            source: previousPageSource(),
+          });
+        }
       } catch (err) {
         if (cancelled) {
           return;

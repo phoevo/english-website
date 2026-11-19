@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { rememberPath } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import { Geist} from "next/font/google";
 
@@ -15,6 +17,10 @@ type Consent = "granted" | "denied" | null;
 export default function CookieConsent() {
   const [consent, setConsent] = useState<Consent>(null);
   const [loaded, setLoaded] = useState(false);
+  const pathname = usePathname();
+
+  // Mounted on every page, so it keeps track of the previous page for funnel events.
+  useEffect(() => { rememberPath(pathname); }, [pathname]);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY) as Consent;

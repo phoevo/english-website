@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowDown, ArrowLeft, ArrowUpRight } from "lucide-react";
 import GuideShell from "./GuideShell";
+import TrackGuideView from "@/components/analytics/TrackGuideView";
 import styles from "./guide-article.module.css";
 
 type RelatedGuide = { title: string; href: string };
@@ -12,6 +13,7 @@ export default function GuideArticle({ children, relatedGuides = [] }: {
 }) {
   const hasRelated = relatedGuides.length > 0;
   return <GuideShell>
+    <TrackGuideView />
     <main id="guide-main" className={hasRelated ? `${styles.articleLayout} ${styles.withRail}` : styles.articleLayout}>
       <div className={styles.articleTop}>
         <Link href="/guides" className={styles.backLink}><ArrowLeft size={16} aria-hidden="true" />All guides</Link>

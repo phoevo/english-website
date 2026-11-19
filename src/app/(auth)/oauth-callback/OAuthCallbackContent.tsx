@@ -6,6 +6,7 @@ import { account } from '@/data/appwrite'
 import { ensureUserDocument } from '@/data/getData'
 import AuthLoading from '@/components/auth/AuthLoading'
 import { sendWelcomeEmail } from '@/services/emailService'
+import { trackEvent } from '@/lib/analytics'
 
 export default function OAuthCallback() {
   const router = useRouter()
@@ -44,6 +45,7 @@ export default function OAuthCallback() {
         const { created } = await ensureUserDocument()
 
         if (created) {
+          trackEvent('sign_up', { method: 'google' })
           const user = await account.get()
 
           try {
