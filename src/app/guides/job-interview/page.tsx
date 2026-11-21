@@ -1,5 +1,6 @@
 import GuideArticle from "@/components/guides/GuideArticle";
 import styles from "@/components/guides/guide-article.module.css";
+import DownloadPdfButton from "@/components/conversations/DownloadPdfButton";
 import { ArrowLeft, ArrowRight, Lightbulb } from "lucide-react";
 import Link from "next/link";
 
@@ -166,6 +167,9 @@ export default function PostPage() {
           </p>
 
 
+          <div>
+            <DownloadPdfButton conversationId="69a3093fb5ff6367494c" level="B2" source="guide" />
+          </div>
         </header>
 
         {/* Conversation first */}

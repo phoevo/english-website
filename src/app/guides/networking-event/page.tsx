@@ -1,5 +1,6 @@
 import GuideArticle from "@/components/guides/GuideArticle";
 import styles from "@/components/guides/guide-article.module.css";
+import DownloadPdfButton from "@/components/conversations/DownloadPdfButton";
 import {
   ArrowLeft,
   ArrowRight,
@@ -220,6 +221,9 @@ export default function PostPage() {
             career, ask natural follow-up questions, and leave a professional
             conversation politely.
           </p>
+          <div>
+            <DownloadPdfButton conversationId="68ce638012a4e95d0cfe" level="B1" source="guide" />
+          </div>
         </header>
 
         {/* Guide introduction */}

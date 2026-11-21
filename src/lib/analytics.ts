@@ -4,6 +4,7 @@
 export type FunnelEvent =
   | "guide_view"
   | "conversation_open"
+  | "pdf_download"
   | "sign_up"
   | "view_pricing"
   | "begin_checkout"

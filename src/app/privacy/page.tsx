@@ -149,8 +149,9 @@ export default function PrivacyPage() {
             If you accept analytics cookies, we use Google Analytics, provided
             by Google Ireland Limited, to understand how the site is used. It
             records the pages you visit and these actions: viewing a guide,
-            opening a conversation, creating an account, viewing the pricing
-            page, starting checkout and completing a purchase.
+            opening a conversation, downloading a conversation as a PDF,
+            creating an account, viewing the pricing page, starting checkout
+            and completing a purchase.
           </p>
           <p>
             We use this in aggregate, to see which parts of the site are

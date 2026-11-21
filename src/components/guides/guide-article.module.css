@@ -93,6 +93,9 @@
 .jumpLink { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted-foreground); }
 .jumpLink:hover { color: var(--foreground); }
 .related { scroll-margin-top: 24px; }
+/* Plus guides: a quiet note pointing to a related free guide. */
+.content > header > .plusNote { max-width: 740px; padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px; font-size: 14px; line-height: 1.7; color: var(--muted-foreground); }
+.plusNote strong { font-weight: 500; }
 .rail { display: none; }
 .rail h2 { font-size: 13px; font-weight: 500; color: var(--muted-foreground); }
 .rail ul { margin-top: 12px; }

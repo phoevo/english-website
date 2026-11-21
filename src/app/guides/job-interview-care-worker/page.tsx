@@ -3,6 +3,7 @@ import styles from "@/components/guides/guide-article.module.css";
 import { ArrowLeft, Lightbulb } from "lucide-react";
 import Link from "next/link";
 import GuidePlusCta from "@/components/guides/GuidePlusCta";
+import GuidePlusNote from "@/components/guides/GuidePlusNote";
 
 
 /* eslint react/no-unescaped-entities: 0 */
@@ -162,6 +163,7 @@ export default function PostPage() {
             after her dad, gives her two situations, and checks when she can
             work.
           </p>
+          <GuidePlusNote freeGuide={{ title: "Job Interview guide", href: "/guides/job-interview" }} />
         </header>
 
         {/* Conversation first */}

@@ -1,5 +1,6 @@
 import GuideArticle from "@/components/guides/GuideArticle";
 import styles from "@/components/guides/guide-article.module.css";
+import DownloadPdfButton from "@/components/conversations/DownloadPdfButton";
 import {
   ArrowLeft,
   ArrowRight,
@@ -155,6 +156,9 @@ export default function PostPage() {
           work, including vocabulary, comprehension questions, discussion
           prompts, polite disagreement practice, and homework.
         </p>
+        <div>
+          <DownloadPdfButton conversationId="6a1c68581f9bbab1c1d9" level="B2" source="guide" />
+        </div>
       </header>
 
       {/* Lesson introduction */}

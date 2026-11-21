@@ -21,6 +21,7 @@ import { useUserStore } from "@/data/useUserStore";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { AudioPlayer } from "./AudioPlayer";
+import DownloadPdfButton from "@/components/conversations/DownloadPdfButton";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { backgroundColors, hoverBackgroundColors } from "@/data/color";
@@ -361,7 +362,8 @@ React.useEffect(() => {
     <Badge variant={"outline"}>{conversation.category}</Badge>
     </div>
 
-    <div className="flex flex-row items-center gap-1">
+    <div className="flex flex-row items-center gap-1 xl:ml-auto">
+      <DownloadPdfButton conversationId={conversation.$id} level={conversation.level} isPlus={conversation.isPro} source="conversation" />
   </div>
 
   </div>

@@ -1,5 +1,6 @@
 import GuideArticle from "@/components/guides/GuideArticle";
 import styles from "@/components/guides/guide-article.module.css";
+import DownloadPdfButton from "@/components/conversations/DownloadPdfButton";
 import {
   ArrowLeft,
   ArrowRight,
@@ -201,6 +202,9 @@ export default function PostPage() {
             town or city, understanding directions, and asking for help when
             you're lost.
           </p>
+          <div>
+            <DownloadPdfButton conversationId="68f1112fe34924c519ad" level="A1" source="guide" />
+          </div>
         </header>
 
         {/* Introduction */}

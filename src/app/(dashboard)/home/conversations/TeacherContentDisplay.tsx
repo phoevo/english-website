@@ -10,6 +10,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Button } from "@/components/ui/button";
+import DownloadPdfButton from "@/components/conversations/DownloadPdfButton";
 import { Check, Plus } from "lucide-react";
 import { backgroundColors, hoverBackgroundColors } from "@/data/color";
 import { Geist } from "next/font/google";
@@ -163,8 +164,9 @@ export default function TeacherContentDisplay({
 }
   return (
     <div className="grid h-full w-full grid-rows-[auto_1fr] rounded-lg bg-background text-foreground">
-      <div className="flex items-center gap-2 border-b px-10 py-4 text-2xl font-light">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b px-10 py-4 text-2xl font-light">
         <span>{conversation.title}</span>
+        <DownloadPdfButton conversationId={conversation.$id} level={conversation.level} source="conversation" />
       </div>
 
       <ScrollArea className="h-full w-full overflow-y-auto">
