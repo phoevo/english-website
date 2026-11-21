@@ -10,14 +10,14 @@ import GuidePlusCta from "@/components/guides/GuidePlusCta";
 
 export const metadata = {
   title:
-    "Café Job Interview: A2 English Conversation and Teaching Notes | Synomilo",
+    "Café Job Interview: A2 English Speaking Practice and Teaching Notes | Synomilo",
   description:
-    "An A2 English conversation in which a café owner interviews someone for a part-time job, with vocabulary, polite questions and classroom activities.",
+    "A2 English speaking practice: a conversation in which a café owner interviews someone for a part-time job, with vocabulary, polite questions and classroom activities.",
   alternates: { canonical: "/guides/job-interview-cafe-worker" },
   openGraph: {
-    title: "Café Job Interview: A2 English Conversation | Synomilo",
+    title: "Café Job Interview: A2 English Speaking Practice | Synomilo",
     description:
-      "A café owner interviews someone for a part-time job. Vocabulary, polite questions and role-play activities for A2 learners.",
+      "A café owner interviews someone for a part-time job. Speaking practice, vocabulary, polite questions and role-play activities for A2 learners.",
     url: "/guides/job-interview-cafe-worker",
     type: "article",
   },
@@ -116,15 +116,15 @@ type relatedGuides = {
 
 const relatedGuides: relatedGuides[] = [
   {
-    title: "Care Worker Phone Interview: B1 English Conversation",
+    title: "Care Worker Phone Interview: B1 English Conversation and Speaking Practice",
     href: "/guides/job-interview-care-worker",
   },
   {
-    title: "Nursing Job Interview: B2 English Conversation",
+    title: "Nursing Job Interview: B2 English Conversation and Speaking Practice",
     href: "/guides/job-interview-nursing",
   },
   {
-    title: "Job Interview English: B2 ESL Guide",
+    title: "Job Interview English: B2 ESL Lesson and Speaking Practice",
     href: "/guides/job-interview",
   },
 ];
@@ -147,7 +147,7 @@ export default function PostPage() {
           </div>
 
           <h1 >
-            Café Job Interview: A2 English Conversation
+            Café Job Interview: A2 English Conversation and Speaking Practice
           </h1>
 
           <p className={styles.muted}>

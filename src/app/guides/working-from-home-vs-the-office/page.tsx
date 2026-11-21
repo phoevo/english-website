@@ -121,7 +121,7 @@ const relatedGuides: RelatedLesson[] = [
     href: "/guides/job-interview",
   },
   {
-    title: "English Networking Event: B1 ESL Guide",
+    title: "Networking Event: B1 Business English and Small Talk",
     href: "/guides/networking-event",
   },
 ];

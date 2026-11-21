@@ -14,7 +14,7 @@ import Link from "next/link";
 
 export const metadata = {
   title:
-    "B1 Networking Event English Guide | Business English Conversation Practice | Synomilo",
+    "Networking and Small Talk: B1 Business English ESL Lesson | Synomilo",
   description:
     "Practise English for networking events with this B1 conversation guide. Includes vocabulary, business expressions, comprehension questions, role-play activities, and an interactive conversation.",
   alternates: {
@@ -22,7 +22,7 @@ export const metadata = {
   },
   openGraph: {
     title:
-      "B1 Networking Event English Guide | Business English Conversation Practice",
+      "Networking and Small Talk: B1 Business English ESL Lesson",
     description:
       "Learn how to introduce yourself, discuss your career, make small talk, and end professional conversations politely.",
     url: "/guides/networking-event",
@@ -168,7 +168,7 @@ type RelatedGuide = {
 
 const relatedGuides: RelatedGuide[] = [
   {
-    title: "Job Interview English: B2 Conversation Guide",
+    title: "Job Interview English: B2 ESL Lesson and Speaking Practice",
     href: "/guides/job-interview",
   },
   {
@@ -211,7 +211,7 @@ export default function PostPage() {
           </div>
 
           <h1 >
-            Networking Event: B1 English Conversation Guide
+            Networking Event: B1 Business English and Small Talk
           </h1>
 
           <p className={styles.muted}>

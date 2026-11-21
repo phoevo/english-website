@@ -10,14 +10,14 @@ import GuidePlusCta from "@/components/guides/GuidePlusCta";
 
 export const metadata = {
   title:
-    "Nursing Job Interview: B2 English Conversation and Teaching Notes | Synomilo",
+    "Nursing Job Interview: B2 English Speaking Practice and Teaching Notes | Synomilo",
   description:
-    "A B2 English conversation in which a newly qualified nurse is interviewed for a hospital ward job, with vocabulary, scenario questions and classroom activities.",
+    "B2 English speaking practice: a conversation in which a newly qualified nurse is interviewed for a hospital ward job, with vocabulary, scenario questions and classroom activities.",
   alternates: { canonical: "/guides/job-interview-nursing" },
   openGraph: {
-    title: "Nursing Job Interview: B2 English Conversation | Synomilo",
+    title: "Nursing Job Interview: B2 English Speaking Practice | Synomilo",
     description:
-      "A newly qualified nurse is interviewed for a hospital ward job. Vocabulary, scenario questions and classroom activities for B2 learners.",
+      "A newly qualified nurse is interviewed for a hospital ward job. Speaking practice, vocabulary, scenario questions and classroom activities for B2 learners.",
     url: "/guides/job-interview-nursing",
     type: "article",
   },
@@ -122,15 +122,15 @@ type relatedGuides = {
 
 const relatedGuides: relatedGuides[] = [
   {
-    title: "Job Interview English: B2 ESL Guide",
+    title: "Job Interview English: B2 ESL Lesson and Speaking Practice",
     href: "/guides/job-interview",
   },
   {
-    title: "Care Worker Phone Interview: B1 English Conversation",
+    title: "Care Worker Phone Interview: B1 English Conversation and Speaking Practice",
     href: "/guides/job-interview-care-worker",
   },
   {
-    title: "Café Job Interview: A2 English Conversation",
+    title: "Café Job Interview: A2 English Conversation and Speaking Practice",
     href: "/guides/job-interview-cafe-worker",
   },
   {
@@ -157,7 +157,7 @@ export default function PostPage() {
           </div>
 
           <h1 >
-            Nursing Job Interview: B2 English Conversation
+            Nursing Job Interview: B2 English Conversation and Speaking Practice
           </h1>
 
           <p className={styles.muted}>

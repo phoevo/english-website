@@ -10,14 +10,14 @@ import GuidePlusCta from "@/components/guides/GuidePlusCta";
 
 export const metadata = {
   title:
-    "Care Worker Phone Interview: B1 English Conversation and Teaching Notes | Synomilo",
+    "Care Worker Phone Interview: B1 English Speaking Practice and Teaching Notes | Synomilo",
   description:
-    "A B1 English conversation in which a care home manager phones someone about their job application, with vocabulary, phone phrases and classroom activities.",
+    "B1 English speaking practice: a conversation in which a care home manager phones someone about their job application, with vocabulary, phone phrases and classroom activities.",
   alternates: { canonical: "/guides/job-interview-care-worker" },
   openGraph: {
-    title: "Care Worker Phone Interview: B1 English Conversation | Synomilo",
+    title: "Care Worker Phone Interview: B1 English Speaking Practice | Synomilo",
     description:
-      "A care home manager phones someone about their job application. Vocabulary, phone phrases and role-play activities for B1 learners.",
+      "A care home manager phones someone about their job application. Speaking practice, vocabulary, phone phrases and role-play activities for B1 learners.",
     url: "/guides/job-interview-care-worker",
     type: "article",
   },
@@ -121,15 +121,15 @@ type relatedGuides = {
 
 const relatedGuides: relatedGuides[] = [
   {
-    title: "Café Job Interview: A2 English Conversation",
+    title: "Café Job Interview: A2 English Conversation and Speaking Practice",
     href: "/guides/job-interview-cafe-worker",
   },
   {
-    title: "Nursing Job Interview: B2 English Conversation",
+    title: "Nursing Job Interview: B2 English Conversation and Speaking Practice",
     href: "/guides/job-interview-nursing",
   },
   {
-    title: "Job Interview English: B2 ESL Guide",
+    title: "Job Interview English: B2 ESL Lesson and Speaking Practice",
     href: "/guides/job-interview",
   },
 ];
@@ -152,7 +152,7 @@ export default function PostPage() {
           </div>
 
           <h1 >
-            Care Worker Phone Interview: B1 English Conversation
+            Care Worker Phone Interview: B1 English Conversation and Speaking Practice
           </h1>
 
           <p className={styles.muted}>

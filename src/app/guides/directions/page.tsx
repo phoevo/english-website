@@ -14,14 +14,14 @@ import Link from "next/link";
 
 export const metadata = {
   title:
-    "Asking for Directions in English: A2 Conversation Guide | Synomilo",
+    "How to Give Directions in English: A2 ESL Lesson with Landmarks | Synomilo",
   description:
-    "Practise asking for and giving directions in English with this A2 conversation guide. Learn useful vocabulary, phrases, comprehension questions, and speaking activities.",
+    "An A2 lesson on asking for and giving directions in English, using landmarks and distance. Vocabulary, comprehension questions and speaking practice.",
   alternates: {
     canonical: "/guides/directions",
   },
   openGraph: {
-    title: "Asking for Directions in English: A2 Conversation Guide",
+    title: "How to Give Directions in English: A2 ESL Lesson with Landmarks",
     description:
       "Learn how to ask for directions, understand simple instructions, and give directions in English with this A2 conversation guide.",
     url: "/guides/directions",
@@ -139,15 +139,15 @@ type RelatedGuide = {
 
 const relatedGuides: RelatedGuide[] = [
   {
-    title: "Networking Event: B1 English Conversation Guide",
+    title: "Networking Event: B1 Business English and Small Talk",
     href: "/guides/networking-event",
   },
   {
-    title: "Job Interview English: B2 Conversation Guide",
+    title: "Job Interview English: B2 ESL Lesson and Speaking Practice",
     href: "/guides/job-interview",
   },
   {
-    title: "Café Job Interview: A2 English Conversation",
+    title: "Café Job Interview: A2 English Conversation and Speaking Practice",
     href: "/guides/job-interview-cafe-worker",
   },
 ];
@@ -192,7 +192,7 @@ export default function PostPage() {
           </div>
 
           <h1 >
-            Asking for Directions in English: A2 Conversation Guide
+            How to Give and Ask for Directions in English: A2 ESL Lesson
           </h1>
 
           <p className={styles.muted}>

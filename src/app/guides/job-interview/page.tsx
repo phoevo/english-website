@@ -10,14 +10,14 @@ const conversationHref = "/home/conversations/69a3093fb5ff6367494c";
 
 export const metadata = {
   title:
-    "B2 Job Interview ESL Lesson: Questions, Vocabulary and Role-Play | Synomilo",
+    "B2 Job Interview ESL Lesson and Speaking Practice | Synomilo",
   description:
-    "A ready-to-use B2 job interview ESL lesson with vocabulary, comprehension questions, discussion prompts, role-play activities, and homework.",
+    "A ready-to-use B2 job interview ESL lesson with speaking practice, vocabulary, comprehension questions, discussion prompts, role-play activities and homework.",
   alternates: { canonical: "/guides/job-interview" },
   openGraph: {
-    title: "B2 Job Interview ESL Lesson | Synomilo",
+    title: "B2 Job Interview ESL Lesson and Speaking Practice | Synomilo",
     description:
-      "Teach job interview English with vocabulary, questions, role-play activities, and homework for B2 learners.",
+      "Practise job interview English with vocabulary, questions, role-play activities and homework for B2 learners.",
     url: "/guides/job-interview",
     type: "article",
   },
@@ -121,15 +121,15 @@ type relatedGuides = {
 
 const relatedGuides: relatedGuides[] = [
   {
-    title: "Nursing Job Interview: B2 English Conversation",
+    title: "Nursing Job Interview: B2 English Conversation and Speaking Practice",
     href: "/guides/job-interview-nursing",
   },
   {
-    title: "Care Worker Phone Interview: B1 English Conversation",
+    title: "Care Worker Phone Interview: B1 English Conversation and Speaking Practice",
     href: "/guides/job-interview-care-worker",
   },
   {
-    title: "Café Job Interview: A2 English Conversation",
+    title: "Café Job Interview: A2 English Conversation and Speaking Practice",
     href: "/guides/job-interview-cafe-worker",
   },
   {
@@ -155,7 +155,7 @@ export default function PostPage() {
           </div>
 
           <h1 >
-            Job Interview English: B2 ESL Lesson
+            Job Interview English: B2 ESL Lesson and Speaking Practice
           </h1>
 
           <p className={styles.muted}>
